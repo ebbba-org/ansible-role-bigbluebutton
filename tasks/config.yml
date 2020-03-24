@@ -1,0 +1,12 @@
+---
+- name: enable join via html5
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^attendeesJoinViaHTML5Client'
+    line: 'attendeesJoinViaHTML5Client=true'
+
+- name: enable mod join via html5
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^moderatorsJoinViaHTML5Client'
+    line: 'moderatorsJoinViaHTML5Client=true'
