@@ -1,4 +1,5 @@
 ---
+bbb_hostname: "{{ ansible_fqdn_hostname }}"
 bbb_letsencrypt_enable: yes
 bbb_enable_coturn: yes
 bbb_turn_server: "{{ bbb_hostname }}"

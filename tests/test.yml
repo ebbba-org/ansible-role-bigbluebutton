@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - ./
+  vars:
+    bbb_turn_secret: ee8d093109a9b273eb69cce6c965e1d3

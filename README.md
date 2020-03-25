@@ -1,11 +1,15 @@
-# BigBlueButton
+BigBlueButton
+=========
 
 Ansible role for a bigbluebutton installation (following the documentation on http://docs.bigbluebutton.org/install/install.html)
 
-## Variables to specify
+
+Role Variables
+--------------
+
 | Variable Name | Function | Default value | Comment |
 | ------------- | -------- | ------------- | ------- |
-| `bbb_hostname` | Hostname for this BigBlueButton instance _(required)_ | |
+| `bbb_hostname` | Hostname for this BigBlueButton instance _(required)_ | {{ ansible_fqdn_hostname }} |
 | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
 | `bbb_letsencrypt_email` | E-mail for use with letsencrypt |  |
 | `bbb_enable_coturn` | enable installation of the TURN-server | `yes` |
@@ -15,3 +19,22 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_enable_api_demos` | enable installation of the api demos | `no` |
 | `bbb_nodejs_version` | version of nodejs to be installed | `8.x` |
 | `bbb_system_locale` | the system locale to use | `en_US.UTF-8` |
+
+Dependencies
+------------
+
+- geerlingguy.nodejs
+
+Example Playbook
+----------------
+
+This is an example, of how to use this role. Warning: the value of bbb_turn_secret should be changed!
+
+    - hosts: servers
+      roles:
+         - { role: n0emis.bigbluebutton, bbb_turn_secret: 'ee8d093109a9b273eb69cce6c965e1d3' }
+
+License
+-------
+
+MIT
