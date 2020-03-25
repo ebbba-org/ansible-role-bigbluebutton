@@ -1,10 +1,10 @@
 ---
-bbb_hostname: "{{ ansible_fqdn_hostname }}"
+bbb_hostname: "{{ ansible_fqdn }}"
 bbb_letsencrypt_enable: yes
-bbb_enable_coturn: yes
+bbb_coturn_enable: yes
 bbb_turn_server: "{{ bbb_hostname }}"
-bbb_enable_greenlight: yes
-bbb_enable_api_demos: no
+bbb_greenlight_enable: yes
+bbb_api_demos_enable: no
 bbb_nodejs_version: 8.x
 
 bbb_system_locale: en_US.UTF-8

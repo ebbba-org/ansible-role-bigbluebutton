@@ -1,11 +1,11 @@
 ---
-- name: Install required packages
+- name: Install coturn
   apt:
     name: coturn
     update_cache: yes
     state: present
 
-- name: Copy cuturn config-file
+- name: Copy coturn config-file
   template:
     src: "turnserver.conf.j2"
     dest: /etc/turnserver.conf
@@ -21,7 +21,7 @@
     regexp: 'TURNSERVER_ENABLED'
     line: 'TURNSERVER_ENABLED=1'
 
-- name: Enable Cutorn
+- name: Enable coturn
   service:
     name: coturn
     enabled: yes

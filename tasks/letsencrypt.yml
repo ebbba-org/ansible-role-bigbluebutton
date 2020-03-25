@@ -1,0 +1,15 @@
+---
+- name: Install certbot
+  apt:
+    pkg: ['certbot', 'python3-certbot-nginx']
+    update_cache: true
+    state: present
+
+- name: Change Let's Encrypt API to v2
+  lineinfile:
+    path: /etc/letsencrypt/cli.ini
+    line: 'server = https://acme-v02.api.letsencrypt.org/directory'
+
+- name: Generate Certificates
+  shell: certbot certonly -d {{ bbb_hostname }} -d {{ ansible_fqdn }} --agree-tos --email {{ bbb_letsencrypt_email }} -n --nginx
+  notify: reload nginx

@@ -1,0 +1,9 @@
+---
+- name: install python docker packages
+  pip:
+    name:
+      - wheel
+      - docker
+      - docker-compose
+    extra_args: '--upgrade'
+    state: present
