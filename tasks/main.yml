@@ -10,13 +10,7 @@
     update_cache: yes
     state: present
 
-- name: Ensure the locale exists
-  locale_gen:
-    name: en_US.UTF-8
-    state: present
-
-- name: set as default locale
-  command: localectl set-locale LANG=en_US.UTF-8
+- import_tasks: locale.yml
 
 - name: add BigBlueButton apt key
   apt_key:
