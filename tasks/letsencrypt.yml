@@ -10,6 +10,12 @@
     path: /etc/letsencrypt/cli.ini
     line: 'server = https://acme-v02.api.letsencrypt.org/directory'
 
+- name: Register certbot certificate file
+  stat:
+    path: "/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"
+  register: certbot_certificate_file_path
+
 - name: Generate Certificates
-  shell: certbot certonly -d {{ bbb_hostname }} -d {{ ansible_fqdn }} --agree-tos --email {{ bbb_letsencrypt_email }} -n --nginx
+  command: certbot certonly -d {{ bbb_hostname }} -d {{ ansible_fqdn }} --agree-tos --email {{ bbb_letsencrypt_email }} -n --nginx
   notify: reload nginx
+  when: not certbot_certificate_file_path.stat.exists
