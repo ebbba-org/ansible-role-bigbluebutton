@@ -1,0 +1,28 @@
+---
+- name: Install required packages
+  apt:
+    name: coturn
+    update_cache: yes
+    state: present
+
+- name: Copy cuturn config-file
+  template:
+    src: "turnserver.conf.j2"
+    dest: /etc/turnserver.conf
+
+- name: Enable logrotate for coturn
+  file:
+    src: logrotate/coturn
+    dest: /etc/logrotate.d/coturn
+
+- name: enable join via html5
+  lineinfile:
+    path: /etc/default/coturn
+    regexp: 'TURNSERVER_ENABLED'
+    line: 'TURNSERVER_ENABLED=1'
+
+- name: Enable Cutorn
+  service:
+    name: coturn
+    enabled: yes
+    state: started

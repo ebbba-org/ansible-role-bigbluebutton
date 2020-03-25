@@ -60,3 +60,6 @@
     state: present
 
 - import_tasks: config.yml
+
+- import_tasks: coturn.yml
+  when: bbb_enable_coturn

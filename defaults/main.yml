@@ -1,2 +1,13 @@
 ---
-bbb_apt_key: '328BD16D'
+bbb_letsencrypt_enable: yes
+bbb_enable_coturn: yes
+bbb_turn_server: "{{ bbb_hostname }}"
+bbb_enable_greenlight: yes
+bbb_enable_api_demos: no
+bbb_nodejs_version: 8.x
+
+bbb_ssl_cert: "/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"
+bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
+
+
+bbb_apt_key: 328BD16D

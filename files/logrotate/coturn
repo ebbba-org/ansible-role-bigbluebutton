@@ -1,0 +1,12 @@
+/var/log/coturn.log
+{
+    rotate 30
+    daily
+    missingok
+    notifempty
+    delaycompress
+    compress
+    postrotate
+    systemctl kill -sHUP coturn.service
+    endscript
+}
