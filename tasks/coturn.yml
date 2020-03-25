@@ -11,7 +11,7 @@
     dest: /etc/turnserver.conf
 
 - name: Enable logrotate for coturn
-  file:
+  template:
     src: logrotate/coturn
     dest: /etc/logrotate.d/coturn
 
