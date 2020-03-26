@@ -52,15 +52,15 @@
   apt:
     name:
     - mongodb-org
-    - bigbluebutton
-    - bbb-html5
     - bbb-check
+    - bbb-html5
+    - bigbluebutton
     state: present
-
-- import_tasks: config.yml
 
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable
+
+- import_tasks: config.yml
 
 - import_tasks: coturn.yml
   when: bbb_coturn_enable

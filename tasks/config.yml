@@ -4,14 +4,23 @@
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^attendeesJoinViaHTML5Client'
     line: 'attendeesJoinViaHTML5Client=true'
+  notify: restart bigbluebutton
 
 - name: enable mod join via html5
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^moderatorsJoinViaHTML5Client'
     line: 'moderatorsJoinViaHTML5Client=true'
+  notify: restart bigbluebutton
 
 - name: copy TURN config file
   template:
     src: bbb/turn-stun-servers.xml.j2
     dest: /usr/share/bbb-web/WEB-INF/classes/spring/turn-stun-servers.xml
+  notify: restart bigbluebutton
+
+- name: copy bbb's nginx vhost
+  template:
+     src: bbb/bigbluebutton.j2
+     dest: /etc/nginx/sites-available/bigbluebutton
+  notify: reload nginx
