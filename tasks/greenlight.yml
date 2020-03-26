@@ -2,8 +2,38 @@
 - name: install python docker packages
   pip:
     name:
-      - wheel
       - docker
       - docker-compose
-    extra_args: '--upgrade'
     state: present
+
+- name: create greenlight directory
+  file:
+    path: /root/greenlight
+    state: directory
+
+- name: register bbb secret
+  command: bbb-conf --secret
+  register: result
+  when: not bbb_secret is defined
+
+- name: parse bbb secret
+  set_fact:
+    bbb_secret: "{{ result.stdout | regex_search('Secret: ([a-zA-Z0-9]*)', multiline=True) |  regex_replace('Secret: ') }}"
+    cacheable: yes
+  when: not bbb_secret is defined
+
+- name: copy greenlight config file
+  template:
+    src: greenlight/env.j2
+    dest: /root/greenlight/.env
+
+- name: copy greenlight docker compose file
+  template:
+    src: greenlight/docker-compose.yml.j2
+    dest: /root/greenlight/docker-compose.yml
+
+- name: start greenlight
+  docker_compose:
+    pull: yes
+    project_src: /root/greenlight/
+  when: bbb_greenlight_enable
