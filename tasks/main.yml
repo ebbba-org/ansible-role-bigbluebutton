@@ -11,8 +11,16 @@
     - python3-dev
     - python-wheel
     - python3-wheel
+    - openjdk-8-jdk
     update_cache: yes
     state: present
+
+- name: set version of java to use
+  file:
+    src: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+    dest: /etc/alternatives/java
+    state: link
+  notify: restart bigbluebutton
 
 - import_tasks: locale.yml
 

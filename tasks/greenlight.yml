@@ -3,7 +3,7 @@
   apt:
     name:
       - python3-pip
-      - python3-setuptools    
+      - python3-setuptools
     state: present
 
 - name: install python docker packages
@@ -38,6 +38,12 @@
   template:
     src: greenlight/docker-compose.yml.j2
     dest: /root/greenlight/docker-compose.yml
+
+- name: copy greenlight docker compose file
+  template:
+    src: greenlight/greenlight.nginx.j2
+    dest: /etc/bigbluebutton/nginx/greenlight.nginx
+  notify: reload nginx
 
 - name: start greenlight
   docker_compose:

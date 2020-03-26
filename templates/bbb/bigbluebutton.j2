@@ -1,7 +1,15 @@
 server {
+        listen 80;
+        listen [::]:80;
+        server_name {{ bbb_hostname }};
+        return 301 https://$host$request_uri;
+}
+
+
+server {
     listen 443 ssl;
     listen [::]:443 ssl;
-    server_name  {{ bbb_hostname }};
+    server_name {{ bbb_hostname }};
 
     ssl_certificate {{ bbb_ssl_cert }};
     ssl_certificate_key {{ bbb_ssl_key }};
@@ -68,9 +76,9 @@ server {
         root   /var/www/nginx-default;
     }
 
-    {% if bbb_greenlight_enable %}
+{% if bbb_greenlight_enable %}
     location = / {
         return 307 /b;
     }
-    {% endif %}
+{% endif %}
 }

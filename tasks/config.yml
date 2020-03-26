@@ -1,4 +1,15 @@
 ---
+- name: register current bbb properties
+  slurp:
+    src: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+  register: properties
+
+- name: set bbb hostname
+  command: "bbb-conf --setip {{ bbb_hostname }}"
+  become: yes
+  when: properties['content'] | b64decode | regex_search(bbb_hostname, multiline=True, ignorecase=True) != bbb_hostname
+  notify: restart bigbluebutton
+
 - name: enable join via html5
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
@@ -12,6 +23,59 @@
     regexp: '^moderatorsJoinViaHTML5Client'
     line: 'moderatorsJoinViaHTML5Client=true'
   notify: restart bigbluebutton
+
+- name: set bbb to use HTTPS
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^bigbluebutton.web.serverURL'
+    line: 'bigbluebutton.web.serverURL=https://{{ bbb_hostname }}'
+  notify: restart bigbluebutton
+
+- name: set red5 to use HTTPS 1/2
+  lineinfile:
+    path: /usr/share/red5/webapps/screenshare/WEB-INF/screenshare.properties
+    regexp: '^jnlpUrl'
+    line: 'jnlpUrl=https://{{ bbb_hostname }}/screenshare'
+  notify: restart bigbluebutton
+
+- name: set red5 to use HTTPS 2/2
+  lineinfile:
+    path: /usr/share/red5/webapps/screenshare/WEB-INF/screenshare.properties
+    regexp: '^jnlpFile'
+    line: 'jnlpFile=https://{{ bbb_hostname }}/screenshare/screenshare.jnlp'
+  notify: restart bigbluebutton
+
+- name: serve recordings via https
+  lineinfile:
+    path: /usr/local/bigbluebutton/core/scripts/bigbluebutton.yml
+    regexp: "playback_protocol"
+    line: "playback_protocol: https"
+  notify: restart bigbluebutton
+
+- name: configure freeswitch to use SSL
+  lineinfile:
+    path: /etc/bigbluebutton/nginx/sip.nginx
+    regexp: "proxy_pass"
+    line: "        proxy_pass https://{{ ansible_default_ipv4.address }}:7443;"
+  notify: reload nginx
+
+- name: set BigBlueButton client to load components via HTTPS
+  replace:
+    path: /var/www/bigbluebutton/client/conf/config.xml
+    regexp: 'http://'
+    replace: 'https://'
+
+- name: set note server to use HTTPS
+  replace:
+    path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+    regexp: 'http://'
+    replace: 'https://'
+
+- name: set korrento server to use HTTPS
+  replace:
+    path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+    regexp: 'ws://'
+    replace: 'wss://'
 
 - name: copy TURN config file
   template:
