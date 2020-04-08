@@ -33,10 +33,10 @@
 - name: add multiverse apt repositories
   apt_repository: repo={{ item }} state=present
   with_items:
-    - 'deb http://archive.ubuntu.com/ubuntu trusty multiverse'
-    - 'deb-src http://archive.ubuntu.com/ubuntu trusty multiverse'
-    - 'deb http://archive.ubuntu.com/ubuntu trusty-updates multiverse'
-    - 'deb-src http://archive.ubuntu.com/ubuntu trusty-updates multiverse'
+    - 'deb http://archive.ubuntu.com/ubuntu xenial multiverse'
+    - 'deb-src http://archive.ubuntu.com/ubuntu xenial multiverse'
+    - 'deb http://archive.ubuntu.com/ubuntu xenial-updates multiverse'
+    - 'deb-src http://archive.ubuntu.com/ubuntu xenial-updates multiverse'
 
 - name: add mongodb apt key
   apt_key:
