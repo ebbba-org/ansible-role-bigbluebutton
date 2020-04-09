@@ -101,11 +101,11 @@ galaxy_info:
   #  - quantal
   #  - raring
   #  - saucy
-    - trusty
+  #  - trusty
   #  - utopic
   #  - vivid
   #  - wily
-  #  - xenial
+    - xenial
   #- name: SLES
   #  versions:
   #  - all
