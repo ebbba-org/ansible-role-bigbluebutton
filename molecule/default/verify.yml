@@ -8,7 +8,7 @@
     command: "dpkg-query -l {{ item }}"
     with_items:
       - language-pack-en
-      - python3-pip
+      - python-pip
       - mongodb-org
       - bbb-check
       - bbb-html5
