@@ -3,15 +3,29 @@
     name: "{{ bbb_system_locale }}"
     state: present
 
-- name: Get current locale and language configuration
-  command: localectl status
-  register: locale_status
-  changed_when: false
+- block:
+    - name: Get current locale and language configuration
+      command: localectl status
+      register: locale_status
+      changed_when: false
 
-- name: Parse 'LANG' from current locale and language configuration
-  set_fact:
-    locale_lang: "{{ locale_status.stdout | regex_search('LANG=([^\n]+)', '\\1') | first }}"
+    - name: Parse 'LANG' from current locale and language configuration
+      set_fact:
+        locale_lang: "{{ locale_status.stdout | regex_search('LANG=([^\n]+)', '\\1') | first }}"
 
-- name: Configure locale to '{{ bbb_system_locale }}'
-  command: localectl set-locale LANG={{ bbb_system_locale }}
-  changed_when: locale_lang != bbb_system_locale
+    - name: Configure locale to '{{ bbb_system_locale }}'
+      command: localectl set-locale LANG={{ bbb_system_locale }}
+      changed_when: locale_lang != bbb_system_locale
+  when: not (ansible_virtualization_type is defined and (ansible_virtualization_type == "docker"))
+- block:
+    - name: Get locale
+      command: locale -a
+      changed_when: false
+      register: localea
+    - debug: var=localea
+
+    - name: Configure locale to '{{ bbb_system_locale }}'
+      command: >
+        localedef -c -i {{ bbb_system_locale1 }} -f {{ bbb_system_locale2 }} {{ bbb_system_locale }}
+      when: "'en_US.utf8' not in localea.stdout"
+  when: (ansible_virtualization_type is defined and (ansible_virtualization_type == "docker"))
