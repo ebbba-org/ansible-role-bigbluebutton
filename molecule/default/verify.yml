@@ -6,6 +6,7 @@
   tasks:
   - name: Check if needed packages are installed
     command: "dpkg-query -l {{ item }}"
+    changed_when: false
     with_items:
       - language-pack-en
       - python3-pip
@@ -48,18 +49,13 @@
     with_items:
       - 3478
       - 3479
-#  - name: check if turtl answering network
-#    command: curl -sf http://localhost:8181
-#    register: curl
-#    changed_when: false
-#  - name: Validate curl output
-#    assert:
-#      that: curl.stdout == '{"greeting":"Hi."}'
-# FIXME! bbb-conf relies on systemctl. NOK in docker
+  # FIXME! bbb-conf relies on systemctl. NOK in docker
   - name: check if bbb status
     command: bbb-conf --status
     register: bbbconf
     changed_when: false
   - name: Validate bbb-conf output
     assert:
-      that: "'Failed to connect to bus: No such file or directory' not in bbbconf.stdout"
+      that: >
+        'Failed to connect to bus: No such file or directory'
+        not in bbbconf.stdout

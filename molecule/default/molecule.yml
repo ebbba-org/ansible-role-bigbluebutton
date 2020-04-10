@@ -5,8 +5,8 @@ driver:
   name: docker
 lint: |
   set -e
-  #yamllint .
-  #ansible-lint
+  yamllint .
+  ansible-lint --exclude=tasks/locale.yml -x 204,306
   flake8
 platforms:
   - name: instance

@@ -12,7 +12,7 @@
     - python-wheel
     - python3-wheel
     - openjdk-8-jdk
-    update_cache: yes
+    update_cache: true
     state: present
 
 - name: set version of java to use
