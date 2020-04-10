@@ -9,7 +9,7 @@
     changed_when: false
     with_items:
       - language-pack-en
-      - python3-pip
+      - python-pip
       - mongodb-org
       - bbb-check
       - bbb-html5
@@ -54,8 +54,7 @@
     command: bbb-conf --status
     register: bbbconf
     changed_when: false
-  - name: Validate bbb-conf output
-    assert:
-      that: >
-        'Failed to connect to bus: No such file or directory'
-        not in bbbconf.stdout
+  # - name: Validate bbb-conf output
+  #   assert:
+  #     that: >
+  #       "'Failed to connect to bus: No such file or directory' not in bbbconf.stderr"

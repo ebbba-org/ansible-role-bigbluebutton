@@ -8,6 +8,8 @@
     - curl
     - python-apt
     - python-dev
+    - python-setuptools
+    - python-pip
     - python3-dev
     - python-wheel
     - python3-wheel
