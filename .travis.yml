@@ -1,29 +1,24 @@
 ---
 language: python
-python: "2.7"
+services: docker
 
-# Use the new container infrastructure
-sudo: false
-
-# Install ansible
-addons:
-  apt:
-    packages:
-    - python-pip
+env:
+  global:
+    - MOLECULE_NO_LOG: "false"
+  matrix:
+    - MOLECULE_DISTRO: ubuntu:16.04
 
 install:
-  # Install ansible
-  - pip install ansible
+  # Install test dependencies.
+  - pip install molecule docker ansible-lint flake8 testinfra
 
-  # Check ansible version
-  - ansible --version
-
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
+before_script:
+  - cd ../ && mv ansible-role-bigbluebutton n0emis.bigbluebutton
+  - cd n0emis.bigbluebutton
+  - ansible-galaxy install -p .. -r requirements.yml
 
 script:
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+  - molecule test
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
