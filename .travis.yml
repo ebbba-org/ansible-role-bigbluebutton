@@ -16,7 +16,7 @@ before_install:
   - env
   - pwd
   - find -ls
-  - pip install ansible ansible-lint
+  - pip3 install ansible ansible-lint
   - cd ../ && mv ansible-role-bigbluebutton n0emis.bigbluebutton
   - cd n0emis.bigbluebutton
   - ansible-galaxy install -p .. -r requirements.yml
