@@ -72,6 +72,12 @@
     - bigbluebutton
     state: present
 
+- name: Ensure services are enabled
+  service:
+    name: mongod
+    enabled: true
+    started: true
+
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable
 
