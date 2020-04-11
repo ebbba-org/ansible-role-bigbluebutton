@@ -70,6 +70,9 @@
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable
 
+- import_tasks: certificate-selfsigned.yml
+  when: not bbb_letsencrypt_enable
+
 - import_tasks: config.yml
 
 - import_tasks: coturn.yml

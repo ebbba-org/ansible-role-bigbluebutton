@@ -1,0 +1,19 @@
+---
+
+- name: apt | self-signed certificate packages dependencies
+  apt: name=ssl-cert state=present update_cache=yes cache_valid_time=3600
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Generate SSL self-signed certificate
+  openssl_certificate:
+    path: {{ bbb_ssl_cert }}
+    privatekey_path: {{ bbb_ssl_key }}
+    csr_path: {{ bbb_ssl_cert }}.csr
+    provider: selfsigned
+
+- name: Validate private key file permissions
+  file:
+    path: "{{ bbb_ssl_key }}"
+    owner: "root"
+    group: "{{ ssl_user }}"
+    mode: '0440'
