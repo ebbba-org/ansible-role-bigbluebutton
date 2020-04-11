@@ -6,9 +6,9 @@
 
 - name: Generate SSL self-signed certificate
   openssl_certificate:
-    path: {{ bbb_ssl_cert }}
-    privatekey_path: {{ bbb_ssl_key }}
-    csr_path: {{ bbb_ssl_cert }}.csr
+    path: "{{ bbb_ssl_cert }}"
+    privatekey_path: "{{ bbb_ssl_key }}"
+    csr_path: "{{ bbb_ssl_cert }}.csr"
     provider: selfsigned
 
 - name: Validate private key file permissions
