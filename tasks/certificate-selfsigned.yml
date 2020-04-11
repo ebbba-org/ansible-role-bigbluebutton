@@ -34,5 +34,5 @@
   file:
     path: "{{ bbb_ssl_key }}"
     owner: "root"
-    group: "{{% if ansible_os_family == 'Debian' %}}ssl-cert{% else %}root{% endif %}"
+    group: "{% if ansible_os_family == 'Debian' %}ssl-cert{% else %}root{% endif %}"
     mode: '0440'
