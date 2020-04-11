@@ -10,6 +10,15 @@
     state: directory
     mode: '0755'
 
+- name: Generate an OpenSSL Certificate Signing Request
+  openssl_csr:
+    path: "{{ bbb_ssl_cert }}.csr"
+    privatekey_path: "{{ bbb_ssl_key }}"
+    organization_name: "{{ cert_orgname | default('Ansible') }}"
+    common_name: "{{ ansible_fqdn }}"
+    subject_alt_name: "{{ cert_san | default(omit) }}"
+    email_address: "{{ cert_email | default(omit) }}"
+
 - name: Generate SSL self-signed certificate
   openssl_certificate:
     path: "{{ bbb_ssl_cert }}"
