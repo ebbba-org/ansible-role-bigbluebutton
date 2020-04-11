@@ -10,9 +10,15 @@
     state: directory
     mode: '0755'
 
+- name: Check if OpenSSL private key exists
+  stat:
+    path: "{{ bbb_ssl_key }}"
+  register: private_key
+
 - name: Generate an OpenSSL private key
   openssl_privatekey:
     path: "{{ bbb_ssl_key }}"
+  when: not private_key.stat.exists
 
 - name: Generate an OpenSSL Certificate Signing Request
   openssl_csr:
