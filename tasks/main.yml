@@ -35,14 +35,14 @@
 - name: add multiverse apt repositories
   apt_repository: repo={{ item }} state=present
   with_items:
-    - 'deb http://archive.ubuntu.com/ubuntu trusty multiverse'
-    - 'deb-src http://archive.ubuntu.com/ubuntu trusty multiverse'
-    - 'deb http://archive.ubuntu.com/ubuntu trusty-updates multiverse'
-    - 'deb-src http://archive.ubuntu.com/ubuntu trusty-updates multiverse'
+    - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse"
+    - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse"
+    - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
+    - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
 
 - name: add mongodb apt key
   apt_key:
-    url: https://www.mongodb.org/static/pgp/server-3.4.asc
+    url: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version | default('3.4') }}.asc"
     state: present
 
 - name: add bigbluebutton apt key
@@ -50,13 +50,18 @@
     url: https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
     state: present
 
-- name: add dependency apt repositories
+- name: add Xenial dependency apt repositories
   apt_repository: repo={{ item }} state=present
   with_items:
     - ppa:bigbluebutton/support
     - ppa:rmescandon/yq
-    - deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse
-    - deb https://ubuntu.bigbluebutton.org/xenial-220/ bigbluebutton-xenial main
+  when: ansible_distribution_release == 'xenial'
+
+- name: add dependency apt repositories
+  apt_repository: repo={{ item }} state=present
+  with_items:
+    - "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu {{ ansible_distribution_release | lower }}/mongodb-org/{{ mongodb_version | default('3.4') }} multiverse"
+    - "deb https://ubuntu.bigbluebutton.org/xenial-220/ bigbluebutton-xenial main"
 
 - name: install bbb and dependencies
   apt:
