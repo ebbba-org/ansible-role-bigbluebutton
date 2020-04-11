@@ -4,6 +4,12 @@
   apt: name=ssl-cert state=present update_cache=yes cache_valid_time=3600
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
+- name: Ensure target directory exists
+  file:
+    dest: "{{ bbb_ssl_cert | dirname }}"
+    state: directory
+    mode: '0755'
+
 - name: Generate SSL self-signed certificate
   openssl_certificate:
     path: "{{ bbb_ssl_cert }}"
