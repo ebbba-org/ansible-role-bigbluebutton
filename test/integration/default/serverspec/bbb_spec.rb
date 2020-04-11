@@ -11,15 +11,15 @@ for p in pkg_list do
   end
 end
 
-describe service('bbb-html5')
+describe service('bbb-html5') do
   it { should be_enabled }
   it { should be_running }
 end
-describe service('bbb-webrtc-sfu')
+describe service('bbb-webrtc-sfu') do
   it { should be_enabled }
   it { should be_running }
 end
-describe service('bbb-web')
+describe service('bbb-web') do
   it { should be_enabled }
   it { should be_running }
 end
