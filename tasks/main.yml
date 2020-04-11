@@ -76,7 +76,7 @@
   service:
     name: mongod
     enabled: true
-    started: true
+    state: started
 
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable
