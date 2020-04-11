@@ -16,6 +16,7 @@ before_install:
   - env
   - pwd
   - find -ls
+  - apt-get install python3-pip
   - pip3 install ansible ansible-lint
   - cd ../ && mv ansible-role-bigbluebutton n0emis.bigbluebutton
   - cd n0emis.bigbluebutton
