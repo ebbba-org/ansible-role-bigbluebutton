@@ -10,11 +10,15 @@
       register: locale_status
       changed_when: false
 
+    - debug: var=locale_status
+
     - name: Parse 'LANG' from current locale and language configuration
       set_fact:
         locale_lang: >
           "{{ locale_status.stdout | regex_search('LANG=([0-9A-Za-z_.-]+)', '\1') | first }}"
 
+    - debug: var=locale_lang
+    - debug: var=bbb_system_locale
     - name: Configure locale to '{{ bbb_system_locale }}'
       command: localectl set-locale LANG={{ bbb_system_locale }}
       changed_when: locale_lang != bbb_system_locale
