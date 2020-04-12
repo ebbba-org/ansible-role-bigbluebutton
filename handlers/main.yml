@@ -7,3 +7,12 @@
 - name: restart bigbluebutton
   command: bbb-conf --restart
   become: true
+
+- name: restart mongo
+  service:
+    name: mongod
+    state: restarted
+
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
