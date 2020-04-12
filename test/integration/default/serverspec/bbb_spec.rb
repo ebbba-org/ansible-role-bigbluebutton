@@ -23,3 +23,26 @@ describe service('bbb-web') do
   it { should be_enabled }
   it { should be_running }
 end
+
+describe process("node") do
+  its(:user) { should eq "bigbluebutton" }
+  its(:args) { should match /server.js/ }
+  its(:count) { should eq 1 }
+end
+describe process("node") do
+  its(:user) { should eq "bigbluebutton" }
+  its(:args) { should match /\.\/lib\/video\/VideoProcess.js/ }
+  its(:count) { should eq 1 }
+end
+describe process("node") do
+  its(:user) { should eq "bigbluebutton" }
+  its(:args) { should match /\.\/lib\/audio\/AudioProcess.js/ }
+  its(:count) { should eq 1 }
+end
+
+describe port(9001) do
+  it { should be_listening.with('tcp') }
+end
+describe port(3010) do
+  it { should be_listening.with('tcp') }
+end
