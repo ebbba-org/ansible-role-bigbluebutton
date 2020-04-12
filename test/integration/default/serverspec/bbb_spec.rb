@@ -25,7 +25,7 @@ describe service('bbb-web') do
 end
 
 describe process("node") do
-  its(:user) { should eq "bigbluebutton" }
+  #its(:user) { should eq "bigbluebutton" }
   # its(:args) { should match /server.js/ }
   its(:count) { should eq 7 }
 end
