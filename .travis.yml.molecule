@@ -1,0 +1,24 @@
+---
+language: python
+services: docker
+
+env:
+  global:
+    - MOLECULE_NO_LOG: "false"
+  matrix:
+    - MOLECULE_DISTRO: ubuntu:16.04
+
+install:
+  # Install test dependencies.
+  - pip install molecule docker ansible-lint flake8 testinfra
+
+before_script:
+  - cd ../ && mv ansible-role-bigbluebutton n0emis.bigbluebutton
+  - cd n0emis.bigbluebutton
+  - ansible-galaxy install -p .. -r requirements.yml
+
+script:
+  - molecule test
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
