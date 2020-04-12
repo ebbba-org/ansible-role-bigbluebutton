@@ -8,8 +8,10 @@ jobs:
   include:
     - stage: ansible-lint
       name: Ansible Lint
+      before_install: true
       script:
         - ansible-lint tasks/main.yml || true
+      after_script: true
     - stage: xenial
       name: Deploy on Ubuntu Xenial
       env:
@@ -26,7 +28,7 @@ jobs:
           suite: default
       script:
         - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
-      if: branch = devel
+      if: branch =~ /^devel*/
 
 before_install:
   - env
