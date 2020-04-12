@@ -74,6 +74,7 @@
 
 # nojournal not supported for default engine
 # inMemory engine seems only in Enterprise distribution
+- debug: var=mongodb_version
 - name: Ensure mongodb4+ does not use nojournal - systemd
   replace:
     dest: /etc/systemd/system/mongod.service
