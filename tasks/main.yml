@@ -81,7 +81,7 @@
     regexp: ' --nojournal$'
     replace: ''
     backup: yes
-  when: mongodb_version is defined and mongodb_version == '4.2'
+  when: mongodb_version is defined and mongodb_version|string == '4.2'
   notify:
     - reload systemd
     - restart mongo
@@ -94,7 +94,7 @@
     mode: '0644'
   notify:
     - restart mongo
-  when: mongodb_version is defined and mongodb_version == '4.2'
+  when: mongodb_version is defined and mongodb_version|string == '4.2'
 
 - name: LXD | disable freeswitch scheduling options
   replace:
