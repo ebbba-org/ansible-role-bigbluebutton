@@ -16,6 +16,5 @@ describe port(27017) do
 end
 
 describe file('/var/log/mongodb/mongod.log') do
-  its(:content) { should_not match /ERROR/ }
+  its(:content) { should_not match /ERROR[: ]/ }
 end
-
