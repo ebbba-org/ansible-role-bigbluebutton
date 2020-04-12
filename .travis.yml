@@ -4,13 +4,29 @@ sudo: required
 rvm:
   - 2.6
 
-env:
-  - distribution: ubuntu
-    version: 18.04
-    suite: default
-  - distribution: ubuntu
-    version: 16.04
-    suite: default
+jobs:
+  include:
+    - stage: ansible-lint
+      name: Ansible Lint
+      script:
+        - ansible-lint tasks/main.yml || true
+    - stage: xenial
+      name: Deploy on Ubuntu Xenial
+      env:
+        - distribution: ubuntu
+          version: 16.04
+          suite: default
+      script:
+        - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
+    - stage: deployalt
+      name: Alternate Deployment
+      env:
+        - distribution: ubuntu
+          version: 18.04
+          suite: default
+      script:
+        - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
+      if: branch = devel
 
 before_install:
   - env
@@ -70,11 +86,6 @@ before_install:
   - ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -P ""
   - sudo -E su $USER -c "env"
   - sudo -E su $USER -c "env PATH=$PATH kitchen diagnose --all"
-
-script:
-  - ansible-lint tasks/main.yml || true
-#  - KITCHEN_LOCAL_YAML=.kitchen.local.yml bundle exec kitchen verify ${INSTANCE}
-  - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug || (cat $HOME/.kitchen/logs/${suite}-${distribution}-${version//./}.log; find /tmp/kitchen)"
 
 after_script:
   - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'pip freeze'"
