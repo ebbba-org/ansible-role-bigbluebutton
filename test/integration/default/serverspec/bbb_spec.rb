@@ -26,18 +26,8 @@ end
 
 describe process("node") do
   its(:user) { should eq "bigbluebutton" }
-  its(:args) { should match /server.js/ }
-  its(:count) { should eq 1 }
-end
-describe process("node") do
-  its(:user) { should eq "bigbluebutton" }
-  its(:args) { should match /\.\/lib\/video\/VideoProcess.js/ }
-  its(:count) { should eq 1 }
-end
-describe process("node") do
-  its(:user) { should eq "bigbluebutton" }
-  its(:args) { should match /\.\/lib\/audio\/AudioProcess.js/ }
-  its(:count) { should eq 1 }
+  # its(:args) { should match /server.js/ }
+  its(:count) { should eq 7 }
 end
 
 describe port(9001) do
@@ -45,4 +35,12 @@ describe port(9001) do
 end
 describe port(3010) do
   it { should be_listening.with('tcp') }
+end
+
+describe command('curl -vk https://localhost') do
+  its(:stdout) { should match /BigBlueButton - Open Source Web Conferencing/ }
+  its(:stdout) { should match /Welcome Message & Login Into Demo/ }
+  its(:stderr) { should match /200 OK/ }
+  its(:stderr) { should_not match /No such file or directory/ }
+  its(:exit_status) { should eq 0 }
 end
