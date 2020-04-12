@@ -14,5 +14,10 @@
     bbb_letsencrypt_enable: false
     bbb_letsencrypt_email: mail@example.com
     bbb_greenlight_enable: false
+  pre_tasks:
+    - name: Bionic+ | Set mongodb to 4.2
+      set_fact:
+        mongodb_version: 4.2
+      when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 18
   roles:
     - n0emis.bigbluebutton
