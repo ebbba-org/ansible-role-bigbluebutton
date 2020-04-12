@@ -12,7 +12,7 @@ jobs:
       script:
         - ansible-lint tasks/main.yml || true
       after_script: true
-    - stage: xenial
+    - stage: deploy
       name: Deploy on Ubuntu Xenial
       env:
         - distribution: ubuntu
@@ -20,15 +20,6 @@ jobs:
           suite: default
       script:
         - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
-    - stage: deployalt
-      name: Ubuntu 18.04 with nodejs 8.x and mongodb 3.4
-      env:
-        - distribution: ubuntu
-          version: 18.04
-          suite: default
-      script:
-        - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
-      if: branch =~ /^devel*/
     - stage: deployalt
       name: Ubuntu 16.04 with nodejs 10.x and mongodb 3.4
       env:
@@ -61,6 +52,15 @@ jobs:
           suite: default-mongo4
       script:
         - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
+    - stage: deployalt
+      name: Ubuntu 18.04 with nodejs 8.x and mongodb 3.4
+      env:
+        - distribution: ubuntu
+          version: 18.04
+          suite: default
+      script:
+        - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
+      if: branch =~ /^devel*/
 
 before_install:
   - env
