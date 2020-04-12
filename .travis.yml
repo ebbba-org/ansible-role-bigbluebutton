@@ -53,7 +53,7 @@ jobs:
       script:
         - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
     - stage: deployalt
-      name: Ubuntu 18.04 with nodejs 8.x and mongodb 3.4
+      name: Ubuntu 18.04 with nodejs 8.x and mongodb 4.x
       env:
         - distribution: ubuntu
           version: 18.04
