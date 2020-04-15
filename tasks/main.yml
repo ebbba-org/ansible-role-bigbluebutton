@@ -26,7 +26,7 @@
 
 - name: add BigBlueButton apt key
   apt_key:
-    url: http://ubuntu.bigbluebutton.org/bigbluebutton.asc
+    url: https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
     id: '{{ bbb_apt_key }}'
     state: present
 
@@ -41,11 +41,7 @@
 - name: add mongodb apt key
   apt_key:
     url: https://www.mongodb.org/static/pgp/server-3.4.asc
-    state: present
-
-- name: add bigbluebutton apt key
-  apt_key:
-    url: https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
+    id: '{{ mongodb_apt_key }}'
     state: present
 
 - name: add dependency apt repositories
@@ -53,7 +49,7 @@
   with_items:
     - ppa:bigbluebutton/support
     - ppa:rmescandon/yq
-    - deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse
+    - deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse
     - deb https://ubuntu.bigbluebutton.org/xenial-220/ bigbluebutton-xenial main
 
 - name: install bbb and dependencies

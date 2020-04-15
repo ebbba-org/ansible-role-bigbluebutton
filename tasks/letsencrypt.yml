@@ -23,6 +23,6 @@
   register: certbot_certificate_file_path
 
 - name: Generate Certificates
-  command: certbot certonly -d {{ bbb_hostname }} -d {{ ansible_fqdn }} --agree-tos --email {{ bbb_letsencrypt_email }} -n --nginx
+  command: certbot certonly -d {{ bbb_hostname }} --agree-tos --email {{ bbb_letsencrypt_email }} -n --nginx
   notify: reload nginx
   when: not certbot_certificate_file_path.stat.exists

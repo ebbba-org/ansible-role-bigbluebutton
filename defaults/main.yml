@@ -14,4 +14,5 @@ bbb_ssl_cert: "/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"
 bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 
 
-bbb_apt_key: 328BD16D
+bbb_apt_key: 770C4267C5E63474D171B60937B5DD5EFAB46452
+mongodb_apt_key: 0C49F3730359A14518585931BC711F9BA15703C6
