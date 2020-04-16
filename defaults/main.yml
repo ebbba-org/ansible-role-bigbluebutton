@@ -5,7 +5,6 @@ bbb_coturn_enable: yes
 bbb_turn_enable: yes
 bbb_turn_server: "{{ bbb_hostname }}"
 bbb_greenlight_enable: yes
-bbb_api_demos_enable: no
 bbb_nodejs_version: 8.x
 
 bbb_system_locale: en_US.UTF-8
@@ -16,3 +15,6 @@ bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 
 bbb_apt_key: 770C4267C5E63474D171B60937B5DD5EFAB46452
 mongodb_apt_key: 0C49F3730359A14518585931BC711F9BA15703C6
+
+# Greenlight registration mode: open (default), invite, approval
+bbb_greenlight_reg: open

@@ -2,9 +2,12 @@ server {
         listen 80;
         listen [::]:80;
         server_name {{ bbb_hostname }};
-        return 301 https://$host$request_uri;
-}
 
+        # If a user tries to come through http, redirect them through https
+        if ($scheme != "https") {
+            return 301 https://$host$request_uri;
+        }
+}
 
 server {
     listen 443 ssl;
