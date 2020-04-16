@@ -52,6 +52,14 @@
     line: "playback_protocol: https"
   notify: restart bigbluebutton
 
+- name: disable recordings by default
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^disableRecordingDefault'
+    line: 'disableRecordingDefault=true'
+  notify: restart bigbluebutton
+  when: bbb_disable_rec
+
 - name: configure freeswitch to use SSL
   lineinfile:
     path: /etc/bigbluebutton/nginx/sip.nginx

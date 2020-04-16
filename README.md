@@ -17,6 +17,8 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_api_demos_enable` | enable installation of the api demos | `no` |
 | `bbb_nodejs_version` | version of nodejs to be installed | `8.x` |
 | `bbb_system_locale` | the system locale to use | `en_US.UTF-8` |
+| `bbb_greenlight_reg` | Registration mode | `open` | Greenlight registration mode: open, invite, aprroval |
+| `bbb_cam_rec` | Disable recording | `false` | Disable recording by default: false/true |
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:
