@@ -96,3 +96,11 @@
      src: bbb/bigbluebutton.j2
      dest: /etc/nginx/sites-available/bigbluebutton
   notify: reload nginx
+
+- name: disable CPUSchedulingPolicy in FreeSWITCH service
+  lineinfile:
+    path: /lib/systemd/system/freeswitch.service
+    regexp: '^CPUSchedulingPolicy=rr'
+    line: '#CPUSchedulingPolicy=rr'
+  notify: restart freeswitch
+  when: not cpuschedule

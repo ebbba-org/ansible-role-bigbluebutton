@@ -7,3 +7,9 @@
 - name: restart bigbluebutton
   command: bbb-conf --restart
   become: yes
+
+- name: restart freeswitch
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: freeswitch
