@@ -20,6 +20,7 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_greenlight_reg` | Registration mode | `open` | Greenlight registration mode: open, invite, aprroval |
 | `bbb_cam_rec` | Disable recording | `false` | Disable recording by default: false/true |
 | `cpuschedule` | CPUSchedulingPolicy | `true` | Disable to fix [FreeSWITCH SETSCHEDULER error][cpuschedule] |
+| `freeswitch_ipv6` | Enable IPv6 support in FreeSWITCH | `true` | Disable to fix [FreeSWITCH IPv6 error][freeswitch_ipv6] |
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:
@@ -106,3 +107,4 @@ This is an example, of how to use this role. Warning: the value of the Variables
 MIT
 
 [cpuschedule]: https://docs.bigbluebutton.org/2.2/troubleshooting.html#freeswitch-fails-to-start-with-a-setscheduler-error
+[freeswitch_ipv6]: https://docs.bigbluebutton.org/2.2/troubleshooting.html#freeswitch-fails-to-bind-to-port-8021
