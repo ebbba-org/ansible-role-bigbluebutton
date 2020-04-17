@@ -120,4 +120,4 @@
     regexp: '<param name="listen-ip" value="::"/>'
     line: '<param name="listen-ip" value="127.0.0.1"/>'
   when: not freeswitch_ipv6
-  notify: restart bigbluebutton
+  notify: restart freeswitch
