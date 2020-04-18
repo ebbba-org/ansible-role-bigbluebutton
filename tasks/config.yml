@@ -6,7 +6,7 @@
 
 - name: set bbb hostname
   command: "bbb-conf --setip {{ bbb_hostname }}"
-  become: yes
+  become: true
   when: properties['content'] | b64decode | regex_search(bbb_hostname, multiline=True, ignorecase=True) != bbb_hostname
   notify: restart bigbluebutton
 

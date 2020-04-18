@@ -2,7 +2,7 @@
 - name: Install coturn
   apt:
     name: coturn
-    update_cache: yes
+    update_cache: true
     state: present
 
 - name: Copy coturn config-file
@@ -24,5 +24,5 @@
 - name: Enable coturn
   service:
     name: coturn
-    enabled: yes
+    enabled: true
     state: started

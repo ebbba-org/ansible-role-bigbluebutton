@@ -1,0 +1,47 @@
+---
+driver:
+  name: lxd_cli
+
+transport:
+  name: sftp
+
+driver_config:
+    customize:
+#      cpus: 2
+      memory: 1024
+
+provisioner:
+  name: ansible_playbook
+  roles_path: ../
+  hosts: all
+  ansible_verbose: true
+#  ansible_verbose: false
+  ansible_verbosity: 2
+#  ansible_version: 2.7.7
+  ansible_extra_flags: <%= ENV['ANSIBLE_EXTRA_FLAGS'] %>
+  ansible_cfg_path: test/ansible.cfg
+  require_ansible_omnibus: true
+#  require_chef_for_busser: false
+  enable_yum_epel: true
+  ansible_connection: ssh
+
+platforms:
+  - name: ubuntu-18.04
+  - name: ubuntu-16.04
+
+suites:
+  - name: default
+    run_list:
+    attributes:
+  - name: default-node10
+    run_list:
+    attributes:
+  - name: default-node12
+    run_list:
+    attributes:
+  - name: default-mongo36
+    run_list:
+    attributes:
+  - name: default-mongo4
+    run_list:
+    attributes:
