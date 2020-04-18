@@ -117,11 +117,16 @@
     enabled: true
     state: started
 
+- name: Check if bbb_ssl_cert exists
+  stat:
+    path: "{{ bbb_ssl_cert }}"
+  register: bbbcert
+
 - import_tasks: letsencrypt.yml
-  when: bbb_letsencrypt_enable
+  when: bbb_letsencrypt_enable and not bbbcert.stat.exists
 
 - import_tasks: certificate-selfsigned.yml
-  when: not bbb_letsencrypt_enable
+  when: not bbb_letsencrypt_enable and not bbbcert.stat.exists
 
 - import_tasks: config.yml
 
