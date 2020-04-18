@@ -13,8 +13,8 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - trusty
-        # - xenial
+        - xenial
+        # - bionic
 
   galaxy_tags: []
 
