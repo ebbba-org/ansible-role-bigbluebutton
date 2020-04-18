@@ -39,7 +39,7 @@
     src: greenlight/docker-compose.yml.j2
     dest: /root/greenlight/docker-compose.yml
 
-- name: copy greenlight docker compose file
+- name: copy greenlight nginx configuration file
   template:
     src: greenlight/greenlight.nginx.j2
     dest: /etc/bigbluebutton/nginx/greenlight.nginx
