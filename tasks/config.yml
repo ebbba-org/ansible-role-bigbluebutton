@@ -103,7 +103,7 @@
     regexp: '^CPUSchedulingPolicy=rr'
     line: '#CPUSchedulingPolicy=rr'
   notify: restart freeswitch
-  when: not cpuschedule
+  when: not bbb_cpuschedule
 
 - name: disable IPv6 in FreeSWITCH service 1/2
   command:
@@ -119,5 +119,5 @@
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
     regexp: '<param name="listen-ip" value="::"/>'
     line: '<param name="listen-ip" value="127.0.0.1"/>'
-  when: not freeswitch_ipv6
+  when: not bbb_freeswitch_ipv6
   notify: restart freeswitch
