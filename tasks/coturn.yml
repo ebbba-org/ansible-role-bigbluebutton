@@ -15,7 +15,7 @@
     src: logrotate/coturn
     dest: /etc/logrotate.d/coturn
 
-- name: enable join via html5
+- name: Enable coturn server in defaults
   lineinfile:
     path: /etc/default/coturn
     regexp: 'TURNSERVER_ENABLED'
