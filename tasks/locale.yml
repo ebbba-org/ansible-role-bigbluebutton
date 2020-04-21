@@ -9,6 +9,7 @@
       command: localectl status
       register: locale_status
       changed_when: false
+      check_mode: no
 
     - debug: var=locale_status
 
@@ -29,7 +30,9 @@
     - name: Get locale
       command: locale -a
       changed_when: false
+      check_mode: no
       register: localea
+      
     - debug: var=localea
 
     - name: Configure locale to '{{ bbb_system_locale }}'
