@@ -61,7 +61,7 @@
   apt_repository: repo={{ item }} state=present
   with_items:
     - "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu {{ ansible_distribution_release | lower }}/mongodb-org/{{ mongodb_version | default('3.4') }} multiverse"
-    - "deb https://ubuntu.bigbluebutton.org/xenial-220/ bigbluebutton-xenial main"
+    - "deb https://ubuntu.bigbluebutton.org/xenial-22/ bigbluebutton-xenial main"
 
 - name: install bbb and dependencies
   apt:
