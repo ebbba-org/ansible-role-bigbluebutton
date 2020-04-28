@@ -78,6 +78,13 @@ bbb_greenlight_office365:
     hd:
 ```
 
+#### In Application Authentication
+By default, the ability for anyone to create a Greenlight account is enabled. To disable this, use `false`.
+For more information see: https://docs.bigbluebutton.org/greenlight/gl-config.html#in-application-greenlight
+```yaml
+bbb_greenlight_accounts: 'false'
+```
+
 #### RECAPTCHA
 To enable reCaptcha on the user sign up, define these 2 keys.
 You can obtain these keys by registering your domain using the following url: https://www.google.com/recaptcha/admin
