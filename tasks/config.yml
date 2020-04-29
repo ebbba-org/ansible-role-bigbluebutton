@@ -88,3 +88,27 @@
      src: bbb/bigbluebutton.j2
      dest: /etc/nginx/sites-available/bigbluebutton
   notify: reload nginx
+
+- name: ensure default recording is disabled
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^disableRecordingDefault'
+    line: 'disableRecordingDefault=true'
+  when: bbb_disable_recordings
+  notify: restart bigbluebutton
+
+- name: ensure recording auto start is disabled
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^autoStartRecording'
+    line: 'autoStartRecording=false'
+  when: bbb_disable_recordings
+  notify: restart bigbluebutton
+
+- name: ensure users are not allowed to start recording
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^allowStartStopRecording'
+    line: 'allowStartStopRecording=false'
+  when: bbb_disable_recordings
+  notify: restart bigbluebutton
