@@ -89,12 +89,11 @@
      dest: /etc/nginx/sites-available/bigbluebutton
   notify: reload nginx
 
-- name: ensure default recording is disabled
+- name: set recording default
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^disableRecordingDefault'
-    line: 'disableRecordingDefault=true'
-  when: bbb_disable_recordings
+    line: 'disableRecordingDefault={{ bbb_disable_recordings | ternary("true", "false") }}'
   notify: restart bigbluebutton
 
 - name: ensure recording auto start is disabled
@@ -102,13 +101,11 @@
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^autoStartRecording'
     line: 'autoStartRecording=false'
-  when: bbb_disable_recordings
   notify: restart bigbluebutton
 
-- name: ensure users are not allowed to start recording
+- name: allow/disable users to start recordings
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^allowStartStopRecording'
-    line: 'allowStartStopRecording=false'
-  when: bbb_disable_recordings
+    line: 'allowStartStopRecording={{ bbb_disable_recordings | ternary("false", "true") }}'
   notify: restart bigbluebutton
