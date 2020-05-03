@@ -1,0 +1,60 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  tasks:
+  - name: Check if needed packages are installed
+    command: "dpkg-query -l {{ item }}"
+    changed_when: false
+    with_items:
+      - language-pack-en
+      - python-pip
+      - mongodb-org
+      - bbb-check
+      - bbb-html5
+      - bigbluebutton
+  - name: Ensure bigbluebutton.properties file is present
+    stat:
+      path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    register: cfg
+  - name: Validate config present
+    assert:
+      that: cfg.stat.exists and cfg.stat.size != 0
+  - name: Ensure red5 config file is present
+    stat:
+      path: /etc/red5/red5.xml
+    register: cfg2
+  - name: Validate config present
+    assert:
+      that: cfg2.stat.exists and cfg2.stat.size != 0
+  - name: Ensure bbb nginx config is enabled
+    stat:
+      path: /etc/nginx/sites-enabled/bigbluebutton
+    register: cfg3
+  - name: Validate config present
+    assert:
+      that: cfg3.stat.exists and cfg3.stat.size != 0
+  - name: Ensure process is running
+    command: pgrep -u root turnserver
+    register: ps
+    changed_when: false
+  - name: Validate ps output
+    assert:
+      that: ps.stdout
+  - name: Ensure turnserver ports are listening
+    wait_for:
+      host: localhost
+      port: "{{ item }}"
+    with_items:
+      - 3478
+      - 3479
+  # FIXME! bbb-conf relies on systemctl. NOK in docker
+  - name: check if bbb status
+    command: bbb-conf --status
+    register: bbbconf
+    changed_when: false
+  # - name: Validate bbb-conf output
+  #   assert:
+  #     that: >
+  #       "'Failed to connect to bus: No such file or directory' not in bbbconf.stderr"

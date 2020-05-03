@@ -26,7 +26,7 @@
 - name: parse bbb secret
   set_fact:
     bbb_secret: "{{ result.stdout | regex_search('Secret: ([a-zA-Z0-9]*)', multiline=True) |  regex_replace('Secret: ') }}"
-    cacheable: yes
+    cacheable: true
   when: not bbb_secret is defined
 
 - name: copy greenlight config file
@@ -39,7 +39,7 @@
     src: greenlight/docker-compose.yml.j2
     dest: /root/greenlight/docker-compose.yml
 
-- name: copy greenlight docker compose file
+- name: copy greenlight nginx configuration file
   template:
     src: greenlight/greenlight.nginx.j2
     dest: /etc/bigbluebutton/nginx/greenlight.nginx
@@ -47,6 +47,6 @@
 
 - name: start greenlight
   docker_compose:
-    pull: yes
+    pull: true
     project_src: /root/greenlight/
   when: bbb_greenlight_enable

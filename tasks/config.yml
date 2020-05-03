@@ -6,7 +6,7 @@
 
 - name: set bbb hostname
   command: "bbb-conf --setip {{ bbb_hostname }}"
-  become: yes
+  become: true
   when: properties['content'] | b64decode | regex_search(bbb_hostname, multiline=True, ignorecase=True) != bbb_hostname
   notify: restart bigbluebutton
 
@@ -52,14 +52,6 @@
     line: "playback_protocol: https"
   notify: restart bigbluebutton
 
-- name: disable recordings by default
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^disableRecordingDefault'
-    line: 'disableRecordingDefault=true'
-  notify: restart bigbluebutton
-  when: bbb_disable_rec
-
 - name: configure freeswitch to use SSL
   lineinfile:
     path: /etc/bigbluebutton/nginx/sip.nginx
@@ -95,7 +87,7 @@
   template:
      src: bbb/bigbluebutton.j2
      dest: /etc/nginx/sites-available/bigbluebutton
-  notify: restart nginx
+  notify: reload nginx
 
 - name: disable CPUSchedulingPolicy in FreeSWITCH service
   lineinfile:
@@ -121,3 +113,25 @@
     line: '<param name="listen-ip" value="127.0.0.1"/>'
   when: not bbb_freeswitch_ipv6
   notify: restart freeswitch
+  notify: reload nginx
+
+- name: set recording default
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^disableRecordingDefault'
+    line: 'disableRecordingDefault={{ bbb_disable_recordings | ternary("true", "false") }}'
+  notify: restart bigbluebutton
+
+- name: ensure recording auto start is disabled
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^autoStartRecording'
+    line: 'autoStartRecording=false'
+  notify: restart bigbluebutton
+
+- name: allow/disable users to start recordings
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^allowStartStopRecording'
+    line: 'allowStartStopRecording={{ bbb_disable_recordings | ternary("false", "true") }}'
+  notify: restart bigbluebutton

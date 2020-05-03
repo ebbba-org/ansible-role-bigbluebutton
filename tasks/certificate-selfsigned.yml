@@ -1,0 +1,44 @@
+---
+
+- name: apt | self-signed certificate packages dependencies
+  apt: name=ssl-cert state=present update_cache=yes cache_valid_time=3600
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Ensure target directory exists
+  file:
+    dest: "{{ bbb_ssl_cert | dirname }}"
+    state: directory
+    mode: '0755'
+
+- name: Check if OpenSSL private key exists
+  stat:
+    path: "{{ bbb_ssl_key }}"
+  register: private_key
+
+- name: Generate an OpenSSL private key
+  openssl_privatekey:
+    path: "{{ bbb_ssl_key }}"
+  when: not private_key.stat.exists
+
+- name: Generate an OpenSSL Certificate Signing Request
+  openssl_csr:
+    path: "{{ bbb_ssl_cert }}.csr"
+    privatekey_path: "{{ bbb_ssl_key }}"
+    organization_name: "{{ cert_orgname | default('Ansible') }}"
+    common_name: "{{ ansible_fqdn }}"
+    subject_alt_name: "{{ cert_san | default(omit) }}"
+    email_address: "{{ cert_email | default(omit) }}"
+
+- name: Generate SSL self-signed certificate
+  openssl_certificate:
+    path: "{{ bbb_ssl_cert }}"
+    privatekey_path: "{{ bbb_ssl_key }}"
+    csr_path: "{{ bbb_ssl_cert }}.csr"
+    provider: selfsigned
+
+- name: Validate private key file permissions
+  file:
+    path: "{{ bbb_ssl_key }}"
+    owner: "root"
+    group: "{% if ansible_os_family == 'Debian' %}ssl-cert{% else %}root{% endif %}"
+    mode: '0440'

@@ -1,29 +1,147 @@
 ---
-language: python
-python: "2.7"
+dist: xenial
+sudo: required
+rvm:
+  - 2.6
 
-# Use the new container infrastructure
-sudo: false
+jobs:
+  include:
+    - stage: ansible-lint
+      name: Ansible Lint
+      before_install: true
+      script:
+        - ansible-lint tasks/main.yml || true
+      after_script: true
+    - stage: deploy
+      name: Deploy on Ubuntu Xenial
+      env:
+        - distribution: ubuntu
+          version: 16.04
+          suite: default
+      script:
+        - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
+    - stage: deployalt
+      name: Ubuntu 16.04 with nodejs 10.x and mongodb 3.4
+      env:
+        - distribution: ubuntu
+          version: 16.04
+          suite: default-node10
+      script:
+        - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
+    - stage: deployalt
+      name: Ubuntu 16.04 with nodejs 12.x and mongodb 3.4
+      env:
+        - distribution: ubuntu
+          version: 16.04
+          suite: default-node12
+      script:
+        - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
+    - stage: deployalt
+      name: Ubuntu 16.04 with nodejs 8.x and mongodb 3.6
+      env:
+        - distribution: ubuntu
+          version: 16.04
+          suite: default-mongo36
+      script:
+        - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
+    - stage: deployalt
+      name: Ubuntu 16.04 with nodejs 8.x and mongodb 4.x
+      env:
+        - distribution: ubuntu
+          version: 16.04
+          suite: default-mongo4
+      script:
+        - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
+    - stage: deployalt
+      name: Ubuntu 18.04 with nodejs 8.x and mongodb 4.x
+      env:
+        - distribution: ubuntu
+          version: 18.04
+          suite: default
+      script:
+        - sudo -E su $USER -c "env PATH=$PATH kitchen verify ${suite}-${distribution}-${version//./} -l debug"
+      if: branch =~ /^devel*/
 
-# Install ansible
-addons:
-  apt:
-    packages:
-    - python-pip
+before_install:
+  - env
+  - pwd
+  - find -ls
+  - sudo apt-get install python3-pip python3-setuptools
+  - pip3 install ansible ansible-lint
+  - cd ../ && mv ansible-role-bigbluebutton n0emis.bigbluebutton
+  - cd n0emis.bigbluebutton
+  - ansible-galaxy install -p .. -r requirements.yml
+  - echo "deb http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse" | sudo tee /etc/apt/sources.list.d/xenial-backports.list
+  - sudo apt-get update -qq
+  - sudo apt -t xenial-backports -y install lxd acl dnsmasq-base zfsutils-linux -q
+## change of group implies logout+login to apply... can't do with travis = run as root (sic)
+## https://github.com/travis-ci/travis-ci/issues/1839   or chain: sudo -E su $USER -c "..."
+  - sudo usermod -G lxd travis
+  # Pull container
+#  - lxc remote add images images.linuxcontainers.org
+  - sudo -E su $USER -c "lxc remote list"
+  - sudo -E su $USER -c "lxc image list"
+## pre-download base images
+  - 'sudo -E su $USER -c "[ ${distribution} == ubuntu ] || lxc image copy images:${distribution}/${version}/amd64 local: --alias=${distribution}-${version}-nossh"'
+  - 'sudo -E su $USER -c "[ ${distribution} == ubuntu ] && lxc image copy ubuntu:${version} local: --alias=${distribution}-${version}" || true'
+  - sudo -E su $USER -c "lxc image list"
+## configure network
+  - ifconfig -a
+  - sudo lxc info
+  - sudo lxc network list
+  - sudo lxc network create lxdbr0
+  - sudo lxc network show lxdbr0
+  - sudo lxc network attach-profile lxdbr0 default ens4
+  - sudo lxc profile device get default ens4 nictype || true
+  - sudo service lxd restart
+  - ps ax | grep dnsmasq
+  - systemctl status -l --no-pager lxd || true
+  - cat /etc/network/interfaces.d/50-cloud-init.cfg
+  - sudo lxc network list
+# configure storage pool
+  - sudo lxc storage list
+  - sudo lxc storage create pool1 zfs
+  - sudo lxc storage list
+  - sudo zpool list
+  - sudo lxc profile device add default root disk path=/ pool=pool1
+  - sudo lxc profile show default
+# https://redis4you.com/articles.php?id=012&name=redis
+# https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux
+  - sudo sysctl -w net.ipv4.tcp_timestamps=1
 
-install:
-  # Install ansible
-  - pip install ansible
+  - sudo pip install ansible ansible-lint
+  - gem install test-kitchen --version "=1.25.0"
+  - gem install kitchen-ansible
+  - gem install kitchen-sync
+  - gem install kitchen-lxd_cli
+  - gem list
+  - which kitchen
+  - ls ~/.ssh
+  - ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -P ""
+  - sudo -E su $USER -c "env"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen diagnose --all"
 
-  # Check ansible version
-  - ansible --version
-
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
-
-script:
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+after_script:
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'pip freeze'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'pip3 freeze'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'cat /tmp/idempotency.test'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'netstat -anp'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'ss -nlp'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'ps auxw'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'bbb-conf --status'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'bbb-conf --check'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'systemctl -l --no-pager status nginx'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'systemctl -l --no-pager status mongod'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'systemctl -l --no-pager status freeswitch'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'systemctl -l --no-pager status'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'journalctl -xe --no-pager'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'cat /etc/mongod.conf'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'cat /var/log/mongodb/mongod.log'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'curl -v http://localhost'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'curl -vk https://localhost'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'curl -vk https://localhost/check/'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen exec ${suite}-${distribution}-${version//./} -c 'curl -vk https://localhost/default.pdf'"
+  - sudo -E su $USER -c "env PATH=$PATH kitchen destroy ${suite}-${distribution}-${version//./}"
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

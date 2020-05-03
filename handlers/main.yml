@@ -11,10 +11,20 @@
 
 - name: restart bigbluebutton
   command: bbb-conf --restart
-  become: yes
+  become: true
 
 - name: restart freeswitch
   systemd:
+    name: freeswitch
     state: restarted
     daemon_reload: yes
-    name: freeswitch
+  become: true
+
+- name: restart mongo
+  service:
+    name: mongod
+    state: restarted
+
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
