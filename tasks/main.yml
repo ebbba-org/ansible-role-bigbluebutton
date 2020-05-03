@@ -43,7 +43,6 @@
 - name: add mongodb apt key
   apt_key:
     url: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version | default('3.4') }}.asc"
-    id: '{{ mongodb_apt_key }}'
     state: present
 
 - name: add Xenial dependency apt repositories
