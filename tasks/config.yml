@@ -105,6 +105,9 @@
   with_items:
     - "/opt/freeswitch/etc/freeswitch/sip_profiles/internal-ipv6.xml"
     - "/opt/freeswitch/etc/freeswitch/sip_profiles/external-ipv6.xml"
+  when: not bbb_freeswitch_ipv6
+  notify: restart freeswitch
+  notify: reload nginx
 
 - name: disable IPv6 in FreeSWITCH service 2/2
   lineinfile:
