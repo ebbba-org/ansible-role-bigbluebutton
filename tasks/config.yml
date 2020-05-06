@@ -83,6 +83,18 @@
     dest: /usr/share/bbb-web/WEB-INF/classes/spring/turn-stun-servers.xml
   notify: restart bigbluebutton
 
+- name: create ssl folder for nginx
+  file:
+    path: /etc/nginx/ssl
+    state: directory
+
+
+- name: Generate DH Parameters with a different size (4096 bits)
+  openssl_dhparam:
+    path: /etc/nginx/ssl/dhp-4096.pem
+    size: 4096
+  notify: reload nginx
+
 - name: copy bbb's nginx vhost
   template:
      src: bbb/bigbluebutton.j2
