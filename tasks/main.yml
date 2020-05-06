@@ -1,5 +1,6 @@
 ---
 - name: Install required packages
+  become: yes
   apt:
     name:
     - language-pack-en
@@ -27,12 +28,14 @@
 - import_tasks: locale.yml
 
 - name: add BigBlueButton apt key
+  become: yes
   apt_key:
     url: http://ubuntu.bigbluebutton.org/bigbluebutton.asc
     id: '{{ bbb_apt_key }}'
     state: present
 
 - name: add multiverse apt repositories
+  become: yes
   apt_repository: repo={{ item }} state=present
   with_items:
     - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse"
@@ -41,16 +44,19 @@
     - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
 
 - name: add mongodb apt key
+  become: yes
   apt_key:
     url: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version | default('3.4') }}.asc"
     state: present
 
 - name: add bigbluebutton apt key
+  become: yes
   apt_key:
     url: https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
     state: present
 
 - name: add Xenial dependency apt repositories
+  become: yes
   apt_repository: repo={{ item }} state=present
   with_items:
     - ppa:bigbluebutton/support
@@ -58,12 +64,14 @@
   when: ansible_distribution_release == 'xenial'
 
 - name: add dependency apt repositories
+  become: yes
   apt_repository: repo={{ item }} state=present
   with_items:
     - "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu {{ ansible_distribution_release | lower }}/mongodb-org/{{ mongodb_version | default('3.4') }} multiverse"
     - "deb https://ubuntu.bigbluebutton.org/xenial-22/ bigbluebutton-xenial main"
 
 - name: install bbb and dependencies
+  become: yes
   apt:
     name:
     - mongodb-org
@@ -76,6 +84,7 @@
 # inMemory engine seems only in Enterprise distribution
 - debug: var=mongodb_version
 - name: Ensure mongodb4+ does not use nojournal - systemd
+  become: yes
   replace:
     dest: /etc/systemd/system/mongod.service
     regexp: ' --nojournal$'
@@ -87,6 +96,7 @@
     - restart mongo
 
 - name: Ensure mongodb4+ does not use nojournal - config
+  become: yes
   template:
     src: mongo4-ramdisk.conf.j2
     dest: /usr/share/meteor/bundle/mongo-ramdisk.conf
@@ -97,6 +107,7 @@
   when: mongodb_version is defined and mongodb_version|string == '4.2'
 
 - name: LXD | disable freeswitch scheduling options
+  become: yes
   replace:
     dest: /lib/systemd/system/freeswitch.service
     regexp: "{{ item.re }}"
@@ -112,12 +123,14 @@
 - meta: flush_handlers
 
 - name: Ensure services are enabled
+  become: yes
   service:
     name: mongod
     enabled: true
     state: started
 
 - name: Check if bbb_ssl_cert exists
+  become: yes
   stat:
     path: "{{ bbb_ssl_cert }}"
   register: bbbcert

@@ -1,5 +1,6 @@
 ---
 - name: ensure pip is installed
+  become: yes
   apt:
     name:
       - python3-pip
@@ -7,6 +8,7 @@
     state: present
 
 - name: install python docker packages
+  become: yes
   pip:
     name:
       - docker
@@ -14,11 +16,13 @@
     state: present
 
 - name: create greenlight directory
+  become: yes
   file:
     path: /root/greenlight
     state: directory
 
 - name: register bbb secret
+  become: yes
   command: bbb-conf --secret
   register: result
   when: not bbb_secret is defined
@@ -30,22 +34,26 @@
   when: not bbb_secret is defined
 
 - name: copy greenlight config file
+  become: yes
   template:
     src: greenlight/env.j2
     dest: /root/greenlight/.env
 
 - name: copy greenlight docker compose file
+  become: yes
   template:
     src: greenlight/docker-compose.yml.j2
     dest: /root/greenlight/docker-compose.yml
 
 - name: copy greenlight nginx configuration file
+  become: yes
   template:
     src: greenlight/greenlight.nginx.j2
     dest: /etc/bigbluebutton/nginx/greenlight.nginx
   notify: reload nginx
 
 - name: start greenlight
+  become: yes
   docker_compose:
     pull: true
     project_src: /root/greenlight/

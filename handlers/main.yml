@@ -1,18 +1,21 @@
 ---
 - name: reload nginx
+  become: yes
   service:
     name: nginx
     state: reloaded
 
 - name: restart bigbluebutton
+  become: yes
   command: bbb-conf --restart
-  become: true
 
 - name: restart mongo
+  become: yes
   service:
     name: mongod
     state: restarted
 
 - name: reload systemd
+  become: yes
   systemd:
     daemon_reload: yes

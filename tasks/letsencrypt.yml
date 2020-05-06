@@ -1,10 +1,12 @@
 ---
 - name: Add certbot apt repo
+  become: yes
   apt_repository:
     repo: ppa:certbot/certbot
     state: present
 
 - name: Install certbot
+  become: yes
   apt:
     pkg:
       - certbot
@@ -13,6 +15,7 @@
     state: present
 
 - name: Change Let's Encrypt API to v2
+  become: yes
   lineinfile:
     path: /etc/letsencrypt/cli.ini
     line: 'server = https://acme-v02.api.letsencrypt.org/directory'
@@ -23,6 +26,7 @@
   register: certbot_certificate_file_path
 
 - name: Generate Certificates
+  become: yes
   command: certbot certonly -d {{ bbb_hostname }} -d {{ ansible_fqdn }} --agree-tos --email {{ bbb_letsencrypt_email }} -n --nginx
   notify: reload nginx
   when: not certbot_certificate_file_path.stat.exists

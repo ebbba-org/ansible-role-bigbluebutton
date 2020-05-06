@@ -1,27 +1,32 @@
 ---
 - name: Install coturn
+  become: yes
   apt:
     name: coturn
     update_cache: true
     state: present
 
 - name: Copy coturn config-file
+  become: yes
   template:
     src: "turnserver.conf.j2"
     dest: /etc/turnserver.conf
 
 - name: Enable logrotate for coturn
+  become: yes
   template:
     src: logrotate/coturn
     dest: /etc/logrotate.d/coturn
 
 - name: Enable coturn server in defaults
+  become: yes
   lineinfile:
     path: /etc/default/coturn
     regexp: 'TURNSERVER_ENABLED'
     line: 'TURNSERVER_ENABLED=1'
 
 - name: Enable coturn
+  become: yes
   service:
     name: coturn
     enabled: true

@@ -6,11 +6,12 @@
 
 - name: set bbb hostname
   command: "bbb-conf --setip {{ bbb_hostname }}"
-  become: true
+  become: yes
   when: properties['content'] | b64decode | regex_search(bbb_hostname, multiline=True, ignorecase=True) != bbb_hostname
   notify: restart bigbluebutton
 
 - name: enable join via html5
+  become: yes
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^attendeesJoinViaHTML5Client'
@@ -18,6 +19,7 @@
   notify: restart bigbluebutton
 
 - name: enable mod join via html5
+  become: yes
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^moderatorsJoinViaHTML5Client'
@@ -25,6 +27,7 @@
   notify: restart bigbluebutton
 
 - name: set bbb to use HTTPS
+  become: yes
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^bigbluebutton.web.serverURL'
@@ -32,6 +35,7 @@
   notify: restart bigbluebutton
 
 - name: set red5 to use HTTPS 1/2
+  become: yes
   lineinfile:
     path: /usr/share/red5/webapps/screenshare/WEB-INF/screenshare.properties
     regexp: '^jnlpUrl'
@@ -39,6 +43,7 @@
   notify: restart bigbluebutton
 
 - name: set red5 to use HTTPS 2/2
+  become: yes
   lineinfile:
     path: /usr/share/red5/webapps/screenshare/WEB-INF/screenshare.properties
     regexp: '^jnlpFile'
@@ -46,6 +51,7 @@
   notify: restart bigbluebutton
 
 - name: serve recordings via https
+  become: yes
   lineinfile:
     path: /usr/local/bigbluebutton/core/scripts/bigbluebutton.yml
     regexp: "playback_protocol"
@@ -53,6 +59,7 @@
   notify: restart bigbluebutton
 
 - name: configure freeswitch to use SSL
+  become: yes
   lineinfile:
     path: /etc/bigbluebutton/nginx/sip.nginx
     regexp: "proxy_pass"
@@ -60,36 +67,42 @@
   notify: reload nginx
 
 - name: set BigBlueButton client to load components via HTTPS
+  become: yes
   replace:
     path: /var/www/bigbluebutton/client/conf/config.xml
     regexp: 'http://'
     replace: 'https://'
 
 - name: set note server to use HTTPS
+  become: yes
   replace:
     path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
     regexp: 'http://'
     replace: 'https://'
 
 - name: set korrento server to use HTTPS
+  become: yes
   replace:
     path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
     regexp: 'ws://'
     replace: 'wss://'
 
 - name: copy TURN config file
+  become: yes
   template:
     src: bbb/turn-stun-servers.xml.j2
     dest: /usr/share/bbb-web/WEB-INF/classes/spring/turn-stun-servers.xml
   notify: restart bigbluebutton
 
 - name: copy bbb's nginx vhost
+  become: yes
   template:
      src: bbb/bigbluebutton.j2
      dest: /etc/nginx/sites-available/bigbluebutton
   notify: reload nginx
 
 - name: set recording default
+  become: yes
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^disableRecordingDefault'
@@ -97,6 +110,7 @@
   notify: restart bigbluebutton
 
 - name: ensure recording auto start is disabled
+  become: yes
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^autoStartRecording'
@@ -104,6 +118,7 @@
   notify: restart bigbluebutton
 
 - name: allow/disable users to start recordings
+  become: yes
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^allowStartStopRecording'
