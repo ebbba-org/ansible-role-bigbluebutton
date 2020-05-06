@@ -41,8 +41,11 @@
 
 - name: copy greenlight nginx configuration file
   template:
-    src: greenlight/greenlight.nginx.j2
-    dest: /etc/bigbluebutton/nginx/greenlight.nginx
+    src: "greenlight/{{ item }}.j2"
+    dest: "/etc/bigbluebutton/nginx/{{ item }}"
+  with_items:
+  - greenlight.nginx
+  - greenlight-redirect.nginx
   notify: reload nginx
 
 - name: start greenlight
