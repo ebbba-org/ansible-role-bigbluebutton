@@ -11,6 +11,8 @@ bbb_greenlight_enable: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
 bbb_disable_recordings: false
 bbb_api_demos_enable: false
+bbb_mute_on_start: false
+bbb_app_log_level: 'DEBUG'
 bbb_nodejs_version: 8.x
 bbb_cpuschedule: true
 bbb_freeswitch_ipv6: true
@@ -20,5 +22,6 @@ bbb_system_locale: en_US.UTF-8
 bbb_ssl_cert: "/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"
 bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 
+bbb_meteor: {}
 
 bbb_apt_key: 770C4267C5E63474D171B60937B5DD5EFAB46452
