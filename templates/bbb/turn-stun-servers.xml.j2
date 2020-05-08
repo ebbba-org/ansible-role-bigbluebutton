@@ -1,42 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+BigBlueButton open source conferencing system - http://www.bigbluebutton.org/
+
+Copyright (c) 2012 BigBlueButton Inc. and by respective authors (see below).
+
+This program is free software; you can redistribute it and/or modify it under the
+terms of the GNU Lesser General Public License as published by the Free Software
+Foundation; either version 3.0 of the License, or (at your option) any later
+version.
+
+BigBlueButton is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along
+with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
+
+-->
 <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
-    {% if bbb_turn_enable %}
-    <bean id="stun0" class="org.bigbluebutton.web.services.turn.StunServer">
-        <constructor-arg index="0" value="stun:{{ bbb_turn_server }}"/>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+            ">
+{% if bbb_turn_enable %}
+{% for item in bbb_stun_servers %}
+    <bean id="stun{{ loop.index }}" class="org.bigbluebutton.web.services.turn.StunServer">
+        <constructor-arg index="0" value="stun:{{ item.server }}"/>
     </bean>
+{% endfor %}
 
+{% for item in bbb_ice_servers %}
+    <bean id="iceCandidate{{ loop.index }}" class="org.bigbluebutton.web.services.turn.RemoteIceCandidate">
+        <constructor-arg index="0" value="{{ item.server }}"/>
+    </bean>
+{% endfor %}
 
-    <bean id="turn0" class="org.bigbluebutton.web.services.turn.TurnServer">
-        <constructor-arg index="0" value="{{ bbb_turn_secret }}"/>
-        <constructor-arg index="1" value="turns:{{ bbb_turn_server }}:443?transport=tcp"/>
+    <!-- Turn servers are configured with a secret that's compatible with
+         http://tools.ietf.org/html/draft-uberti-behave-turn-rest-00
+         as supported by the coturn and rfc5766-turn-server turn servers -->
+
+{% for item in bbb_turn_servers %}
+    <bean id="turn{{ loop.index }}" class="org.bigbluebutton.web.services.turn.TurnServer">
+        <constructor-arg index="0" value="{{ item.secret }}"/>
+        <constructor-arg index="1" value="turn{% if item.tls %}s{% endif%}:{{item.server}}:{{ item.port }}?transport=tcp"/>
         <constructor-arg index="2" value="86400"/>
     </bean>
+{% endfor %}
+{% endif %}
 
-    <bean id="turn1" class="org.bigbluebutton.web.services.turn.TurnServer">
-        <constructor-arg index="0" value="{{ bbb_turn_secret }}"/>
-        <constructor-arg index="1" value="turn:{{ bbb_turn_server }}:443?transport=tcp"/>
-        <constructor-arg index="2" value="86400"/>
-    </bean>
-    {% endif %}
-
-    <bean id="stunTurnService"
-            class="org.bigbluebutton.web.services.turn.StunTurnService">
+    <bean id="stunTurnService" class="org.bigbluebutton.web.services.turn.StunTurnService">
         <property name="stunServers">
             <set>
-                {% if bbb_turn_enable %}
-                <ref bean="stun0"/>
-                {% endif %}
+{% if bbb_turn_enable %}
+{% for item in bbb_stun_servers %}
+                <ref bean="stun{{ loop.index }}" />
+{% endfor %}
+{% endif %}
             </set>
         </property>
         <property name="turnServers">
             <set>
-                {% if bbb_turn_enable %}
-                <ref bean="turn0"/>
-                <ref bean="turn1"/>
-                {% endif %}
+{% if bbb_turn_enable %}
+{% for item in bbb_turn_servers %}
+                <ref bean="turn{{ loop.index }}" />
+{% endfor %}
+{% endif %}
+            </set>
+        </property>
+        <property name="remoteIceCandidates">
+            <set>
+{% if bbb_turn_enable %}
+{% for item in bbb_ice_servers %}
+                <ref bean="iceCandidate{{ loop.index }}" />
+{% endfor %}
+{% endif %}
             </set>
         </property>
     </bean>

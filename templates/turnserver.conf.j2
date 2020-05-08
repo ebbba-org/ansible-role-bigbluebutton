@@ -3,8 +3,8 @@
 # These are the two network ports used by the TURN server which the client
 # may connect to. We enable the standard unencrypted port 3478 for STUN,
 # as well as port 443 for TURN over TLS, which can bypass firewalls.
-listening-port=3478
-tls-listening-port=443
+listening-port={{ bbb_coturn_port }}
+tls-listening-port={{ bbb_coturn_port_tls }}
 
 # If the server has multiple IP addresses, you may wish to limit which
 # addresses coturn is using. Do that by setting this option (it can be
@@ -34,7 +34,7 @@ lt-cred-mech
 # You can generate a new random value by running the command:
 #   openssl rand -hex 16
 use-auth-secret
-static-auth-secret={{ bbb_turn_secret }}
+static-auth-secret={{ bbb_coturn_secret }}
 
 # If the realm value is unspecified, it defaults to the TURN server hostname.
 # You probably want to configure it to a domain name that you control to

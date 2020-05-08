@@ -5,8 +5,24 @@ bbb_nginx_privacy: true
 bbb_nginx_dh: true
 
 bbb_coturn_enable: true
+bbb_coturn_port: 3478
+bbb_coturn_port_tls: 443
+#bbb_coturn_secret: "" <- undefined to set as required
+
 bbb_turn_enable: true
-bbb_turn_server: "{{ bbb_hostname }}"
+bbb_stun_servers:
+- server: "{{ bbb_hostname }}"
+bbb_ice_servers: []
+bbb_turn_servers:
+- server: "{{ bbb_hostname }}"
+  port: 443
+  secret: "{{ bbb_coturn_secret }}"
+  tls: false
+- server: "{{ bbb_hostname }}"
+  port: 443
+  secret: "{{ bbb_coturn_secret }}"
+  tls: true
+
 bbb_greenlight_enable: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
 bbb_disable_recordings: false
