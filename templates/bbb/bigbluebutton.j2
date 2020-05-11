@@ -1,84 +1,85 @@
 server {
-        listen 80;
-        listen [::]:80;
-        server_name {{ bbb_hostname }};
-        return 301 https://$host$request_uri;
+    listen 80;
+    listen [::]:80;
+    server_name {{ bbb_hostname }};
+    return 301 https://$host$request_uri;
 }
 
-
 server {
-    listen 443 ssl;
-    listen [::]:443 ssl;
-    server_name {{ bbb_hostname }};
 
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
+  server_name {{ bbb_hostname }};
     ssl_certificate {{ bbb_ssl_cert }};
     ssl_certificate_key {{ bbb_ssl_key }};
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_protocols TLSv1.2;
     ssl_ciphers "ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS:!AES256";
     ssl_prefer_server_ciphers on;
-
-    access_log  /var/log/nginx/bigbluebutton.access.log;
-
-	# Handle RTMPT (RTMP Tunneling).  Forwards requests
-	# to Red5 on port 5080
-    location ~ (/open/|/close/|/idle/|/send/|/fcs/) {
-        proxy_pass         http://127.0.0.1:5080;
-        proxy_redirect     off;
-        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
-
-        client_max_body_size       10m;
-        client_body_buffer_size    128k;
-
-        proxy_connect_timeout      90;
-        proxy_send_timeout         90;
-        proxy_read_timeout         90;
-
-        proxy_buffering            off;
-        keepalive_requests         1000000000;
-    }
-
-	# Handle desktop sharing tunneling.  Forwards
-	# requests to Red5 on port 5080.
-    location /deskshare {
-        proxy_pass         http://127.0.0.1:5080;
-        proxy_redirect     default;
-        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
-        client_max_body_size       10m;
-        client_body_buffer_size    128k;
-        proxy_connect_timeout      90;
-        proxy_send_timeout         90;
-        proxy_read_timeout         90;
-        proxy_buffer_size          4k;
-        proxy_buffers              4 32k;
-        proxy_busy_buffers_size    64k;
-        proxy_temp_file_write_size 64k;
-        include    fastcgi_params;
-    }
-
-	# BigBlueButton landing page.
-    location / {
-        root   /var/www/bigbluebutton-default;
-        index  index.html index.htm;
-	    expires 1m;
-    }
-
-	# Include specific rules for record and playback
-    include /etc/bigbluebutton/nginx/*.nginx;
-
-    #error_page  404  /404.html;
-
-    # Redirect server error pages to the static page /50x.html
-    #
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-        root   /var/www/nginx-default;
-    }
-
-{% if bbb_greenlight_enable %}
-    location = / {
-        return 307 /b;
-    }
+{% if bbb_nginx_dh %}
+    ssl_dhparam /etc/nginx/ssl/dhp-4096.pem;
 {% endif %}
+
+{% if bbb_nginx_privacy %}
+  error_log /var/log/nginx/bigbluebutton.error.log;
+  access_log /dev/null;
+{% else %}
+  access_log  /var/log/nginx/bigbluebutton.access.log;
+{% endif %}
+
+   # Handle RTMPT (RTMP Tunneling).  Forwards requests
+   # to Red5 on port 5080
+  location ~ (/open/|/close/|/idle/|/send/|/fcs/) {
+    proxy_pass         http://127.0.0.1:5080;
+    proxy_redirect     off;
+    proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+
+    client_max_body_size       10m;
+    client_body_buffer_size    128k;
+
+    proxy_connect_timeout      90;
+    proxy_send_timeout         90;
+    proxy_read_timeout         90;
+
+    proxy_buffering            off;
+    keepalive_requests         1000000000;
+  }
+
+  # Handle desktop sharing tunneling.  Forwards
+  # requests to Red5 on port 5080.
+  location /deskshare {
+     proxy_pass         http://127.0.0.1:5080;
+     proxy_redirect     default;
+     proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+     client_max_body_size       10m;
+     client_body_buffer_size    128k;
+     proxy_connect_timeout      90;
+     proxy_send_timeout         90;
+     proxy_read_timeout         90;
+     proxy_buffer_size          4k;
+     proxy_buffers              4 32k;
+     proxy_busy_buffers_size    64k;
+     proxy_temp_file_write_size 64k;
+     include    fastcgi_params;
+  }
+
+  # BigBlueButton landing page.
+  location / {
+    root   /var/www/bigbluebutton-default;
+    index  index.html index.htm;
+    expires 1m;
+  }
+
+  # Include specific rules for record and playback
+  include /etc/bigbluebutton/nginx/*.nginx;
+
+  #error_page  404  /404.html;
+
+  # Redirect server error pages to the static page /50x.html
+  #
+  error_page   500 502 503 504  /50x.html;
+  location = /50x.html {
+    root   /var/www/nginx-default;
+  }
 }

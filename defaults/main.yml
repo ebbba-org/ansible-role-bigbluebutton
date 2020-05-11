@@ -1,6 +1,9 @@
 ---
 bbb_hostname: "{{ ansible_fqdn }}"
 bbb_letsencrypt_enable: true
+bbb_nginx_privacy: true
+bbb_nginx_dh: true
+
 bbb_coturn_enable: true
 bbb_turn_enable: true
 bbb_turn_server: "{{ bbb_hostname }}"
