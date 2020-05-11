@@ -89,12 +89,22 @@
      dest: /etc/nginx/sites-available/bigbluebutton
   notify: reload nginx
 
+- name: enable CPUSchedulingPolicy in FreeSWITCH service
+  lineinfile:
+    path: /lib/systemd/system/freeswitch.service
+    regexp: '^CPUSchedulingPolicy=rr'
+    line: '#CPUSchedulingPolicy=rr'
+  notify: restart freeswitch
+  notify: reload systemd
+  when: bbb_cpuschedule
+
 - name: disable CPUSchedulingPolicy in FreeSWITCH service
   lineinfile:
     path: /lib/systemd/system/freeswitch.service
     regexp: '^CPUSchedulingPolicy=rr'
     line: '#CPUSchedulingPolicy=rr'
   notify: restart freeswitch
+  notify: reload systemd
   when: not bbb_cpuschedule
 
 - name: enable IPv6 in FreeSWITCH service 1/2

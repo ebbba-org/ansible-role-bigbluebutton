@@ -17,7 +17,6 @@
   systemd:
     name: freeswitch
     state: restarted
-    daemon_reload: yes
   become: true
 
 - name: restart mongo
