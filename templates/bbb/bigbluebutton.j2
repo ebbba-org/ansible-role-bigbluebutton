@@ -19,7 +19,12 @@ server {
     ssl_prefer_server_ciphers on;
     ssl_dhparam /etc/nginx/ssl/dhp-4096.pem;
 
+{% if bbb_nginx_privacy %}
+  error_log /var/log/nginx/bigbluebutton.error.log;
+  access_log /dev/null;
+{% else %}
   access_log  /var/log/nginx/bigbluebutton.access.log;
+{% endif %}
 
    # Handle RTMPT (RTMP Tunneling).  Forwards requests
    # to Red5 on port 5080
