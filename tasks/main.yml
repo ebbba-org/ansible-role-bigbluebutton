@@ -29,7 +29,7 @@
 
 - name: add BigBlueButton apt key
   apt_key:
-    url: http://ubuntu.bigbluebutton.org/bigbluebutton.asc
+    url: https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
     id: '{{ bbb_apt_key }}'
     state: present
 
@@ -44,11 +44,6 @@
 - name: add mongodb apt key
   apt_key:
     url: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version | default('3.4') }}.asc"
-    state: present
-
-- name: add bigbluebutton apt key
-  apt_key:
-    url: https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
     state: present
 
 - name: add Xenial dependency apt repositories

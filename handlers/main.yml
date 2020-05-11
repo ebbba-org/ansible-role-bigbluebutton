@@ -4,8 +4,19 @@
     name: nginx
     state: reloaded
 
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+
 - name: restart bigbluebutton
   command: bbb-conf --restart
+  become: true
+
+- name: restart freeswitch
+  systemd:
+    name: freeswitch
+    state: restarted
   become: true
 
 - name: restart mongo
