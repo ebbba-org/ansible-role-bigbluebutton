@@ -12,6 +12,7 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_turn_server` | the adress for the TURN-Server to use | `{{ bbb_hostname }}` | has to be a fully qualified domain name
 | `bbb_turn_secret` | Secret for the TURN-Server  _(required)_ | | can be generated with `openssl rand -hex 16`
 | `bbb_greenlight_enable` | enable installation of the greenlight client | `yes` |
+| `bbb_greenlight_hosts` | the hostname that greenlight is accessible from | `{{ bbb_hostname }}` |
 | `bbb_greenlight_secret` | Secret for greenlight _(required when using greenlight)_ |  | can be generated with `openssl rand -hex 64`
 | `bbb_greenlight_db_password` | Password for greenlight's database  _(required when using greenlight)_ | | can be generated with `openssl rand -hex 16`
 | `bbb_greenlight_default_registration` | Registration option open(default), invite or approval

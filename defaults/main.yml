@@ -5,6 +5,7 @@ bbb_coturn_enable: true
 bbb_turn_enable: true
 bbb_turn_server: "{{ bbb_hostname }}"
 bbb_greenlight_enable: true
+bbb_greenlight_hosts: "{{ bbb_hostname }}"
 bbb_disable_recordings: false
 bbb_api_demos_enable: false
 bbb_nodejs_version: 8.x
