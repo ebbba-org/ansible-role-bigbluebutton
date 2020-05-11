@@ -97,6 +97,27 @@
   notify: restart freeswitch
   when: not bbb_cpuschedule
 
+- name: enable IPv6 in FreeSWITCH service 1/2
+  command:
+    cmd: mv {{ item }}_ {{ item }}
+    creates: "{{ item }}"
+    removes: "{{ item }}_"
+  with_items:
+    - "/opt/freeswitch/etc/freeswitch/sip_profiles/internal-ipv6.xml"
+    - "/opt/freeswitch/etc/freeswitch/sip_profiles/external-ipv6.xml"
+  when: bbb_freeswitch_ipv6
+  notify: restart freeswitch
+  notify: reload nginx
+
+- name: enable IPv6 in FreeSWITCH service 2/2
+  lineinfile:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
+    regexp: '<param name="listen-ip" value="127.0.0.1"/>'
+    line: '<param name="listen-ip" value="::"/>'
+  when: bbb_freeswitch_ipv6
+  notify: restart freeswitch
+  notify: reload nginx
+
 - name: disable IPv6 in FreeSWITCH service 1/2
   command:
     cmd: mv {{ item }} {{ item }}_
