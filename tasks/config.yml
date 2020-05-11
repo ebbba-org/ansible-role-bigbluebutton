@@ -87,13 +87,14 @@
   file:
     path: /etc/nginx/ssl
     state: directory
-
+  when: bbb_nginx_dh
 
 - name: Generate DH Parameters with a different size (4096 bits)
   openssl_dhparam:
     path: /etc/nginx/ssl/dhp-4096.pem
     size: 4096
   notify: reload nginx
+  when: bbb_nginx_dh
 
 - name: copy bbb's nginx vhost
   template:
