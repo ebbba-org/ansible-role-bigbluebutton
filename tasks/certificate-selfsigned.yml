@@ -1,4 +1,8 @@
 ---
+- name: Ensure openssl-python-module is installed
+  pip:
+    name: PyOpenSSL
+    state: present
 
 - name: apt | self-signed certificate packages dependencies
   apt: name=ssl-cert state=present update_cache=yes cache_valid_time=3600
