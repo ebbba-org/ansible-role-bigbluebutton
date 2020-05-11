@@ -14,11 +14,11 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_greenlight_enable` | enable installation of the greenlight client | `yes` |
 | `bbb_greenlight_secret` | Secret for greenlight _(required when using greenlight)_ |  | can be generated with `openssl rand -hex 64`
 | `bbb_greenlight_db_password` | Password for greenlight's database  _(required when using greenlight)_ | | can be generated with `openssl rand -hex 16`
+| `bbb_greenlight_default_registration` | Registration option open(default), invite or approval
 | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored
 | `bbb_api_demos_enable` | enable installation of the api demos | `no` |
 | `bbb_nodejs_version` | version of nodejs to be installed | `8.x` |
 | `bbb_system_locale` | the system locale to use | `en_US.UTF-8` |
-| `bbb_greenlight_reg` | Registration mode | `open` | Greenlight registration mode: open, invite, approval |
 | `bbb_cpuschedule` | CPUSchedulingPolicy | `true` | Disable to fix [FreeSWITCH SETSCHEDULER error][bbb_cpuschedule] |
 | `bbb_freeswitch_ipv6` | Enable IPv6 support in FreeSWITCH | `true` | Disable to fix [FreeSWITCH IPv6 error][bbb_freeswitch_ipv6] |
 
