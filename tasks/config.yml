@@ -31,6 +31,41 @@
     line: 'bigbluebutton.web.serverURL=https://{{ bbb_hostname }}'
   notify: restart bigbluebutton
 
+- name: set recording default
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^disableRecordingDefault'
+    line: 'disableRecordingDefault={{ bbb_disable_recordings | ternary("true", "false") }}'
+  notify: restart bigbluebutton
+
+- name: ensure recording auto start is disabled
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^autoStartRecording'
+    line: 'autoStartRecording=false'
+  notify: restart bigbluebutton
+
+- name: allow/disable users to start recordings
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^allowStartStopRecording'
+    line: 'allowStartStopRecording={{ bbb_disable_recordings | ternary("false", "true") }}'
+  notify: restart bigbluebutton
+
+- name: set muteOnStart
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^muteOnStart'
+    line: 'muteOnStart={{ bbb_mute_on_start | ternary("false", "true") }}'
+  notify: restart bigbluebutton
+
+- name: set appLogLevel
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^appLogLevel'
+    line: 'appLogLevel={{ bbb_app_log_level }}'
+  notify: restart bigbluebutton
+
 - name: set red5 to use HTTPS 1/2
   lineinfile:
     path: /usr/share/red5/webapps/screenshare/WEB-INF/screenshare.properties
@@ -45,6 +80,12 @@
     line: 'jnlpFile=https://{{ bbb_hostname }}/screenshare/screenshare.jnlp'
   notify: restart bigbluebutton
 
+- name: copy TURN config file
+  template:
+    src: bbb/turn-stun-servers.xml.j2
+    dest: /usr/share/bbb-web/WEB-INF/classes/spring/turn-stun-servers.xml
+  notify: restart bigbluebutton
+
 - name: serve recordings via https
   lineinfile:
     path: /usr/local/bigbluebutton/core/scripts/bigbluebutton.yml
@@ -52,36 +93,52 @@
     line: "playback_protocol: https"
   notify: restart bigbluebutton
 
-- name: configure freeswitch to use SSL
-  lineinfile:
-    path: /etc/bigbluebutton/nginx/sip.nginx
-    regexp: "proxy_pass"
-    line: "        proxy_pass https://{{ ansible_default_ipv4.address }}:7443;"
-  notify: reload nginx
-
 - name: set BigBlueButton client to load components via HTTPS
+  notify: restart bigbluebutton
   replace:
     path: /var/www/bigbluebutton/client/conf/config.xml
     regexp: 'http://'
     replace: 'https://'
 
 - name: set note server to use HTTPS
+  notify: restart bigbluebutton
   replace:
     path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
     regexp: 'http://'
     replace: 'https://'
 
 - name: set korrento server to use HTTPS
+  notify: restart bigbluebutton
   replace:
     path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
     regexp: 'ws://'
     replace: 'wss://'
 
-- name: copy TURN config file
-  template:
-    src: bbb/turn-stun-servers.xml.j2
-    dest: /usr/share/bbb-web/WEB-INF/classes/spring/turn-stun-servers.xml
+- name: Read meteor
+  slurp:
+    path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+  register: r_meteor
+
+- name: extract config of meteor
+  set_fact:
+    meteor: "{{ r_meteor['content'] | b64decode | from_yaml }}"
+
+- name: combine meteor config
+  set_fact:
+    meteor: "{{ meteor | combine(bbb_meteor, recursive=true) }}"
+
+- name: write back new meteor config
   notify: restart bigbluebutton
+  copy:
+    content: '{{ meteor  | to_nice_yaml }}'
+    dest: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+
+- name: configure freeswitch to use SSL
+  lineinfile:
+    path: /etc/bigbluebutton/nginx/sip.nginx
+    regexp: "proxy_pass"
+    line: "        proxy_pass https://{{ ansible_default_ipv4.address }}:7443;"
+  notify: reload nginx
 
 - name: create ssl folder for nginx
   file:
@@ -161,24 +218,3 @@
   when: not bbb_freeswitch_ipv6
   notify: restart freeswitch
   notify: reload nginx
-
-- name: set recording default
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^disableRecordingDefault'
-    line: 'disableRecordingDefault={{ bbb_disable_recordings | ternary("true", "false") }}'
-  notify: restart bigbluebutton
-
-- name: ensure recording auto start is disabled
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^autoStartRecording'
-    line: 'autoStartRecording=false'
-  notify: restart bigbluebutton
-
-- name: allow/disable users to start recordings
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^allowStartStopRecording'
-    line: 'allowStartStopRecording={{ bbb_disable_recordings | ternary("false", "true") }}'
-  notify: restart bigbluebutton

@@ -5,12 +5,31 @@ bbb_nginx_privacy: true
 bbb_nginx_dh: true
 
 bbb_coturn_enable: true
+bbb_coturn_port: 3478
+bbb_coturn_port_tls: 443
+bbb_coturn_server: "{{ bbb_hostname }}"
+#bbb_coturn_secret: "" <- undefined to set as required
+
 bbb_turn_enable: true
-bbb_turn_server: "{{ bbb_hostname }}"
+bbb_stun_servers:
+- server: "{{ bbb_hostname }}"
+bbb_ice_servers: []
+bbb_turn_servers:
+- server: "{{ bbb_hostname }}"
+  port: 443
+  secret: "{{ bbb_coturn_secret }}"
+  tls: false
+- server: "{{ bbb_hostname }}"
+  port: 443
+  secret: "{{ bbb_coturn_secret }}"
+  tls: true
+
 bbb_greenlight_enable: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
 bbb_disable_recordings: false
 bbb_api_demos_enable: false
+bbb_mute_on_start: false
+bbb_app_log_level: 'DEBUG'
 bbb_nodejs_version: 8.x
 bbb_cpuschedule: true
 bbb_freeswitch_ipv6: true
@@ -20,5 +39,6 @@ bbb_system_locale: en_US.UTF-8
 bbb_ssl_cert: "/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"
 bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 
+bbb_meteor: {}
 
 bbb_apt_key: 770C4267C5E63474D171B60937B5DD5EFAB46452

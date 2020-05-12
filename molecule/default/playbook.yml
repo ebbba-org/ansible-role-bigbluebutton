@@ -1,7 +1,5 @@
 ---
 - name: Converge
   hosts: all
-  vars:
-  - bbb_nginx_dh: false
   roles:
     - role: n0emis.bigbluebutton
