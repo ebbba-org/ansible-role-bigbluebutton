@@ -11,8 +11,8 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_nginx_dh` | generate Diff-Hellmann for nginx | `yes` | same place like bbb-install.sh
 | `bbb_coturn_enable` | enable installation of the TURN-server | `yes` |
 | `bbb_coturn_server` | server name on coturn (realm) | `{{ bbb_hostname }}` |
-| `bbb_coturn_port` | the port for the TURN-Server to use | `3443` | 
-| `bbb_coturn_port_tls` | the port for tls for the TURN-Server to use | `3443` | 
+| `bbb_coturn_port` | the port for the TURN-Server to use | `443` | 
+| `bbb_coturn_port_tls` | the port for tls for the TURN-Server to use | `443` | 
 | `bbb_coturn_secret` | Secret for the TURN-Server  _(required)_ | | can be generated with `openssl rand -hex 16`
 | `bbb_turn_enable` | enable the use uf TURN in general | `yes` |
 | `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml
