@@ -164,8 +164,9 @@
     path: /lib/systemd/system/freeswitch.service
     regexp: '^CPUSchedulingPolicy=rr'
     line: '#CPUSchedulingPolicy=rr'
-  notify: restart freeswitch
-  notify: reload systemd
+  notify:
+  - restart freeswitch
+  - reload systemd
   when: bbb_cpuschedule
 
 - name: disable CPUSchedulingPolicy in FreeSWITCH service
@@ -173,8 +174,9 @@
     path: /lib/systemd/system/freeswitch.service
     regexp: '^CPUSchedulingPolicy=rr'
     line: '#CPUSchedulingPolicy=rr'
-  notify: restart freeswitch
-  notify: reload systemd
+  notify:
+  - freeswitch
+  - reload systemd
   when: not bbb_cpuschedule
 
 - name: enable IPv6 in FreeSWITCH service 1/2
@@ -186,8 +188,9 @@
     - "/opt/freeswitch/etc/freeswitch/sip_profiles/internal-ipv6.xml"
     - "/opt/freeswitch/etc/freeswitch/sip_profiles/external-ipv6.xml"
   when: bbb_freeswitch_ipv6
-  notify: restart freeswitch
-  notify: reload nginx
+  notify:
+  - restart freeswitch
+  - reload nginx
 
 - name: enable IPv6 in FreeSWITCH service 2/2
   lineinfile:
@@ -195,8 +198,9 @@
     regexp: '<param name="listen-ip" value="127.0.0.1"/>'
     line: '<param name="listen-ip" value="::"/>'
   when: bbb_freeswitch_ipv6
-  notify: restart freeswitch
-  notify: reload nginx
+  notify:
+  - restart freeswitch
+  - reload nginx
 
 - name: disable IPv6 in FreeSWITCH service 1/2
   command:
@@ -207,8 +211,9 @@
     - "/opt/freeswitch/etc/freeswitch/sip_profiles/internal-ipv6.xml"
     - "/opt/freeswitch/etc/freeswitch/sip_profiles/external-ipv6.xml"
   when: not bbb_freeswitch_ipv6
-  notify: restart freeswitch
-  notify: reload nginx
+  notify:
+  - restart freeswitch
+  - reload nginx
 
 - name: disable IPv6 in FreeSWITCH service 2/2
   lineinfile:
@@ -216,5 +221,6 @@
     regexp: '<param name="listen-ip" value="::"/>'
     line: '<param name="listen-ip" value="127.0.0.1"/>'
   when: not bbb_freeswitch_ipv6
-  notify: restart freeswitch
-  notify: reload nginx
+  notify:
+  - restart freeswitch
+  - reload nginx
