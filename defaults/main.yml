@@ -6,7 +6,7 @@ bbb_nginx_dh: true
 
 bbb_coturn_enable: true
 bbb_coturn_port: 3478
-bbb_coturn_port_tls: 443
+bbb_coturn_port_tls: 3443
 bbb_coturn_server: "{{ bbb_hostname }}"
 #bbb_coturn_secret: "" <- undefined to set as required
 
@@ -16,11 +16,11 @@ bbb_stun_servers:
 bbb_ice_servers: []
 bbb_turn_servers:
 - server: "{{ bbb_hostname }}"
-  port: 443
+  port: "{{ bbb_coturn_port_tls }}"
   secret: "{{ bbb_coturn_secret }}"
   tls: false
 - server: "{{ bbb_hostname }}"
-  port: 443
+  port: "{{ bbb_coturn_port_tls }}"
   secret: "{{ bbb_coturn_secret }}"
   tls: true
 
