@@ -3,7 +3,7 @@
   apt:
     name: coturn
     update_cache: true
-    state: present
+    state: "{{ bbb_state }}"
 
 - name: Copy coturn config-file
   template:
