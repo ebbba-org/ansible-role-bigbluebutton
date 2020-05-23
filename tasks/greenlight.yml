@@ -4,14 +4,14 @@
     name:
       - python3-pip
       - python3-setuptools
-    state: present
+    state: "{{ bbb_state }}"
 
 - name: install python docker packages
   pip:
     name:
       - docker
       - docker-compose
-    state: present
+    state: "{{ bbb_state }}"
 
 - name: create greenlight directory
   file:

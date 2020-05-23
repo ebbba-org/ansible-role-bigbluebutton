@@ -5,6 +5,7 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | Variable Name | Function | Default value | Comment |
 | ------------- | -------- | ------------- | ------- |
 | `bbb_hostname` | Hostname for this BigBlueButton instance _(required)_ | `{{ ansible_fqdn_hostname }}` |
+| `bbb_state` | Install BigBlueButton to state | `present` | for updating BigBlueButton with this role use `latest`
 | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
 | `bbb_letsencrypt_email` | E-mail for use with letsencrypt _(required when using LE)_|  |
 | `bbb_nginx_privacy` | only log errors not access | `yes` |

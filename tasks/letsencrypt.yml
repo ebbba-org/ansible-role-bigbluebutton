@@ -10,7 +10,7 @@
       - certbot
       - python3-certbot-nginx
     update_cache: true
-    state: present
+    state: "{{ bbb_state }}"
 
 - name: Change Let's Encrypt API to v2
   lineinfile:
