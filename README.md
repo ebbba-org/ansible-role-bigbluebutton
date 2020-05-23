@@ -33,6 +33,10 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_system_locale` | the system locale to use | `en_US.UTF-8` |
 | `bbb_cpuschedule` | CPUSchedulingPolicy | `true` | Disable to fix [FreeSWITCH SETSCHEDULER error][bbb_cpuschedule] |
 | `bbb_freeswitch_ipv6` | Enable IPv6 support in FreeSWITCH | `true` | Disable to fix [FreeSWITCH IPv6 error][bbb_freeswitch_ipv6] |
+| `bbb_freeswitch_external_ip` | Set stun server for sip and rtp on FreeSWITCH | `stun:{{ (bbb_stun_servers | first).server }}` | default is `stun:stun.freeswitch.org |
+| `bbb_dialplan_quality` | Set quality of dailplan for FreeSWITCH | `cdquality` |
+| `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality`
+| `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `true` | only for selected profile `bbb_dialplan_quality`
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:
