@@ -1,0 +1,15 @@
+---
+bbb_required_packages:
+  - language-pack-en
+  - software-properties-common
+  - haveged
+  - curl
+  - python-apt
+  - python-dev
+  - python3-dev
+  - python-setuptools
+  - python-pip
+  - python3-pip
+  - python-wheel
+  - python3-wheel
+  - openjdk-8-jdk
