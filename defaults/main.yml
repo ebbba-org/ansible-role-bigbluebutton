@@ -17,7 +17,7 @@ bbb_stun_servers:
 bbb_ice_servers: []
 bbb_turn_servers:
 - server: "{{ bbb_hostname }}"
-  port: "{{ bbb_coturn_port_tls }}"
+  port: "{{ bbb_coturn_port }}"
   secret: "{{ bbb_coturn_secret }}"
   tls: false
 - server: "{{ bbb_hostname }}"
