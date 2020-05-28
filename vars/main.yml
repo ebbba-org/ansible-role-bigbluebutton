@@ -13,3 +13,9 @@ bbb_required_packages:
   - python-wheel
   - python3-wheel
   - openjdk-8-jdk
+
+bbb_and_dependencies:
+  - mongodb-org
+  - bbb-check
+  - bbb-html5
+  - bigbluebutton

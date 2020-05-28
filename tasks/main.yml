@@ -18,11 +18,7 @@
 
 - name: install bbb and dependencies
   apt:
-    name:
-    - mongodb-org
-    - bbb-check
-    - bbb-html5
-    - bigbluebutton
+    name: "{{ bbb_and_dependencies }}"
     state: "{{ bbb_state }}"
 
 - import_tasks: mongodb.yml
