@@ -15,7 +15,9 @@
     bbb_letsencrypt_enable: false
     bbb_letsencrypt_email: mail@example.com
     bbb_nginx_dh: false
-  tasks:
-    - name: "Include n0emis.bigbluebutton"
-      include_role:
-        name: "n0emis.bigbluebutton"
+#  pre_tasks:
+#    - name: Ensure python3 is installed
+#      package:
+#        name: python3
+  roles:
+    - "{{ playbook_dir }}/../../"
