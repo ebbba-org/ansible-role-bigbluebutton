@@ -15,9 +15,5 @@
     bbb_letsencrypt_enable: false
     bbb_letsencrypt_email: mail@example.com
     bbb_nginx_dh: false
-#  pre_tasks:
-#    - name: Ensure python3 is installed
-#      package:
-#        name: python3
   roles:
     - "{{ playbook_dir }}/../../"

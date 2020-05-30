@@ -75,7 +75,7 @@
     dest: /etc/systemd/system/mongod.service
     regexp: ' --nojournal$'
     replace: ''
-    backup: yes
+    backup: true
   when: mongodb_version is defined and mongodb_version|string == '4.2'
   notify:
     - reload systemd
@@ -85,7 +85,7 @@
   template:
     src: mongo4-ramdisk.conf.j2
     dest: /usr/share/meteor/bundle/mongo-ramdisk.conf
-    backup: yes
+    backup: true
     mode: '0644'
   notify:
     - restart mongo
@@ -96,7 +96,7 @@
     dest: /lib/systemd/system/freeswitch.service
     regexp: "{{ item.re }}"
     replace: "{{ item.rep }}"
-    backup: yes
+    backup: true
     mode: '0644'
   with_items:
     - { re: '^IOSchedulingClass=realtime', rep: '#IOSchedulingClass=realtime' }
