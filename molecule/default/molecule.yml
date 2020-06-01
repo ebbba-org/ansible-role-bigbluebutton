@@ -14,10 +14,6 @@ platforms:
   - name: instance
     server_type: cx21
     image: ubuntu-16.04
-    # env:
-    #   http_proxy: ${http_proxy}
-    #   https_proxy: ${https_proxy}
-    #   no_proxy: ${no_proxy}
 provisioner:
   name: ansible
   config_options:
