@@ -26,6 +26,7 @@ bbb_turn_servers:
   tls: true
 
 bbb_greenlight_enable: true
+bbb_allow_mail_notifications: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
 bbb_disable_recordings: false
 bbb_api_demos_enable: false
