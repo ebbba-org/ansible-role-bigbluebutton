@@ -1,5 +1,4 @@
 ---
-# This is an example playbook to execute Ansible tests.
 
 - name: Verify
   hosts: all
@@ -35,21 +34,6 @@
   - name: Validate config present
     assert:
       that: cfg3.stat.exists and cfg3.stat.size != 0
-  - name: Ensure process is running
-    command: pgrep -u root turnserver
-    register: ps
-    changed_when: false
-  - name: Validate ps output
-    assert:
-      that: ps.stdout
-  - name: Ensure turnserver ports are listening
-    wait_for:
-      host: localhost
-      port: "{{ item }}"
-    with_items:
-      - 3478
-      - 3479
-  # FIXME! bbb-conf relies on systemctl. NOK in docker
   - name: check if bbb status
     command: bbb-conf --status
     register: bbbconf
