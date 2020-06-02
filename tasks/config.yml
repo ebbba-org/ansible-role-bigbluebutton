@@ -228,7 +228,7 @@
 - name: FreeSWITCH dialplan quality
   replace:
     path: /opt/freeswitch/conf/dialplan/default/bbb_conference.xml
-    regexp: '<action application="conference" data="$1@.*"/>'
+    regexp: '<action application="conference" data="\$1@.*"\/>'
     replace: '<action application="conference" data="$1@{{ bbb_dialplan_quality }}"/>'
   notify:
   - restart freeswitch
@@ -237,7 +237,7 @@
 - name: FreeSWITCH dialplan quality (echo)
   replace:
     path: /opt/freeswitch/conf/dialplan/default/bbb_echo_to_conference.xml
-    regexp: '<action application="conference" data="${vbridge}@.*"/>'
+    regexp: '<action application="conference" data="\${vbridge}@.*"\/>'
     replace: '<action application="conference" data="${vbridge}@{{ bbb_dialplan_quality }}"/>'
   notify:
   - restart freeswitch
@@ -248,7 +248,7 @@
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
     after: '<profile name="{{ bbb_dialplan_quality }}">'
     before: '</profile>'
-    regexp: '<param name="energy-level" value=".*"/>'
+    regexp: '<param name="energy-level" value=".*"\/>'
     replace: '<param name="energy-level" value="{{ bbb_dialplan_energy_level }}"/>'
   notify:
   - restart freeswitch
@@ -259,7 +259,7 @@
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
     after:   '<profile name="{{ bbb_dialplan_quality }}">'
     before:  '</profile>'
-    regexp:  '<param name="comfort-noise" value=".*"/>'
+    regexp:  '<param name="comfort-noise" value=".*"\/>'
     replace: '<param name="comfort-noise" value="{{ bbb_dialplan_comfort_noise | ternary("true", "false") }}"/>'
   notify:
   - restart freeswitch
@@ -268,7 +268,7 @@
 - name: FreeSWITCH external ip (rtp)
   replace:
     path: /opt/freeswitch/etc/freeswitch/vars.xml
-    regexp:  '<X-PRE-PROCESS cmd="set" data="external_rtp_ip=.*"/>'
+    regexp:  '<X-PRE-PROCESS cmd="set" data="external_rtp_ip=.*"\/>'
     replace: '<X-PRE-PROCESS cmd="set" data="external_rtp_ip={{ bbb_freeswitch_external_ip }}"/>'
   notify:
   - restart freeswitch
@@ -277,7 +277,7 @@
 - name: FreeSWITCH external ip (sip)
   replace:
     path: /opt/freeswitch/etc/freeswitch/vars.xml
-    regexp:  '<X-PRE-PROCESS cmd="set" data="external_sip_ip=.*"/>'
+    regexp:  '<X-PRE-PROCESS cmd="set" data="external_sip_ip=.*"\/>'
     replace: '<X-PRE-PROCESS cmd="set" data="external_sip_ip={{ bbb_freeswitch_external_ip }}"/>'
   notify:
   - restart freeswitch
