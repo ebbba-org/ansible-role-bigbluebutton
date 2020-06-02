@@ -13,8 +13,8 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_nginx_dh` | generate Diff-Hellmann for nginx | `yes` | same place like bbb-install.sh
 | `bbb_coturn_enable` | enable installation of the TURN-server | `yes` |
 | `bbb_coturn_server` | server name on coturn (realm) | `{{ bbb_hostname }}` |
-| `bbb_coturn_port` | the port for the TURN-Server to use | `3443` | 
-| `bbb_coturn_port_tls` | the port for tls for the TURN-Server to use | `3443` | 
+| `bbb_coturn_port` | the port for the TURN-Server to use | `3443` |
+| `bbb_coturn_port_tls` | the port for tls for the TURN-Server to use | `3443` |
 | `bbb_coturn_secret` | Secret for the TURN-Server  _(required)_ | | can be generated with `openssl rand -hex 16`
 | `bbb_turn_enable` | enable the use uf TURN in general | `yes` |
 | `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml
@@ -25,6 +25,7 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_greenlight_secret` | Secret for greenlight _(required when using greenlight)_ |  | can be generated with `openssl rand -hex 64`
 | `bbb_greenlight_db_password` | Password for greenlight's database  _(required when using greenlight)_ | | can be generated with `openssl rand -hex 16`
 | `bbb_greenlight_default_registration` | Registration option open(default), invite or approval
+| `bbb_allow_mail_notifications`  | Set this to true if you want GreenLight to send verification emails upon the creation of a new account | `true` |
 | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored
 | `bbb_api_demos_enable` | enable installation of the api demos | `no` |
 | `bbb_mute_on_start:` | start with muted mic on join | `no` |
