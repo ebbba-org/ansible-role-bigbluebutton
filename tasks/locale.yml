@@ -28,7 +28,7 @@
       changed_when: false
       check_mode: no
       register: localea
-      
+
     - name: Configure locale to '{{ bbb_system_locale }}'
       command: >
         localedef -c -i {{ bbb_system_locale1 }} -f {{ bbb_system_locale2 }} {{ bbb_system_locale }}
