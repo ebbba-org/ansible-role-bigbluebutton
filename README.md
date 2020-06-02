@@ -6,6 +6,7 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | ------------- | -------- | ------------- | ------- |
 | `bbb_hostname` | Hostname for this BigBlueButton instance _(required)_ | `{{ ansible_fqdn }}` |
 | `bbb_state` | Install BigBlueButton to state | `present` | for updating BigBlueButton with this role use `latest`
+| `bbb_apt_mirror` | apt repo server for BigBlueButton packages | `https://ubuntu.bigbluebutton.org` | other value would be e.g. `https://packages-eu.bigbluebutton.org` |
 | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
 | `bbb_letsencrypt_email` | E-mail for use with letsencrypt _(required when using LE)_|  |
 | `bbb_nginx_privacy` | only log errors not access | `yes` |
@@ -33,6 +34,10 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_system_locale` | the system locale to use | `en_US.UTF-8` |
 | `bbb_cpuschedule` | CPUSchedulingPolicy | `true` | Disable to fix [FreeSWITCH SETSCHEDULER error][bbb_cpuschedule] |
 | `bbb_freeswitch_ipv6` | Enable IPv6 support in FreeSWITCH | `true` | Disable to fix [FreeSWITCH IPv6 error][bbb_freeswitch_ipv6] |
+| `bbb_freeswitch_external_ip` | Set stun server for sip and rtp on FreeSWITCH | `stun:{{ (bbb_stun_servers | first).server }}` | WARNING: the value of the default freeswitch installation is `stun:stun.freeswitch.org` |
+| `bbb_dialplan_quality` | Set quality of dailplan for FreeSWITCH | `cdquality` |
+| `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality`
+| `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality`
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:
