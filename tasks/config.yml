@@ -260,7 +260,7 @@
     after:   '<profile name="{{ bbb_dialplan_quality }}">'
     before:  '</profile>'
     regexp:  '<param name="comfort-noise" value=".*"\/>'
-    replace: '<param name="comfort-noise" value="{{ bbb_dialplan_comfort_noise | ternary("true", "false") }}"/>'
+    replace: '<param name="comfort-noise" value="{{ bbb_dialplan_comfort_noise }}"/>'
   notify:
   - restart freeswitch
   - reload nginx

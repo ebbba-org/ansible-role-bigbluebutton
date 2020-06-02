@@ -43,6 +43,6 @@ bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 bbb_meteor: {}
 bbb_dialplan_quality: "cdquality"
 bbb_dialplan_energy_level: 100
-bbb_dialplan_comfort_noise: true
+bbb_dialplan_comfort_noise: 1400
 
 bbb_apt_key: 770C4267C5E63474D171B60937B5DD5EFAB46452
