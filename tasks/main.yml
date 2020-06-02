@@ -1,20 +1,7 @@
 ---
 - name: Install required packages
   apt:
-    name:
-    - language-pack-en
-    - software-properties-common
-    - haveged
-    - curl
-    - python-apt
-    - python-dev
-    - python3-dev
-    - python-setuptools
-    - python-pip
-    - python3-pip
-    - python-wheel
-    - python3-wheel
-    - openjdk-8-jdk
+    name: "{{ bbb_required_packages }}"
     update_cache: true
     state: "{{ bbb_state }}"
 
@@ -27,69 +14,14 @@
 
 - import_tasks: locale.yml
 
-- name: add BigBlueButton apt key
-  apt_key:
-    url: https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
-    id: '{{ bbb_apt_key }}'
-    state: present
-
-- name: add multiverse apt repositories
-  apt_repository: repo={{ item }} state=present
-  with_items:
-    - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse"
-    - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse"
-    - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
-    - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
-
-- name: add mongodb apt key
-  apt_key:
-    url: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version | default('3.4') }}.asc"
-    state: present
-
-- name: add Xenial dependency apt repositories
-  apt_repository: repo={{ item }} state=present
-  with_items:
-    - ppa:bigbluebutton/support
-    - ppa:rmescandon/yq
-  when: ansible_distribution_release == 'xenial'
-
-- name: add dependency apt repositories
-  apt_repository: repo={{ item }} state=present
-  with_items:
-    - "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu {{ ansible_distribution_release | lower }}/mongodb-org/{{ mongodb_version | default('3.4') }} multiverse"
-    - "deb https://ubuntu.bigbluebutton.org/xenial-22/ bigbluebutton-xenial main"
+- import_tasks: repositories.yml
 
 - name: install bbb and dependencies
   apt:
-    name:
-    - mongodb-org
-    - bbb-check
-    - bbb-html5
-    - bigbluebutton
+    name: "{{ bbb_and_dependencies }}"
     state: "{{ bbb_state }}"
 
-# nojournal not supported for default engine
-# inMemory engine seems only in Enterprise distribution
-- name: Ensure mongodb4+ does not use nojournal - systemd
-  replace:
-    dest: /etc/systemd/system/mongod.service
-    regexp: ' --nojournal$'
-    replace: ''
-    backup: yes
-  when: mongodb_version is defined and mongodb_version|string == '4.2'
-  notify:
-    - reload systemd
-    - restart mongo
-
-- name: Ensure mongodb4+ does not use nojournal - config
-  template:
-    src: mongo4-ramdisk.conf.j2
-    dest: /usr/share/meteor/bundle/mongo-ramdisk.conf
-    backup: yes
-    mode: '0644'
-  notify:
-    - restart mongo
-  when: mongodb_version is defined and mongodb_version|string == '4.2'
+- import_tasks: mongodb.yml
 
 - name: LXD | disable freeswitch scheduling options
   replace:
