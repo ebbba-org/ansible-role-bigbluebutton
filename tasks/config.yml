@@ -162,8 +162,8 @@
 - name: enable CPUSchedulingPolicy in FreeSWITCH service
   lineinfile:
     path: /lib/systemd/system/freeswitch.service
-    regexp: '^CPUSchedulingPolicy=rr'
-    line: '#CPUSchedulingPolicy=rr'
+    regexp: '^#?CPUSchedulingPolicy=rr'
+    line: 'CPUSchedulingPolicy=rr'
   notify:
   - restart freeswitch
   - reload systemd
@@ -172,7 +172,7 @@
 - name: disable CPUSchedulingPolicy in FreeSWITCH service
   lineinfile:
     path: /lib/systemd/system/freeswitch.service
-    regexp: '^CPUSchedulingPolicy=rr'
+    regexp: '^#?CPUSchedulingPolicy=rr'
     line: '#CPUSchedulingPolicy=rr'
   notify:
   - freeswitch
