@@ -195,7 +195,7 @@
 - name: enable IPv6 in FreeSWITCH service 2/2
   lineinfile:
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
-    regexp: '<param name="listen-ip" value="127.0.0.1"/>'
+    regexp: '<param name="listen-ip" value="[a-fA-F0-9.:]+"/>'
     line: '<param name="listen-ip" value="::"/>'
   when: bbb_freeswitch_ipv6
   notify:
@@ -218,7 +218,7 @@
 - name: disable IPv6 in FreeSWITCH service 2/2
   lineinfile:
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
-    regexp: '<param name="listen-ip" value="::"/>'
+    regexp: '<param name="listen-ip" value="[a-fA-F0-9.:]+"/>'
     line: '<param name="listen-ip" value="127.0.0.1"/>'
   when: not bbb_freeswitch_ipv6
   notify:
