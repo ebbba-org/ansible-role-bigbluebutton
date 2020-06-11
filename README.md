@@ -8,7 +8,7 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_state` | Install BigBlueButton to state | `present` | for updating BigBlueButton with this role use `latest`
 | `bbb_apt_mirror` | apt repo server for BigBlueButton packages | `https://ubuntu.bigbluebutton.org` | other value would be e.g. `https://packages-eu.bigbluebutton.org` |
 | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
-| `bbb_letsencrypt_email` | E-mail for use with letsencrypt _(required when using LE)_|  |
+| `bbb_letsencrypt_email` | E-mail for use with letsencrypt | |
 | `bbb_nginx_privacy` | only log errors not access | `yes` |
 | `bbb_nginx_dh` | generate Diff-Hellmann for nginx | `yes` | same place like bbb-install.sh
 | `bbb_coturn_enable` | enable installation of the TURN-server | `yes` |
