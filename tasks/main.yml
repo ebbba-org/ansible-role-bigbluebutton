@@ -38,11 +38,17 @@
 
 - meta: flush_handlers
 
-- name: Ensure services are enabled
+- name: Ensure mongod is started and enabled to start at boot.
   service:
     name: mongod
-    enabled: true
+    enabled: yes
     state: started
+
+- name: Ensure nginx is started and enabled to start at boot.
+  service: 
+    name: nginx 
+    enabled: yes
+    state: started 
 
 - name: Check if bbb_ssl_cert exists
   stat:
