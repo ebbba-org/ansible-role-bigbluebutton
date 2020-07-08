@@ -21,6 +21,13 @@
     name: "{{ bbb_and_dependencies }}"
     state: "{{ bbb_state }}"
 
+- name: install bbb-webhooks
+  apt:
+    name: "{{ bbb_webhooks }}"
+    state: "{{ bbb_state}}"
+  when: bbb_webhooks_enable
+  notify: restart bigbluebutton
+
 - import_tasks: mongodb.yml
 
 - name: LXD | disable freeswitch scheduling options
