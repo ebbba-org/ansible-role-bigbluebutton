@@ -9,7 +9,7 @@
       command: localectl status
       register: locale_status
       changed_when: false
-      check_mode: no
+      check_mode: false
 
     - name: Parse 'LANG' from current locale and language configuration
       set_fact:
@@ -26,7 +26,7 @@
     - name: Get locale
       command: locale -a
       changed_when: false
-      check_mode: no
+      check_mode: false
       register: localea
 
     - name: Configure locale to '{{ bbb_system_locale }}'

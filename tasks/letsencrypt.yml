@@ -31,4 +31,3 @@
   command: certbot certonly -d {{ bbb_hostname }} --register-unsafely-without-email --agree-tos -n --nginx
   notify: reload nginx
   when: not certbot_certificate_file_path.stat.exists and bbb_letsencrypt_email is not defined
-

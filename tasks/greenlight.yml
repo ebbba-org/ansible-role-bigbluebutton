@@ -21,7 +21,7 @@
 
 - name: register bbb secret
   command: bbb-conf --secret
-  changed_when: False
+  changed_when: false
   register: result
   when: not bbb_secret is defined
 
