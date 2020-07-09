@@ -24,7 +24,7 @@
 - name: install bbb-webhooks
   apt:
     name: "{{ bbb_webhooks }}"
-    state: "{{ bbb_state}}"
+    state: "{{ bbb_state }}"
   when: bbb_webhooks_enable
   notify: restart bigbluebutton
 
