@@ -12,6 +12,7 @@
       - docker
       - docker-compose
     state: "{{ bbb_state }}"
+    executable: pip3
 
 - name: create greenlight directory
   file:
