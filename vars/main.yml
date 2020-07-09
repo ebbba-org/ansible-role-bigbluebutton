@@ -4,13 +4,10 @@ bbb_required_packages:
   - software-properties-common
   - haveged
   - curl
-  - python-apt
-  - python-dev
+  - python3-apt
   - python3-dev
-  - python-setuptools
-  - python-pip
+  - python3-setuptools
   - python3-pip
-  - python-wheel
   - python3-wheel
   - openjdk-8-jdk
 

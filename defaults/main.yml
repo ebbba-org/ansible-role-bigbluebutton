@@ -50,3 +50,5 @@ bbb_dialplan_comfort_noise: 1400
 
 bbb_apt_mirror: "https://ubuntu.bigbluebutton.org"
 bbb_apt_key: 770C4267C5E63474D171B60937B5DD5EFAB46452
+
+ansible_python_interpreter: "/usr/bin/python3"

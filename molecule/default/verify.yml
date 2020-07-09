@@ -9,7 +9,7 @@
     changed_when: false
     with_items:
       - language-pack-en
-      - python-pip
+      - python3-pip
       - mongodb-org
       - bbb-check
       - bbb-html5
