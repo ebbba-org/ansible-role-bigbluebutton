@@ -66,6 +66,14 @@
     line: 'appLogLevel={{ bbb_app_log_level }}'
   notify: restart bigbluebutton
 
+- name: set securitySalt
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^securitySalt'
+    line: 'securitySalt={{ bbb_secret }}'
+  when: bbb_secret is defined
+  notify: restart bigbluebutton
+
 - name: set red5 to use HTTPS 1/2
   lineinfile:
     path: /usr/share/red5/webapps/screenshare/WEB-INF/screenshare.properties
