@@ -40,6 +40,7 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_dialplan_quality` | Set quality of dailplan for FreeSWITCH | `cdquality` |
 | `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality`
 | `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality`
+| `bbb_webhooks_enable` | install bbb-webhooks | `no` |
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:
