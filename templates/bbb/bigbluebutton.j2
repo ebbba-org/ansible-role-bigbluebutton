@@ -18,7 +18,7 @@ server {
     ssl_ciphers "ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS:!AES256";
     ssl_prefer_server_ciphers on;
 {% if bbb_nginx_dh %}
-    ssl_dhparam /etc/nginx/ssl/dhp-4096.pem;
+    ssl_dhparam /etc/nginx/ssl/ffdhe4096.pem;
 {% endif %}
 
 {% if bbb_nginx_privacy %}

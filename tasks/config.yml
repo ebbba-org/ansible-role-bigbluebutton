@@ -154,10 +154,13 @@
     state: directory
   when: bbb_nginx_dh
 
-- name: Generate DH Parameters with a different size (4096 bits)
-  openssl_dhparam:
-    path: /etc/nginx/ssl/dhp-4096.pem
-    size: 4096
+- name: Copy Predefined DH group ffdhe2048
+  copy:
+    src: ffdhe4096.pem
+    dest: /etc/nginx/ssl/ffdhe4096.pem
+    owner: root
+    group: root
+    mode: '0644'
   notify: reload nginx
   when: bbb_nginx_dh
 
