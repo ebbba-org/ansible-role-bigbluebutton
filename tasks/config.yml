@@ -152,7 +152,6 @@
   file:
     path: /etc/nginx/ssl
     state: directory
-  when: bbb_nginx_dh
 
 - name: Copy Predefined DH group ffdhe2048
   copy:
@@ -162,7 +161,6 @@
     group: root
     mode: '0644'
   notify: reload nginx
-  when: bbb_nginx_dh
 
 - name: copy bbb's nginx vhost
   template:

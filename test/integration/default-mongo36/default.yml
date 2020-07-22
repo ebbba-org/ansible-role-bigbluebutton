@@ -15,6 +15,5 @@
     bbb_greenlight_db_password: 2585c27c785e8895ec
     bbb_letsencrypt_enable: false
     bbb_letsencrypt_email: mail@example.com
-    bbb_nginx_dh: false
   roles:
     - n0emis.bigbluebutton
