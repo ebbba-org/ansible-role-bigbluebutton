@@ -3,7 +3,6 @@ bbb_hostname: "{{ ansible_fqdn }}"
 bbb_state: "present"
 bbb_letsencrypt_enable: true
 bbb_nginx_privacy: true
-bbb_nginx_dh: true
 
 bbb_coturn_enable: true
 bbb_coturn_port: 3478
