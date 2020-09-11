@@ -10,6 +10,8 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
 | `bbb_letsencrypt_email` | E-mail for use with letsencrypt | |
 | `bbb_nginx_privacy` | only log errors not access | `yes` |
+| `bbb_default_welcome_message` | Welcome Message in the client | Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others. | Needs to be encoded with `native2ascii -encoding UTF8`! |
+| `bbb_default_welcome_message_footer` | Footer of the welcome message | This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>. | Encoded as the welcome message |
 | `bbb_coturn_enable` | enable installation of the TURN-server | `yes` |
 | `bbb_coturn_server` | server name on coturn (realm) | `{{ bbb_hostname }}` |
 | `bbb_coturn_port` | the port for the TURN-Server to use | `3443` |
