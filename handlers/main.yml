@@ -27,3 +27,9 @@
 - name: reload systemd
   systemd:
     daemon_reload: true
+
+- name: restart monitoring
+  docker_compose:
+    pull: no
+    restarted: true
+    project_src: "{{ bbb_monitoring_directory }}"
