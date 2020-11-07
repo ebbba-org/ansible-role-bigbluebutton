@@ -88,6 +88,20 @@
     line: 'jnlpFile=https://{{ bbb_hostname }}/screenshare/screenshare.jnlp'
   notify: restart bigbluebutton
 
+- name: set bbb default welcome message
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^defaultWelcomeMessage='
+    line: 'defaultWelcomeMessage={{ bbb_default_welcome_message }}'
+  notify: restart bigbluebutton
+
+- name: set bbb default welcome message footer
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^defaultWelcomeMessageFooter='
+    line: 'defaultWelcomeMessageFooter={{ bbb_default_welcome_message_footer }}'
+  notify: restart bigbluebutton
+
 - name: copy TURN config file
   template:
     src: bbb/turn-stun-servers.xml.j2

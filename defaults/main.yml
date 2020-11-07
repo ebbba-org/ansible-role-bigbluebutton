@@ -39,6 +39,10 @@ bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 bbb_system_locale: en_US.UTF-8
 bbb_mongodb_version: 3.4
 
+# Attention, needs to be encoded with "native2ascii -encoding UTF8"
+bbb_default_welcome_message: Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others.
+bbb_default_welcome_message_footer: This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>.
+
 bbb_ssl_cert: "/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"
 bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 
