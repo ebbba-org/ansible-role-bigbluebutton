@@ -40,9 +40,9 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality`
 | `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality`
 | `bbb_webhooks_enable` | install bbb-webhooks | `no` |
-| `bbb_monitoring_enable` | deploy [all in one monitoring stack](https://bigbluebutton-exporter.greenstatic.dev/installation/all_in_one_monitoring_stack/) (docker) | `no` |
-| `bbb_monitoring_directory` | Directory for the docker compose files | `/root/bbb-monitoring` |
-| `bbb_monitoring_port` | Internal Port for the monitoring werbservice | `3001` |
+| `bbb_monitoring_all_in_one_enable` | deploy [all in one monitoring stack](https://bigbluebutton-exporter.greenstatic.dev/installation/all_in_one_monitoring_stack/) (docker) | `no` |
+| `bbb_monitoring_all_in_one_directory` | Directory for the docker compose files | `/root/bbb-monitoring` |
+| `bbb_monitoring_all_in_one_port` | Internal Port for the monitoring werbservice | `3001` |
 | `bbb_monitoring_recordings_from_disk` | Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details. | `true`
 
 ### Extra options for Greenlight

@@ -39,7 +39,7 @@ services:
     network_mode: host
     environment:
       GF_SERVER_HTTP_ADDR: "127.0.0.1"
-      GF_SERVER_HTTP_PORT: "{{ bbb_monitoring_port }}"
+      GF_SERVER_HTTP_PORT: "{{ bbb_monitoring_all_in_one_port }}"
       GF_SERVER_ROOT_URL: "https://{{ bbb_hostname }}/monitoring"
     volumes:
       - "grafana_data:/var/lib/grafana"

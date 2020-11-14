@@ -32,4 +32,4 @@
   docker_compose:
     pull: no
     restarted: true
-    project_src: "{{ bbb_monitoring_directory }}"
+    project_src: "{{ bbb_monitoring_all_in_one_directory }}"
