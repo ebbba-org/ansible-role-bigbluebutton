@@ -14,7 +14,7 @@
   set_fact:
     bbb_secret: "{{ result.stdout | regex_search('Secret: ([a-zA-Z0-9]*)', multiline=True) |  regex_replace('Secret: ') }}"
     cacheable: true
-  when: not bbb_baseurl is defined
+  when: not bbb_secret is defined
 
 - name: parse bbb baseurl
   set_fact:

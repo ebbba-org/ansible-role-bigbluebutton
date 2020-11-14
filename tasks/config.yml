@@ -66,13 +66,26 @@
     line: 'appLogLevel={{ bbb_app_log_level }}'
   notify: restart bigbluebutton
 
-- name: set securitySalt
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^securitySalt'
-    line: 'securitySalt={{ bbb_secret }}'
-  when: bbb_secret is defined
+- name: register bbb secret
+  command: bbb-conf --secret
+  changed_when: false
+  register: result
+
+- name: parse bbb secret
+  set_fact:
+    current_bbb_secret: "{{ result.stdout | regex_search('Secret: ([a-zA-Z0-9]*)', multiline=True) |  regex_replace('Secret: ') }}"
+    cacheable: true
+
+- name: set BBB secret
+  command: "bbb-conf --setsecret {{ bbb_secret }}"
+  when: bbb_secret is defined and bbb_secret != current_bbb_secret
   notify: restart bigbluebutton
+
+- name: set bbb secret variable
+  set_fact:
+    bbb_secret: "{{ current_bbb_secret }}"
+    cacheable: true
+  when: not bbb_secret is defined
 
 - name: set red5 to use HTTPS 1/2
   lineinfile:
