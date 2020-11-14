@@ -75,3 +75,6 @@
 
 - import_tasks: greenlight.yml
   when: bbb_greenlight_enable
+
+- import_tasks: monitoring/all_in_one.yml
+  when: bbb_monitoring_all_in_one_enable

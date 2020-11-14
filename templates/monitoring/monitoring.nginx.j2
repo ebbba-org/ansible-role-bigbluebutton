@@ -1,0 +1,4 @@
+location /monitoring/ {
+  proxy_pass http://127.0.0.1:{{ bbb_monitoring_all_in_one_port }}/;
+  include proxy_params;
+}
