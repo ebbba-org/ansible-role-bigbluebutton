@@ -10,7 +10,7 @@
   pip:
     name:
       - docker
-      - docker-compose
+      - docker-compose==1.24.1
     state: "{{ bbb_state }}"
 
 - name: create greenlight directory
