@@ -153,6 +153,9 @@ bbb_meteor:
         bitrate: 800
 ```
 
+### LXD/LXC compatibility
+To run BigBlueButton in unprivileged LXD/LXC containers, you have to set `bbb_cpuschedule` and `bbb_freeswitch_ioschedule_realtime` to `false`.
+
 ## Dependencies
 - [geerlingguy.nodejs](https://github.com/geerlingguy/ansible-role-nodejs)
 - [geerlingguy.docker](https://github.com/geerlingguy/ansible-role-docker)
