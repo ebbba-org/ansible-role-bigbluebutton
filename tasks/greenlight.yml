@@ -1,18 +1,4 @@
 ---
-- name: ensure pip is installed
-  apt:
-    name:
-      - python3-pip
-      - python3-setuptools
-    state: "{{ bbb_state }}"
-
-- name: install python docker packages
-  pip:
-    name:
-      - docker
-      - docker-compose==1.24.1
-    state: "{{ bbb_state }}"
-
 - name: create greenlight directory
   file:
     path: /root/greenlight
