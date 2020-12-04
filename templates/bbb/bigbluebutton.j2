@@ -19,7 +19,7 @@ server {
     ssl_prefer_server_ciphers off;
     ssl_dhparam /etc/nginx/ssl/ffdhe4096.pem;
 
-{% if bbb_nginx_privacy %}
+{% if bbb_nginx_privacy | bool %}
   error_log /var/log/nginx/bigbluebutton.error.log;
   access_log /dev/null;
 {% else %}
