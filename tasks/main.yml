@@ -36,19 +36,6 @@
 
 - import_tasks: mongodb.yml
 
-- name: LXD | disable freeswitch scheduling options
-  replace:
-    dest: /lib/systemd/system/freeswitch.service
-    regexp: "{{ item.re }}"
-    replace: "{{ item.rep }}"
-    backup: true
-    mode: '0644'
-  with_items:
-    - { re: '^IOSchedulingClass=realtime', rep: '#IOSchedulingClass=realtime' }
-    - { re: '^CPUSchedulingPolicy=rr', rep: '#CPUSchedulingPolicy=rr' }
-  notify:
-    - reload systemd
-
 - meta: flush_handlers
 
 - name: Ensure mongod is started and enabled to start at boot.

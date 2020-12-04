@@ -35,6 +35,7 @@ bbb_mute_on_start: false
 bbb_app_log_level: 'DEBUG'
 bbb_nodejs_version: 8.x
 bbb_cpuschedule: true
+bbb_freeswitch_ioschedule_realtime: true
 bbb_freeswitch_ipv6: true
 bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 bbb_system_locale: en_US.UTF-8

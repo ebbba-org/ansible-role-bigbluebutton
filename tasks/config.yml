@@ -197,25 +197,23 @@
      dest: /etc/nginx/sites-available/bigbluebutton
   notify: reload nginx
 
-- name: enable CPUSchedulingPolicy in FreeSWITCH service
+- name: configure CPU and IO Scheduling in FreeSWITCH service
   lineinfile:
     path: /lib/systemd/system/freeswitch.service
-    regexp: '^#?CPUSchedulingPolicy=rr'
-    line: 'CPUSchedulingPolicy=rr'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+    state: '{{ item.state }}'
+    insertbefore: '^CPUSchedulingPriority='
+  with_items:
+    - line: 'CPUSchedulingPolicy=rr'
+      regexp: '^#?CPUSchedulingPolicy='
+      state: '{{ "present" if bbb_cpuschedule | bool else "absent" }}'
+    - line: 'IOSchedulingClass=realtime'
+      regexp: '^#?IOSchedulingClass='
+      state: '{{ "present" if bbb_freeswitch_ioschedule_realtime | bool else "absent" }}'
   notify:
   - restart freeswitch
   - reload systemd
-  when: bbb_cpuschedule
-
-- name: disable CPUSchedulingPolicy in FreeSWITCH service
-  lineinfile:
-    path: /lib/systemd/system/freeswitch.service
-    regexp: '^#?CPUSchedulingPolicy=rr'
-    line: '#CPUSchedulingPolicy=rr'
-  notify:
-  - freeswitch
-  - reload systemd
-  when: not bbb_cpuschedule
 
 - name: enable IPv6 in FreeSWITCH service 1/2
   command:
