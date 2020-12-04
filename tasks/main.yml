@@ -20,6 +20,12 @@
   apt:
     name: "{{ bbb_and_dependencies }}"
     state: "{{ bbb_state }}"
+  register: _bbb_install
+
+- name: upgrade packages
+  apt:
+    upgrade: "{{ bbb_upgrade_packages }}"
+  register: _bbb_upgrade
 
 - name: install bbb-webhooks
   apt:
