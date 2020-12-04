@@ -58,7 +58,7 @@
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^muteOnStart'
-    line: 'muteOnStart={{ bbb_mute_on_start | ternary("false", "true") }}'
+    line: 'muteOnStart={{ bbb_mute_on_start | ternary("true", "false") }}'
   notify: restart bigbluebutton
 
 - name: set appLogLevel
