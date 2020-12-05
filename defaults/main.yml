@@ -63,3 +63,13 @@ bbb_monitoring_all_in_one_version: latest
 bbb_monitoring_all_in_one_directory: "/root/bbb-monitoring"
 bbb_monitoring_all_in_one_port: 3001
 bbb_monitoring_recordings_from_disk: true
+
+bbb_dialin_enabled: false
+bbb_dialin_provider_proxy: 'sip.example.net'
+bbb_dialin_provider_username: 'provider-account'
+bbb_dialin_provider_password: 'provider-password'
+bbb_dialin_provider_extension: '6135551234'
+bbb_dialin_default_number: '613-555-1234'
+bbb_dialin_mask_caller: false
+bbb_dialin_overwrite_footer: false
+bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.

@@ -1,0 +1,19 @@
+---
+- name: Remove custom provider profile
+  file:
+    path: "/opt/freeswitch/conf/sip_profiles/external/dial-in.xml"
+    state: absent
+  notify: restart freeswitch
+
+- name: Remove custom dialplan
+  file:
+    path: "/opt/freeswitch/conf/dialplan/public/dial-in.xml"
+    state: absent
+  notify: restart freeswitch
+
+- name: reset defaultDialAccessNumber
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^defaultDialAccessNumber=?'
+    line: 'defaultDialAccessNumber=613-555-1234'
+  notify: restart bigbluebutton

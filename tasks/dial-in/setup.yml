@@ -1,0 +1,23 @@
+---
+- name: Install custom provider profile
+  template:
+    src: "dial-in/provider.xml.j2"
+    dest: "/opt/freeswitch/conf/sip_profiles/external/dial-in.xml"
+    owner: freeswitch
+    group: daemon
+  notify: restart freeswitch
+
+- name: Install custom dialplan
+  template:
+    src: "dial-in/dialplan.xml.j2"
+    dest: "/opt/freeswitch/conf/dialplan/public/dial-in.xml"
+    owner: freeswitch
+    group: daemon
+  notify: restart freeswitch
+
+- name: set defaultDialAccessNumber
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^defaultDialAccessNumber=?'
+    line: 'defaultDialAccessNumber={{ bbb_dialin_default_number }}'
+  notify: restart bigbluebutton
