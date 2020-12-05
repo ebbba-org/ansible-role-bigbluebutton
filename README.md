@@ -48,6 +48,15 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_monitoring_all_in_one_directory` | Directory for the docker compose files | `/root/bbb-monitoring` |
 | `bbb_monitoring_all_in_one_port` | Internal Port for the monitoring werbservice | `3001` |
 | `bbb_monitoring_recordings_from_disk` | Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details. | `true`
+| `bbb_dialin_enabled` | enable phone dial-in, will also remove any previous dial-in configuration if set to `false`  | `false` |
+| `bbb_dialin_provider_proxy` | IP or Domain of your SIP provider, also known as registrar | `sip.example.net` |
+| `bbb_dialin_provider_username` | Username for authentication on the SIP-server | `provider-account` |
+| `bbb_dialin_provider_password` | Password for authentication on the SIP-server | `provider-password` |
+| `bbb_dialin_provider_extension` | Extension of your SIP account | `6135551234` |
+| `bbb_dialin_default_number` | Number to present to users for dial-in. Enable `bbb_dialin_overwrite_footer` or use `%%DIALNUM%%` and `%%CONFNUM%%` in you footer (see `bbb_default_welcome_message_footer`) | `6135551234` |
+| `bbb_dialin_mask_caller` | Mask caller-number in the BBB web-interface for privacy reasons (`01711233121` → `xxx-xxx-3121`) ||
+| `bbb_dialin_overwrite_footer` | Set the default dial-in footer instead of `bbb_default_welcome_message_footer` | `false` |
+| `bbb_dialin_footer` | The default dial-in notice, if you want to customize it, it is recommended to change `bbb_default_welcome_message_footer` instead | `<br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.` |
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:
@@ -155,6 +164,21 @@ bbb_meteor:
 
 ### LXD/LXC compatibility
 To run BigBlueButton in unprivileged LXD/LXC containers, you have to set `bbb_cpuschedule` and `bbb_freeswitch_ioschedule_realtime` to `false`.
+
+### Phone dial-in
+
+Example configuration using [sipgate](https://sipgate.de) for dial-in. Be sure to check with your provider if this usage is permitted.
+
+```yaml
+bbb_dialin_enabled: true
+bbb_dialin_provider_proxy: 'sipgate.de'
+bbb_dialin_provider_username: '158d43584d'
+bbb_dialin_provider_password: 'xxxx-secret-xxxx'
+bbb_dialin_provider_extension: '133713374223'
+bbb_dialin_default_number: '0133 713-337-4223'
+bbb_dialin_mask_caller: true
+bbb_dialin_overwrite_footer: true
+```
 
 ## Dependencies
 - [geerlingguy.nodejs](https://github.com/geerlingguy/ansible-role-nodejs)

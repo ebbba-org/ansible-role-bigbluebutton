@@ -1,0 +1,6 @@
+---
+- include_tasks: setup.yml
+  when: bbb_dialin_enabled
+
+- include_tasks: remove.yml
+  when: not bbb_dialin_enabled
