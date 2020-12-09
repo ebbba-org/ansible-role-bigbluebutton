@@ -10,7 +10,7 @@ services:
       - "/var/bigbluebutton:/var/bigbluebutton:ro"
     environment:
       BIND_IP: "127.0.0.1"
-      RECORDINGS_METRICS_READ_FROM_DISK: "{{ 'true' if bbb_monitoring_recordings_from_disk else 'false' }}"
+      RECORDINGS_METRICS_READ_FROM_DISK: "{{ bbb_monitoring_recordings_from_disk | ternary("true", "false") }}"
     env_file:
       - bbb_exporter_secrets.env
     restart: unless-stopped

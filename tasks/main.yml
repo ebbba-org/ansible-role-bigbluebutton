@@ -56,15 +56,15 @@
   register: bbbcert
 
 - import_tasks: letsencrypt.yml
-  when: bbb_letsencrypt_enable and not bbbcert.stat.exists
+  when: bbb_letsencrypt_enable | bool and not bbbcert.stat.exists
 
 - import_tasks: certificate-selfsigned.yml
-  when: not bbb_letsencrypt_enable and not bbbcert.stat.exists
+  when: not (bbb_letsencrypt_enable | bool) and not bbbcert.stat.exists
 
 - import_tasks: config.yml
 
 - import_tasks: coturn.yml
-  when: bbb_coturn_enable
+  when: bbb_coturn_enable | bool
 
 - block:
   - name: ensure pip is installed
@@ -80,12 +80,12 @@
         - docker
         - docker-compose==1.24.1
       state: "{{ bbb_state }}"
-  when: bbb_greenlight_enable or bbb_monitoring_all_in_one_enable
+  when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool
 
 - import_tasks: dial-in/main.yml
 
 - import_tasks: greenlight.yml
-  when: bbb_greenlight_enable
+  when: bbb_greenlight_enable | bool
 
 - import_tasks: monitoring/all_in_one.yml
-  when: bbb_monitoring_all_in_one_enable
+  when: bbb_monitoring_all_in_one_enable | bool

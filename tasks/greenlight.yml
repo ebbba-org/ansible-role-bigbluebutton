@@ -39,4 +39,4 @@
   docker_compose:
     pull: true
     project_src: /root/greenlight/
-  when: bbb_greenlight_enable
+  when: bbb_greenlight_enable | bool
