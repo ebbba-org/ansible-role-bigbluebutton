@@ -26,6 +26,10 @@ bbb_turn_servers:
   tls: true
 
 bbb_greenlight_enable: true
+bbb_greenlight_users: []
+#  - { name: '', email: '', password: '', type: 'user' }
+#  - { name: '', email: '', password: '', type: 'admin' }
+
 bbb_webhooks_enable: false
 bbb_allow_mail_notifications: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
