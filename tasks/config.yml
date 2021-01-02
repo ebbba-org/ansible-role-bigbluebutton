@@ -89,6 +89,13 @@
     cacheable: true
   when: not bbb_secret is defined
 
+- name: set bbb Guest Policy
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^defaultGuestPolicy='
+    line: 'defaultGuestPolicy={{ bbb_guestpolicy }}'
+  notify: restart bigbluebutton
+
 - name: set red5 to use HTTPS 1/2
   lineinfile:
     path: /usr/share/red5/webapps/screenshare/WEB-INF/screenshare.properties
