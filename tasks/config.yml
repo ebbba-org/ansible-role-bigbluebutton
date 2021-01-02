@@ -216,7 +216,7 @@
   with_items:
     - line: 'CPUSchedulingPolicy=rr'
       regexp: '^#?CPUSchedulingPolicy='
-      state: '{{ "present" if bbb_cpuschedule | bool else "absent" }}'
+      state: '{{ "present" if (bbb_cpuschedule | bool and not (ansible_virtualization_type is defined and ansible_virtualization_type == "lxd")) else "absent" }}'
     - line: 'IOSchedulingClass=realtime'
       regexp: '^#?IOSchedulingClass='
       state: '{{ "present" if bbb_freeswitch_ioschedule_realtime | bool else "absent" }}'
