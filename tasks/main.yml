@@ -89,3 +89,6 @@
 
 - import_tasks: monitoring/all_in_one.yml
   when: bbb_monitoring_all_in_one_enable | bool
+
+- import_tasks: systemd.yml
+  when: bbb_systemd_hardening | bool

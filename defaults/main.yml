@@ -73,3 +73,13 @@ bbb_dialin_default_number: '613-555-1234'
 bbb_dialin_mask_caller: false
 bbb_dialin_overwrite_footer: false
 bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.
+
+bbb_systemd_hardening: true
+bbb_systemd_override:
+  - { name: freeswitch, t: systemd-override.conf.j2 }
+  - { name: kurento-media-server, t: systemd-override.conf.j2 }
+  - { name: red5, t: systemd-override.conf.j2 }
+  - { name: bbb-web, t: systemd-override.conf.j2 }
+  - { name: bbb-html5, t: systemd-override.conf.j2 }
+# NOK as coturn using init.d
+#  - { name: turnserver, t: systemd-override.conf.j2 }

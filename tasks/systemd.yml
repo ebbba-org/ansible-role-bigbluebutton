@@ -1,0 +1,19 @@
+---
+
+- name: Ensure systemd override folder exists
+  file:
+    dest: "/etc/systemd/system/{{ item.name }}.service.d"
+    state: directory
+    mode: '0755'
+  with_items: "{{ bbb_systemd_override }}"
+
+# if issue, check /var/log/audit/audit.log
+- name: Review few services systemd hardening
+  template:
+    src: "{{ item.t }}"
+    dest: "/etc/systemd/system/{{ item.name }}.service.d/override.conf"
+    mode: '0644'
+  with_items: "{{ bbb_systemd_override }}"
+  notify:
+    - reload systemd
+    - "restart {{ item.name }}"

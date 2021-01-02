@@ -9,6 +9,31 @@
     name: nginx
     state: restarted
 
+- name: restart freeswitch
+  service:
+    name: freeswitch
+    state: restarted
+
+- name: restart kurento-media-server
+  service:
+    name: kurento-media-server
+    state: restarted
+
+- name: restart red5
+  service:
+    name: red5
+    state: restarted
+
+- name: restart bbb-web
+  service:
+    name: bbb-web
+    state: restarted
+
+- name: restart bbb-html5
+  service:
+    name: bbb-html5
+    state: restarted
+
 - name: restart bigbluebutton
   command: bbb-conf --restart
   become: true

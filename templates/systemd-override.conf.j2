@@ -1,0 +1,32 @@
+[Service]
+NoNewPrivileges=yes
+# Reduce Attack Surface
+PrivateTmp=true
+#PrivateDevices=yes
+ProtectHome=yes
+ProtectSystem=full
+{% if (ansible_os_family == 'RedHat' and ansible_distribution_major_version|int > 7) or (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 18) %}
+## FIXME! testing needed as currently bbb only on 16.04
+InaccessiblePaths=/proc
+ProtectKernelTunables=true
+ProtectKernelModules=yes
+ProtectControlGroups=true
+RestrictRealtime=true
+RestrictNamespaces=~user mnt
+{% endif %}
+RestrictAddressFamilies=AF_INET AF_INET6
+#LockPersonality=true
+{% if not (ansible_virtualization_type is defined and
+          ansible_virtualization_type == "docker"
+        )
+%}
+{% if (ansible_os_family == 'RedHat' and ansible_distribution_major_version|int >= 8) or (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 18) %}
+SystemCallFilter=@system-service
+SystemCallFilter=~@debug @mount @cpu-emulation @obsolete @privileged
+# When system call is disallowed, return error code instead of killing process
+SystemCallErrorNumber=EPERM
+{% endif %}
+{% endif %}
+CPUShares={{ bbb_cgroups_cpushares | default('1024') }}
+CPUQuota={{ bbb_cgroups_cpuquota | default('80%') }}
+MemoryLimit={{ bbb_cgroups_memorylimit | default('4G') }}
