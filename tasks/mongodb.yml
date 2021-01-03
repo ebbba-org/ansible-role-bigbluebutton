@@ -7,7 +7,7 @@
     regexp: ' --nojournal$'
     replace: ''
     backup: true
-  when: mongodb_version is defined and mongodb_version|string == '4.2'
+  when: bbb_mongodb_version is defined and bbb_mongodb_version|string == '4.2'
   notify:
     - reload systemd
     - restart mongo
@@ -20,4 +20,4 @@
     mode: '0644'
   notify:
     - restart mongo
-  when: mongodb_version is defined and mongodb_version|string == '4.2'
+  when: bbb_mongodb_version is defined and bbb_mongodb_version|string == '4.2'

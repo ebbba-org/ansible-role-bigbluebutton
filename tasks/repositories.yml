@@ -17,7 +17,7 @@
 
 - name: add mongodb apt key
   apt_key:
-    url: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version | default('3.4') }}.asc"
+    url: "https://www.mongodb.org/static/pgp/server-{{ bbb_mongodb_version | default('3.4') }}.asc"
     state: present
 
 - name: Debug | apt keys
