@@ -206,6 +206,7 @@
      dest: /etc/nginx/sites-available/bigbluebutton
   notify: reload nginx
 
+- debug: var=ansible_virtualization_type
 - name: configure CPU and IO Scheduling in FreeSWITCH service
   lineinfile:
     path: /lib/systemd/system/freeswitch.service
