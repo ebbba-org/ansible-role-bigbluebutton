@@ -27,7 +27,7 @@ end
 describe process("node") do
   #its(:user) { should eq "bigbluebutton" }
   # its(:args) { should match /server.js/ }
-  its(:count) { should eq 7 }
+  its(:count) { should >= 6 }
 end
 
 describe port(9001) do
