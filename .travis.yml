@@ -10,7 +10,8 @@ jobs:
       name: Ansible Lint
       before_install:
         - sudo apt-get install python3-pip python3-setuptools
-        - pip3 install --upgrade pip wheel ansible-lint
+        - pip3 install --upgrade pip wheel
+        - pip3 install ansible-lint
       script:
         - ansible-lint tasks/main.yml || true
       after_script: true
