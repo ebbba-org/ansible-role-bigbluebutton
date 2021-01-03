@@ -220,7 +220,7 @@
       state: '{{ "present" if (bbb_cpuschedule | bool and not (ansible_virtualization_type is defined and ansible_virtualization_type == "lxc")) else "absent" }}'
     - line: 'IOSchedulingClass=realtime'
       regexp: '^#?IOSchedulingClass='
-      state: '{{ "present" if bbb_freeswitch_ioschedule_realtime | bool else "absent" }}'
+      state: '{{ "present" if (bbb_freeswitch_ioschedule_realtime | bool and not (ansible_virtualization_type is defined and ansible_virtualization_type == "lxc")) else "absent" }}'
   notify:
   - restart freeswitch
   - reload systemd
