@@ -18,6 +18,12 @@
   command: bbb-conf --restart
   become: true
 
+- name: restart bbb-html5
+  systemd:
+    name: bbb-html5
+    state: restarted
+  become: true
+
 - name: restart freeswitch
   systemd:
     name: freeswitch
