@@ -1,4 +1,10 @@
 ---
+
+- name: Ensure libssl-dev is present
+  apt:
+    name: libssl-dev
+    state: present
+
 - name: Ensure openssl-python-module is installed
   pip:
     name: PyOpenSSL
