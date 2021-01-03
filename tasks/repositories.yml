@@ -20,6 +20,13 @@
     url: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version | default('3.4') }}.asc"
     state: present
 
+- name: Debug | apt keys
+  command: apt-key list
+  changed_when: false
+  ignore_errors: true
+  register: akeys
+- debug: var=akeys
+
 - name: add Xenial dependency apt repositories
   apt_repository:
     repo: "{{ item }}"
