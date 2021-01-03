@@ -40,7 +40,7 @@ bbb_freeswitch_ipv6: true
 bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
-bbb_guestpolicy: ASK_MODERATOR
+bbb_guestpolicy: ALWAYS_ACCEPT
 
 bbb_system_locale: en_US.UTF-8
 bbb_mongodb_version: 3.4
