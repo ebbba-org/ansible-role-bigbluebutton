@@ -67,6 +67,7 @@ before_install:
   - pwd
   - find -ls
   - sudo apt-get install python3-pip python3-setuptools
+  - pip3 install --upgrade pip
   - pip3 install wheel
   - pip3 install ansible ansible-lint
   - cd ../ && mv ansible-role-bigbluebutton n0emis.bigbluebutton
