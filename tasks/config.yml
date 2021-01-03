@@ -207,6 +207,21 @@
   notify: reload nginx
 
 - debug: var=ansible_virtualization_type
+- name: configure CPU Scheduling in bbb-html5 service
+  lineinfile:
+    path: /usr/lib/systemd/system/bbb-html5.service
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+    state: '{{ item.state }}'
+    insertbefore: '^Nice=19'
+  with_items:
+    - line: 'CPUSchedulingPolicy=fifo'
+      regexp: '^#?CPUSchedulingPolicy='
+      state: '{{ "present" if (bbb_cpuschedule | bool and not (ansible_virtualization_type is defined and ansible_virtualization_type == "lxc")) else "absent" }}'
+  notify:
+  - restart bbb-html5
+  - reload systemd
+
 - name: configure CPU and IO Scheduling in FreeSWITCH service
   lineinfile:
     path: /lib/systemd/system/freeswitch.service
