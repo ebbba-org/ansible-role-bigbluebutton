@@ -72,6 +72,7 @@
   command: bbb-conf --secret
   changed_when: false
   register: result
+  check_mode: no
 
 - name: parse bbb secret
   set_fact:
@@ -357,3 +358,23 @@
     replace: 'PORT=3000 /usr/share/$NODE_VERSION/bin/node main.js'
   when: not bbb_html5_node_options is defined
   notify: restart bigbluebutton
+
+- name: Enable mp4 for recordings
+  replace:
+    path: /usr/local/bigbluebutton/core/scripts/presentation.yml
+    regexp: '^video_formats:\s*\n\s*-\s*webm\n#*\s*-\s*mp4$'
+    replace: |-
+      video_formats:
+        - webm
+        - mp4
+  when: bbb_recordings_mp4
+
+- name: Disable mp4 for recordings
+  replace:
+    path: /usr/local/bigbluebutton/core/scripts/presentation.yml
+    regexp: '^video_formats:\s*\n\s*-\s*webm\n#*\s*-\s*mp4$'
+    replace: |-
+      video_formats:
+        - webm
+        # - mp4
+  when: not bbb_recordings_mp4
