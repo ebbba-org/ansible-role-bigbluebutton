@@ -133,6 +133,12 @@
   when: bbb_dialin_enabled and bbb_dialin_overwrite_footer
   notify: restart bigbluebutton
 
+- name: set bbb default presentation
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^beans.presentationService.defaultUploadedPresentation='
+    line: 'beans.presentationService.defaultUploadedPresentation={{ bbb_default_presentation }}'
+
 - name: copy TURN config file
   template:
     src: bbb/turn-stun-servers.xml.j2

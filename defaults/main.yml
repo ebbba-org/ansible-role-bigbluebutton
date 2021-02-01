@@ -79,3 +79,5 @@ bbb_dialin_default_number: '613-555-1234'
 bbb_dialin_mask_caller: false
 bbb_dialin_overwrite_footer: false
 bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.
+
+bbb_default_presentation: ${bigbluebutton.web.serverURL}/default.pdf
