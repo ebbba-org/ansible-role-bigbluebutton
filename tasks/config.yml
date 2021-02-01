@@ -138,6 +138,7 @@
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^beans.presentationService.defaultUploadedPresentation='
     line: 'beans.presentationService.defaultUploadedPresentation={{ bbb_default_presentation }}'
+  notify: restart bigbluebutton
 
 - name: copy TURN config file
   template:
