@@ -65,6 +65,7 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_ntp_cron_day` | Day of the month the time-sync job should run | `*`
 | `bbb_ntp_cron_hour` | Hour when the time-sync job should run | `5`
 | `bbb_ntp_cron_minute` | Minute when the time-sync job should run | `0`
+| `bbb_html5_node_options` | Allow to set extra options for node for the html5-webclient | unset | Could be used for example with https://github.com/bigbluebutton/bigbluebutton/issues/11183 ; `--max-old-space-size=4096 --max_semi_space_size=128`
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:

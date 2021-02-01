@@ -341,3 +341,19 @@
   notify:
   - restart freeswitch
   - reload nginx
+
+- name: set nodejs options for the html5-webclient
+  replace:
+    path: /usr/share/meteor/bundle/systemd_start.sh
+    regexp:  'PORT=3000 /usr/share/\$NODE_VERSION/bin/node.*main.js'
+    replace: 'PORT=3000 /usr/share/$NODE_VERSION/bin/node {{ bbb_html5_node_options }} main.js'
+  when: bbb_html5_node_options is defined
+  notify: restart bigbluebutton
+
+- name: unset nodejs options for the html5-webclient
+  replace:
+    path: /usr/share/meteor/bundle/systemd_start.sh
+    regexp:  'PORT=3000 /usr/share/\$NODE_VERSION/bin/node.*main.js'
+    replace: 'PORT=3000 /usr/share/$NODE_VERSION/bin/node main.js'
+  when: not bbb_html5_node_options is defined
+  notify: restart bigbluebutton
