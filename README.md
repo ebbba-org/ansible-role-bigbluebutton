@@ -17,6 +17,8 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_coturn_port` | the port for the TURN-Server to use | `3443` |
 | `bbb_coturn_port_tls` | the port for tls for the TURN-Server to use | `3443` |
 | `bbb_coturn_secret` | Secret for the TURN-Server  _(required)_ | | can be generated with `openssl rand -hex 16`
+| `bbb_coturn_min_port` | Lower bound of the UDP relay endpoints | `49152`
+| `bbb_coturn_max_port` | Upper bound of the UDP relay endpoints | `65535`
 | `bbb_turn_enable` | enable the use uf TURN in general | `yes` |
 | `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml
 | `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server`

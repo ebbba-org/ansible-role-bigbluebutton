@@ -9,6 +9,8 @@ bbb_coturn_enable: true
 bbb_coturn_port: 3478
 bbb_coturn_port_tls: 3443
 bbb_coturn_server: "{{ bbb_hostname }}"
+bbb_coturn_min_port: 49152
+bbb_coturn_max_port: 65535
 #bbb_coturn_secret: "" <- undefined to set as required
 
 bbb_turn_enable: true
