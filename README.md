@@ -124,7 +124,7 @@ bbb_greenlight_office365:
 By default, the ability for anyone to create a Greenlight account is enabled. To disable this, use `false`.
 For more information see: https://docs.bigbluebutton.org/greenlight/gl-config.html#in-application-greenlight
 ```yaml
-bbb_greenlight_accounts: 'false'
+bbb_greenlight_accounts: false
 ```
 
 #### RECAPTCHA
