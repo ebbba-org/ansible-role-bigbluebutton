@@ -17,7 +17,7 @@
 
 - name: Set timedatectl to (not-)use ntp
   command: "timedatectl set-ntp {{ bbb_ntp_cron | ternary('no', 'yes') }}"
-  changed_when: no
+  changed_when: false
 
 - name: Add/remove time syncronisation cronjob
   cron:

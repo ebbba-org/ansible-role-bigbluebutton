@@ -30,6 +30,6 @@
 
 - name: restart monitoring
   docker_compose:
-    pull: no
+    pull: false
     restarted: true
     project_src: "{{ bbb_monitoring_all_in_one_directory }}"

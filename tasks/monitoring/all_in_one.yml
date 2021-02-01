@@ -43,4 +43,3 @@
     pull: true
     project_src: /root/bbb-monitoring/
   when: bbb_monitoring_all_in_one_enable | bool
-
