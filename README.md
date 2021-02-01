@@ -61,6 +61,10 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_dialin_overwrite_footer` | Set the default dial-in footer instead of `bbb_default_welcome_message_footer` | `false` |
 | `bbb_dialin_footer` | The default dial-in notice, if you want to customize it, it is recommended to change `bbb_default_welcome_message_footer` instead | `<br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.` |
 | `bbb_guestpolicy` | How guest can access | `ALWAYS_ACCEPT` | acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR |
+| `bbb_ntp_cron` | Disable automatic time synchronisation and instead configure a cronjob | `false`
+| `bbb_ntp_cron_day` | Day of the month the time-sync job should run | `*`
+| `bbb_ntp_cron_hour` | Hour when the time-sync job should run | `5`
+| `bbb_ntp_cron_minute` | Minute when the time-sync job should run | `0`
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:
