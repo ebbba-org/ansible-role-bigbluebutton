@@ -87,4 +87,5 @@ bbb_ntp_cron_day: "*"
 bbb_ntp_cron_hour: "5"
 bbb_ntp_cron_minute: "0"
 
+bbb_recordings_webm: true
 bbb_recordings_mp4: false
