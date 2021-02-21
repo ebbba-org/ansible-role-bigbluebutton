@@ -1,0 +1,29 @@
+---
+- name: Install chrony
+  apt:
+    name: chrony
+    state: present
+  when: bbb_ntp_cron
+
+- name: Check if chrony is installed
+  package_facts:
+    manager: "apt"
+
+- name: Disable/enable chrony service
+  service:
+    name: chrony
+    enabled: "{{ bbb_ntp_cron | ternary('false', 'true') }}"
+  when: "'chrony' in ansible_facts.packages"
+
+- name: Set timedatectl to (not-)use ntp
+  command: "timedatectl set-ntp {{ bbb_ntp_cron | ternary('no', 'yes') }}"
+  changed_when: false
+
+- name: Add/remove time syncronisation cronjob
+  cron:
+    name: "sync system time"
+    job: "chronyd -q"
+    state: "{{ bbb_ntp_cron | ternary('present', 'absent') }}"
+    day: "{{ bbb_ntp_cron_day }}"
+    hour: "{{ bbb_ntp_cron_hour }}"
+    minute: "{{ bbb_ntp_cron_minute }}"

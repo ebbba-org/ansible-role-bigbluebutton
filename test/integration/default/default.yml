@@ -14,6 +14,9 @@
     bbb_greenlight_db_password: 2585c27c785e8895ec
     bbb_letsencrypt_enable: false
     bbb_letsencrypt_email: mail@example.com
+    bbb_greenlight_enable: true
+    bbb_greenlight_users:
+      - { name: 'user1', email: 'user1@example.com', password: 'user1@example.com', type: 'user' }
   pre_tasks:
     - name: Bionic+ | Set mongodb to 4.2
       set_fact:
