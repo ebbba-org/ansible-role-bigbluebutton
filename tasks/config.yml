@@ -357,3 +357,31 @@
     replace: 'PORT=3000 /usr/share/$NODE_VERSION/bin/node main.js'
   when: not bbb_html5_node_options is defined
   notify: restart bigbluebutton
+
+- name: Create overrides directory for bbb-html5.service
+  file:
+    path: /etc/systemd/system/bbb-html5.service.d
+    state: directory
+  when: bbb_cpuschedule == false
+
+- name: Save override file for bbb-html5.service
+  copy:
+    dest: /etc/systemd/system/bbb-html5.service.d/override.conf
+    content: |
+      [Service]
+      # Set no scheduling policy in LXC, see https://docs.bigbluebutton.org/2.2/troubleshooting.html#bbb-html5-fails-to-start-with-a-setscheduler-error
+      CPUSchedulingPolicy=other
+      Nice=-10
+  when: bbb_cpuschedule == false
+  notify:
+    - reload systemd
+    - restart bigbluebutton
+
+- name: Remove override file for bbb-html5.service
+  file:
+    path: /etc/systemd/system/bbb-html5.service.d/override.conf
+    state: absent
+  when: bbb_cpuschedule == true
+  notify:
+    - reload systemd
+    - restart bigbluebutton
