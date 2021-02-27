@@ -284,6 +284,42 @@
   - restart freeswitch
   - reload nginx
 
+- name: change FreeSWITCH RTP start port
+  lineinfile:
+    path: /opt/freeswitch/conf/autoload_configs/switch.conf.xml
+    regexp: '<param name="rtp-start-port" value="[0-9]+"/>'
+    line: '<param name="rtp-start-port" value="{{ bbb_freeswitch_rtp_start_port }}"/>'
+  notify:
+  - restart freeswitch
+  - reload nginx
+
+- name: change FreeSWITCH RTP end port
+  lineinfile:
+    path: /opt/freeswitch/conf/autoload_configs/switch.conf.xml
+    regexp: '<param name="rtp-end-port" value="[0-9]+"/>'
+    line: '<param name="rtp-end-port" value="{{ bbb_freeswitch_rtp_end_port }}"/>'
+  notify:
+  - restart freeswitch
+  - reload nginx
+
+- name: change Kurento RTP start port
+  lineinfile:
+    path: /etc/kurento/modules/kurento/BaseRtpEndpoint.conf.ini
+    regexp: 'minPort=[0-9]+'
+    line: 'minPort={{ bbb_kurento_rtp_start_port }}'
+  notify:
+  - restart kurento
+  - reload nginx
+
+- name: change Kurento RTP end port
+  lineinfile:
+    path: /etc/kurento/modules/kurento/BaseRtpEndpoint.conf.ini
+    regexp: 'maxPort=[0-9]+'
+    line: 'maxPort={{ bbb_kurento_rtp_end_port }}'
+  notify:
+  - restart kurento
+  - reload nginx
+
 - name: FreeSWITCH dialplan quality
   replace:
     path: /opt/freeswitch/conf/dialplan/default/bbb_conference.xml

@@ -44,6 +44,11 @@ bbb_cpuschedule: true
 bbb_freeswitch_ioschedule_realtime: true
 bbb_freeswitch_ipv6: true
 bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
+bbb_freeswitch_rtp_start_port: 16384
+bbb_freeswitch_rtp_end_port: 24576
+
+bbb_kurento_rtp_start_port: 24577
+bbb_kurento_rtp_end_port: 32768
 
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
 bbb_guestpolicy: ALWAYS_ACCEPT

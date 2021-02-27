@@ -43,6 +43,10 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_freeswitch_ioschedule_realtime` | [IOSchedulingClass](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#IOSchedulingClass=) | `true` | Set this to `false` for LXD/LXC Compatibility |
 | `bbb_freeswitch_ipv6` | Enable IPv6 support in FreeSWITCH | `true` | Disable to fix [FreeSWITCH IPv6 error][bbb_freeswitch_ipv6] |
 | `bbb_freeswitch_external_ip` | Set stun server for sip and rtp on FreeSWITCH | `stun:{{ (bbb_stun_servers \| first).server }}` | WARNING: the value of the default freeswitch installation is `stun:stun.freeswitch.org` |
+| `bbb_freeswitch_rtp_start_port` | RTP start port of FreeSWITCH | 16384 |
+| `bbb_freeswitch_rtp_end_port` | RTP end port of FreeSWITCH | 24576 |
+| `bbb_kurento_rtp_start_port` | RTP start port of Kurento | 24577 |
+| `bbb_kurento_rtp_end_port` | RTP end port of Kurento | 32768 |
 | `bbb_dialplan_quality` | Set quality of dailplan for FreeSWITCH | `cdquality` |
 | `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality`
 | `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality`
