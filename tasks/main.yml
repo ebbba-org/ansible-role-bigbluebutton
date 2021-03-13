@@ -62,6 +62,7 @@
   when: not (bbb_letsencrypt_enable | bool) and not bbbcert.stat.exists
 
 - import_tasks: config.yml
+- import_tasks: ntp.yml
 
 - import_tasks: coturn.yml
   when: bbb_coturn_enable | bool

@@ -35,8 +35,18 @@
   - greenlight-redirect.nginx
   notify: reload nginx
 
-- name: start greenlight
-  docker_compose:
-    pull: true
-    project_src: /root/greenlight/
+- block:
+    - name: start greenlight
+      docker_compose:
+        pull: true
+        project_src: /root/greenlight/
+
+    # https://docs.bigbluebutton.org/greenlight/gl-admin.html#creating-accounts
+    - name: Create greenlight users
+      command: "docker exec greenlight-v2 bundle exec rake user:create[\"{{ item.name }}\",\"{{ item.email }}\",\"{{ item.password }}\",\"{{ item.type }}\"]"
+      loop: "{{ bbb_greenlight_users | flatten(levels=1) }}"
+      register: usercreate
+      failed_when: "'Invalid Arguments' in usercreate.stdout"
+      changed_when: "'Account with that email already exists' not in usercreate.stdout"
+
   when: bbb_greenlight_enable | bool

@@ -10,13 +10,17 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
 | `bbb_letsencrypt_email` | E-mail for use with letsencrypt | |
 | `bbb_nginx_privacy` | only log errors not access | `yes` |
+| `bbb_nginx_listen_https` | nginx: use https | `yes` | This is useful for a reverse proxy configuration where the BBB server is behind a load balancing server like haproxy that does SSL termination
 | `bbb_default_welcome_message` | Welcome Message in the client | Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others. | Needs to be encoded with `native2ascii -encoding UTF8`! |
 | `bbb_default_welcome_message_footer` | Footer of the welcome message | This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>. | Encoded as the welcome message |
+| `bbb_default_presentation` | Location of default presentation | `${bigbluebutton.web.serverURL}/default.pdf` |
 | `bbb_coturn_enable` | enable installation of the TURN-server | `yes` |
 | `bbb_coturn_server` | server name on coturn (realm) | `{{ bbb_hostname }}` |
 | `bbb_coturn_port` | the port for the TURN-Server to use | `3443` |
 | `bbb_coturn_port_tls` | the port for tls for the TURN-Server to use | `3443` |
 | `bbb_coturn_secret` | Secret for the TURN-Server  _(required)_ | | can be generated with `openssl rand -hex 16`
+| `bbb_coturn_min_port` | Lower bound of the UDP relay endpoints | `49152`
+| `bbb_coturn_max_port` | Upper bound of the UDP relay endpoints | `65535`
 | `bbb_turn_enable` | enable the use uf TURN in general | `yes` |
 | `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml
 | `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server`
@@ -26,6 +30,7 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_greenlight_secret` | Secret for greenlight _(required when using greenlight)_ |  | can be generated with `openssl rand -hex 64`
 | `bbb_greenlight_db_password` | Password for greenlight's database  _(required when using greenlight)_ | | can be generated with `openssl rand -hex 16`
 | `bbb_greenlight_default_registration` | Registration option open(default), invite or approval
+| `bbb_greenlight_users` | Greenlight users' list to create. No email notification will be triggered. As it contains passwords, recommend to put in ansible-vault. for more details see defaults/main.yml | `[]` |
 | `bbb_allow_mail_notifications`  | Set this to true if you want GreenLight to send verification emails upon the creation of a new account | `true` |
 | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored
 | `bbb_api_demos_enable` | enable installation of the api demos | `no` |
@@ -57,6 +62,12 @@ Ansible role for a bigbluebutton installation (following the documentation on ht
 | `bbb_dialin_mask_caller` | Mask caller-number in the BBB web-interface for privacy reasons (`01711233121` → `xxx-xxx-3121`) ||
 | `bbb_dialin_overwrite_footer` | Set the default dial-in footer instead of `bbb_default_welcome_message_footer` | `false` |
 | `bbb_dialin_footer` | The default dial-in notice, if you want to customize it, it is recommended to change `bbb_default_welcome_message_footer` instead | `<br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.` |
+| `bbb_guestpolicy` | How guest can access | `ALWAYS_ACCEPT` | acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR |
+| `bbb_ntp_cron` | Disable automatic time synchronisation and instead configure a cronjob | `false`
+| `bbb_ntp_cron_day` | Day of the month the time-sync job should run | `*`
+| `bbb_ntp_cron_hour` | Hour when the time-sync job should run | `5`
+| `bbb_ntp_cron_minute` | Minute when the time-sync job should run | `0`
+| `bbb_html5_node_options` | Allow to set extra options for node for the html5-webclient | unset | Could be used for example with https://github.com/bigbluebutton/bigbluebutton/issues/11183 ; `--max-old-space-size=4096 --max_semi_space_size=128`
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:
@@ -122,7 +133,7 @@ bbb_greenlight_office365:
 By default, the ability for anyone to create a Greenlight account is enabled. To disable this, use `false`.
 For more information see: https://docs.bigbluebutton.org/greenlight/gl-config.html#in-application-greenlight
 ```yaml
-bbb_greenlight_accounts: 'false'
+bbb_greenlight_accounts: false
 ```
 
 #### RECAPTCHA

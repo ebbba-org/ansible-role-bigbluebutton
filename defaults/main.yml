@@ -4,11 +4,14 @@ bbb_state: "present"
 bbb_upgrade_packages: "{% if bbb_state == 'latest'%}yes{% else %}no{%endif%}"
 bbb_letsencrypt_enable: true
 bbb_nginx_privacy: true
+bbb_nginx_listen_https: true
 
 bbb_coturn_enable: true
 bbb_coturn_port: 3478
 bbb_coturn_port_tls: 3443
 bbb_coturn_server: "{{ bbb_hostname }}"
+bbb_coturn_min_port: 49152
+bbb_coturn_max_port: 65535
 #bbb_coturn_secret: "" <- undefined to set as required
 
 bbb_turn_enable: true
@@ -26,6 +29,10 @@ bbb_turn_servers:
   tls: true
 
 bbb_greenlight_enable: true
+bbb_greenlight_users: []
+#  - { name: '', email: '', password: '', type: 'user' }
+#  - { name: '', email: '', password: '', type: 'admin' }
+
 bbb_webhooks_enable: false
 bbb_allow_mail_notifications: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
@@ -38,6 +45,10 @@ bbb_cpuschedule: true
 bbb_freeswitch_ioschedule_realtime: true
 bbb_freeswitch_ipv6: true
 bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
+
+# ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
+bbb_guestpolicy: ALWAYS_ACCEPT
+
 bbb_system_locale: en_US.UTF-8
 bbb_mongodb_version: 3.4
 
@@ -73,6 +84,13 @@ bbb_dialin_default_number: '613-555-1234'
 bbb_dialin_mask_caller: false
 bbb_dialin_overwrite_footer: false
 bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.
+
+bbb_default_presentation: ${bigbluebutton.web.serverURL}/default.pdf
+
+bbb_ntp_cron: false
+bbb_ntp_cron_day: "*"
+bbb_ntp_cron_hour: "5"
+bbb_ntp_cron_minute: "0"
 
 bbb_systemd_hardening: true
 bbb_systemd_override:
