@@ -1,0 +1,4 @@
+map $remote_addr $freeswitch_addr {
+    "~:"    [{{ ansible_default_ipv6.address }}];
+    default    {{ ansible_default_ipv4.address }};
+}

@@ -193,12 +193,28 @@
     content: '{{ meteor  | to_nice_yaml }}'
     dest: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 
-- name: configure freeswitch to use SSL
+- name: configure freeswitch to use SSL (IPv4 only)
   lineinfile:
     path: /etc/bigbluebutton/nginx/sip.nginx
     regexp: "proxy_pass"
     line: "        proxy_pass https://{{ ansible_default_ipv4.address }}:7443;"
   notify: reload nginx
+  when: not bbb_freeswitch_ipv6 | bool
+
+- name: configure freeswitch to use SSL (IPv4 + IPv6)
+  lineinfile:
+    path: /etc/bigbluebutton/nginx/sip.nginx
+    regexp: "proxy_pass"
+    line: "        proxy_pass https://$freeswitch_addr:7443;"
+  notify: reload nginx
+  when: bbb_freeswitch_ipv6 | bool
+
+- name: configure freeswitch external IP addresses
+  template:
+    src: bbb/bigbluebutton_sip_addr_map.conf.j2
+    dest: /etc/nginx/conf.d/bigbluebutton_sip_addr_map.conf
+  notify: reload nginx
+  when: bbb_freeswitch_ipv6 | bool
 
 - name: create ssl folder for nginx
   file:
