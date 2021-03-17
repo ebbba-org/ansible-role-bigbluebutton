@@ -254,7 +254,7 @@
   - restart freeswitch
   - reload systemd
 
-- name: enable IPv6 in FreeSWITCH service 1/2
+- name: enable IPv6 in FreeSWITCH service 1/3
   command:
     cmd: mv {{ item }}_ {{ item }}
     creates: "{{ item }}"
@@ -267,11 +267,21 @@
   - restart freeswitch
   - reload nginx
 
-- name: enable IPv6 in FreeSWITCH service 2/2
+- name: enable IPv6 in FreeSWITCH service 2/3
   lineinfile:
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
     regexp: '<param name="listen-ip" value="[a-fA-F0-9.:]+"/>'
     line: '<param name="listen-ip" value="::"/>'
+  when: bbb_freeswitch_ipv6 | bool
+  notify:
+  - restart freeswitch
+  - reload nginx
+
+- name: enable IPv6 in FreeSWITCH service 3/3
+  lineinfile:
+    path: /opt/freeswitch/etc/freeswitch/sip_profiles/external-ipv6.xml
+    regexp: '^.*<param name="enable-3pcc" value="[a-zA-Z]+"/>.*$'
+    line: '    <param name="enable-3pcc" value="proxy"/>'
   when: bbb_freeswitch_ipv6 | bool
   notify:
   - restart freeswitch
