@@ -48,6 +48,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_freeswitch_ioschedule_realtime` | [IOSchedulingClass](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#IOSchedulingClass=) | `true` | Set this to `false` for LXD/LXC Compatibility |
 | `bbb_freeswitch_ipv6` | Enable IPv6 support in FreeSWITCH | `true` | Disable to fix [FreeSWITCH IPv6 error][bbb_freeswitch_ipv6] |
 | `bbb_freeswitch_external_ip` | Set stun server for sip and rtp on FreeSWITCH | `stun:{{ (bbb_stun_servers \| first).server }}` | WARNING: the value of the default freeswitch installation is `stun:stun.freeswitch.org` |
+| `bbb_kurento_interfaces` | Specify the listening interfaces for kurento | `{{ [ansible_default_ipv4.interface, 'lo'] }}`
 | `bbb_dialplan_quality` | Set quality of dailplan for FreeSWITCH | `cdquality` |
 | `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality`
 | `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality`

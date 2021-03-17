@@ -19,6 +19,12 @@
     state: restarted
   become: true
 
+- name: restart kurento
+  service:
+    name: kurento-media-server
+    state: restarted
+  become: true
+
 - name: restart mongo
   service:
     name: mongod
