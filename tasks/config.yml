@@ -385,3 +385,45 @@
   notify:
     - reload systemd
     - restart bigbluebutton
+
+- name: Set the default maximum number of users a meeting can have
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^defaultMaxUsers='
+    line: 'defaultMaxUsers={{ bbb_default_max_users }}'
+  notify: restart bigbluebutton
+
+- name: Set the number of minutes elapse of no activity before ending the meeting
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^defaultMeetingDuration='
+    line: 'defaultMeetingDuration={{ bbb_default_meeting_time }}'
+  notify: restart bigbluebutton
+
+- name: Set the maximum number of pages allowed for an uploaded presentation
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^maxNumPages='
+    line: 'maxNumPages={{ bbb_max_num_pages }}'
+  notify: restart bigbluebutton
+
+- name: Set the max allowed number of minutes the conversion should take
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^maxConversionTime='
+    line: 'maxConversionTime={{ bbb_max_conversion_time }}'
+  notify: restart bigbluebutton
+
+- name: Set the number of threads in the pool to do the presentation conversion
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^numConversionThreads='
+    line: 'numConversionThreads={{ bbb_num_conversion_threads }}'
+  notify: restart bigbluebutton
+
+- name: Set the number of threads to process file uploads
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: '^numFileProcessorThreads='
+    line: 'numFileProcessorThreads={{ bbb_num_file_processor_threads }}'
+  notify: restart bigbluebutton
