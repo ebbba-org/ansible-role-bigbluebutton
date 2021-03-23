@@ -393,11 +393,11 @@
     line: 'defaultMaxUsers={{ bbb_default_max_users }}'
   notify: restart bigbluebutton
 
-- name: Set the number of minutes elapse of no activity before ending the meeting
+- name: Set default duration of the meeting (in minutes)
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: '^defaultMeetingDuration='
-    line: 'defaultMeetingDuration={{ bbb_default_meeting_time }}'
+    line: 'defaultMeetingDuration={{ bbb_default_meeting_duration }}'
   notify: restart bigbluebutton
 
 - name: Set the maximum number of pages allowed for an uploaded presentation

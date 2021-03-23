@@ -73,7 +73,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_ntp_cron_minute` | Minute when the time-sync job should run | `0`
 | `bbb_html5_node_options` | Allow to set extra options for node for the html5-webclient | unset | Could be used for example with https://github.com/bigbluebutton/bigbluebutton/issues/11183 ; `--max-old-space-size=4096 --max_semi_space_size=128`
 | `bbb_default_max_users` | Default maximum number of users a meeting can have | `0` | Meeting doesn't have a user limit |
-| `bbb_default_meeting_time` | Default duration of the meeting in minutes | `0` | Meeting doesn't end |
+| `bbb_default_meeting_duration` | Default duration of the meeting in minutes | `0` | Meeting doesn't end |
 | `bbb_max_num_pages` | Maximum number of pages allowed for an uploaded presentation | `200` |
 | `bbb_max_conversion_time` | Number of minutes the conversion should take | `5` | If it takes more than this time, cancel the conversion process |
 | `bbb_num_conversion_threads` | Number of threads in the pool to do the presentation conversion | `5` |

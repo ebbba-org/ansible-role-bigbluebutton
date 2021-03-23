@@ -93,7 +93,7 @@ bbb_ntp_cron_hour: "5"
 bbb_ntp_cron_minute: "0"
 
 bbb_default_max_users: 0
-bbb_default_meeting_time: 0
+bbb_default_meeting_duration: 0
 bbb_max_num_pages: 200
 bbb_max_conversion_time: 5
 bbb_num_conversion_threads: 5
