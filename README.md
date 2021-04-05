@@ -82,6 +82,8 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_cron_unrecorded_days` | Retention period of recordings for meetings with no recording markers in days | `14` |
 | `bbb_cron_published_days` | Retention period of recordings’ raw data (if these get published) in days | `14` |
 | `bbb_cron_log_history` | Retention period of old log files in days | `28` |
+| `bbb_freeswitch_muted_sound` | Enable muted sound (`you are now muted`) | `true` |
+| `bbb_freeswitch_unmuted_sound` | Enable unmuted sound (`you are now unmuted`) | `true` |
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:

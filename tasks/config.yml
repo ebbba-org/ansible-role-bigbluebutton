@@ -451,3 +451,19 @@
     path: /etc/cron.daily/bigbluebutton
     regexp: '^log_history'
     line: 'log_history={{ bbb_cron_log_history }}'
+
+- name: Disable muted sound
+  replace:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
+    regexp: '<param name="muted-sound" value="conference/conf-muted.wav"/>'
+    replace: '<!-- <param name="muted-sound" value="conference/conf-muted.wav"/> -->'
+  when: bbb_freeswitch_muted_sound == false
+  notify: restart bigbluebutton
+
+- name: Disable unmuted sound
+  replace:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
+    regexp: '<param name="unmuted-sound" value="conference/conf-unmuted.wav"/>'
+    replace: '<!-- <param name="unmuted-sound" value="conference/conf-unmuted.wav"/> -->'
+  when: bbb_freeswitch_unmuted_sound == false
+  notify: restart bigbluebutton

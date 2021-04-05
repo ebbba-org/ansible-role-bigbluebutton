@@ -45,6 +45,8 @@ bbb_cpuschedule: true
 bbb_freeswitch_ioschedule_realtime: true
 bbb_freeswitch_ipv6: true
 bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
+bbb_freeswitch_muted_sound: true
+bbb_freeswitch_unmuted_sound: true
 
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
 bbb_guestpolicy: ALWAYS_ACCEPT
