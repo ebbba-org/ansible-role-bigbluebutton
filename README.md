@@ -78,6 +78,10 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_max_conversion_time` | Number of minutes the conversion should take | `5` | If it takes more than this time, cancel the conversion process |
 | `bbb_num_conversion_threads` | Number of threads in the pool to do the presentation conversion | `5` |
 | `bbb_num_file_processor_threads` | Number of threads to process file uploads | `2` |
+| `bbb_cron_history` | Retention period for presentations, red5, kurento, and freeswitch caches in days | `5` |
+| `bbb_cron_unrecorded_days` | Retention period of recordings for meetings with no recording markers in days | `14` |
+| `bbb_cron_published_days` | Retention period of recordings’ raw data (if these get published) in days | `14` |
+| `bbb_cron_log_history` | Retention period of old log files in days | `28` |
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:
