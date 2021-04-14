@@ -81,6 +81,8 @@ In that case, make sure the rest of the variables are properly set.
 
 The default value for `bbb_greenlight_smtp.sender` is `bbb@{{ bbb_hostname }}`
 
+To skip SSL certificate validation set `bbb_greenlight_smtp.openssl_verify_none` to `true`.
+
 Example Setup:
 ```yaml
 bbb_greenlight_smtp:
