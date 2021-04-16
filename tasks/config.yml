@@ -167,7 +167,7 @@
     regexp: 'http://'
     replace: 'https://'
 
-- name: set korrento server to use HTTPS
+- name: set kurento server to use HTTPS
   notify: restart bigbluebutton
   replace:
     path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
