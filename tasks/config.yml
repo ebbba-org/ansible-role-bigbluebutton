@@ -467,3 +467,19 @@
     replace: '<!-- <param name="unmuted-sound" value="conference/conf-unmuted.wav"/> -->'
   when: bbb_freeswitch_unmuted_sound == false
   notify: restart bigbluebutton
+
+- name: Enable muted sound
+  replace:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
+    regexp: '<!-- <param name="muted-sound" value="conference/conf-muted.wav"/> -->'
+    replace: '<param name="muted-sound" value="conference/conf-muted.wav"/>'
+  when: bbb_freeswitch_muted_sound == true
+  notify: restart bigbluebutton
+
+- name: Enable unmuted sound
+  replace:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
+    regexp: '<!-- <param name="unmuted-sound" value="conference/conf-unmuted.wav"/> -->'
+    replace: '<param name="unmuted-sound" value="conference/conf-unmuted.wav"/>'
+  when: bbb_freeswitch_muted_sound == true
+  notify: restart bigbluebutton
