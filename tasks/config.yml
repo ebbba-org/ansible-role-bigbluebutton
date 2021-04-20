@@ -43,20 +43,6 @@
     cacheable: true
   when: not bbb_secret is defined
 
-- name: set red5 to use HTTPS 1/2
-  lineinfile:
-    path: /usr/share/red5/webapps/screenshare/WEB-INF/screenshare.properties
-    regexp: '^jnlpUrl'
-    line: 'jnlpUrl=https://{{ bbb_hostname }}/screenshare'
-  notify: restart bigbluebutton
-
-- name: set red5 to use HTTPS 2/2
-  lineinfile:
-    path: /usr/share/red5/webapps/screenshare/WEB-INF/screenshare.properties
-    regexp: '^jnlpFile'
-    line: 'jnlpFile=https://{{ bbb_hostname }}/screenshare/screenshare.jnlp'
-  notify: restart bigbluebutton
-
 - name: copy TURN config file
   template:
     src: bbb/turn-stun-servers.xml.j2
