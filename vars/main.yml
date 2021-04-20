@@ -13,7 +13,6 @@ bbb_required_packages:
 
 bbb_and_dependencies:
   - mongodb-org
-  - bbb-check
   - bbb-html5
   - bigbluebutton
 

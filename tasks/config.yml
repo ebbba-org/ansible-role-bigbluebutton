@@ -63,13 +63,6 @@
     line: "playback_protocol: https"
   notify: restart bigbluebutton
 
-- name: set BigBlueButton client to load components via HTTPS
-  notify: restart bigbluebutton
-  replace:
-    path: /var/www/bigbluebutton/client/conf/config.xml
-    regexp: 'http://'
-    replace: 'https://'
-
 - name: set note server to use HTTPS
   notify: restart bigbluebutton
   replace:
