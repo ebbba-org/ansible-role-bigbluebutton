@@ -291,3 +291,11 @@
   notify:
     - reload systemd
     - restart bigbluebutton
+
+- name: set default presentation
+  become: true
+  copy:
+    src: "{{ bbb_custom_presentation }}"
+    dest: "/var/www/bigbluebutton-default/{{ bbb_custom_presentation_name | default(bbb_custom_presentation) }}"
+    mode: 0644
+  when: bbb_custom_presentation | length
