@@ -106,3 +106,5 @@
 - import_tasks: webrtc-sfu.yml
 
 - import_tasks: stun-turn.yml
+
+- import_tasks: thp.yml
