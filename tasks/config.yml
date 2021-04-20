@@ -22,13 +22,6 @@
     mode: '0600'
   notify: restart bigbluebutton
 
-- name: ensure recording auto start is disabled
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^autoStartRecording'
-    line: 'autoStartRecording=false'
-  notify: restart bigbluebutton
-
 - name: allow/disable users to start recordings
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
