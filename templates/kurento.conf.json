@@ -1,0 +1,31 @@
+{
+  "mediaServer": {
+    "resources": {
+      "//": "Default: false",
+      "//exceptionLimit": "0.8",
+      "//killLimit": "0.7",
+      "garbageCollectorPeriod": 240,
+      "disableRequestCache": false
+    },
+    "net": {
+      "websocket": {
+        "//": "Default: SOMAXCONN (128)",
+        "//ipv6": false,
+        "port": {{ item }},
+        "secure": {
+          "//": "Password for the private key, if one was set when the key was created",
+          "//port": 8433,
+          "//certificate": "cert+key.pem",
+          "//password": ""
+        },
+        "//registrar": {
+          "//address": "ws://localhost:9090",
+          "//localAddress": "localhost"
+        },
+        "//connqueue": 128,
+        "path": "kurento",
+        "threads": 10
+      }
+    }
+  }
+}

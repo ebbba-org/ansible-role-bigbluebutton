@@ -92,3 +92,9 @@
   when: bbb_monitoring_all_in_one_enable | bool
 
 - import_tasks: nginx.yml
+
+- import_tasks: multikurento.yml
+  when: bbb_multikurento
+
+- import_tasks: singlekurento.yml
+  when: not bbb_multikurento

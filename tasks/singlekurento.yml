@@ -13,4 +13,3 @@
   notify:
     - reload systemd
     - restart kurento
-

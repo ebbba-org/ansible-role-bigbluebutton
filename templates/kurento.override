@@ -1,0 +1,4 @@
+[Service]
+Environment=
+ExecStart=
+ExecStart=/usr/bin/kurento-media-server
