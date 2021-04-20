@@ -12,6 +12,19 @@
     _bbb_upgrade.changed
   notify: restart bigbluebutton
 
+- name: Update /etc/bigbluebutton akka configs
+  become: true
+  template:
+    src: "{{ item }}"
+    dest: "/etc/bigbluebutton/{{ item }}"
+    owner: bigbluebutton
+    group: root
+    mode: '0600'
+  loop:
+    - bbb-apps-akka.conf
+    - bbb-fsesl-akka.conf
+  notify: restart bigbluebutton
+
 - name: Update /etc/bigbluebutton/bbb-web.properties
   become: true
   template:

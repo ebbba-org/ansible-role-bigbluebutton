@@ -97,3 +97,70 @@ bbb_ntp_cron: false
 bbb_ntp_cron_day: "*"
 bbb_ntp_cron_hour: "5"
 bbb_ntp_cron_minute: "0"
+
+bbb_multikurento: false
+
+# bbb_freeswitch_socket_password needs to be defined by the User
+# bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
+
+bbb_webrtc_sfu_singlekurento:
+  balancing-strategy: ROUND_ROBIN
+  kurento:
+    - ip: "{{ ansible_default_ipv4.address }}"
+      url: ws://127.0.0.1:8888/kurento
+      mediaType: main
+      ipClassMappings:
+        local: ''
+        private: ''
+        public: ''
+      options:
+        failAfter: 5
+        request_timeout: 30000
+        response_timeout: 30000
+  freeswitch:
+    esl_password: "{{ bbb_freeswitch_socket_password }}"
+  log:
+    level: warn
+    filename:
+
+bbb_webrtc_sfu_multikurento:
+  balancing-strategy: MEDIA_TYPE
+  kurento:
+    - ip: "{{ ansible_default_ipv4.address }}"
+      url: ws://127.0.0.1:8888/kurento
+      mediaType: main
+      ipClassMappings:
+        local: ''
+        private: ''
+        public: ''
+      options:
+        failAfter: 5
+        request_timeout: 30000
+        response_timeout: 30000
+    - ip: "{{ ansible_default_ipv4.address }}"
+      url: ws://127.0.0.1:8889/kurento
+      mediaType: audio
+      ipClassMappings:
+        local: ''
+        private: ''
+        public: ''
+      options:
+        failAfter: 5
+        request_timeout: 30000
+        response_timeout: 30000
+    - ip: "{{ ansible_default_ipv4.address }}"
+      url: ws://127.0.0.1:8890/kurento
+      mediaType: content
+      ipClassMappings:
+        local: ''
+        private: ''
+        public: ''
+      options:
+        failAfter: 5
+        request_timeout: 30000
+        response_timeout: 30000
+  freeswitch:
+    esl_password: "{{ bbb_freeswitch_socket_password }}"
+  log:
+    level: warn
+    filename:

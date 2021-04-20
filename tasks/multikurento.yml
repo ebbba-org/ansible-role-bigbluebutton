@@ -1,0 +1,90 @@
+---
+
+- name: add kurento-media-server@.service
+  become: true
+  template:
+    src: kurento-media-server@.service
+    dest: /usr/lib/systemd/system/kurento-media-server@.service
+    mode: 0644
+  notify:
+    - stop kurento
+    - reload systemd
+
+- name: add kurento-media-server.target
+  become: true
+  template:
+    src: kurento-media-server.target
+    dest: /usr/lib/systemd/system/kurento-media-server.target
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: remove kurento-media-server.service
+  become: true
+  file:
+     path: /usr/lib/systemd/system/kurento-media-server.service
+     state: absent
+
+- name: remove kurento-media-server.service override
+  become: true
+  file:
+     path: /etc/systemd/system/kurento-media-server.service.d/override.conf
+     state: absent
+
+- meta: flush_handlers
+
+- name: template kurento-media-server instance configs
+  become: true
+  template:
+    src: "kurento.conf.json"
+    dest: "/etc/kurento/kurento-{{ item }}.conf.json"
+    mode: 0644
+  with_items: [ 8888, 8889, 8890 ]
+  notify:
+    - restart kurento
+
+- name: generate DTLS-SRTP certificate for kurento
+  become: true
+  shell:
+    cmd: 'umask 137 && openssl req -x509 -new -nodes -newkey rsa:4096 -sha256 -days 3650 -subj "/C=BR/ST=Ottawa/O=BigBlueButton Inc./OU=Live/CN={{ inventory_hostname }}" -keyout /tmp/dtls-srtp-key.pem -out /tmp/dtls-srtp-cert.pem && cat /tmp/dtls-srtp-key.pem /tmp/dtls-srtp-cert.pem > /etc/kurento/dtls-srtp.pem && chgrp kurento /etc/kurento/dtls-srtp.pem && rm /tmp/dtls-srtp-key.pem /tmp/dtls-srtp-cert.pem'
+    creates: /etc/kurento/dtls-srtp.pem
+  notify: restart kurento
+
+- name: use DTLS-SRTP for kurento
+  become: true
+  lineinfile:
+    path: /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
+    regexp: 'pemCertificateRSA='
+    line: 'pemCertificateRSA=/etc/kurento/dtls-srtp.pem'
+  notify: restart kurento
+
+- name: use DTLS-SRTP for freeswitch
+  become: true
+  copy:
+    remote_src: True
+    src: /etc/kurento/dtls-srtp.pem
+    dest: /opt/freeswitch/etc/freeswitch/tls/dtls-srtp.pem
+    group: daemon
+    mode: 0640
+  ignore_errors: "{{ ansible_check_mode }}"
+  notify: restart freeswitch
+
+- name: enable kurento-media-server instances
+  become: true
+  systemd:
+     name: "kurento-media-server@{{ item }}"
+     enabled: true
+  with_items: [ 8888, 8889, 8890 ]
+  notify:
+    - restart kurento
+
+- name: enable kurento-media-server target
+  become: true
+  systemd:
+     name: "kurento-media-server.target"
+     enabled: true
+     state: started
+  notify:
+    - restart kurento
+
+

@@ -1,0 +1,16 @@
+---
+- name: create kurento service override directory
+  become: true
+  file:
+    state: directory
+    path: /etc/systemd/system/kurento-media-server.service.d/
+
+- name: deploy kurento service override configuration
+  become: true
+  template:
+    src: kurento.override
+    dest: /etc/systemd/system/kurento-media-server.service.d/override.conf
+  notify:
+    - reload systemd
+    - restart kurento
+
