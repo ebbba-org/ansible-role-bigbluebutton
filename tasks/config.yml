@@ -22,13 +22,6 @@
     mode: '0600'
   notify: restart bigbluebutton
 
-- name: enable mod join via html5
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^moderatorsJoinViaHTML5Client'
-    line: 'moderatorsJoinViaHTML5Client=true'
-  notify: restart bigbluebutton
-
 - name: set bbb to use HTTPS
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
