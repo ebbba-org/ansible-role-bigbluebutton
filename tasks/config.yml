@@ -22,13 +22,6 @@
     mode: '0600'
   notify: restart bigbluebutton
 
-- name: set recording default
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^disableRecordingDefault'
-    line: 'disableRecordingDefault={{ bbb_disable_recordings | ternary("true", "false") }}'
-  notify: restart bigbluebutton
-
 - name: ensure recording auto start is disabled
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
