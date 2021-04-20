@@ -100,3 +100,5 @@
   when: not bbb_multikurento
 
 - import_tasks: bbb-web.yml
+
+- import_tasks: freeswitch.yml
