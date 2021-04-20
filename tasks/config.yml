@@ -119,26 +119,6 @@
     line: "        proxy_pass https://{{ ansible_default_ipv4.address }}:7443;"
   notify: reload nginx
 
-- name: create ssl folder for nginx
-  file:
-    path: /etc/nginx/ssl
-    state: directory
-
-- name: Copy Predefined DH group ffdhe2048
-  copy:
-    src: ffdhe4096.pem
-    dest: /etc/nginx/ssl/ffdhe4096.pem
-    owner: root
-    group: root
-    mode: '0644'
-  notify: reload nginx
-
-- name: copy bbb's nginx vhost
-  template:
-     src: bbb/bigbluebutton.j2
-     dest: /etc/nginx/sites-available/bigbluebutton
-  notify: reload nginx
-
 - name: configure CPU and IO Scheduling in FreeSWITCH service
   lineinfile:
     path: /lib/systemd/system/freeswitch.service

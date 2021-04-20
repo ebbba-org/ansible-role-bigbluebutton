@@ -1,0 +1,24 @@
+---
+- name: create ssl folder for nginx
+  become: true
+  file:
+    path: /etc/nginx/ssl
+    mode: 0755
+    state: directory
+
+- name: Copy Predefined DH group ffdhe2048
+  become: true
+  copy:
+    src: ffdhe4096.pem
+    dest: /etc/nginx/ssl/ffdhe4096.pem
+    mode: 0644
+  notify: reload nginx
+
+- name: copy bbb's nginx vhost
+  become: true
+  template:
+    src: bbb/bigbluebutton.j2
+    dest: /etc/nginx/sites-available/bigbluebutton
+    mode: 0644
+  notify: reload nginx
+
