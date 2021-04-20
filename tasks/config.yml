@@ -57,22 +57,6 @@
     line: 'jnlpFile=https://{{ bbb_hostname }}/screenshare/screenshare.jnlp'
   notify: restart bigbluebutton
 
-- name: set bbb default welcome message footer
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^defaultWelcomeMessageFooter='
-    line: 'defaultWelcomeMessageFooter={{ bbb_default_welcome_message_footer }}'
-  when: not bbb_dialin_enabled or not bbb_dialin_overwrite_footer
-  notify: restart bigbluebutton
-
-- name: set bbb default welcome message footer for dial-in
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^defaultWelcomeMessageFooter='
-    line: 'defaultWelcomeMessageFooter={{ bbb_dialin_footer }}'
-  when: bbb_dialin_enabled and bbb_dialin_overwrite_footer
-  notify: restart bigbluebutton
-
 - name: set bbb default presentation
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
