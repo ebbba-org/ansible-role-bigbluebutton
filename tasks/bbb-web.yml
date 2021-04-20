@@ -1,0 +1,36 @@
+---
+
+- name: create bbb-web service override directory
+  become: true
+  file:
+    state: directory
+    path: /etc/systemd/system/bbb-web.service.d/
+    mode: 0755
+
+- name: deploy bbb-web service override configuration
+  become: true
+  template:
+    src: bbb-web.override
+    dest: /etc/systemd/system/bbb-web.service.d/override.conf
+    mode: 0644
+  notify:
+    - reload systemd
+    - restart bbb-web
+
+- name: configure bbb-web application settings
+  become: true
+  template:
+    src: '{{ item }}'
+    dest: '/usr/share/bbb-web/WEB-INF/classes/{{ item }}'
+    mode: 0644
+  loop:
+    - logback.xml
+  notify:
+    - restart bbb-web
+
+- name: write custom meteor config
+  copy:
+    content: '{{ bbb_meteor | to_nice_yaml }}'
+    dest: /etc/bigbluebutton/bbb-html5.yml
+  notify:
+    - restart bbb-html5
