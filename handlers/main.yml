@@ -1,32 +1,103 @@
 ---
+- name: reload systemd
+  become: true
+  systemd:
+    daemon_reload: true
+
 - name: reload nginx
-  service:
+  become: true
+  systemd:
     name: nginx
     state: reloaded
 
 - name: restart nginx
-  service:
+  become: true
+  systemd:
     name: nginx
     state: restarted
 
 - name: restart bigbluebutton
-  command: bbb-conf --restart
   become: true
+  command: bbb-conf --restart
 
 - name: restart freeswitch
+  become: true
   systemd:
     name: freeswitch
     state: restarted
+
+- name: reload freeswitch xml
   become: true
+  command:
+    cmd: "fs_clibbb -x 'reloadxml'"
+
+- name: reload freeswitch acls
+  become: true
+  command:
+    cmd: "fs_clibbb -x 'reloadacl'"
+
+- name: restart sofia dialin profile
+  become: true
+  command:
+    cmd: "fs_clibbb -x 'sofia profile dialin start'"
 
 - name: restart mongo
-  service:
+  become: true
+  systemd:
     name: mongod
     state: restarted
 
-- name: reload systemd
+- name: restart kurento
+  become: true
   systemd:
-    daemon_reload: true
+    name: kurento-media-server
+    state: restarted
+
+- name: stop kurento
+  become: true
+  systemd:
+    name: kurento-media-server
+    state: stopped
+
+- name: restart bbb-html5
+  become: true
+  systemd:
+    name: bbb-html5
+    state: restarted
+
+- name: restart bbb-web
+  become: true
+  systemd:
+    name: bbb-web
+    state: restarted
+
+- name: reload bbb-web
+  become: true
+  systemd:
+    name: bbb-web
+    state: reloaded
+
+- name: restart bbb-webrtc-sfu
+  become: true
+  systemd:
+    name: bbb-webrtc-sfu
+    state: restarted
+
+- name: restart bbb-apps-akka
+  become: true
+  systemd:
+    name: bbb-apps-akka
+    state: restarted
+
+- name: reload apparmor
+  become: true
+  systemd:
+    name: apparmor
+    state: reloaded
+
+- name: update grub
+  become: true
+  command: update-grub
 
 - name: restart monitoring
   docker_compose:
