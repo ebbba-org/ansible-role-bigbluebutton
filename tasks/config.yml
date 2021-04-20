@@ -238,6 +238,13 @@
   - restart freeswitch
   - reload systemd
 
+- name: configure freeswitch to use correct IP address for wss-binding
+  lineinfile:
+    path: /opt/freeswitch/conf/sip_profiles/external.xml
+    regexp: "<param name=\"wss-binding\"  value=\":7443\"/>"
+    line: "    <param name=\"wss-binding\"  value=\"{{ ansible_default_ipv4.address }}:7443\"/>"
+  notify: restart freeswitch
+
 - name: enable IPv6 in FreeSWITCH service 1/2
   command:
     cmd: mv {{ item }}_ {{ item }}
