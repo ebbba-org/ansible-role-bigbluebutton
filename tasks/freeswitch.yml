@@ -1,0 +1,56 @@
+- name: create AppArmor rules
+  become: true
+  copy:
+    src: opt.freeswitch.bin.freeswitch
+    dest: /etc/apparmor.d/opt.freeswitch.bin.freeswitch
+    mode: 0600
+  notify: reload apparmor
+
+- name: fix freeswitch systemd service permissions
+  become: true
+  file:
+    path: /lib/systemd/system/freeswitch.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: delete freeswitch file logging config
+  become: true
+  file:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/logfile.conf.xml
+    state: absent
+  notify: restart freeswitch
+
+- name: deploy conference config
+  become: true
+  template:
+    src: conference.conf.xml
+    dest: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
+    mode: 0640
+    owner: freeswitch
+    group: daemon
+  notify: restart freeswitch
+
+- name: set socket password
+  become: true
+  xml:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
+    xpath: /configuration/settings/param[@name='password']
+    attribute: "value"
+    value: "{{ bbb_freeswitch_socket_password }}"
+
+- name: set socket listen port
+  become: true
+  xml:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
+    xpath: /configuration/settings/param[@name='listen-ip']
+    attribute: "value"
+    value: "127.0.0.1"
+
+- name: fix fs_clibbb to accept additional parameters
+  become: true
+  lineinfile:
+    path: /usr/local/bin/fs_clibbb
+    regexp: "^/opt/freeswitch/bin/fs_cli"
+    line: "/opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name=\"password\"]' -v @value /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml) \"$@\"" 
+
