@@ -12,6 +12,16 @@
     _bbb_upgrade.changed
   notify: restart bigbluebutton
 
+- name: Update /etc/bigbluebutton/bbb-web.properties
+  become: true
+  template:
+    src: bbb-web.properties
+    dest: /etc/bigbluebutton/bbb-web.properties
+    owner: bigbluebutton
+    group: root
+    mode: '0600'
+  notify: restart bigbluebutton
+
 - name: enable join via html5
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
