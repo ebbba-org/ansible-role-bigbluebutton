@@ -40,7 +40,7 @@ bbb_disable_recordings: false
 bbb_api_demos_enable: false
 bbb_mute_on_start: false
 bbb_app_log_level: 'DEBUG'
-bbb_nodejs_version: 8.x
+bbb_nodejs_version: 12.x
 bbb_cpuschedule: true
 bbb_freeswitch_ioschedule_realtime: true
 bbb_freeswitch_ipv6: true
@@ -50,7 +50,7 @@ bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 bbb_guestpolicy: ALWAYS_ACCEPT
 
 bbb_system_locale: en_US.UTF-8
-bbb_mongodb_version: 3.4
+bbb_mongodb_version: 4.2
 
 # Attention, needs to be encoded with "native2ascii -encoding UTF8"
 bbb_default_welcome_message: Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others.
