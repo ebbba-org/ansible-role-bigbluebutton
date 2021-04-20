@@ -1,0 +1,10 @@
+<include>
+  <gateway name="dialin">
+    <param name="proxy" value="{{ bbb_sip_account.proxy }}"/>
+    <param name="username" value="{{ bbb_sip_account.username }}"/>
+    <param name="password" value="{{ bbb_sip_account.password }}"/>
+    <param name="extension" value="{{ bbb_sip_account.extension }}"/>
+    <param name="register" value="true"/>
+    <param name="context" value="public"/>
+  </gateway>
+</include>

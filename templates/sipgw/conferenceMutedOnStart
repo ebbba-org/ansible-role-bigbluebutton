@@ -1,0 +1,4 @@
+#!/bin/bash
+
+conf_id="$1"
+mongo "mongodb://127.0.1.1/meteor" --eval "db.meetings.find({\"voiceProp.telVoice\": \"${conf_id}\"}, {\"voiceProp.muteOnStart\": true}).forEach(function(u) { print(u.voiceProp.muteOnStart) } )" --quiet

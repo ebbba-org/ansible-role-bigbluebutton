@@ -164,3 +164,8 @@ bbb_webrtc_sfu_multikurento:
   log:
     level: warn
     filename:
+
+# Missing var for tasks
+# bbb_sip_account:
+# bbb_sipgw:
+bbb_sip_extension: "{{ ansible_hostname }}"

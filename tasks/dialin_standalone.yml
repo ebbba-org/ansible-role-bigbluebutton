@@ -1,0 +1,21 @@
+---
+
+- name: create sip profile
+  become: true
+  template:
+    src: standalone/sip_profile.xml
+    dest: /opt/freeswitch/etc/freeswitch/sip_profiles/external/dialin.xml
+    owner: freeswitch
+    group: daemon
+    mode: 0640
+  notify: restart freeswitch
+
+- name: create dialplan
+  become: true
+  template:
+    src: standalone/dialplan.xml
+    dest: /opt/freeswitch/etc/freeswitch/dialplan/public/dialin.xml
+    owner: freeswitch
+    group: daemon
+    mode: 0640
+  notify: restart freeswitch

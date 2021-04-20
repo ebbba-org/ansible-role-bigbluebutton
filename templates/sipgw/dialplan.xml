@@ -1,0 +1,43 @@
+<include>
+   <context name="from-dialin">
+ 
+     <extension name="unloop">
+       <condition field="${unroll_loops}" expression="^true$"/>
+       <condition field="${sip_looped_call}" expression="^true$">
+ 	<action application="deflect" data="${destination_number}"/>
+       </condition>
+     </extension>
+     <!--
+ 	Tag anything pass thru here as an outside_call so you can make sure not
+ 	to create any routing loops based on the conditions that it came from 
+ 	the outside of the switch.  
+     -->
+     <extension name="outside_call" continue="true">
+       <condition>
+ 	<action application="set" data="outside_call=true"/>
+ 	<action application="export" data="RFC2822_DATE=${strftime(%a, %d %b %Y %T %z)}"/>
+       </condition>
+     </extension>
+
+     <extension name="dialin-from-sipgw" continue="true">
+       <condition field="destination_number" expression="^(\d{5,9})$"/>
+       <condition field="${conference ${destination_number} list}" expression="/sofia/g">
+         <action application="set" data="bbb_authorized=true"/>
+         <anti-action application="playback" data="ivr/ivr-that_was_an_invalid_entry.wav"/>
+         <anti-action application="hangup" data="CALL_REJECTED"/>
+       </condition>
+     </extension>
+
+     <extension name="enter-conference">
+       <action application="answer"/>
+       <condition field="${system conferenceMutedOnStart ${destination_number}}" expression="true">
+         <action application="playback" data="/opt/freeswitch/share/freeswitch/sounds/you-are-muted.flac"/>
+       <action application="jitterbuffer" data="60:120"/>
+       <action application="conference" data="${destination_number}@cdquality"/>
+       <anti-action application="jitterbuffer" data="60:120"/>
+       <anti-action application="conference" data="${destination_number}@cdquality"/>
+       </condition>
+     </extension>
+
+   </context>
+</include>
