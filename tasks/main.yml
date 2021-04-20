@@ -98,3 +98,5 @@
 
 - import_tasks: singlekurento.yml
   when: not bbb_multikurento
+
+- import_tasks: bbb-web.yml
