@@ -1,0 +1,9 @@
+---
+- name: Update /etc/bigbluebutton/turn-stun-servers.xml
+  template:
+    src: bbb/turn-stun-servers.xml.j2
+    dest: /etc/bigbluebutton/turn-stun-servers.xml
+    owner: bigbluebutton
+    group: root
+    mode: '0600'
+  notify: restart bigbluebutton

@@ -56,15 +56,6 @@
     cacheable: true
   when: not bbb_secret is defined
 
-- name: Update /etc/bigbluebutton/turn-stun-servers.xml
-  template:
-    src: bbb/turn-stun-servers.xml.j2
-    dest: /etc/bigbluebutton/turn-stun-servers.xml
-    owner: bigbluebutton
-    group: root
-    mode: '0600'
-  notify: restart bigbluebutton
-
 - name: serve recordings via https
   lineinfile:
     path: /usr/local/bigbluebutton/core/scripts/bigbluebutton.yml
