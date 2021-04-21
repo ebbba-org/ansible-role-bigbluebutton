@@ -25,6 +25,12 @@
      path: /usr/lib/systemd/system/kurento-media-server.service
      state: absent
 
+- name: prevent creation of transient systemd service for sysv service
+  become: true
+  file:
+     path: /etc/init.d/kurento-media-server
+     state: absent
+
 - name: remove kurento-media-server.service override
   become: true
   file:
