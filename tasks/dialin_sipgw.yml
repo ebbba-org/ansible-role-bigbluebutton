@@ -12,7 +12,7 @@
 - name: copy announcements
   become: true
   copy:
-    src: samples/you-are-muted.flac
+    src: sounds/you-are-muted.flac
     dest: /opt/freeswitch/share/freeswitch/sounds/you-are-muted.flac
     mode: 644
 

@@ -54,3 +54,28 @@
     regexp: "^/opt/freeswitch/bin/fs_cli"
     line: "/opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name=\"password\"]' -v @value /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml) \"$@\"" 
 
+- name: configure different mute sound
+  copy:
+    src: sounds/{{ item }}/conf-muted.wav
+    dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
+    owner: freeswitch
+    group: daemon
+    mode: u=rw,g=r,o=r
+  with_items:
+    - 48000
+    - 32000
+    - 16000
+    - 8000
+
+- name: configure different unmute sound
+  copy:
+    src: sounds/{{ item }}/conf-unmuted.wav
+    dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
+    owner: freeswitch
+    group: daemon
+    mode: u=rw,g=r,o=r
+  with_items:
+    - 48000
+    - 32000
+    - 16000
+    - 8000

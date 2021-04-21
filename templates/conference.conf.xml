@@ -69,9 +69,9 @@
       <!-- File to play to acknowledge failure -->
       <!-- <param name="nack-sound" value="beeperr.wav"/> -->
       <!-- File to play to acknowledge muted -->
-      <!-- <param name="muted-sound" value="conference/conf-muted.wav"/> -->
+      <param name="muted-sound" value="conference/conf-muted.wav"/>
       <!-- File to play to acknowledge unmuted -->
-      <!-- <param name="unmuted-sound" value="conference/conf-unmuted.wav"/> -->
+      <param name="unmuted-sound" value="conference/conf-unmuted.wav"/>
       <!-- File to play if you are alone in the conference -->
       <!-- <param name="alone-sound" value="conference/conf-alone.wav"/> -->
       <!-- File to play endlessly (nobody will ever be able to talk) -->
@@ -134,8 +134,8 @@
       <param name="interval" value="20"/>
       <param name="energy-level" value="100"/>
       <!-- <param name="sound-prefix" value="$${sounds_dir}/en/us/callie"/> -->
-      <!-- <param name="muted-sound" value="conference/conf-muted.wav"/> -->
-      <!-- <param name="unmuted-sound" value="conference/conf-unmuted.wav"/> -->
+      <param name="muted-sound" value="conference/conf-muted.wav"/>
+      <param name="unmuted-sound" value="conference/conf-unmuted.wav"/>
       <!-- <param name="alone-sound" value="conference/conf-alone.wav"/> -->
       <!-- <param name="moh-sound" value="$${hold_music}"/> -->
       <!-- <param name="enter-sound" value="tone_stream://%(200,0,500,600,700)"/> -->
@@ -159,8 +159,8 @@
       <param name="interval" value="20"/>
       <param name="energy-level" value="100"/>
       <!-- <param name="sound-prefix" value="$${sounds_dir}/en/us/callie"/> -->
-      <!-- <param name="muted-sound" value="conference/conf-muted.wav"/> -->
-      <!-- <param name="unmuted-sound" value="conference/conf-unmuted.wav"/> -->
+      <param name="muted-sound" value="conference/conf-muted.wav"/>
+      <param name="unmuted-sound" value="conference/conf-unmuted.wav"/>
       <!-- <param name="alone-sound" value="conference/conf-alone.wav"/> -->
       <!-- <param name="moh-sound" value="$${hold_music}"/> -->
       <!-- <param name="enter-sound" value="tone_stream://%(200,0,500,600,700)"/> -->
@@ -198,8 +198,8 @@
       <param name="interval" value="20"/>
       <param name="energy-level" value="100"/>
       <!-- <param name="sound-prefix" value="$${sounds_dir}/en/us/callie"/> -->
-      <!-- <param name="muted-sound" value="conference/conf-muted.wav"/> -->
-      <!-- <param name="unmuted-sound" value="conference/conf-unmuted.wav"/> -->
+      <param name="muted-sound" value="conference/conf-muted.wav"/>
+      <param name="unmuted-sound" value="conference/conf-unmuted.wav"/>
       <!-- <param name="alone-sound" value="conference/conf-alone.wav"/> -->
       <!-- <param name="moh-sound" value="$${hold_music}"/> -->
       <!-- <param name="enter-sound" value="tone_stream://%(200,0,500,600,700)"/> -->
@@ -236,7 +236,7 @@
       <param name="energy-level" value="100"/>
       <!-- <param name="tts-engine" value="flite"/> -->
       <!-- <param name="tts-voice" value="kal16"/> -->
-      <!-- <param name="muted-sound" value="conference/conf-muted.wav"/> -->
+      <param name="muted-sound" value="conference/conf-muted.wav"/>
       <!-- <param name="unmuted-sound" value="conference/conf-unmuted.wav"/> -->
       <!-- <param name="alone-sound" value="conference/conf-alone.wav"/> -->
       <!-- <param name="moh-sound" value="local_stream://stereo"/> -->
