@@ -104,3 +104,4 @@ bbb_cron_history: 5
 bbb_cron_unrecorded_days: 14
 bbb_cron_published_days: 14
 bbb_cron_log_history: 28
+bbb_skip_check_audio: false

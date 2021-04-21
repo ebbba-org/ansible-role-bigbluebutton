@@ -483,3 +483,19 @@
     replace: '<param name="unmuted-sound" value="conference/conf-unmuted.wav"/>'
   when: bbb_freeswitch_muted_sound == true
   notify: restart bigbluebutton
+
+- name: Disable echo test
+  replace:
+    path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+    regexp: 'skipCheck: false'
+    replace: 'skipCheck: true'
+  when: bbb_skip_check_audio == true
+  notify: restart bigbluebutton
+
+- name: Enable echo test
+  replace:
+    path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+    regexp: 'skipCheck: true'
+    replace: 'skipCheck: false'
+  when: bbb_skip_check_audio == false
+  notify: restart bigbluebutton

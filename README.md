@@ -84,6 +84,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_cron_log_history` | Retention period of old log files in days | `28` |
 | `bbb_freeswitch_muted_sound` | Enable muted sound (`you are now muted`) | `true` |
 | `bbb_freeswitch_unmuted_sound` | Enable unmuted sound (`you are now unmuted`) | `true` |
+| `bbb_skip_check_audio` | Prompt user to see the "echo test" when sharing audio | `false` |
 
 ### Extra options for Greenlight
 The Web-Frontend has some extra configuration options, listed below:
