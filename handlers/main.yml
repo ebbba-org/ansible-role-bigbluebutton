@@ -1,4 +1,8 @@
 ---
+
+- name: Populate service facts
+  ansible.builtin.service_facts:
+
 - name: reload systemd
   become: true
   systemd:
@@ -58,6 +62,7 @@
   systemd:
     name: kurento-media-server
     state: stopped
+  when: "'kurento-media-server@' not in services"
 
 - name: restart bbb-html5
   become: true
