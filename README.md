@@ -9,6 +9,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 ## Role Variables
 
 > ⚠️ **WATCH OUT FOR _REQUIRED_ VARIABLES!** ⚠️
+
 > ⚠️ **IF NOT SET THIS ROLE WILL FAIL!** ⚠️
 
 | Variable Name | Function | Default value | Comment |
