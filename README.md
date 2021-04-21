@@ -174,20 +174,71 @@ bbb_greenlight_recaptcha:
 
 With settings `bbb_meteor` it is possible to overwrite / change settings of meteor.
 
+The following example is from [infra.run](https://gitlab.com/infra.run/public/ansible-bigbluebutton-tiny/-/blob/bbb-2.3/defaults/main.yml)
+
 ```yaml
 bbb_meteor:
   public:
+    note:
+      url: "https://{{ inventory_hostname }}/pad"
     app:
-      skipCheck: true
+      skipCheck: false
+      mirrorOwnWebcam: true
+      enableMultipleCameras: true
+      enableNetworkInformation: true
+      breakoutRoomLimit: 16
+    chat:
+      bufferChatInsertsMs: 100
+      typingIndicator:
+        enabled: false
+    media:
+      sipjsHackViaWs: true
     kurento:
+      wsUrl: "wss://{{ inventory_hostname }}/bbb-webrtc-sfu"
       cameraProfiles:
+      - id: low-u30
+        name: low-u30
+        bitrate: 30
+        hidden: true
+        constraints:
+          frameRate: 3
+      - id: low-u25
+        name: low-u25
+        bitrate: 40
+        hidden: true
+        constraints:
+          frameRate: 3
+      - id: low-u20
+        name: low-u20
+        bitrate: 50
+        hidden: true
+        constraints:
+          frameRate: 5
+      - id: low-u15
+        name: low-u15
+        bitrate: 70
+        hidden: true
+        constraints:
+          frameRate: 8
+      - id: low-u12
+        name: low-u12
+        bitrate: 90
+        hidden: true
+        constraints:
+          frameRate: 10
+      - id: low-u8
+        name: low-u8
+        bitrate: 100
+        hidden: true
+        constraints:
+          frameRate: 10
       - id: low
         name: Low quality
-        default: true
-        bitrate: 20
+        default: false
+        bitrate: 50
       - id: medium
         name: Medium quality
-        default: false
+        default: true
         bitrate: 200
       - id: high
         name: High quality
@@ -196,7 +247,33 @@ bbb_meteor:
       - id: hd
         name: High definition
         default: false
-        bitrate: 800
+        bitrate: 1200
+      cameraQualityThresholds:
+        enabled: true
+        thresholds:
+          - threshold: 8
+            profile: low-u8
+          - threshold: 12
+            profile: low-u12
+          - threshold: 15
+            profile: low-u15
+          - threshold: 20
+            profile: low-u20
+          - threshold: 25
+            profile: low-u25
+          - threshold: 30
+            profile: low-u30
+      cameraTimeouts:
+        baseTimeout: 30000
+      pagination:
+        enabled: true
+        pageChangeDebounceTime: 2500
+        desktopPageSizes:
+          moderator: 16
+          viewer: 16
+        mobilePageSizes:
+          moderator: 8
+          viewer: 8
 ```
 
 ### LXD/LXC compatibility
