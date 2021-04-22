@@ -197,7 +197,7 @@
   lineinfile:
     path: /etc/bigbluebutton/nginx/sip.nginx
     regexp: "proxy_pass"
-    line: "        proxy_pass https://{{ ansible_default_ipv4.address }}:7443;"
+    line: "        proxy_pass https://{{ bbb_freeswitch_ip_address }}:7443;"
   notify: reload nginx
 
 - name: create ssl folder for nginx
@@ -238,11 +238,11 @@
   - restart freeswitch
   - reload systemd
 
-- name: configure freeswitch to use correct IP address for wss-binding
+- name: configure wss-binding of FreeSWITCH
   lineinfile:
     path: /opt/freeswitch/conf/sip_profiles/external.xml
     regexp: "<param name=\"wss-binding\"  value=\":7443\"/>"
-    line: "    <param name=\"wss-binding\"  value=\"{{ ansible_default_ipv4.address }}:7443\"/>"
+    line: "    <param name=\"wss-binding\"  value=\"{{ bbb_freeswitch_ip_address }}:7443\"/>"
   notify: restart freeswitch
 
 - name: enable IPv6 in FreeSWITCH service 1/2
