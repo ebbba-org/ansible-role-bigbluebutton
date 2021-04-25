@@ -1,7 +1,7 @@
 ---
 - name: register current bbb properties
   slurp:
-    src: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    src: /etc/bigbluebutton/bbb-web.properties
   register: properties
 
 - name: set bbb hostname
