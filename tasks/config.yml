@@ -237,22 +237,28 @@
   when: not bbb_html5_node_options is defined
   notify: restart bigbluebutton
 
-- name: Create overrides directory for bbb-html5.service
+- name: Create overrides directory for bbb-html5 template services
   file:
-    path: /etc/systemd/system/bbb-html5.service.d
+    path: "/etc/systemd/system/{{ item }}.d"
     state: directory
     mode: '0644'
+  loop:
+    - bbb-html5-backend@.service
+    - bbb-html5-frontend@.service
   when: not bbb_cpuschedule
 
-- name: Save override file for bbb-html5.service
+- name: Save override file for bbb-html5 template services
   copy:
-    dest: /etc/systemd/system/bbb-html5.service.d/override.conf
+    dest: "/etc/systemd/system/{{ item }}.d/override.conf"
     content: |
       [Service]
       # Set no scheduling policy in LXC, see https://docs.bigbluebutton.org/2.2/troubleshooting.html#bbb-html5-fails-to-start-with-a-setscheduler-error
       CPUSchedulingPolicy=other
       Nice=-10
     mode: '0644'
+  loop:
+    - bbb-html5-backend@.service
+    - bbb-html5-frontend@.service
   when: not bbb_cpuschedule
   notify:
     - reload systemd
@@ -263,6 +269,9 @@
     path: /etc/systemd/system/bbb-html5.service.d/override.conf
     state: absent
     mode: '0644'
+  loop:
+    - bbb-html5-backend@.service
+    - bbb-html5-frontend@.service
   when: bbb_cpuschedule
   notify:
     - reload systemd
