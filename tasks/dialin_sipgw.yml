@@ -14,7 +14,7 @@
   copy:
     src: sounds/you-are-muted.flac
     dest: /opt/freeswitch/share/freeswitch/sounds/you-are-muted.flac
-    mode: 644
+    mode: 0644
 
 - name: create conferenceMutedOnStart helper script
   become: true
