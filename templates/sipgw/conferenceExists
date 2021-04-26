@@ -1,0 +1,4 @@
+#!/bin/bash
+
+conf_id="$1"
+mongo "mongodb://127.0.1.1/meteor" --eval "db.meetings.count({\"voiceProp.telVoice\": \"${conf_id}\"}) > 0" --quiet

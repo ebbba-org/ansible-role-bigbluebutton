@@ -1,4 +1,4 @@
-# Last Modified: Wed Nov 25 12:51:08 2020
+# {{ ansible_managed }} 
 #include <tunables/global>
 
 /opt/freeswitch/bin/freeswitch {
@@ -17,5 +17,10 @@
   /opt/freeswitch/var/lib/freeswitch/images/* r,
   /opt/freeswitch/var/log/freeswitch/* rw,
   /opt/freeswitch/var/run/freeswitch/freeswitch.pid wk,
+
+# required for system()
+  /bin/dash rix,
+# allow helper scripts
+  /usr/local/bin/conference* rUx,
 
 }

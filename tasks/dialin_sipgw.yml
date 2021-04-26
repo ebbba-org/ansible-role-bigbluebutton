@@ -16,6 +16,13 @@
     dest: /opt/freeswitch/share/freeswitch/sounds/you-are-muted.flac
     mode: 0644
 
+- name: create conferenceExists helper script
+  become: true
+  template:
+    src: sipgw/conferenceExists
+    dest: /usr/local/bin/conferenceExists
+    mode: 0755
+
 - name: create conferenceMutedOnStart helper script
   become: true
   template:
