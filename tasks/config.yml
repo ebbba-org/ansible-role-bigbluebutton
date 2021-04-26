@@ -238,7 +238,7 @@
   - restart freeswitch
   - reload systemd
 
-- name: configure wss-binding of FreeSWITCH
+- name: configure IP {{ bbb_freeswitch_ip_address }} for wss-binding of FreeSWITCH
   lineinfile:
     path: /opt/freeswitch/conf/sip_profiles/external.xml
     regexp: "<param name=\"wss-binding\"  value=\":7443\"/>"
