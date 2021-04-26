@@ -102,6 +102,8 @@ bbb_multikurento: false
 
 # bbb_freeswitch_socket_password needs to be defined by the User
 # bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
+bbb_html5_backend_processes: 1
+bbb_html5_frontend_processes: 1
 
 bbb_webrtc_sfu_singlekurento:
   balancing-strategy: ROUND_ROBIN
