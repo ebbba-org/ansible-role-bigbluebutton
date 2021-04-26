@@ -12,6 +12,7 @@
   /opt/freeswitch/etc/** r,
   /opt/freeswitch/lib/** mr,
   /opt/freeswitch/share/freeswitch/sounds/**.wav r,
+  /opt/freeswitch/share/freeswitch/sounds/**.flac r,
   /opt/freeswitch/var/lib/freeswitch/db/* rwk,
   /opt/freeswitch/var/lib/freeswitch/images/* r,
   /opt/freeswitch/var/log/freeswitch/* rw,
