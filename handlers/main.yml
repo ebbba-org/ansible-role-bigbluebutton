@@ -57,9 +57,12 @@
 - name: stop kurento
   become: true
   systemd:
-    name: kurento-media-server
+    name: "{{ item }}"
     state: stopped
-  ignore_errors: yes
+  loop:
+    - kurento-media-server
+    - kurento-media-server.target
+  ignore_errors: true
 
 - name: restart bbb-html5
   become: true
