@@ -21,6 +21,22 @@
     state: absent
   notify: restart freeswitch
 
+- name: add freeswitch module config
+  become: true
+  template:
+    src: modules.conf.xml
+    dest: /opt/freeswitch/etc/freeswitch/autoload_configs/modules.conf.xml
+  notify: restart freeswitch
+
+- name: add freeswitch syslog config
+  become: true
+  template:
+    src: syslog.conf.xml
+    dest: /opt/freeswitch/etc/freeswitch/autoload_configs/syslog.conf.xml
+    owner: freeswitch
+    group: daemon
+  notify: restart freeswitch
+
 - name: deploy conference config
   become: true
   template:
