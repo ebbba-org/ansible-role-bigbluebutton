@@ -9,7 +9,7 @@
   <!-- info    - informational message  -->
   <!-- debug   - debug-level message -->
   <settings>
-    <param name="facility" value="system"/>
+    <param name="facility" value="daemon"/>
     <param name="ident" value="freeswitch"/>
     <param name="loglevel" value="info"/>
     <param name="uuid" value="true"/>
