@@ -38,6 +38,7 @@
     xpath: /configuration/settings/param[@name='password']
     attribute: "value"
     value: "{{ bbb_freeswitch_socket_password }}"
+  notify: restart freeswitch
 
 - name: set socket listen port
   become: true
@@ -46,6 +47,7 @@
     xpath: /configuration/settings/param[@name='listen-ip']
     attribute: "value"
     value: "127.0.0.1"
+  notify: restart freeswitch
 
 - name: fix fs_clibbb to accept additional parameters
   become: true
@@ -53,6 +55,8 @@
     path: /usr/local/bin/fs_clibbb
     regexp: "^/opt/freeswitch/bin/fs_cli"
     line: "/opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name=\"password\"]' -v @value /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml) \"$@\"" 
+
+- meta: flush_handlers
 
 - name: configure different mute sound
   copy:
