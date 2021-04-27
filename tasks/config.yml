@@ -100,7 +100,7 @@
   lineinfile:
     path: /etc/bigbluebutton/nginx/sip.nginx
     regexp: "proxy_pass"
-    line: "        proxy_pass https://{{ ansible_default_ipv4.address }}:7443;"
+    line: "        proxy_pass http://{{ ansible_default_ipv4.address }}:5066;"
   notify: reload nginx
 
 - name: configure CPU and IO Scheduling in FreeSWITCH service
