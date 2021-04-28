@@ -1,4 +1,5 @@
 ---
+
 - name: Install required packages
   apt:
     name: "{{ bbb_required_packages }}"
@@ -55,6 +56,24 @@
     path: "{{ bbb_ssl_cert }}"
   register: bbbcert
 
+- name: register bbb secret
+  command: bbb-conf --secret
+  changed_when: false
+  register: result
+  when: not bbb_secret is defined or not bbb_baseurl is defined
+
+- name: parse bbb secret
+  set_fact:
+    bbb_secret: "{{ result.stdout | regex_search('Secret: ([a-zA-Z0-9]*)', multiline=True) |  regex_replace('Secret: ') }}"
+    cacheable: true
+  when: not bbb_secret is defined
+
+- name: parse bbb baseurl
+  set_fact:
+    bbb_baseurl: "{{ result.stdout | regex_search('URL:\\s*(https?:\\/\\/.*)', multiline=True) |  regex_replace('URL: ') }}"
+    cacheable: true
+  when: not bbb_baseurl is defined
+
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable | bool and not bbbcert.stat.exists
 
@@ -93,17 +112,11 @@
 
 - import_tasks: nginx.yml
 
-- import_tasks: multikurento.yml
-  when: bbb_multikurento
-
-- import_tasks: singlekurento.yml
-  when: not bbb_multikurento
+- import_tasks: webrtc-sfu.yml
 
 - import_tasks: bbb-web.yml
 
 - import_tasks: freeswitch.yml
-
-- import_tasks: webrtc-sfu.yml
 
 - import_tasks: stun-turn.yml
 
@@ -114,3 +127,9 @@
 
 - import_tasks: register_with_sipgw.yml
   when: bbb_sipgw is defined
+
+- import_tasks: multikurento.yml
+  when: bbb_multikurento
+
+- import_tasks: singlekurento.yml
+  when: not bbb_multikurento

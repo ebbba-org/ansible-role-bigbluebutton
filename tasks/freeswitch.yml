@@ -3,6 +3,7 @@
   template:
     src: opt.freeswitch.bin.freeswitch
     dest: /etc/apparmor.d/opt.freeswitch.bin.freeswitch
+    mode: 0600
   notify: reload apparmor
 
 - name: fix freeswitch systemd service permissions
@@ -69,7 +70,7 @@
   lineinfile:
     path: /usr/local/bin/fs_clibbb
     regexp: "^/opt/freeswitch/bin/fs_cli"
-    line: "/opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name=\"password\"]' -v @value /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml) \"$@\"" 
+    line: "/opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name=\"password\"]' -v @value /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml) \"$@\""
 
 - meta: flush_handlers
 
