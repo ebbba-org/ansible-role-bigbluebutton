@@ -117,6 +117,15 @@
   - restart freeswitch
   - reload systemd
 
+- name: Set FreeSWITCH local IPv4
+  replace:
+    path: /opt/freeswitch/etc/freeswitch/vars.xml
+    regexp:  '<X-PRE-PROCESS cmd="set" data="local_ip_v4=.*"\/>'
+    replace: '<X-PRE-PROCESS cmd="set" data="local_ip_v4={{ ansible_default_ipv4.address }}"/>'
+  notify:
+    - restart freeswitch
+    - reload nginx
+
 - name: enable IPv6 in FreeSWITCH service 1/2
   command:
     cmd: mv {{ item }}_ {{ item }}
