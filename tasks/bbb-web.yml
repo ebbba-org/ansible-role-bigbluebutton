@@ -35,6 +35,22 @@
   notify:
     - restart bbb-html5
 
+- name: enable sipjsHackViaWs (http)
+  replace:
+    path: /etc/bigbluebutton/nginx/sip.nginx
+    regexp: 'proxy_pass https://'
+    replace: 'proxy_pass http://'
+  when: bbb_meteor.public.media.sipjsHackViaWs | bool
+  notify: reload nginx
+
+- name: enable sipjsHackViaWs (port)
+  replace:
+    path: /etc/bigbluebutton/nginx/sip.nginx
+    regexp: ':7443;'
+    replace: ':5066;'
+  when: bbb_meteor.public.media.sipjsHackViaWs | bool
+  notify: reload nginx
+
 - name: set amount of html5 back- and frontends
   become: true
   template:

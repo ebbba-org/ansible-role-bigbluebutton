@@ -96,13 +96,6 @@
     content: '{{ meteor  | to_nice_yaml }}'
     dest: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 
-- name: configure freeswitch to use SSL
-  lineinfile:
-    path: /etc/bigbluebutton/nginx/sip.nginx
-    regexp: "proxy_pass"
-    line: "        proxy_pass http://{{ ansible_default_ipv4.address }}:5066;"
-  notify: reload nginx
-
 - name: configure CPU and IO Scheduling in FreeSWITCH service
   lineinfile:
     path: /lib/systemd/system/freeswitch.service
