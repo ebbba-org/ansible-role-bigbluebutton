@@ -22,3 +22,9 @@
     mode: 0644
   notify: reload nginx
 
+- name: remove nginx default config
+  become: true
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: reload nginx
