@@ -15,12 +15,17 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | Variable Name | Function | Default value | Comment |
 | ------------- | -------- | ------------- | ------- |
 | `bbb_hostname` | Hostname for this BigBlueButton instance _(required)_ | `{{ ansible_fqdn }}` |
-| `bbb_state` | Install BigBlueButton to state | `present` | for updating BigBlueButton with this role use `latest`
+| `bbb_state` | Install BigBlueButton to state | `present` | for updating BigBlueButton with this role use `latest` |
 | `bbb_apt_mirror` | apt repo server for BigBlueButton packages | `https://ubuntu.bigbluebutton.org` | other value would be e.g. `https://packages-eu.bigbluebutton.org` |
 | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
 | `bbb_letsencrypt_email` | E-mail for use with letsencrypt | |
 | `bbb_nginx_privacy` | only log errors not access | `yes` |
-| `bbb_nginx_listen_https` | nginx: use https | `yes` | This is useful for a reverse proxy configuration where the BBB server is behind a load balancing server like haproxy that does SSL termination
+| `bbb_nginx_listen_https` | nginx: use https | `yes` | This is useful for a reverse proxy configuration where the BBB server is behind a load balancing server like haproxy that does SSL termination |
+| bbb_ssl_cert | Define the ssl cert location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"` | |
+| bbb_ssl_key | Define the ssl key location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"` | |
+| bbb_use_own_cert | Enable the usage of a already existent cert/key | `false` | When enabling this alone it will do nothing |
+| bbb_own_cert | Define the name of the cert file which shall be used | `undefined` | |
+| bbb_own_key | Define the name of the key file which shall be used | `undefined` | |
 | `bbb_default_welcome_message` | Welcome Message in the client | Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others. | Needs to be encoded with `native2ascii -encoding UTF8`! |
 | `bbb_default_welcome_message_footer` | Footer of the welcome message | This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>. | Encoded as the welcome message |
 | `bbb_default_presentation` | Location of default presentation | `${bigbluebutton.web.serverURL}/default.pdf` |
@@ -30,56 +35,56 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_coturn_server` | server name on coturn (realm) | `{{ bbb_hostname }}` |
 | `bbb_coturn_port` | the port for the TURN-Server to use | `3443` |
 | `bbb_coturn_port_tls` | the port for tls for the TURN-Server to use | `3443` |
-| `bbb_coturn_secret` | Secret for the TURN-Server  _(required)_ | | can be generated with `openssl rand -hex 16`
-| `bbb_coturn_min_port` | Lower bound of the UDP relay endpoints | `49152`
-| `bbb_coturn_max_port` | Upper bound of the UDP relay endpoints | `65535`
-| `bbb_turn_enable` | enable the use uf TURN in general | `yes` |
-| `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml
-| `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server`
-| `bbb_turn_servers` | a list of TURN-Server to use | `{{ bbb_hostname }}` with `{{ bbb_coturn_secret }}` | take a look in defaults/main.yml
-| `bbb_greenlight_enable` | enable installation of the greenlight client | `yes` |
-| `bbb_greenlight_hosts` | the hostname that greenlight is accessible from | `{{ bbb_hostname }}` |
-| `bbb_greenlight_secret` | Secret for greenlight _(required when using greenlight)_ |  | can be generated with `openssl rand -hex 64`
-| `bbb_greenlight_db_password` | Password for greenlight's database  _(required when using greenlight)_ | | can be generated with `openssl rand -hex 16`
-| `bbb_greenlight_default_registration` | Registration option open(default), invite or approval
+| `bbb_coturn_secret` | Secret for the TURN-Server  _(required)_ | | can be generated with `openssl rand -hex 16` |
+| `bbb_coturn_min_port` | Lower bound of the UDP relay endpoints | `49152` | |
+| `bbb_coturn_max_port` | Upper bound of the UDP relay endpoints | `65535` | |
+| `bbb_turn_enable` | enable the use uf TURN in general | `yes` | |
+| `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml |
+| `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server` |
+| `bbb_turn_servers` | a list of TURN-Server to use | `{{ bbb_hostname }}` with `{{ bbb_coturn_secret }}` | take a look in defaults/main.yml |
+| `bbb_greenlight_enable` | enable installation of the greenlight client | `yes` | |
+| `bbb_greenlight_hosts` | the hostname that greenlight is accessible from | `{{ bbb_hostname }}` | |
+| `bbb_greenlight_secret` | Secret for greenlight _(required when using greenlight)_ |  | can be generated with `openssl rand -hex 64` |
+| `bbb_greenlight_db_password` | Password for greenlight's database  _(required when using greenlight)_ | | can be generated with `openssl rand -hex 16` |
+| `bbb_greenlight_default_registration` | Registration option open(default), invite or approval | `open` | |
 | `bbb_greenlight_users` | Greenlight users' list to create. No email notification will be triggered. As it contains passwords, recommend to put in ansible-vault. for more details see defaults/main.yml | `[]` |
 | `bbb_allow_mail_notifications`  | Set this to true if you want GreenLight to send verification emails upon the creation of a new account | `true` |
-| `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored
-| `bbb_api_demos_enable` | enable installation of the api demos | `no` |
-| `bbb_mute_on_start:` | start with muted mic on join | `no` |
-| `bbb_app_log_level:` | set bigbluebutton log level | `DEBUG` |
-| `bbb_meteor:` | overwrite settings in meteor | `{}` |
-| `bbb_nodejs_version` | version of nodejs to be installed | `12.x` |
-| `bbb_system_locale` | the system locale to use | `en_US.UTF-8` |
+| `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
+| `bbb_api_demos_enable` | enable installation of the api demos | `no` | |
+| `bbb_mute_on_start:` | start with muted mic on join | `no` | |
+| `bbb_app_log_level:` | set bigbluebutton log level | `DEBUG` | |
+| `bbb_meteor:` | overwrite settings in meteor | `{}` | |
+| `bbb_nodejs_version` | version of nodejs to be installed | `12.x` | |
+| `bbb_system_locale` | the system locale to use | `en_US.UTF-8` | |
 | `bbb_secret` | define the secret for bbb | `none` | `set this if you want to define the bbb-conf -secret. Otherwise the secret is generated by bbb`
 | `bbb_cpuschedule` | CPUSchedulingPolicy | `true` | Disable to fix [FreeSWITCH SETSCHEDULER error][bbb_cpuschedule], needed for LXD/LXC Compatibility |
 | `bbb_freeswitch_ioschedule_realtime` | [IOSchedulingClass](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#IOSchedulingClass=) | `true` | Set this to `false` for LXD/LXC Compatibility |
 | `bbb_freeswitch_ipv6` | Enable IPv6 support in FreeSWITCH | `true` | Disable to fix [FreeSWITCH IPv6 error][bbb_freeswitch_ipv6] |
 | `bbb_freeswitch_external_ip` | Set stun server for sip and rtp on FreeSWITCH | `stun:{{ (bbb_stun_servers \| first).server }}` | WARNING: the value of the default freeswitch installation is `stun:stun.freeswitch.org` |
-| `bbb_dialplan_quality` | Set quality of dailplan for FreeSWITCH | `cdquality` |
-| `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality`
-| `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality`
-| `bbb_webhooks_enable` | install bbb-webhooks | `no` |
+| `bbb_dialplan_quality` | Set quality of dailplan for FreeSWITCH | `cdquality` | |
+| `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality` |
+| `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality` |
+| `bbb_webhooks_enable` | install bbb-webhooks | `no` | |
 | `bbb_monitoring_all_in_one_enable` | deploy [all in one monitoring stack](https://bigbluebutton-exporter.greenstatic.dev/installation/all_in_one_monitoring_stack/) (docker) | `no` |
-| `bbb_monitoring_all_in_one_version` | Version of the `greenstatic/bigbluebutton-exporter` docker image | `latest` |
-| `bbb_monitoring_all_in_one_directory` | Directory for the docker compose files | `/root/bbb-monitoring` |
-| `bbb_monitoring_all_in_one_port` | Internal Port for the monitoring werbservice | `3001` |
-| `bbb_monitoring_recordings_from_disk` | Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details. | `true`
-| `bbb_dialin_enabled` | enable phone dial-in, will also remove any previous dial-in configuration if set to `false`  | `false` |
-| `bbb_dialin_provider_proxy` | IP or Domain of your SIP provider, also known as registrar | `sip.example.net` |
-| `bbb_dialin_provider_username` | Username for authentication on the SIP-server | `provider-account` |
-| `bbb_dialin_provider_password` | Password for authentication on the SIP-server | `provider-password` |
-| `bbb_dialin_provider_extension` | Extension of your SIP account | `6135551234` |
-| `bbb_dialin_default_number` | Number to present to users for dial-in. Enable `bbb_dialin_overwrite_footer` or use `%%DIALNUM%%` and `%%CONFNUM%%` in you footer (see `bbb_default_welcome_message_footer`) | `6135551234` |
-| `bbb_dialin_mask_caller` | Mask caller-number in the BBB web-interface for privacy reasons (`01711233121` → `xxx-xxx-3121`) ||
-| `bbb_dialin_overwrite_footer` | Set the default dial-in footer instead of `bbb_default_welcome_message_footer` | `false` |
-| `bbb_dialin_footer` | The default dial-in notice, if you want to customize it, it is recommended to change `bbb_default_welcome_message_footer` instead | `<br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.` |
+| `bbb_monitoring_all_in_one_version` | Version of the `greenstatic/bigbluebutton-exporter` docker image | `latest` | |
+| `bbb_monitoring_all_in_one_directory` | Directory for the docker compose files | `/root/bbb-monitoring` | |
+| `bbb_monitoring_all_in_one_port` | Internal Port for the monitoring werbservice | `3001` | |
+| `bbb_monitoring_recordings_from_disk` | Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details. | `true` |
+| `bbb_dialin_enabled` | enable phone dial-in, will also remove any previous dial-in configuration if set to `false`  | `false` | |
+| `bbb_dialin_provider_proxy` | IP or Domain of your SIP provider, also known as registrar | `sip.example.net` | |
+| `bbb_dialin_provider_username` | Username for authentication on the SIP-server | `provider-account` | |
+| `bbb_dialin_provider_password` | Password for authentication on the SIP-server | `provider-password` | |
+| `bbb_dialin_provider_extension` | Extension of your SIP account | `6135551234` | |
+| `bbb_dialin_default_number` | Number to present to users for dial-in. Enable `bbb_dialin_overwrite_footer` or use `%%DIALNUM%%` and `%%CONFNUM%%` in you footer (see `bbb_default_welcome_message_footer`) | `6135551234` | |
+| `bbb_dialin_mask_caller` | Mask caller-number in the BBB web-interface for privacy reasons (`01711233121` → `xxx-xxx-3121`) | |
+| `bbb_dialin_overwrite_footer` | Set the default dial-in footer instead of `bbb_default_welcome_message_footer` | `false` | |
+| `bbb_dialin_footer` | The default dial-in notice, if you want to customize it, it is recommended to change `bbb_default_welcome_message_footer` instead | `<br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.` | |
 | `bbb_guestpolicy` | How guest can access | `ALWAYS_ACCEPT` | acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR |
-| `bbb_ntp_cron` | Disable automatic time synchronisation and instead configure a cronjob | `false`
-| `bbb_ntp_cron_day` | Day of the month the time-sync job should run | `*`
-| `bbb_ntp_cron_hour` | Hour when the time-sync job should run | `5`
-| `bbb_ntp_cron_minute` | Minute when the time-sync job should run | `0`
-| `bbb_html5_node_options` | Allow to set extra options for node for the html5-webclient | unset | Could be used for example with <https://github.com/bigbluebutton/bigbluebutton/issues/11183> ; `--max-old-space-size=4096 --max_semi_space_size=128`
+| `bbb_ntp_cron` | Disable automatic time synchronisation and instead configure a cronjob | `false` |
+| `bbb_ntp_cron_day` | Day of the month the time-sync job should run | `*` |
+| `bbb_ntp_cron_hour` | Hour when the time-sync job should run | `5` |
+| `bbb_ntp_cron_minute` | Minute when the time-sync job should run | `0` |
+| `bbb_html5_node_options` | Allow to set extra options for node for the html5-webclient | unset | Could be used for example with <https://github.com/bigbluebutton/bigbluebutton/issues/11183> ; `--max-old-space-size=4096 --max_semi_space_size=128` |
 | `bbb_meeting_inactivity_timeout_minutes` | set the default timeout in minutes | `10` | TBD |
 | `bbb_freeswitch_socket_password` | set password for freeswitch _(required)_ |  | Can be generated with `pwgen -s 16 1` |
 | `bbb_multikurento` | enable multikurento setup | `false` | TBD |
