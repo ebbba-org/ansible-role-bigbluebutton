@@ -21,7 +21,7 @@
 
      <extension name="dialin-from-sipgw" continue="true">
        <condition field="destination_number" expression="^(\d{5,9})$"/>
-        <condition field="${system conferenceExists ${destination_number}}" expression="true">
+       <condition field="${system conferenceExists ${destination_number}}" expression="true">
          <action application="set" data="bbb_authorized=true"/>
          <anti-action application="playback" data="ivr/ivr-that_was_an_invalid_entry.wav"/>
          <anti-action application="hangup" data="CALL_REJECTED"/>
