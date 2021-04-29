@@ -23,4 +23,4 @@
         mongodb_version: 4.2
       when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 18
   roles:
-    - n0emis.bigbluebutton
+    - ebbba.bigbluebutton
