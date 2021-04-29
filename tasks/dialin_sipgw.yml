@@ -49,4 +49,3 @@
     group: daemon
     mode: 0640
   notify: reload freeswitch xml
-
