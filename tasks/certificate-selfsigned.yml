@@ -21,7 +21,7 @@
   pip:
     name: PyOpenSSL
     state: "{{ bbb_state }}"
-  when: not bbb_letsencrypt_enable and bbb_own_cert is not defined
+  when: bbb_own_cert is not defined
 
 - name: apt | self-signed certificate packages dependencies
   apt:
@@ -41,12 +41,11 @@
   stat:
     path: "{{ bbb_ssl_key }}"
   register: private_key
-  when: not bbb_letsencrypt_enable and bbb_own_cert is not defined
 
 - name: Generate an OpenSSL private key
   openssl_privatekey:
     path: "{{ bbb_ssl_key }}"
-  when: not private_key.stat.exists and not bbb_letsencrypt_enable and bbb_own_cert is not defined
+  when: not private_key.stat.exists and bbb_own_cert is not defined
 
 - name: Generate an OpenSSL Certificate Signing Request
   openssl_csr:
@@ -56,7 +55,7 @@
     common_name: "{{ ansible_fqdn }}"
     subject_alt_name: "{{ cert_san | default(omit) }}"
     email_address: "{{ cert_email | default(omit) }}"
-  when: not bbb_letsencrypt_enable and bbb_own_cert is not defined
+  when: bbb_own_cert is not defined
 
 - name: Generate SSL self-signed certificate
   openssl_certificate:
@@ -64,7 +63,7 @@
     privatekey_path: "{{ bbb_ssl_key }}"
     csr_path: "{{ bbb_ssl_cert }}.csr"
     provider: selfsigned
-  when: not bbb_letsencrypt_enable and bbb_own_cert is not defined
+  when: bbb_own_cert is not defined
 
 - name: Validate private key file permissions
   file:

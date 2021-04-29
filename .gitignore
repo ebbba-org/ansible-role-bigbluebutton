@@ -3,3 +3,4 @@
 *.retry
 *.patch
 .idea/
+.cache/
