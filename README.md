@@ -23,7 +23,6 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_nginx_listen_https` | nginx: use https | `yes` | This is useful for a reverse proxy configuration where the BBB server is behind a load balancing server like haproxy that does SSL termination |
 | bbb_ssl_cert | Define the ssl cert location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"` | |
 | bbb_ssl_key | Define the ssl key location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"` | |
-| bbb_use_own_cert | Enable the usage of a already existent cert/key | `false` | When enabling this alone it will do nothing |
 | bbb_own_cert | Define the name of the cert file which shall be used | `undefined` | |
 | bbb_own_key | Define the name of the key file which shall be used | `undefined` | |
 | `bbb_default_welcome_message` | Welcome Message in the client | Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others. | Needs to be encoded with `native2ascii -encoding UTF8`! |
