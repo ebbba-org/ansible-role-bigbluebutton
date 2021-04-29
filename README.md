@@ -47,6 +47,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_cpuschedule` | CPUSchedulingPolicy | `true` | Disable to fix [FreeSWITCH SETSCHEDULER error][bbb_cpuschedule], needed for LXD/LXC Compatibility |
 | `bbb_freeswitch_ioschedule_realtime` | [IOSchedulingClass](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#IOSchedulingClass=) | `true` | Set this to `false` for LXD/LXC Compatibility |
 | `bbb_freeswitch_ipv6` | Enable IPv6 support in FreeSWITCH | `true` | Disable to fix [FreeSWITCH IPv6 error][bbb_freeswitch_ipv6] |
+| `bbb_freeswitch_ip_address` | Set IP address for FreeSWITCH's wss-binding | `{{ ansible_default_ipv4.address }}` | Can be used when port 7443 is already in use on `{{ ansible_default_ipv4.address }}` or in IPv6-only setups. |
 | `bbb_freeswitch_external_ip` | Set stun server for sip and rtp on FreeSWITCH | `stun:{{ (bbb_stun_servers \| first).server }}` | WARNING: the value of the default freeswitch installation is `stun:stun.freeswitch.org` |
 | `bbb_dialplan_quality` | Set quality of dailplan for FreeSWITCH | `cdquality` |
 | `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality`
