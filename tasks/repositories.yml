@@ -1,22 +1,19 @@
 ---
-- name: add BigBlueButton apt key
+- name: add bigbluebutton.org repo key
   become: true
   apt_key:
     url: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
     id: '{{ bbb_apt_key }}'
-    state: present
 
-- name: add mongodb apt key
+- name: add mongodb repo key
   become: true
   apt_key:
-    url: "https://www.mongodb.org/static/pgp/server-{{ bbb_mongodb_version | default('4.2') }}.asc"
-    state: present
+    url: "https://www.mongodb.org/static/pgp/server-{{ bbb_mongodb_version }}.asc"
 
 - name: add multiverse apt repositories
   become: true
   apt_repository:
     repo: "{{ item }}"
-    state: present
   with_items:
     - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse"
     - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse"
@@ -29,7 +26,6 @@
   become: true
   apt_repository:
     repo: "{{ item }}"
-    state: present
   with_items:
     - ppa:bigbluebutton/support
     - ppa:rmescandon/yq
