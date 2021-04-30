@@ -1,4 +1,10 @@
 ---
+- name: Ensure target directory exists
+  file:
+    dest: "{{ bbb_ssl_cert | dirname }}"
+    state: directory
+    mode: '0755'
+
 - name: install own ssl-certs
   become: true
   copy:
@@ -30,12 +36,6 @@
     cache_valid_time: 3600
     state: "{{ bbb_state }}"
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-
-- name: Ensure target directory exists
-  file:
-    dest: "{{ bbb_ssl_cert | dirname }}"
-    state: directory
-    mode: '0755'
 
 - name: Check if OpenSSL private key exists
   stat:
