@@ -34,7 +34,7 @@
 - name: add kurento-media-server@.service
   become: true
   template:
-    src: kurento-media-server@.service
+    src: kurento/kurento-media-server@.service
     dest: "/usr/lib/systemd/system/kurento-media-server-{{ item }}.service"
     mode: 0644
   loop: [ 8888, 8889, 8890 ]
@@ -56,7 +56,7 @@
 - name: add kurento-media-server.target
   become: true
   template:
-    src: kurento-media-server.target
+    src: kurento/kurento-media-server.target
     dest: /usr/lib/systemd/system/kurento-media-server.target
     mode: 0644
   notify:
@@ -83,7 +83,7 @@
 - name: deploy kurento service override configuration
   become: true
   template:
-    src: kurento-mk.override
+    src: kurento/kurento-mk.override
     dest: /etc/systemd/system/kurento-media-server.service
     force: true
   notify:
@@ -94,7 +94,7 @@
 - name: template kurento-media-server instance configs
   become: true
   template:
-    src: "kurento.conf.json"
+    src: kurento/kurento.conf.json
     dest: "/etc/kurento/kurento-{{ item }}.conf.json"
     mode: 0644
   loop: [ 8888, 8889, 8890 ]
