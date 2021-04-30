@@ -4,33 +4,30 @@
   file:
     state: directory
     path: /etc/systemd/system/bbb-webrtc-sfu.service.d/
+    mode: 0755
 
-- name: deploy webrtc-sfu service override configuration (singlekurento)
+- name: deploy webrtc-sfu service override configuration
   become: true
   template:
     src: bbb-webrtc-sfu.override
     dest: /etc/systemd/system/bbb-webrtc-sfu.service.d/override.conf
+    mode: 0644
   notify:
     - reload systemd
-  when: not bbb_multikurento
-
-- name: deploy webrtc-sfu service override configuration (multikurento)
-  become: true
-  template:
-    src: bbb-webrtc-sfu-mk.override
-    dest: /etc/systemd/system/bbb-webrtc-sfu.service.d/override.conf
-  notify:
-    - reload systemd
-  when: bbb_multikurento
+    - restart bbb-webrtc-sfu
 
 - name: create /etc/bigbluebutton/bbb-webrtc-sfu
   become: true
   file:
     state: directory
     path: /etc/bigbluebutton/bbb-webrtc-sfu
+    mode: 0755
 
 - name: write custom webrtc-sfu config
   become: true
   copy:
-    content: '{{ (bbb_webrtc_sfu_multikurento if bbb_multikurento else bbb_webrtc_sfu_singlekurento) | to_nice_yaml }}'
+    content: '{{ bbb_webrtc_sfu_multikurento | to_nice_yaml }}'
     dest: /etc/bigbluebutton/bbb-webrtc-sfu/production.yml
+    mode: 0644
+  notify:
+    - restart bbb-webrtc-sfu
