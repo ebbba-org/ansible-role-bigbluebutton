@@ -11,7 +11,7 @@
   template:
     src: bbb-webrtc-sfu.override
     dest: /etc/systemd/system/bbb-webrtc-sfu.service.d/override.conf
-    mode: 0644
+    mode: '0644'
   notify:
     - reload systemd
     - restart bbb-webrtc-sfu
@@ -28,6 +28,6 @@
   copy:
     content: '{{ bbb_webrtc_sfu_multikurento | to_nice_yaml }}'
     dest: /etc/bigbluebutton/bbb-webrtc-sfu/production.yml
-    mode: 0644
+    mode: '0644'
   notify:
     - restart bbb-webrtc-sfu

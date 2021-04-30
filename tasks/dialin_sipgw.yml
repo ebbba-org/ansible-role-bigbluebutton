@@ -6,7 +6,7 @@
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/acl.conf.xml
     owner: freeswitch
     group: daemon
-    mode: 0644
+    mode: '0644'
   notify: reload freeswitch acls
 
 - name: copy announcements
@@ -14,7 +14,7 @@
   copy:
     src: sounds/you-are-muted.flac
     dest: /opt/freeswitch/share/freeswitch/sounds/you-are-muted.flac
-    mode: 0644
+    mode: '0644'
 
 - name: create conferenceExists helper script
   become: true

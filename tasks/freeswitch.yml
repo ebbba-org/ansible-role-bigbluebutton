@@ -19,7 +19,7 @@
   become: true
   file:
     path: /lib/systemd/system/freeswitch.service
-    mode: 0644
+    mode: '0644'
     owner: root
     group: root
 
@@ -35,7 +35,7 @@
   template:
     src: modules.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/modules.conf.xml
-    mode: 0644
+    mode: '0644'
     owner: root
     group: root
   notify: restart freeswitch
@@ -45,7 +45,7 @@
   template:
     src: syslog.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/syslog.conf.xml
-    mode: 0644
+    mode: '0644'
     owner: root
     group: root
   notify: restart freeswitch
@@ -55,7 +55,7 @@
   template:
     src: conference.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
-    mode: 0644
+    mode: '0644'
     owner: root
     group: root
   notify: restart freeswitch
@@ -85,14 +85,15 @@
     regexp: "^/opt/freeswitch/bin/fs_cli"
     line: "/opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name=\"password\"]' -v @value /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml) \"$@\""
 
-- meta: flush_handlers
+- name: Flush Handler
+  meta: flush_handlers
 
 - name: configure different mute sound
   become: true
   copy:
     src: sounds/{{ item }}/conf-muted.wav
     dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
-    mode: 0644
+    mode: '0644'
     owner: root
     group: root
   with_items:
@@ -106,7 +107,7 @@
   copy:
     src: sounds/{{ item }}/conf-unmuted.wav
     dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
-    mode: 0644
+    mode: '0644'
     owner: root
     group: root
   with_items:

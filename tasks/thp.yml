@@ -12,5 +12,5 @@
     path: /etc/default/grub
     regex: '^GRUB_CMDLINE_LINUX_DEFAULT="(((?!transparent_hugepage=never).)*)"$'
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="\1 transparent_hugepage=never"'
-    backrefs: yes
+    backrefs: true
   notify: update grub

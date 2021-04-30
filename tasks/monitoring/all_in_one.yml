@@ -3,13 +3,13 @@
   file:
     path: "{{ bbb_monitoring_all_in_one_directory }}"
     state: directory
-
-
+    mode: '0644'
 
 - name: copy docker files into place
   template:
     src: "monitoring/{{ item }}.j2"
     dest: "{{ bbb_monitoring_all_in_one_directory }}/{{ item }}"
+    mode: '0644'
   with_items:
     - bbb_exporter_secrets.env
     - docker-compose.yaml
@@ -20,6 +20,7 @@
   template:
     src: "monitoring/monitoring.nginx.j2"
     dest: "/etc/bigbluebutton/nginx/monitoring.nginx"
+    mode: '0644'
   notify: reload nginx
 
 - name: start monitoring

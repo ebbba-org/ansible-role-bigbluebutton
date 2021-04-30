@@ -5,6 +5,7 @@
     dest: "/opt/freeswitch/conf/sip_profiles/external/dial-in.xml"
     owner: freeswitch
     group: daemon
+    mode: '0644'
   notify: restart freeswitch
 
 - name: Install custom dialplan
@@ -13,6 +14,7 @@
     dest: "/opt/freeswitch/conf/dialplan/public/dial-in.xml"
     owner: freeswitch
     group: daemon
+    mode: '0644'
   notify: restart freeswitch
 
 - name: set defaultDialAccessNumber

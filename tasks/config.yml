@@ -92,10 +92,12 @@
     meteor: "{{ meteor | combine(bbb_meteor, recursive=true) }}"
 
 - name: write back new meteor config
-  notify: restart bigbluebutton
   copy:
     content: '{{ meteor  | to_nice_yaml }}'
     dest: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+    mode: '0644'
+  notify:
+    - restart bigbluebutton
 
 - name: configure CPU and IO Scheduling in FreeSWITCH service
   lineinfile:
@@ -239,7 +241,8 @@
   file:
     path: /etc/systemd/system/bbb-html5.service.d
     state: directory
-  when: bbb_cpuschedule == false
+    mode: '0644'
+  when: not bbb_cpuschedule
 
 - name: Save override file for bbb-html5.service
   copy:
@@ -249,7 +252,8 @@
       # Set no scheduling policy in LXC, see https://docs.bigbluebutton.org/2.2/troubleshooting.html#bbb-html5-fails-to-start-with-a-setscheduler-error
       CPUSchedulingPolicy=other
       Nice=-10
-  when: bbb_cpuschedule == false
+    mode: '0644'
+  when: not bbb_cpuschedule
   notify:
     - reload systemd
     - restart bigbluebutton
@@ -258,7 +262,8 @@
   file:
     path: /etc/systemd/system/bbb-html5.service.d/override.conf
     state: absent
-  when: bbb_cpuschedule == true
+    mode: '0644'
+  when: bbb_cpuschedule
   notify:
     - reload systemd
     - restart bigbluebutton
@@ -268,5 +273,5 @@
   copy:
     src: "{{ bbb_custom_presentation }}"
     dest: "/var/www/bigbluebutton-default/{{ bbb_custom_presentation_name | default(bbb_custom_presentation) }}"
-    mode: 0644
+    mode: '0644'
   when: bbb_custom_presentation is defined

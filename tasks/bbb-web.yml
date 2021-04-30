@@ -12,7 +12,7 @@
   template:
     src: bbb-web.override
     dest: /etc/systemd/system/bbb-web.service.d/override.conf
-    mode: 0644
+    mode: '0644'
   notify:
     - reload systemd
     - restart bbb-web
@@ -22,7 +22,7 @@
   template:
     src: '{{ item }}'
     dest: '/usr/share/bbb-web/WEB-INF/classes/{{ item }}'
-    mode: 0644
+    mode: '0644'
   loop:
     - logback.xml
   notify:

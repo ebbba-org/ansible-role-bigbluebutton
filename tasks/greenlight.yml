@@ -3,6 +3,7 @@
   file:
     path: /root/greenlight
     state: directory
+    mode: '0644'
 
 - name: register bbb secret
   command: bbb-conf --secret
@@ -20,16 +21,19 @@
   template:
     src: greenlight/env.j2
     dest: /root/greenlight/.env
+    mode: '0644'
 
 - name: copy greenlight docker compose file
   template:
     src: greenlight/docker-compose.yml.j2
     dest: /root/greenlight/docker-compose.yml
+    mode: '0644'
 
 - name: copy greenlight nginx configuration file
   template:
     src: "greenlight/{{ item }}.j2"
     dest: "/etc/bigbluebutton/nginx/{{ item }}"
+    mode: '0644'
   with_items:
   - greenlight.nginx
   - greenlight-redirect.nginx

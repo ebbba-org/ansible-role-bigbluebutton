@@ -4,9 +4,10 @@
   copy:
     content: ""
     dest: /root/.rnd
-    force: yes
+    force: true
     group: root
     owner: root
+    mode: '0644'
 
 - name: generate DTLS-SRTP certificate for kurento
   become: true
@@ -24,7 +25,7 @@
 - name: use DTLS-SRTP for freeswitch
   become: true
   copy:
-    remote_src: True
+    remote_src: true
     src: /etc/kurento/dtls-srtp.pem
     dest: /opt/freeswitch/etc/freeswitch/tls/dtls-srtp.pem
     group: daemon
@@ -36,7 +37,7 @@
   template:
     src: kurento/kurento-media-server@.service
     dest: "/usr/lib/systemd/system/kurento-media-server-{{ item }}.service"
-    mode: 0644
+    mode: '0644'
   loop: [ 8888, 8889, 8890 ]
   notify:
     - stop kurento
@@ -58,7 +59,7 @@
   template:
     src: kurento/kurento-media-server.target
     dest: /usr/lib/systemd/system/kurento-media-server.target
-    mode: 0644
+    mode: '0644'
   notify:
     - reload systemd
 
@@ -86,17 +87,19 @@
     src: kurento/kurento-mk.override
     dest: /etc/systemd/system/kurento-media-server.service
     force: true
+    mode: '0644'
   notify:
     - reload systemd
 
-- meta: flush_handlers
+- name: Flush Handlers
+  meta: flush_handlers
 
 - name: template kurento-media-server instance configs
   become: true
   template:
     src: kurento/kurento.conf.json
     dest: "/etc/kurento/kurento-{{ item }}.conf.json"
-    mode: 0644
+    mode: '0644'
   loop: [ 8888, 8889, 8890 ]
 
 - name: enable kurento-media-server instances
@@ -104,7 +107,7 @@
   systemd:
      name: "kurento-media-server-{{ item }}"
      state: started
-     enabled: yes
+     enabled: true
   loop: [ 8888, 8889, 8890 ]
   notify:
     - reload systemd

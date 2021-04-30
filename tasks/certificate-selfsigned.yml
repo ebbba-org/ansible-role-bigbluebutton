@@ -8,18 +8,18 @@
 - name: install own ssl-certs
   become: true
   copy:
-    src: '{{ bbb_own_cert}}'
+    src: '{{ bbb_own_cert }}'
     dest: '{{ bbb_ssl_cert }}'
-    mode: 0644
+    mode: '0644'
     force: true
   when: bbb_own_cert is defined
 
 - name: install own ssl-key
   become: true
   copy:
-    src: '{{ bbb_own_key}}'
+    src: '{{ bbb_own_key }}'
     dest: '{{ bbb_ssl_key }}'
-    mode: 0644
+    mode: '0644'
     force: true
   when: bbb_own_key is defined
 

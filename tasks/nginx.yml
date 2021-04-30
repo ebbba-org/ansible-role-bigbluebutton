@@ -19,7 +19,7 @@
   copy:
     src: ffdhe4096.pem
     dest: /etc/nginx/ssl/ffdhe4096.pem
-    mode: 0644
+    mode: '0644'
   notify: reload nginx
 
 - name: copy bbb's nginx vhost
@@ -27,7 +27,7 @@
   template:
     src: nginx/vhost.conf
     dest: /etc/nginx/sites-available/bigbluebutton
-    mode: 0644
+    mode: '0644'
   notify: reload nginx
 
 - name: remove nginx default config

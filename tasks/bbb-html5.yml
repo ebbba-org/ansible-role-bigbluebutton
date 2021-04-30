@@ -5,7 +5,7 @@
   copy:
     content: '{{ bbb_meteor | to_nice_yaml }}'
     dest: /etc/bigbluebutton/bbb-html5.yml
-    mode: 0644
+    mode: '0644'
   notify:
     - restart bbb-html5
 
@@ -30,6 +30,6 @@
   template:
     src: bbb-html5/bbb-html5-with-roles.conf
     dest: /etc/bigbluebutton/bbb-html5-with-roles.conf
-    mode: 0644
+    mode: '0644'
   notify:
     - restart bbb-web
