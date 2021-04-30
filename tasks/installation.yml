@@ -1,0 +1,22 @@
+---
+
+- name: install dependencies
+  become: true
+  apt:
+    name: ["language-pack-en", "software-properties-common", "openjdk-8-jre-headless"]
+    update_cache: true
+
+- name: set version of java to use
+  become: true
+  file:
+    src: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+    dest: /etc/alternatives/java
+    state: link
+  notify: restart bigbluebutton
+
+- name: install bbb and dependencies
+  become: true
+  apt:
+    name: "{{ bbb_and_dependencies }}"
+    state: "{{ bbb_state }}"
+  register: _bbb_install
