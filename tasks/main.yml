@@ -133,8 +133,4 @@
 - import_tasks: register_with_sipgw.yml
   when: bbb_sipgw is defined
 
-- import_tasks: multikurento.yml
-  when: bbb_multikurento
-
-- import_tasks: singlekurento.yml
-  when: not bbb_multikurento
+- import_tasks: kurento.yml

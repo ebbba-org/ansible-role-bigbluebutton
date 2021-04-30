@@ -103,8 +103,6 @@ bbb_ntp_cron_day: "*"
 bbb_ntp_cron_hour: "5"
 bbb_ntp_cron_minute: "0"
 
-bbb_multikurento: false
-
 # bbb_freeswitch_socket_password needs to be defined by the User
 # bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
 bbb_html5_backend_processes: 1
