@@ -109,3 +109,11 @@
   notify:
     - reload systemd
     - restart bigbluebutton
+
+- name: increase kernel max PID number
+  sysctl:
+    name: kernel.pid_max
+    value: 4194304
+    sysctl_file: /etc/sysctl.d/20-kurento.conf
+  notify:
+    - restart kurento
