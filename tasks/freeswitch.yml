@@ -1,4 +1,5 @@
 ---
+
 - name: install AppArmor packages
   become: true
   package:
@@ -10,7 +11,9 @@
     src: opt.freeswitch.bin.freeswitch
     dest: /etc/apparmor.d/opt.freeswitch.bin.freeswitch
     mode: 0600
-  notify: reload apparmor
+  notify:
+   - reload apparmor
+   - restart freeswitch
 
 - name: fix freeswitch systemd service permissions
   become: true
@@ -32,6 +35,9 @@
   template:
     src: modules.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/modules.conf.xml
+    mode: 0644
+    owner: root
+    group: root
   notify: restart freeswitch
 
 - name: add freeswitch syslog config
@@ -39,8 +45,9 @@
   template:
     src: syslog.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/syslog.conf.xml
-    owner: freeswitch
-    group: daemon
+    mode: 0644
+    owner: root
+    group: root
   notify: restart freeswitch
 
 - name: deploy conference config
@@ -48,9 +55,9 @@
   template:
     src: conference.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
-    mode: 0640
-    owner: freeswitch
-    group: daemon
+    mode: 0644
+    owner: root
+    group: root
   notify: restart freeswitch
 
 - name: set socket password
@@ -85,9 +92,9 @@
   copy:
     src: sounds/{{ item }}/conf-muted.wav
     dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
-    owner: freeswitch
-    group: daemon
-    mode: u=rw,g=r,o=r
+    mode: 0644
+    owner: root
+    group: root
   with_items:
     - 48000
     - 32000
@@ -99,9 +106,9 @@
   copy:
     src: sounds/{{ item }}/conf-unmuted.wav
     dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
-    owner: freeswitch
-    group: daemon
-    mode: u=rw,g=r,o=r
+    mode: 0644
+    owner: root
+    group: root
   with_items:
     - 48000
     - 32000
