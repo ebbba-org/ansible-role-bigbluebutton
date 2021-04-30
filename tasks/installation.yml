@@ -31,3 +31,19 @@
   apt:
     upgrade: "{{ bbb_upgrade_packages }}"
   register: _bbb_upgrade
+
+- block:
+  - name: ensure pip is installed
+    apt:
+      name:
+        - python3-pip
+        - python3-setuptools
+      state: "{{ bbb_state }}"
+
+  - name: install python docker packages
+    pip:
+      name:
+        - docker
+        - docker-compose==1.24.1
+      state: "{{ bbb_state }}"
+  when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool

@@ -1,4 +1,12 @@
 ---
+
+- name: Ensure nginx is started and enabled to start at boot.
+  become: true
+  systemd:
+    name: nginx
+    enabled: true
+    state: started
+
 - name: create ssl folder for nginx
   become: true
   file:
@@ -6,7 +14,7 @@
     mode: 0755
     state: directory
 
-- name: Copy Predefined DH group ffdhe2048
+- name: copy predefined DH group ffdhe2048
   become: true
   copy:
     src: ffdhe4096.pem

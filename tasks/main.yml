@@ -1,42 +1,10 @@
 ---
 
 - import_tasks: locale.yml
-
 - import_tasks: repositories.yml
-
 - import_tasks: installation.yml
-
 - import_tasks: mongodb.yml
-
-- name: Ensure nginx is started and enabled to start at boot.
-  become: true
-  systemd:
-    name: nginx
-    enabled: true
-    state: started
-
-- name: Check if bbb_ssl_cert exists
-  stat:
-    path: "{{ bbb_ssl_cert }}"
-  register: bbbcert
-
-- name: register bbb secret
-  command: bbb-conf --secret
-  changed_when: false
-  register: result
-  when: not bbb_secret is defined or not bbb_baseurl is defined
-
-- name: parse bbb secret
-  set_fact:
-    bbb_secret: "{{ result.stdout | regex_search('Secret: ([a-zA-Z0-9]*)', multiline=True) |  regex_replace('Secret: ') }}"
-    cacheable: true
-  when: not bbb_secret is defined
-
-- name: parse bbb baseurl
-  set_fact:
-    bbb_baseurl: "{{ result.stdout | regex_search('URL:\\s*(https?:\\/\\/.*)', multiline=True) |  regex_replace('URL: ') }}"
-    cacheable: true
-  when: not bbb_baseurl is defined
+- import_tasks: runtimevars.yml
 
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable | bool and not bbbcert.stat.exists
@@ -44,27 +12,12 @@
 - import_tasks: certificate-selfsigned.yml
   when: not (bbb_letsencrypt_enable | bool) and not bbbcert.stat.exists
 
+- import_tasks: nginx.yml
 - import_tasks: config.yml
 - import_tasks: ntp.yml
 
 - import_tasks: coturn.yml
   when: bbb_coturn_enable | bool
-
-- block:
-  - name: ensure pip is installed
-    apt:
-      name:
-        - python3-pip
-        - python3-setuptools
-      state: "{{ bbb_state }}"
-
-  - name: install python docker packages
-    pip:
-      name:
-        - docker
-        - docker-compose==1.24.1
-      state: "{{ bbb_state }}"
-  when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool
 
 - import_tasks: dial-in/main.yml
 
@@ -74,18 +27,11 @@
 - import_tasks: monitoring/all_in_one.yml
   when: bbb_monitoring_all_in_one_enable | bool
 
-- import_tasks: nginx.yml
-
 - import_tasks: webrtc-sfu.yml
-
 - import_tasks: bbb-web.yml
-
 - import_tasks: bbb-html5.yml
-
 - import_tasks: freeswitch.yml
-
 - import_tasks: stun-turn.yml
-
 - import_tasks: thp.yml
 
 - import_tasks: dialin.yml
