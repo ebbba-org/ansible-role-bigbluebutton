@@ -18,6 +18,13 @@
     src: mongo4-ramdisk.conf
     dest: /usr/share/meteor/bundle/mongo-ramdisk.conf
     mode: 0644
+  when: bbb_mongodb_version|string == '4.2'
   notify:
     - restart mongo
-  when: bbb_mongodb_version|string == '4.2'
+
+- name: Ensure mongod is started and enabled to start at boot.
+  become: true
+  systemd:
+    name: mongod
+    enabled: true
+    state: started

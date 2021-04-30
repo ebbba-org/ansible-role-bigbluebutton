@@ -22,13 +22,6 @@
 
 - meta: flush_handlers
 
-- name: Ensure mongod is started and enabled to start at boot.
-  become: true
-  systemd:
-    name: mongod
-    enabled: true
-    state: started
-
 - name: Ensure nginx is started and enabled to start at boot.
   become: true
   systemd:
