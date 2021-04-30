@@ -6,21 +6,7 @@
 
 - import_tasks: installation.yml
 
-- name: upgrade packages
-  apt:
-    upgrade: "{{ bbb_upgrade_packages }}"
-  register: _bbb_upgrade
-
-- name: install bbb-webhooks
-  apt:
-    name: "{{ bbb_webhooks }}"
-    state: "{{ bbb_state }}"
-  when: bbb_webhooks_enable
-  notify: restart bigbluebutton
-
 - import_tasks: mongodb.yml
-
-- meta: flush_handlers
 
 - name: Ensure nginx is started and enabled to start at boot.
   become: true

@@ -12,7 +12,6 @@
     src: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
     dest: /etc/alternatives/java
     state: link
-  notify: restart bigbluebutton
 
 - name: install bbb and dependencies
   become: true
@@ -20,3 +19,15 @@
     name: "{{ bbb_and_dependencies }}"
     state: "{{ bbb_state }}"
   register: _bbb_install
+
+- name: install bbb-webhooks
+  apt:
+    name: "{{ bbb_webhooks }}"
+    state: "{{ bbb_state }}"
+  when: bbb_webhooks_enable
+  notify: restart bigbluebutton
+
+- name: upgrade packages
+  apt:
+    upgrade: "{{ bbb_upgrade_packages }}"
+  register: _bbb_upgrade
