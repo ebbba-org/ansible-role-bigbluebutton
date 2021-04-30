@@ -5,6 +5,7 @@
     state: present
 
 - name: Install certbot
+  become: true
   apt:
     pkg:
       - certbot
@@ -13,6 +14,7 @@
     state: "{{ bbb_state }}"
 
 - name: Change Let's Encrypt API to v2
+  become: true
   lineinfile:
     path: /etc/letsencrypt/cli.ini
     line: 'server = https://acme-v02.api.letsencrypt.org/directory'

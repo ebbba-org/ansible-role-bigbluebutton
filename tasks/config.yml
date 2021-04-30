@@ -57,6 +57,7 @@
   when: not bbb_secret is defined
 
 - name: serve recordings via https
+  become: true
   lineinfile:
     path: /usr/local/bigbluebutton/core/scripts/bigbluebutton.yml
     regexp: "playback_protocol"

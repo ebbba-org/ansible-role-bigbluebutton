@@ -1,5 +1,6 @@
 ---
 - name: Update /etc/bigbluebutton/turn-stun-servers.xml
+  become: true
   template:
     src: bbb/turn-stun-servers.xml.j2
     dest: /etc/bigbluebutton/turn-stun-servers.xml

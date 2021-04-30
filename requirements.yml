@@ -1,3 +1,4 @@
 ---
 - src: geerlingguy.nodejs
+  become: true
 - src: geerlingguy.docker

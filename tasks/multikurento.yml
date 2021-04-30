@@ -111,6 +111,7 @@
     - restart bigbluebutton
 
 - name: increase kernel max PID number
+  become: true
   sysctl:
     name: kernel.pid_max
     value: 4194304

@@ -29,6 +29,7 @@
     - restart bbb-web
 
 - name: write custom meteor config
+  become: true
   copy:
     content: '{{ bbb_meteor | to_nice_yaml }}'
     dest: /etc/bigbluebutton/bbb-html5.yml

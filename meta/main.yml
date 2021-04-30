@@ -20,6 +20,7 @@ galaxy_info:
 
 dependencies:
   - role: geerlingguy.nodejs
+    become: true
     vars:
       nodejs_version: "{{ bbb_nodejs_version }}"
   - role: geerlingguy.docker

@@ -2,6 +2,7 @@
 # --nojournal not supported for default engine
 # inMemory engine is available only in Enterprise distribution
 - name: Ensure mongodb4+ does not use nojournal - systemd
+  become: true
   replace:
     dest: /etc/systemd/system/mongod.service
     regexp: ' --nojournal$'
@@ -13,6 +14,7 @@
     - restart mongo
 
 - name: Ensure mongodb4+ does not use nojournal - config
+  become: true
   template:
     src: mongo4-ramdisk.conf.j2
     dest: /usr/share/meteor/bundle/mongo-ramdisk.conf
