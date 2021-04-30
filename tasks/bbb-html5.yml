@@ -28,7 +28,7 @@
 - name: set amount of html5 back- and frontends
   become: true
   template:
-    src: bbb-html5-with-roles.conf
+    src: bbb-html5/bbb-html5-with-roles.conf
     dest: /etc/bigbluebutton/bbb-html5-with-roles.conf
     mode: 0644
   notify:
