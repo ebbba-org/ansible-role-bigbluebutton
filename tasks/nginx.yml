@@ -17,7 +17,7 @@
 - name: copy bbb's nginx vhost
   become: true
   template:
-    src: bbb/bigbluebutton.j2
+    src: nginx/vhost.conf
     dest: /etc/nginx/sites-available/bigbluebutton
     mode: 0644
   notify: reload nginx
