@@ -1,4 +1,6 @@
 ---
+- import_tasks: checkvars.yml
+
 - name: Install required packages
   apt:
     name: "{{ bbb_required_packages }}"
