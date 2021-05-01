@@ -1,6 +1,7 @@
 ---
 galaxy_info:
   role_name: bigbluebutton
+  company: eBBBa
   author: n0emis
   description: >
     BigBlueButton installation (following the documentation on
@@ -8,19 +9,17 @@ galaxy_info:
 
   license: MIT
 
-  min_ansible_version: 2.0
+  min_ansible_version: "2.0"
 
   platforms:
     - name: Ubuntu
       versions:
-        - xenial
-        # - bionic
+        - bionic
 
   galaxy_tags: []
 
 dependencies:
   - role: geerlingguy.nodejs
-    become: true
     vars:
       nodejs_version: "{{ bbb_nodejs_version }}"
   - role: geerlingguy.docker
