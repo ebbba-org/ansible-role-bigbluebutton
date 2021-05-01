@@ -87,6 +87,13 @@
     regexp: "^/opt/freeswitch/bin/fs_cli"
     line: "/opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name=\"password\"]' -v @value /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml) \"$@\""
 
+- name: configure IP {{ bbb_freeswitch_ip_address }} for wss-binding of FreeSWITCH
+  lineinfile:
+    path: /opt/freeswitch/conf/sip_profiles/external.xml
+    regexp: "<param name=\"wss-binding\"  value=\""
+    line: "    <param name=\"wss-binding\"  value=\"{{ bbb_freeswitch_ip_address }}:7443\"/>"
+  notify: restart freeswitch
+
 - name: Flush Handler
   meta: flush_handlers
 

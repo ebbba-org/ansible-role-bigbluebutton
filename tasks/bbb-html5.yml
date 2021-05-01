@@ -13,7 +13,7 @@
   replace:
     path: /etc/bigbluebutton/nginx/sip.nginx
     regexp: 'proxy_pass .*'
-    replace: 'proxy_pass http://{{ ansible_default_ipv4.address }}:5066;'
+    replace: 'proxy_pass http://{{ bbb_freeswitch_ip_address }}:5066;'
   when: ((((bbb_meteor | default({})).public | default({})).media | default({})).sipjsHackViaWs  | default({})) | bool
   notify: reload nginx
 
@@ -21,7 +21,7 @@
   replace:
     path: /etc/bigbluebutton/nginx/sip.nginx
     regexp: 'proxy_pass .*'
-    replace: 'proxy_pass https://{{ ansible_default_ipv4.address }}:7443;'
+    replace: 'proxy_pass https://{{ bbb_freeswitch_ip_address }}:7443;'
   when: not ((((bbb_meteor | default({})).public | default({})).media | default({})).sipjsHackViaWs  | default({})) | bool
   notify: reload nginx
 
