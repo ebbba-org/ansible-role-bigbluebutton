@@ -16,4 +16,4 @@
     bbb_letsencrypt_enable: false
     bbb_letsencrypt_email: mail@example.com
   roles:
-    - n0emis.bigbluebutton
+    - ebbba.bigbluebutton
