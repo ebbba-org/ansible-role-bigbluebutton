@@ -33,7 +33,6 @@
 - import_tasks: bbb-html5.yml
 - import_tasks: freeswitch.yml
 - import_tasks: stun-turn.yml
-- import_tasks: thp.yml
 
 - import_tasks: dialin.yml
   when: bbb_sip_account is defined or bbb_sipgw is defined
