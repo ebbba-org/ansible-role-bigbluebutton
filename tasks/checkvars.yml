@@ -1,0 +1,30 @@
+---
+
+- name: checking variable...
+  block:
+    - name: bbb_letsencrypt_email
+      debug:
+        msg: "value: {{ bbb_letsencrypt_email }}"
+      when: bbb_letsencrypt_enable
+    - name: check bbb_coturn_secret
+      debug:
+        msg: "value: {{ bbb_coturn_secret }}"
+      when: bbb_coturn_enable
+    - name: check bbb_greenlight_secret
+      debug:
+        msg: "value: {{ bbb_greenlight_secret }}"
+      when: bbb_greenlight_enable
+    - name: check bbb_greenlight_db_password
+      debug:
+        msg: "value: {{ bbb_greenlight_db_password }}"
+      when: bbb_greenlight_enable
+    - name: check bbb_freeswitch_socket_password
+      debug:
+        msg: "value: {{ bbb_freeswitch_socket_password }}"
+  rescue:
+    - name: CHECK YOUR VARIABLES!
+      debug:
+        msg: "{{ ansible_failed_result }}"
+      failed_when: ansible_failed_result.failed
+  tags:
+    - checkvars

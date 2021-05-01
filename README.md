@@ -18,7 +18,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_state` | Install BigBlueButton to state | `present` | for updating BigBlueButton with this role use `latest` |
 | `bbb_apt_mirror` | apt repo server for BigBlueButton packages | `https://ubuntu.bigbluebutton.org` | other value would be e.g. `https://packages-eu.bigbluebutton.org` |
 | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
-| `bbb_letsencrypt_email` | E-mail for use with letsencrypt | |
+| `bbb_letsencrypt_email` | E-mail for use with letsencrypt | | _(required)_ |
 | `bbb_nginx_privacy` | only log errors not access | `yes` |
 | `bbb_nginx_listen_https` | nginx: use https | `yes` | This is useful for a reverse proxy configuration where the BBB server is behind a load balancing server like haproxy that does SSL termination |
 | bbb_ssl_cert | Define the ssl cert location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"` | |
