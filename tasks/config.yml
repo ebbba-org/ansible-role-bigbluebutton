@@ -1,7 +1,7 @@
 ---
 - name: register current bbb properties
   slurp:
-    src: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    src: /etc/bigbluebutton/bbb-web.properties
   register: properties
 
 - name: set bbb hostname
@@ -109,13 +109,22 @@
   with_items:
     - line: 'CPUSchedulingPolicy=rr'
       regexp: '^#?CPUSchedulingPolicy='
-      state: '{{ "present" if bbb_cpuschedule | bool else "absent" }}'
+      state: '{{ "present" if not bbb_container_compat | bool else "absent" }}'
     - line: 'IOSchedulingClass=realtime'
       regexp: '^#?IOSchedulingClass='
-      state: '{{ "present" if bbb_freeswitch_ioschedule_realtime | bool else "absent" }}'
+      state: '{{ "present" if not bbb_container_compat | bool else "absent" }}'
   notify:
   - restart freeswitch
   - reload systemd
+
+- name: Set FreeSWITCH local IPv4
+  replace:
+    path: /opt/freeswitch/etc/freeswitch/vars.xml
+    regexp:  '<X-PRE-PROCESS cmd="set" data="local_ip_v4=.*"\/>'
+    replace: '<X-PRE-PROCESS cmd="set" data="local_ip_v4={{ ansible_default_ipv4.address }}"/>'
+  notify:
+    - restart freeswitch
+    - reload nginx
 
 - name: enable IPv6 in FreeSWITCH service 1/2
   command:
@@ -134,7 +143,7 @@
   lineinfile:
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
     regexp: '<param name="listen-ip" value="[a-fA-F0-9.:]+"/>'
-    line: '<param name="listen-ip" value="::"/>'
+    line: '    <param name="listen-ip" value="::"/>'
   when: bbb_freeswitch_ipv6 | bool
   notify:
   - restart freeswitch
@@ -157,7 +166,7 @@
   lineinfile:
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
     regexp: '<param name="listen-ip" value="[a-fA-F0-9.:]+"/>'
-    line: '<param name="listen-ip" value="127.0.0.1"/>'
+    line: '    <param name="listen-ip" value="127.0.0.1"/>'
   when: not bbb_freeswitch_ipv6 | bool
   notify:
   - restart freeswitch
@@ -237,23 +246,29 @@
   when: not bbb_html5_node_options is defined
   notify: restart bigbluebutton
 
-- name: Create overrides directory for bbb-html5.service
+- name: Create overrides directory for bbb-html5 template services
   file:
-    path: /etc/systemd/system/bbb-html5.service.d
+    path: "/etc/systemd/system/{{ item }}.d"
     state: directory
     mode: '0644'
-  when: not bbb_cpuschedule
+  loop:
+    - bbb-html5-backend@.service
+    - bbb-html5-frontend@.service
+  when: bbb_container_compat
 
-- name: Save override file for bbb-html5.service
+- name: Save override file for bbb-html5 template services
   copy:
-    dest: /etc/systemd/system/bbb-html5.service.d/override.conf
+    dest: "/etc/systemd/system/{{ item }}.d/override.conf"
     content: |
       [Service]
       # Set no scheduling policy in LXC, see https://docs.bigbluebutton.org/2.2/troubleshooting.html#bbb-html5-fails-to-start-with-a-setscheduler-error
       CPUSchedulingPolicy=other
       Nice=-10
     mode: '0644'
-  when: not bbb_cpuschedule
+  loop:
+    - bbb-html5-backend@.service
+    - bbb-html5-frontend@.service
+  when: bbb_container_compat
   notify:
     - reload systemd
     - restart bigbluebutton
@@ -263,7 +278,10 @@
     path: /etc/systemd/system/bbb-html5.service.d/override.conf
     state: absent
     mode: '0644'
-  when: bbb_cpuschedule
+  loop:
+    - bbb-html5-backend@.service
+    - bbb-html5-frontend@.service
+  when: not bbb_container_compat
   notify:
     - reload systemd
     - restart bigbluebutton

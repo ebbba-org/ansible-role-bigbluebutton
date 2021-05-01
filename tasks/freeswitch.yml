@@ -4,6 +4,7 @@
   become: true
   package:
     name: ['apparmor-utils', 'auditd']
+  when: not bbb_container_compat
 
 - name: create AppArmor rules
   become: true
@@ -11,6 +12,7 @@
     src: opt.freeswitch.bin.freeswitch
     dest: /etc/apparmor.d/opt.freeswitch.bin.freeswitch
     mode: 0600
+  when: not bbb_container_compat
   notify:
    - reload apparmor
    - restart freeswitch
