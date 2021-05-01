@@ -109,10 +109,10 @@
   with_items:
     - line: 'CPUSchedulingPolicy=rr'
       regexp: '^#?CPUSchedulingPolicy='
-      state: '{{ "present" if bbb_cpuschedule | bool else "absent" }}'
+      state: '{{ "present" if not bbb_container_compat | bool else "absent" }}'
     - line: 'IOSchedulingClass=realtime'
       regexp: '^#?IOSchedulingClass='
-      state: '{{ "present" if bbb_freeswitch_ioschedule_realtime | bool else "absent" }}'
+      state: '{{ "present" if not bbb_container_compat | bool else "absent" }}'
   notify:
   - restart freeswitch
   - reload systemd
@@ -254,7 +254,7 @@
   loop:
     - bbb-html5-backend@.service
     - bbb-html5-frontend@.service
-  when: not bbb_cpuschedule
+  when: bbb_container_compat
 
 - name: Save override file for bbb-html5 template services
   copy:
@@ -268,7 +268,7 @@
   loop:
     - bbb-html5-backend@.service
     - bbb-html5-frontend@.service
-  when: not bbb_cpuschedule
+  when: bbb_container_compat
   notify:
     - reload systemd
     - restart bigbluebutton
@@ -281,7 +281,7 @@
   loop:
     - bbb-html5-backend@.service
     - bbb-html5-frontend@.service
-  when: bbb_cpuschedule
+  when: not bbb_container_compat
   notify:
     - reload systemd
     - restart bigbluebutton

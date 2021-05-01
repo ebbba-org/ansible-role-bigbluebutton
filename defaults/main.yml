@@ -41,8 +41,6 @@ bbb_api_demos_enable: false
 bbb_mute_on_start: false
 bbb_app_log_level: 'DEBUG'
 bbb_nodejs_version: 12.x
-bbb_cpuschedule: true
-bbb_freeswitch_ioschedule_realtime: true
 bbb_freeswitch_ipv6: true
 bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 
@@ -175,3 +173,5 @@ bbb_webrtc_sfu_multikurento:
 # bbb_sipgw:
 bbb_sip_extension: "{{ ansible_hostname }}"
 
+# Skip all tasks that are incompatible with (unprivileged) containers
+bbb_container_compat: false
