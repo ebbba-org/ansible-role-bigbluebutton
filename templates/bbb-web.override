@@ -1,5 +1,4 @@
 [Service]
 
 PrivateTmp=yes
-NoNewPrivileges=yes
-#ProtectDevices=yes
+ProtectDevices=yes
