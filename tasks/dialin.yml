@@ -1,7 +1,0 @@
----
-
-- include: dialin_standalone.yml
-  when: bbb_sipgw is not defined
-
-- include: dialin_sipgw.yml
-  when: bbb_sipgw is defined
