@@ -16,10 +16,3 @@
     group: daemon
     mode: '0644'
   notify: restart freeswitch
-
-- name: set defaultDialAccessNumber
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^defaultDialAccessNumber=?'
-    line: 'defaultDialAccessNumber={{ bbb_dialin_default_number }}'
-  notify: restart bigbluebutton

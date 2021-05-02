@@ -1,7 +1,0 @@
----
-
-- name: register with sip gateway
-  become: true
-  delegate_to: "{{ bbb_sipgw }}"
-  command:
-    cmd: "fs_cli -x 'db insert/bbb_host_ip/{{ bbb_sip_extension }}/{{ ansible_default_ipv4.address }}'"

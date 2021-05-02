@@ -169,10 +169,5 @@ bbb_webrtc_sfu_multikurento:
     level: warn
     filename:
 
-# Missing var for tasks
-# bbb_sip_account:
-# bbb_sipgw:
-bbb_sip_extension: "{{ ansible_hostname }}"
-
 # Skip all tasks that are incompatible with (unprivileged) containers
 bbb_container_compat: false
