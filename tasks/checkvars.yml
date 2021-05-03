@@ -25,6 +25,14 @@
       debug:
         msg: "distribution should be bionic and was detected as {{ ansible_distribution_release }}"
       failed_when: ansible_distribution_release | lower != 'bionic'
+    - name: bbb_monitoring_all_in_one_htpasswd_user
+      debug:
+        msg: "value: {{ bbb_monitoring_all_in_one_htpasswd_user }}"
+      when: bbb_monitoring_all_in_one_external
+    - name: bbb_monitoring_all_in_one_htpasswd
+      debug:
+        msg: "value: {{ bbb_monitoring_all_in_one_htpasswd }}"
+      when: bbb_monitoring_all_in_one_external
   rescue:
     - name: CHECK YOUR VARIABLES!
       debug:

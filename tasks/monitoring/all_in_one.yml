@@ -23,6 +23,17 @@
     mode: '0644'
   notify: reload nginx
 
+- name: Generate htpasswd file for external access if enabled
+  htpasswd:
+    path: "/etc/bigbluebutton/nginx/.htpasswd"
+    name: "{{ bbb_monitoring_all_in_one_htpasswd_user }}"
+    password: "{{ bbb_monitoring_all_in_one_htpasswd }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload nginx
+  when: bbb_monitoring_all_in_one_external
+
 - name: start monitoring
   docker_compose:
     pull: true

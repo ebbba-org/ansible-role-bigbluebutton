@@ -10,6 +10,8 @@ bbb_required_packages:
   - python3-pip
   - python3-wheel
   - openjdk-8-jdk
+  - python3-passlib
+  - python-passlib
 
 bbb_and_dependencies:
   - mongodb-org

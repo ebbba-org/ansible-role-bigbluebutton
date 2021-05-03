@@ -78,6 +78,11 @@ bbb_monitoring_all_in_one_version: latest
 bbb_monitoring_all_in_one_directory: "/root/bbb-monitoring"
 bbb_monitoring_all_in_one_port: 3001
 bbb_monitoring_recordings_from_disk: true
+bbb_monitoring_all_in_one_grafana: true
+bbb_monitoring_all_in_one_prometheus: true
+bbb_monitoring_all_in_one_external: false
+# bbb_monitoring_all_in_one_htpasswd_user:
+# bbb_monitoring_all_in_one_htpasswd:
 
 bbb_dialin_enabled: false
 bbb_dialin_provider_proxy: 'sip.example.net'
