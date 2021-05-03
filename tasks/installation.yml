@@ -3,7 +3,7 @@
 - name: install dependencies
   become: true
   apt:
-    name: ["language-pack-en", "software-properties-common", "openjdk-8-jre-headless"]
+    name: "{{ bbb_required_packages }}"
     update_cache: true
 
 - name: set version of java to use
