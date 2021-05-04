@@ -1,0 +1,70 @@
+---
+- name: Install ufw
+  apt:
+    pkg: ufw
+    state: present
+
+- name: Activate ufw
+  # For the setup process we first allow everything by policy,
+  # after allowing ssh the default policy will be set to deny.
+  community.general.ufw:
+    state: enabled
+    policy: allow
+
+- name: Set logging
+  community.general.ufw:
+    logging: true
+  when:
+    - "'logging' in bbb_firewall_ufw"
+    - "bbb_firewall_ufw['logging']"
+
+- name: Setup custom rules
+  community.general.ufw: "{{ item }}"
+  with_items: "{{ bbb_firewall_ufw['rules'] }}"
+  when:
+    - "'rules' in bbb_firewall_ufw"
+
+- name: Allow all outgoing traffic for allow_networks
+  community.general.ufw:
+    rule: allow
+    direction: out
+    src: '{{ item }}'
+  with_items: "{{ bbb_firewall_ufw['allow_networks'] }}"
+  when:
+    - "'allow_networks' in bbb_firewall_ufw"
+
+- name: Reject all out going traffic for reject_networks
+  community.general.ufw:
+    rule: reject
+    direction: out
+    src: '{{ item }}'
+  with_items: "{{ bbb_firewall_ufw['reject_networks'] }}"
+  when:
+    - "'reject_networks' in bbb_firewall_ufw"
+
+- name: Allow ssh connections
+  community.general.ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Connection rate limit for ssh
+  community.general.ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
+
+- name: Setup default policy
+  community.general.ufw:
+    policy: deny
+  when:
+    - "'policy' not in bbb_firewall_ufw"
+
+- name: Setup custom default policy
+  community.general.ufw:
+    policy: "{{ bbb_firewall_ufw['policy'] }}"
+  when:
+    - "'policy' in bbb_firewall_ufw"
+
+- name: Reload bbb_firewall_ufw
+  community.general.ufw:
+    state: reloaded
