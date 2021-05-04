@@ -1,59 +1,11 @@
 ---
-- name: Install required packages
-  apt:
-    name: "{{ bbb_required_packages }}"
-    update_cache: true
-    state: "{{ bbb_state }}"
 
-- name: set version of java to use
-  file:
-    src: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
-    dest: /etc/alternatives/java
-    state: link
-  notify: restart bigbluebutton
-
+- import_tasks: checkvars.yml
 - import_tasks: locale.yml
-
 - import_tasks: repositories.yml
-
-- name: install bbb and dependencies
-  apt:
-    name: "{{ bbb_and_dependencies }}"
-    state: "{{ bbb_state }}"
-  register: _bbb_install
-
-- name: upgrade packages
-  apt:
-    upgrade: "{{ bbb_upgrade_packages }}"
-  register: _bbb_upgrade
-
-- name: install bbb-webhooks
-  apt:
-    name: "{{ bbb_webhooks }}"
-    state: "{{ bbb_state }}"
-  when: bbb_webhooks_enable
-  notify: restart bigbluebutton
-
+- import_tasks: installation.yml
 - import_tasks: mongodb.yml
-
-- meta: flush_handlers
-
-- name: Ensure mongod is started and enabled to start at boot.
-  service:
-    name: mongod
-    enabled: true
-    state: started
-
-- name: Ensure nginx is started and enabled to start at boot.
-  service:
-    name: nginx
-    enabled: true
-    state: started
-
-- name: Check if bbb_ssl_cert exists
-  stat:
-    path: "{{ bbb_ssl_cert }}"
-  register: bbbcert
+- import_tasks: runtimevars.yml
 
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable | bool and not bbbcert.stat.exists
@@ -61,27 +13,12 @@
 - import_tasks: certificate-selfsigned.yml
   when: not (bbb_letsencrypt_enable | bool) and not bbbcert.stat.exists
 
+- import_tasks: nginx.yml
 - import_tasks: config.yml
 - import_tasks: ntp.yml
 
 - import_tasks: coturn.yml
   when: bbb_coturn_enable | bool
-
-- block:
-  - name: ensure pip is installed
-    apt:
-      name:
-        - python3-pip
-        - python3-setuptools
-      state: "{{ bbb_state }}"
-
-  - name: install python docker packages
-    pip:
-      name:
-        - docker
-        - docker-compose==1.24.1
-      state: "{{ bbb_state }}"
-  when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool
 
 - import_tasks: dial-in/main.yml
 
@@ -90,3 +27,10 @@
 
 - import_tasks: monitoring/all_in_one.yml
   when: bbb_monitoring_all_in_one_enable | bool
+
+- import_tasks: webrtc-sfu.yml
+- import_tasks: bbb-web.yml
+- import_tasks: bbb-html5.yml
+- import_tasks: freeswitch.yml
+- import_tasks: stun-turn.yml
+- import_tasks: kurento.yml

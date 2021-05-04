@@ -1,0 +1,35 @@
+---
+
+- name: write custom meteor config
+  become: true
+  copy:
+    content: '{{ bbb_meteor | to_nice_yaml }}'
+    dest: /etc/bigbluebutton/bbb-html5.yml
+    mode: '0644'
+  notify:
+    - restart bbb-html5
+
+- name: Enable sipjsHackViaWs
+  replace:
+    path: /etc/bigbluebutton/nginx/sip.nginx
+    regexp: 'proxy_pass .*'
+    replace: 'proxy_pass http://{{ bbb_freeswitch_ip_address }}:5066;'
+  when: ((((bbb_meteor | default({})).public | default({})).media | default({})).sipjsHackViaWs  | default({})) | bool
+  notify: reload nginx
+
+- name: Disable sipjsHackViaWs
+  replace:
+    path: /etc/bigbluebutton/nginx/sip.nginx
+    regexp: 'proxy_pass .*'
+    replace: 'proxy_pass https://{{ bbb_freeswitch_ip_address }}:7443;'
+  when: not ((((bbb_meteor | default({})).public | default({})).media | default({})).sipjsHackViaWs  | default({})) | bool
+  notify: reload nginx
+
+- name: set amount of html5 back- and frontends
+  become: true
+  template:
+    src: bbb-html5/bbb-html5-with-roles.conf
+    dest: /etc/bigbluebutton/bbb-html5-with-roles.conf
+    mode: '0644'
+  notify:
+    - restart bbb-web

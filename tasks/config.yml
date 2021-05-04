@@ -1,7 +1,7 @@
 ---
 - name: register current bbb properties
   slurp:
-    src: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    src: /etc/bigbluebutton/bbb-web.properties
   register: properties
 
 - name: set bbb hostname
@@ -12,60 +12,27 @@
     _bbb_upgrade.changed
   notify: restart bigbluebutton
 
-- name: enable join via html5
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^attendeesJoinViaHTML5Client'
-    line: 'attendeesJoinViaHTML5Client=true'
+- name: Update /etc/bigbluebutton akka configs
+  become: true
+  template:
+    src: "{{ item }}"
+    dest: "/etc/bigbluebutton/{{ item }}"
+    owner: bigbluebutton
+    group: root
+    mode: '0600'
+  loop:
+    - bbb-apps-akka.conf
+    - bbb-fsesl-akka.conf
   notify: restart bigbluebutton
 
-- name: enable mod join via html5
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^moderatorsJoinViaHTML5Client'
-    line: 'moderatorsJoinViaHTML5Client=true'
-  notify: restart bigbluebutton
-
-- name: set bbb to use HTTPS
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^bigbluebutton.web.serverURL'
-    line: 'bigbluebutton.web.serverURL=https://{{ bbb_hostname }}'
-  notify: restart bigbluebutton
-
-- name: set recording default
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^disableRecordingDefault'
-    line: 'disableRecordingDefault={{ bbb_disable_recordings | ternary("true", "false") }}'
-  notify: restart bigbluebutton
-
-- name: ensure recording auto start is disabled
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^autoStartRecording'
-    line: 'autoStartRecording=false'
-  notify: restart bigbluebutton
-
-- name: allow/disable users to start recordings
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^allowStartStopRecording'
-    line: 'allowStartStopRecording={{ bbb_disable_recordings | ternary("false", "true") }}'
-  notify: restart bigbluebutton
-
-- name: set muteOnStart
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^muteOnStart'
-    line: 'muteOnStart={{ bbb_mute_on_start | ternary("true", "false") }}'
-  notify: restart bigbluebutton
-
-- name: set appLogLevel
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^appLogLevel'
-    line: 'appLogLevel={{ bbb_app_log_level }}'
+- name: Update /etc/bigbluebutton/bbb-web.properties
+  become: true
+  template:
+    src: bbb-web.properties
+    dest: /etc/bigbluebutton/bbb-web.properties
+    owner: bigbluebutton
+    group: root
+    mode: '0600'
   notify: restart bigbluebutton
 
 - name: register bbb secret
@@ -89,76 +56,13 @@
     cacheable: true
   when: not bbb_secret is defined
 
-- name: set bbb Guest Policy
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^defaultGuestPolicy='
-    line: 'defaultGuestPolicy={{ bbb_guestpolicy }}'
-  notify: restart bigbluebutton
-
-- name: set red5 to use HTTPS 1/2
-  lineinfile:
-    path: /usr/share/red5/webapps/screenshare/WEB-INF/screenshare.properties
-    regexp: '^jnlpUrl'
-    line: 'jnlpUrl=https://{{ bbb_hostname }}/screenshare'
-  notify: restart bigbluebutton
-
-- name: set red5 to use HTTPS 2/2
-  lineinfile:
-    path: /usr/share/red5/webapps/screenshare/WEB-INF/screenshare.properties
-    regexp: '^jnlpFile'
-    line: 'jnlpFile=https://{{ bbb_hostname }}/screenshare/screenshare.jnlp'
-  notify: restart bigbluebutton
-
-- name: set bbb default welcome message
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^defaultWelcomeMessage='
-    line: 'defaultWelcomeMessage={{ bbb_default_welcome_message }}'
-  notify: restart bigbluebutton
-
-- name: set bbb default welcome message footer
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^defaultWelcomeMessageFooter='
-    line: 'defaultWelcomeMessageFooter={{ bbb_default_welcome_message_footer }}'
-  when: not bbb_dialin_enabled or not bbb_dialin_overwrite_footer
-  notify: restart bigbluebutton
-
-- name: set bbb default welcome message footer for dial-in
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^defaultWelcomeMessageFooter='
-    line: 'defaultWelcomeMessageFooter={{ bbb_dialin_footer }}'
-  when: bbb_dialin_enabled and bbb_dialin_overwrite_footer
-  notify: restart bigbluebutton
-
-- name: set bbb default presentation
-  lineinfile:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: '^beans.presentationService.defaultUploadedPresentation='
-    line: 'beans.presentationService.defaultUploadedPresentation={{ bbb_default_presentation }}'
-  notify: restart bigbluebutton
-
-- name: copy TURN config file
-  template:
-    src: bbb/turn-stun-servers.xml.j2
-    dest: /usr/share/bbb-web/WEB-INF/classes/spring/turn-stun-servers.xml
-  notify: restart bigbluebutton
-
 - name: serve recordings via https
+  become: true
   lineinfile:
     path: /usr/local/bigbluebutton/core/scripts/bigbluebutton.yml
     regexp: "playback_protocol"
     line: "playback_protocol: https"
   notify: restart bigbluebutton
-
-- name: set BigBlueButton client to load components via HTTPS
-  notify: restart bigbluebutton
-  replace:
-    path: /var/www/bigbluebutton/client/conf/config.xml
-    regexp: 'http://'
-    replace: 'https://'
 
 - name: set note server to use HTTPS
   notify: restart bigbluebutton
@@ -188,37 +92,12 @@
     meteor: "{{ meteor | combine(bbb_meteor, recursive=true) }}"
 
 - name: write back new meteor config
-  notify: restart bigbluebutton
   copy:
     content: '{{ meteor  | to_nice_yaml }}'
     dest: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
-
-- name: configure freeswitch to use SSL
-  lineinfile:
-    path: /etc/bigbluebutton/nginx/sip.nginx
-    regexp: "proxy_pass"
-    line: "        proxy_pass https://{{ ansible_default_ipv4.address }}:7443;"
-  notify: reload nginx
-
-- name: create ssl folder for nginx
-  file:
-    path: /etc/nginx/ssl
-    state: directory
-
-- name: Copy Predefined DH group ffdhe2048
-  copy:
-    src: ffdhe4096.pem
-    dest: /etc/nginx/ssl/ffdhe4096.pem
-    owner: root
-    group: root
     mode: '0644'
-  notify: reload nginx
-
-- name: copy bbb's nginx vhost
-  template:
-     src: bbb/bigbluebutton.j2
-     dest: /etc/nginx/sites-available/bigbluebutton
-  notify: reload nginx
+  notify:
+    - restart bigbluebutton
 
 - name: configure CPU and IO Scheduling in FreeSWITCH service
   lineinfile:
@@ -230,13 +109,22 @@
   with_items:
     - line: 'CPUSchedulingPolicy=rr'
       regexp: '^#?CPUSchedulingPolicy='
-      state: '{{ "present" if bbb_cpuschedule | bool else "absent" }}'
+      state: '{{ "present" if not bbb_container_compat | bool else "absent" }}'
     - line: 'IOSchedulingClass=realtime'
       regexp: '^#?IOSchedulingClass='
-      state: '{{ "present" if bbb_freeswitch_ioschedule_realtime | bool else "absent" }}'
+      state: '{{ "present" if not bbb_container_compat | bool else "absent" }}'
   notify:
   - restart freeswitch
   - reload systemd
+
+- name: Set FreeSWITCH local IPv4
+  replace:
+    path: /opt/freeswitch/etc/freeswitch/vars.xml
+    regexp:  '<X-PRE-PROCESS cmd="set" data="local_ip_v4=.*"\/>'
+    replace: '<X-PRE-PROCESS cmd="set" data="local_ip_v4={{ ansible_default_ipv4.address }}"/>'
+  notify:
+    - restart freeswitch
+    - reload nginx
 
 - name: enable IPv6 in FreeSWITCH service 1/2
   command:
@@ -255,7 +143,7 @@
   lineinfile:
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
     regexp: '<param name="listen-ip" value="[a-fA-F0-9.:]+"/>'
-    line: '<param name="listen-ip" value="::"/>'
+    line: '    <param name="listen-ip" value="::"/>'
   when: bbb_freeswitch_ipv6 | bool
   notify:
   - restart freeswitch
@@ -278,7 +166,7 @@
   lineinfile:
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
     regexp: '<param name="listen-ip" value="[a-fA-F0-9.:]+"/>'
-    line: '<param name="listen-ip" value="127.0.0.1"/>'
+    line: '    <param name="listen-ip" value="127.0.0.1"/>'
   when: not bbb_freeswitch_ipv6 | bool
   notify:
   - restart freeswitch
@@ -358,21 +246,29 @@
   when: not bbb_html5_node_options is defined
   notify: restart bigbluebutton
 
-- name: Create overrides directory for bbb-html5.service
+- name: Create overrides directory for bbb-html5 template services
   file:
-    path: /etc/systemd/system/bbb-html5.service.d
+    path: "/etc/systemd/system/{{ item }}.d"
     state: directory
-  when: bbb_cpuschedule == false
+    mode: '0644'
+  loop:
+    - bbb-html5-backend@.service
+    - bbb-html5-frontend@.service
+  when: bbb_container_compat
 
-- name: Save override file for bbb-html5.service
+- name: Save override file for bbb-html5 template services
   copy:
-    dest: /etc/systemd/system/bbb-html5.service.d/override.conf
+    dest: "/etc/systemd/system/{{ item }}.d/override.conf"
     content: |
       [Service]
       # Set no scheduling policy in LXC, see https://docs.bigbluebutton.org/2.2/troubleshooting.html#bbb-html5-fails-to-start-with-a-setscheduler-error
       CPUSchedulingPolicy=other
       Nice=-10
-  when: bbb_cpuschedule == false
+    mode: '0644'
+  loop:
+    - bbb-html5-backend@.service
+    - bbb-html5-frontend@.service
+  when: bbb_container_compat
   notify:
     - reload systemd
     - restart bigbluebutton
@@ -381,7 +277,19 @@
   file:
     path: /etc/systemd/system/bbb-html5.service.d/override.conf
     state: absent
-  when: bbb_cpuschedule == true
+    mode: '0644'
+  loop:
+    - bbb-html5-backend@.service
+    - bbb-html5-frontend@.service
+  when: not bbb_container_compat
   notify:
     - reload systemd
     - restart bigbluebutton
+
+- name: set default presentation
+  become: true
+  copy:
+    src: "{{ bbb_custom_presentation }}"
+    dest: "/var/www/bigbluebutton-default/{{ bbb_custom_presentation_name | default(bbb_custom_presentation) }}"
+    mode: '0644'
+  when: bbb_custom_presentation is defined

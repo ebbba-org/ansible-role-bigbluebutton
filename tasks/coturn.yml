@@ -9,11 +9,13 @@
   template:
     src: "turnserver.conf.j2"
     dest: /etc/turnserver.conf
+    mode: '0644'
 
 - name: Enable logrotate for coturn
   template:
     src: logrotate/coturn
     dest: /etc/logrotate.d/coturn
+    mode: '0644'
 
 - name: Enable coturn server in defaults
   lineinfile:

@@ -3,29 +3,13 @@
   file:
     path: "{{ bbb_monitoring_all_in_one_directory }}"
     state: directory
-
-- name: register bbb secret
-  command: bbb-conf --secret
-  changed_when: false
-  register: result
-  when: not bbb_secret is defined or not bbb_baseurl is defined
-
-- name: parse bbb secret
-  set_fact:
-    bbb_secret: "{{ result.stdout | regex_search('Secret: ([a-zA-Z0-9]*)', multiline=True) |  regex_replace('Secret: ') }}"
-    cacheable: true
-  when: not bbb_secret is defined
-
-- name: parse bbb baseurl
-  set_fact:
-    bbb_baseurl: "{{ result.stdout | regex_search('URL:\\s*(https?:\\/\\/.*)', multiline=True) |  regex_replace('URL: ') }}"
-    cacheable: true
-  when: not bbb_baseurl is defined
+    mode: '0644'
 
 - name: copy docker files into place
   template:
     src: "monitoring/{{ item }}.j2"
     dest: "{{ bbb_monitoring_all_in_one_directory }}/{{ item }}"
+    mode: '0644'
   with_items:
     - bbb_exporter_secrets.env
     - docker-compose.yaml
@@ -36,7 +20,19 @@
   template:
     src: "monitoring/monitoring.nginx.j2"
     dest: "/etc/bigbluebutton/nginx/monitoring.nginx"
+    mode: '0644'
   notify: reload nginx
+
+- name: Generate htpasswd file for external access if enabled
+  htpasswd:
+    path: "/etc/bigbluebutton/nginx/.htpasswd"
+    name: "{{ bbb_monitoring_all_in_one_htpasswd_user }}"
+    password: "{{ bbb_monitoring_all_in_one_htpasswd }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload nginx
+  when: bbb_monitoring_all_in_one_external
 
 - name: start monitoring
   docker_compose:

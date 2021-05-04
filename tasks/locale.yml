@@ -1,5 +1,6 @@
 ---
 - name: Ensure localisation files for '{{ bbb_system_locale }}' are available
+  become: true
   locale_gen:
     name: "{{ bbb_system_locale }}"
     state: present
@@ -16,6 +17,7 @@
         locale_lang: "{{ locale_status.stdout | regex_search('LANG=([0-9A-Za-z_.-]+)', '\\1') | default(['n/a'], true) | first }}"
 
     - name: Configure locale to '{{ bbb_system_locale }}'
+      become: true
       command: localectl set-locale LANG={{ bbb_system_locale }}
       changed_when: locale_lang != bbb_system_locale
   when: not (

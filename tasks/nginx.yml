@@ -1,0 +1,38 @@
+---
+
+- name: Ensure nginx is started and enabled to start at boot.
+  become: true
+  systemd:
+    name: nginx
+    enabled: true
+    state: started
+
+- name: create ssl folder for nginx
+  become: true
+  file:
+    path: /etc/nginx/ssl
+    mode: 0755
+    state: directory
+
+- name: copy predefined DH group ffdhe2048
+  become: true
+  copy:
+    src: ffdhe4096.pem
+    dest: /etc/nginx/ssl/ffdhe4096.pem
+    mode: '0644'
+  notify: reload nginx
+
+- name: copy bbb's nginx vhost
+  become: true
+  template:
+    src: nginx/vhost.conf
+    dest: /etc/nginx/sites-available/bigbluebutton
+    mode: '0644'
+  notify: reload nginx
+
+- name: remove nginx default config
+  become: true
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: reload nginx
