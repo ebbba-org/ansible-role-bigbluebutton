@@ -27,6 +27,21 @@
   when: bbb_webhooks_enable
   notify: restart bigbluebutton
 
+- name: install bbb api demos
+  apt:
+    name: "{{ bbb_demos }}"
+    state: "{{ bbb_state }}"
+  when: bbb_api_demos_enable
+
+- name: remove bbb api demos
+  apt:
+    name: "{{ bbb_demos }}"
+    state: "absent"
+    # Using autoremove because otherwise tomcat8
+    # would stay installed and keep running
+    autoremove: true
+  when: not bbb_api_demos_enable
+
 - name: upgrade packages
   apt:
     upgrade: "{{ bbb_upgrade_packages }}"
