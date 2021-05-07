@@ -1,0 +1,71 @@
+- name: Ensure NFS common is installed.
+  apt:
+    name:
+      - nfs-common
+    state: latest
+    update_cache: yes
+    cache_valid_time: 180
+
+- name: Ensure group "scalelite-spool" exists
+  group:
+    gid: 2000
+    name: scalelite-spool
+    state: present
+
+- name: adding existing user bigbluebutton to group scalelite-spool
+  user:
+    name: 'bigbluebutton'
+    groups:
+      - 'scalelite-spool'
+    append: yes
+
+- name: Create scalelite tmp-dir
+  file:
+    path: /mnt/scalelite-recordings/var/bigbluebutton
+    state: directory
+    mode: 0755
+    owner: bigbluebutton
+    group: bigbluebutton
+
+- name: set mountpoints
+  mount:
+    path: /mnt/scalelite-recordings/var/bigbluebutton/
+    src: '{{ bbb_recordings_nfs_mount }}'
+    fstype: nfs
+    opts: rw,nfsvers=3,sec=sys,hard,proto=tcp
+    passno: '2'
+    state: mounted
+
+- name: Install scalelite.yml
+  template:
+    src: 'recordings/scalelite.yml'
+    dest: /usr/local/bigbluebutton/core/scripts
+    owner: root
+    group: root
+    force: true
+    mode: '0755'
+
+- name: Install scalelite_post_publish.rb
+  template:
+    src: 'recordings/scalelite_post_publish.rb'
+    dest: /usr/local/bigbluebutton/core/scripts/post_publish
+    owner: root
+    group: root
+    force: true
+    mode: '0755'
+
+- name: change bigbluebutton cronjob unrecorded_days
+  replace:
+    path: /etc/cron.daily/bigbluebutton
+    regexp: 'unrecorded_days=.*'
+    replace: 'unrecorded_days=5'
+
+- name: change bigbluebutton cronjob published_days
+  replace:
+    path: /etc/cron.daily/bigbluebutton
+    regexp: 'published_days=.*'
+    replace: 'published_days=5'
+
+- name: Just force systemd to reread configs
+  systemd:
+    daemon_reload: yes

@@ -45,6 +45,9 @@
         pull: true
         project_src: /root/greenlight/
 
+    - name: Wait for docker-container
+      pause:
+        seconds: 60
     # https://docs.bigbluebutton.org/greenlight/gl-admin.html#creating-accounts
     - name: Create greenlight users
       command: "docker exec greenlight-v2 bundle exec rake user:create[\"{{ item.name }}\",\"{{ item.email }}\",\"{{ item.password }}\",\"{{ item.type }}\"]"

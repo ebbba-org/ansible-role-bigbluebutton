@@ -47,3 +47,10 @@
         - docker-compose==1.24.1
       state: "{{ bbb_state }}"
   when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool
+
+- name: Install nfs-common
+  apt:
+    name:
+      - nfs-common
+    state: latest
+  when: not bbb_disable_recordings | bool

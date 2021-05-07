@@ -22,6 +22,9 @@
 
 - import_tasks: dial-in/main.yml
 
+- import_tasks: recordings.yml
+  when: not bbb_disable_recordings | bool and bbb_recordings_nfs_mount | length > 0
+
 - import_tasks: greenlight.yml
   when: bbb_greenlight_enable | bool
 

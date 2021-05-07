@@ -45,6 +45,8 @@ bbb_freeswitch_ipv6: true
 bbb_freeswitch_ip_address: "{{ ansible_default_ipv4.address }}"
 bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 
+# BBB Recordings
+bbb_recordings_nfs_mount: '131.173.80.143:/var/nfs/general'
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
 bbb_guestpolicy: ALWAYS_ACCEPT
 
