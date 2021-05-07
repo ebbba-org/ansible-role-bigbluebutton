@@ -36,7 +36,6 @@ bbb_greenlight_users: []
 bbb_webhooks_enable: false
 bbb_allow_mail_notifications: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
-bbb_disable_recordings: false
 bbb_api_demos_enable: false
 bbb_mute_on_start: false
 bbb_app_log_level: 'DEBUG'
@@ -46,7 +45,8 @@ bbb_freeswitch_ip_address: "{{ ansible_default_ipv4.address }}"
 bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 
 # BBB Recordings
-bbb_recordings_nfs_mount: '131.173.80.143:/var/nfs/general'
+bbb_disable_recordings: false
+bbb_recordings_nfs_mount: ''
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
 bbb_guestpolicy: ALWAYS_ACCEPT
 
