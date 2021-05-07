@@ -53,19 +53,3 @@
     group: root
     force: true
     mode: '0755'
-
-- name: change bigbluebutton cronjob unrecorded_days
-  replace:
-    path: /etc/cron.daily/bigbluebutton
-    regexp: 'unrecorded_days=.*'
-    replace: 'unrecorded_days=5'
-
-- name: change bigbluebutton cronjob published_days
-  replace:
-    path: /etc/cron.daily/bigbluebutton
-    regexp: 'published_days=.*'
-    replace: 'published_days=5'
-
-- name: Just force systemd to reread configs
-  systemd:
-    daemon_reload: yes
