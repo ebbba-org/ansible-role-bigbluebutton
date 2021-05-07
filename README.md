@@ -21,7 +21,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_letsencrypt_email` | E-mail for use with letsencrypt | | _(required when letsencrypt is enabled)_ |
 | `bbb_nginx_privacy` | only log errors not access | `yes` |
 | `bbb_nginx_listen_https` | nginx: use https | `yes` | This is useful for a reverse proxy configuration where the BBB server is behind a load balancing server like haproxy that does SSL termination |
-| `bbb_nginx_root` | Defaut nginx www path of BigBlueButton | `/var/www/bigbluebutton-default` |
+| `bbb_nginx_root` | Default nginx www path of BigBlueButton | `/var/www/bigbluebutton-default` | Set the default nginx `www` path of BigBlueButton |
 | bbb_ssl_cert | Define the ssl cert location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"` | |
 | bbb_ssl_key | Define the ssl key location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"` | |
 | bbb_own_cert | Define the name of the cert file which shall be used | `undefined` | |

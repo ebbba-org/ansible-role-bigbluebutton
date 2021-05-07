@@ -290,6 +290,6 @@
   become: true
   copy:
     src: "{{ bbb_custom_presentation }}"
-    dest: "{{ bbb_nginx_root }}/{{ bbb_custom_presentation_name | default(bbb_custom_presentation) }}"
+    dest: "{{ bbb_nginx_root | regex_replace('\\/$', ''}}/{{ bbb_custom_presentation_name | default(bbb_custom_presentation) }}"
     mode: '0644'
   when: bbb_custom_presentation is defined
