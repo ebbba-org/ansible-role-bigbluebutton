@@ -111,8 +111,8 @@ bbb_ntp_cron_minute: "0"
 
 # bbb_freeswitch_socket_password needs to be defined by the User
 # bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
-bbb_html5_backend_processes: 1
-bbb_html5_frontend_processes: 1
+bbb_html5_backend_processes: 2
+bbb_html5_frontend_processes: 2
 
 bbb_webrtc_sfu_multikurento:
   balancing-strategy: MEDIA_TYPE

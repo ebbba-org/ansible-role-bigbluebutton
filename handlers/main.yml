@@ -26,21 +26,6 @@
     name: freeswitch
     state: restarted
 
-- name: reload freeswitch xml
-  become: true
-  command:
-    cmd: "fs_clibbb -x 'reloadxml'"
-
-- name: reload freeswitch acls
-  become: true
-  command:
-    cmd: "fs_clibbb -x 'reloadacl'"
-
-- name: restart sofia dialin profile
-  become: true
-  command:
-    cmd: "fs_clibbb -x 'sofia profile dialin start'"
-
 - name: restart mongo
   become: true
   systemd:
@@ -77,13 +62,6 @@
   become: true
   systemd:
     name: bbb-web
-    state: restarted
-
-- name: reload bbb-web
-  become: true
-  systemd:
-    name: bbb-web
-    state: reloaded
 
 - name: restart bbb-webrtc-sfu
   become: true
@@ -91,21 +69,11 @@
     name: bbb-webrtc-sfu
     state: restarted
 
-- name: restart bbb-apps-akka
-  become: true
-  systemd:
-    name: bbb-apps-akka
-    state: restarted
-
 - name: reload apparmor
   become: true
   systemd:
     name: apparmor
     state: reloaded
-
-- name: update grub
-  become: true
-  command: update-grub
 
 - name: restart monitoring
   docker_compose:
