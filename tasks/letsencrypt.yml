@@ -27,12 +27,12 @@
 - name: Generate Certificates with letsencrypt expire notifications
   command: certbot certonly -d {{ bbb_hostname }} --email {{ bbb_letsencrypt_email }} --agree-tos -n --nginx
   notify: reload nginx
-  when: not certbot_certificate_file_path.stat.exists and bbb_letsencrypt_email is defined
+  when: not certbot_certificate_file_path.stat.exists and bbb_letsencrypt_email is defined and not bbb_letsencrypt_staging | bool
 
 - name: Generate Certificates without letsencrypt expire notifications
   command: certbot certonly -d {{ bbb_hostname }} --register-unsafely-without-email --agree-tos -n --nginx
   notify: reload nginx
-  when: not certbot_certificate_file_path.stat.exists and bbb_letsencrypt_email is not defined
+  when: not certbot_certificate_file_path.stat.exists and bbb_letsencrypt_email is not defined and not bbb_letsencrypt_staging | bool
 
 - name: Generate test Certificates with letsencrypt expire notifications
   command: certbot certonly -d {{ bbb_hostname }} --email {{ bbb_letsencrypt_email }} --agree-tos -n --nginx --test-cert
