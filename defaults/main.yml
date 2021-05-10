@@ -184,28 +184,35 @@ bbb_firewall_ufw:
     - 172.17.0.0/16
     - 127.0.0.1/23
   rules:
-    # SSH is allowed by default and limited
-    # Allow port 443 - Used by NGINX
-    - rule: allow
-      port: "443"
-      proto: any
-    # Allow port 80 - Used by NGINX
-    - rule: allow
-      port: "80"
-      proto: any
-    # Allow coturn http port - default used
-    - rule: allow
-      port: "{{ bbb_coturn_port }}"
-      proto: any
-    # Allow coturn https (TLS) port - default used
-    - rule: allow
-      port: "{{ bbb_coturn_port_tls }}"
-      proto: any
-    # Allow coturn relay ports range - default used
-    - rule: allow
-      port: "{{ bbb_coturn_min_port }}:{{ bbb_coturn_max_port }}"
-      proto: udp
-    # Allow BigBlueButton 16384-32768 FreeSWITCH/HTML5 client RTP
-    - rule: allow
-      port: 16384:32768
-      proto: udp
+  # SSH is allowed by default and limited
+    nginx:
+      # Allow port 443 - Used by NGINX
+      - rule: allow
+        port: "443"
+        proto: any
+      # Allow port 80 - Used by NGINX
+      - rule: allow
+        port: "80"
+        proto: any
+    coturn:
+      # Allow coturn http port - default used
+      - rule: allow
+        port: "{{ bbb_coturn_port }}"
+        proto: any
+      # Allow coturn https (TLS) port - default used
+      - rule: allow
+        port: "{{ bbb_coturn_port_tls }}"
+        proto: any
+      # Allow coturn relay ports range - default used
+      - rule: allow
+        port: "{{ bbb_coturn_min_port }}:{{ bbb_coturn_max_port }}"
+        proto: udp
+    bigbluebutton:
+      # Allow BigBlueButton 16384-32768 FreeSWITCH/HTML5 client RTP
+      - rule: allow
+        port: 16384:32768
+        proto: udp
+    default:
+      - rule: allow
+        port: 22
+        proto: tcp

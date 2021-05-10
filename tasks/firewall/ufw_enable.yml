@@ -20,11 +20,31 @@
       - "'logging' in bbb_firewall_ufw"
       - "bbb_firewall_ufw['logging']"
 
-  - name: Setup custom rules
+  - name: Setup default rules
     community.general.ufw: "{{ item }}"
-    with_items: "{{ bbb_firewall_ufw['rules'] }}"
+    with_items: "{{ bbb_firewall_ufw['rules']['default'] }}"
+    when:
+      - "'rules' in bbb_firewall_ufw and 'default' in bbb_firewall_ufw['rules']"
+
+  - name: Setup nginx rules
+    community.general.ufw: "{{ item }}"
+    with_items: "{{ bbb_firewall_ufw['rules']['nginx'] }}"
+    when:
+      - "'rules' in bbb_firewall_ufw and 'nginx' in bbb_firewall_ufw['rules']"
+
+  - name: Setup coturn rules
+    community.general.ufw: "{{ item }}"
+    with_items: "{{ bbb_firewall_ufw['rules']['coturn'] }}"
     when:
       - "'rules' in bbb_firewall_ufw"
+      - "'coturn' in bbb_firewall_ufw['rules']"
+      - bbb_coturn_enable
+
+  - name: Setup bigbluebutton rules
+    community.general.ufw: "{{ item }}"
+    with_items: "{{ bbb_firewall_ufw['rules']['bigbluebutton'] }}"
+    when:
+      - "'rules' in bbb_firewall_ufw and 'bigbluebutton' in bbb_firewall_ufw['rules']"
 
   - name: Allow all outgoing traffic for allow_networks
     community.general.ufw:
