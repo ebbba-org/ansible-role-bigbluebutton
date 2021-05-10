@@ -2,8 +2,11 @@
 
 - import_tasks: checkvars.yml
 
-- import_tasks: ufw.yml
-  when: "bbb_firewall_ufw['enabled']"
+- import_tasks: firewall/ufw_enable.yml
+  when: bbb_firewall_ufw['enabled']
+
+- import_tasks: firewall/ufw_disable.yml
+  when: not bbb_firewall_ufw['enabled']
 
 - import_tasks: locale.yml
 - import_tasks: repositories.yml
