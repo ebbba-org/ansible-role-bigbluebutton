@@ -5,6 +5,7 @@ bbb_upgrade_packages: "{% if bbb_state == 'latest'%}yes{% else %}no{%endif%}"
 bbb_letsencrypt_enable: true
 bbb_nginx_privacy: true
 bbb_nginx_listen_https: true
+bbb_nginx_root: /var/www/bigbluebutton-default
 
 bbb_coturn_enable: true
 bbb_coturn_port: 3478
