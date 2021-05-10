@@ -18,6 +18,14 @@
   lineinfile:
     path: /etc/letsencrypt/cli.ini
     line: 'server = https://acme-v02.api.letsencrypt.org/directory'
+  when: not bbb_letsencrypt_staging | bool
+
+- name: Change Let's Encrypt API to v2 staging environment
+  become: true
+  lineinfile:
+    path: /etc/letsencrypt/cli.ini
+    line: 'server = https://acme-staging-v02.api.letsencrypt.org/directory'
+  when: bbb_letsencrypt_staging | bool
 
 - name: Register certbot certificate file
   stat:
@@ -27,19 +35,9 @@
 - name: Generate Certificates with letsencrypt expire notifications
   command: certbot certonly -d {{ bbb_hostname }} --email {{ bbb_letsencrypt_email }} --agree-tos -n --nginx
   notify: reload nginx
-  when: not certbot_certificate_file_path.stat.exists and bbb_letsencrypt_email is defined and not bbb_letsencrypt_staging | bool
+  when: not certbot_certificate_file_path.stat.exists and bbb_letsencrypt_email is defined
 
 - name: Generate Certificates without letsencrypt expire notifications
   command: certbot certonly -d {{ bbb_hostname }} --register-unsafely-without-email --agree-tos -n --nginx
   notify: reload nginx
-  when: not certbot_certificate_file_path.stat.exists and bbb_letsencrypt_email is not defined and not bbb_letsencrypt_staging | bool
-
-- name: Generate test Certificates with letsencrypt expire notifications
-  command: certbot certonly -d {{ bbb_hostname }} --email {{ bbb_letsencrypt_email }} --agree-tos -n --nginx --test-cert
-  notify: reload nginx
-  when: not certbot_certificate_file_path.stat.exists and bbb_letsencrypt_email is defined and bbb_letsencrypt_staging | bool
-
-- name: Generate test Certificates without letsencrypt expire notifications
-  command: certbot certonly -d {{ bbb_hostname }} --register-unsafely-without-email --agree-tos -n --nginx --test-cert
-  notify: reload nginx
-  when: not certbot_certificate_file_path.stat.exists and bbb_letsencrypt_email is not defined and bbb_letsencrypt_staging | bool
+  when: not certbot_certificate_file_path.stat.exists and bbb_letsencrypt_email is not defined
