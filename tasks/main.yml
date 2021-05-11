@@ -36,7 +36,7 @@
   when: bbb_greenlight_enable | bool
 
 - import_tasks: monitoring/all_in_one.yml
-  when: bbb_monitoring_all_in_one_enable | bool
+  when: (bbb_monitoring_all_in_one_enable | bool) or (bbb_monitoring_all_in_one_external | bool)
 
 - import_tasks: webrtc-sfu.yml
 - import_tasks: bbb-web.yml

@@ -16,6 +16,14 @@
     - prometheus.yaml
   notify: restart monitoring
 
+- name: install prometheus
+  template:
+    src: "monitoring/prometheus.yaml.j2"
+    dest: "{{ bbb_monitoring_all_in_one_directory }}/prometheus.yaml"
+    mode: '0644'
+  notify: restart monitoring
+  when: bbb_monitoring_all_in_one_enable | bool
+
 - name: copy monitoring nginx configuration file
   template:
     src: "monitoring/monitoring.nginx.j2"
@@ -33,7 +41,7 @@
     mode: 0644
   no_log: true
   notify: reload nginx
-  when: bbb_monitoring_all_in_one_external
+  when: bbb_monitoring_all_in_one_external and not bbb_monitoring_use_nginx_access_module | bool
 
 - name: start monitoring
   docker_compose:
