@@ -25,6 +25,12 @@
   when: not ((((bbb_meteor | default({})).public | default({})).media | default({})).sipjsHackViaWs  | default({})) | bool
   notify: reload nginx
 
+- name: Set maximum presentation file size in web.nginx
+  replace:
+    path: /etc/bigbluebutton/nginx/web.nginx
+    regexp: 'client_max_body_size.*'
+    replace: 'client_max_body_size       {{ (bbb_max_file_size_upload/1000000)|int|abs }}m;'
+
 - name: set amount of html5 back- and frontends
   become: true
   template:
