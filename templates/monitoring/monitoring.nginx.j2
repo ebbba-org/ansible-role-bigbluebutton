@@ -1,20 +1,36 @@
-{% if not bbb_monitoring_all_in_one_external %}
+{% if not bbb_monitoring_all_in_one_external | bool %}
 location /monitoring/ {
   proxy_pass http://127.0.0.1:{{ bbb_monitoring_all_in_one_port }}/;
   include proxy_params;
 }
 {% else %}
-location /mon/node/ {
+location {{ bbb_monitoring_metrics_endpoint }} {
   proxy_pass http://127.0.0.1:9100/metrics;
-  auth_basic "BigBlueButton Exporter";
-  auth_basic_user_file /etc/bigbluebutton/nginx/.htpasswd;
+  {% if bbb_monitoring_use_nginx_access_module | bool %}
+{% for item in bbb_monitoring_ips %}
+    allow {{ item.address }};
+{% endfor %}
+    # drop rest of the world
+    deny all;
+  {% else %}
+    auth_basic "BigBlueButton Exporter";
+    auth_basic_user_file /etc/bigbluebutton/nginx/.htpasswd;
+  {% endif %}
   include proxy_params;
 }
 
-location /mon/bbb/ {
+location {{ bbb_monitoring_node_exporter_endpoint }} {
   proxy_pass http://127.0.0.1:9688/;
-  auth_basic "BigBlueButton Exporter";
-  auth_basic_user_file /etc/bigbluebutton/nginx/.htpasswd;
+  {% if bbb_monitoring_use_nginx_access_module | bool %}
+{% for item in bbb_monitoring_ips %}
+    allow {{ item.address }};
+{% endfor %}
+    # drop rest of the world
+    deny all;
+  {% else %}
+    auth_basic "BigBlueButton Exporter";
+    auth_basic_user_file /etc/bigbluebutton/nginx/.htpasswd;
+  {% endif %}
   include proxy_params;
 }
 {% endif %}

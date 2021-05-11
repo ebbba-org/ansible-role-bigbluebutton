@@ -28,11 +28,11 @@
     - name: bbb_monitoring_all_in_one_htpasswd_user
       debug:
         msg: "value: {{ bbb_monitoring_all_in_one_htpasswd_user }}"
-      when: bbb_monitoring_all_in_one_external
+      when: bbb_monitoring_all_in_one_external and not bbb_monitoring_use_nginx_access_module | bool
     - name: bbb_monitoring_all_in_one_htpasswd
       debug:
         msg: "value: {{ bbb_monitoring_all_in_one_htpasswd }}"
-      when: bbb_monitoring_all_in_one_external
+      when: bbb_monitoring_all_in_one_external and not bbb_monitoring_use_nginx_access_module | bool
   rescue:
     - name: CHECK YOUR VARIABLES!
       debug:
