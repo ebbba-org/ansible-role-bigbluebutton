@@ -1,3 +1,4 @@
+	# https://github.com/bigbluebutton/bigbluebutton/blob/v2.3.x-release/bigbluebutton-web/bbb-web.nginx
 	# Handle request to bbb-web running within a SpringBoot Tomcat embedded servlet container.  This is for BBB-API and Presentation.
 	location /bigbluebutton {
 		proxy_http_version 1.1;
@@ -21,7 +22,7 @@
 		        add_header P3P 'CP="No P3P policy available"';
 
 			# high limit for presentation as bbb-web will reject upload if larger than configured
-			client_max_body_size       100m;
+			client_max_body_size       1000m;
 			client_body_buffer_size    128k;
 
 			proxy_connect_timeout      90;
@@ -70,7 +71,7 @@
 			proxy_set_header	X-Original-Content-Length $http_content_length;
 
 			# high limit for presentation as bbb-web will reject upload if larger than configured
-			client_max_body_size       {{ (bbb_max_file_size_upload/1000000)|int|abs }}m;
+			client_max_body_size       1000m;
 			client_body_buffer_size    128k;
 
 			proxy_pass_request_body off;
