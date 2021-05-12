@@ -94,6 +94,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_html5_backend_processes` | amount of html5 backend processes | 1 | min = 1; max = 4 |
 | `bbb_html5_frontend_processes` | amount of html5 frontend processes | 1 | min = 1; max = 4; or 0 to let the same process do front- and backend (2.2 behavior) |
 | `bbb_container_compat` | Compatibility with unprivileged containers | `false` | Enabling this option allows to deploy BBB into a unprivileged container |
+| `bbb_firewall_ufw` | A dict of rules for the ufw | see `defaults/main.yml` | can also be used to allow/deny more/less |
 
 ### Extra options for Greenlight
 
@@ -312,6 +313,14 @@ bbb_dialin_overwrite_footer: true
 
 - [geerlingguy.nodejs](https://github.com/geerlingguy/ansible-role-nodejs)
 - [geerlingguy.docker](https://github.com/geerlingguy/ansible-role-docker)
+
+## Pitfalls
+
+### Greenlight - Server Error: "Invalid BigBlueButton Endpoint and Secret"
+
+check your `/etc/hosts` file if your dns name (example `meet.domain.tld`) has the IP `127.0.1.1`.
+Docker will use the internal system DNS to resolve `meet.domain.tld` to `127.0.1.1` which will result in this error.
+Edit this line and replace `127.0.1.1` with your public IP.
 
 ## Example Playbook
 
