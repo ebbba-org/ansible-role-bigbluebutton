@@ -23,10 +23,10 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_nginx_privacy` | only log errors not access | `yes` |
 | `bbb_nginx_listen_https` | nginx: use https | `yes` | This is useful for a reverse proxy configuration where the BBB server is behind a load balancing server like haproxy that does SSL termination |
 | `bbb_nginx_root` | Default nginx www path of BigBlueButton | `/var/www/bigbluebutton-default` | Set the default nginx `www` path of BigBlueButton |
-| bbb_ssl_cert | Define the ssl cert location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"` | |
-| bbb_ssl_key | Define the ssl key location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"` | |
-| bbb_own_cert | Define the name of the cert file which shall be used | `undefined` | |
-| bbb_own_key | Define the name of the key file which shall be used | `undefined` | |
+| `bbb_ssl_cert` | Define the ssl cert location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"` | |
+| `bbb_ssl_key` | Define the ssl key location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"` | |
+| `bbb_own_cert` | Define the name of the cert file which shall be used | `undefined` | |
+| `bbb_own_key` | Define the name of the key file which shall be used | `undefined` | |
 | `bbb_default_welcome_message` | Welcome Message in the client | Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others. | Needs to be encoded with `native2ascii -encoding UTF8`! |
 | `bbb_default_welcome_message_footer` | Footer of the welcome message | This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>. | Encoded as the welcome message |
 | `bbb_default_presentation` | Location of default presentation | `${bigbluebutton.web.serverURL}/default.pdf` |
@@ -48,7 +48,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_greenlight_secret` | Secret for greenlight _(required when using greenlight)_ |  | can be generated with `openssl rand -hex 64` |
 | `bbb_greenlight_db_password` | Password for greenlight's database  _(required when using greenlight)_ | | can be generated with `openssl rand -hex 16` |
 | `bbb_greenlight_default_registration` | Registration option open(default), invite or approval | `open` | |
-| `bbb_greenlight_users` | Greenlight users' list to create. No email notification will be triggered. As it contains passwords, recommend to put in ansible-vault. for more details see defaults/main.yml | `[]` |
+| `bbb_greenlight_users` | Greenlight users' list to create. No email notification will be triggered. As it contains passwords, recommend to put in ansible-vault. For more details see defaults/main.yml | `[]` |
 | `bbb_allow_mail_notifications`  | Set this to true if you want GreenLight to send verification emails upon the creation of a new account | `true` |
 | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
 | `bbb_api_demos_enable` | enable installation of the api demos | `no` | |
@@ -319,7 +319,7 @@ bbb_dialin_overwrite_footer: true
 
 ### Greenlight - Server Error: "Invalid BigBlueButton Endpoint and Secret"
 
-check your `/etc/hosts` file if your dns name (example `meet.domain.tld`) has the IP `127.0.1.1`.
+Check your `/etc/hosts` file if your dns name (example `meet.domain.tld`) has the IP `127.0.1.1`.
 Docker will use the internal system DNS to resolve `meet.domain.tld` to `127.0.1.1` which will result in this error.
 Edit this line and replace `127.0.1.1` with your public IP.
 
@@ -330,7 +330,7 @@ This is an example, of how to use this role. Warning: the value of the Variables
 ```yaml
     - hosts: servers
       roles:
-         - { role: n0emis.bigbluebutton, bbb_turn_secret: ee8d093109a9b273, bbb_greenlight_secret: 107308d54ff4a5f, bbb_greenlight_db_password: 2585c27c785e8895ec, bbb_letsencrypt_email: mail@example.com }
+         - { role: ebbba.bigbluebutton, bbb_turn_secret: ee8d093109a9b273, bbb_greenlight_secret: 107308d54ff4a5f, bbb_greenlight_db_password: 2585c27c785e8895ec, bbb_letsencrypt_email: mail@example.com }
 ```
 
 ## License
