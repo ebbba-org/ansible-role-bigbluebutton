@@ -13,11 +13,11 @@
     update_cache: true
     state: "{{ bbb_state }}"
 
-- name: Change Let's Encrypt API to v2
+- name: Set Let's Encrypt API
   become: true
   lineinfile:
     path: /etc/letsencrypt/cli.ini
-    line: 'server = https://acme-v02.api.letsencrypt.org/directory'
+    line: "server = {{ bbb_letsencrypt_api }}"
 
 - name: Register certbot certificate file
   stat:
