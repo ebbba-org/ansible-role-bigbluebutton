@@ -12,6 +12,7 @@ bbb_required_packages:
   - openjdk-8-jdk
   - python3-passlib
   - python-passlib
+  - net-tools
 
 bbb_and_dependencies:
   - mongodb-org
