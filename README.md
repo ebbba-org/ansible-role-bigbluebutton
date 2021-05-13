@@ -84,6 +84,9 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_dialin_overwrite_footer` | Set the default dial-in footer instead of `bbb_default_welcome_message_footer` | `false` | |
 | `bbb_dialin_footer` | The default dial-in notice, if you want to customize it, it is recommended to change `bbb_default_welcome_message_footer` instead | `<br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.` | |
 | `bbb_guestpolicy` | How guest can access | `ALWAYS_ACCEPT` | acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR |
+| `bbb_default_max_users`| Default maximum number of users a meeting can have. | 0| |
+| `bbb_max_num_pages`| Maximum number of pages allowed for an uploaded presentation (default 100). | 100| |
+| `bbb_max_file_size_upload`| Maximum file size for an uploaded presentation (default 30MB) | 30000000| |
 | `bbb_ntp_cron` | Disable automatic time synchronisation and instead configure a cronjob | `false` |
 | `bbb_ntp_cron_day` | Day of the month the time-sync job should run | `*` |
 | `bbb_ntp_cron_hour` | Hour when the time-sync job should run | `5` |
