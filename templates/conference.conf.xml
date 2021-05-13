@@ -69,9 +69,18 @@
       <!-- File to play to acknowledge failure -->
       <!-- <param name="nack-sound" value="beeperr.wav"/> -->
       <!-- File to play to acknowledge muted -->
+      {% if bbb_freeswitch_muted_sound is true %}
       <param name="muted-sound" value="conference/conf-muted.wav"/>
+      {% else %}
+      <!-- <param name="muted-sound" value="conference/conf-muted.wav"/> -->
+      {% endif %}
+
       <!-- File to play to acknowledge unmuted -->
+      {% if bbb_freeswitch_unmuted_sound is true %}
       <param name="unmuted-sound" value="conference/conf-unmuted.wav"/>
+      {% else %}
+      <!-- <param name="unmuted-sound" value="conference/conf-unmuted.wav"/> -->
+      {% endif %}
       <!-- File to play if you are alone in the conference -->
       <!-- <param name="alone-sound" value="conference/conf-alone.wav"/> -->
       <!-- File to play endlessly (nobody will ever be able to talk) -->
