@@ -95,9 +95,9 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_html5_frontend_processes` | amount of html5 frontend processes | 1 | min = 1; max = 4; or 0 to let the same process do front- and backend (2.2 behavior) |
 | `bbb_container_compat` | Compatibility with unprivileged containers | `false` | Enabling this option allows to deploy BBB into a unprivileged container |
 | `bbb_firewall_ufw` | A dict of rules for the ufw | see `defaults/main.yml` | can also be used to allow/deny more/less |
-| `bbb_breakout_rooms_enabled` | Enable or disable breakout | true |  |
-| `bbb_breakout_rooms_record` | Enable or disable recording in breakout | false |  |
-| `bbb_breakout_rooms_privatechat_enabled` | Enable or disable private chat in breakout | true |  |
+| `bbb_breakout_rooms_enabled` | Enable or disable breakout | `true` |  |
+| `bbb_breakout_rooms_record` | Enable or disable recording in breakout | `false` |  |
+| `bbb_breakout_rooms_privatechat_enabled` | Enable or disable private chat in breakout | `true` |  |
 
 ### Extra options for Greenlight
 
