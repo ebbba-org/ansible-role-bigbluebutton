@@ -294,26 +294,14 @@
     mode: '0644'
   when: bbb_custom_presentation is defined
 
-  - name: Set the retention period for presentations, red5, kurento, and freeswitch caches
-  lineinfile:
-    path: /etc/cron.daily/bigbluebutton
-    regexp: '^history'
-    line: 'history={{ bbb_cron_history }}'
-
-- name: Set the retention period of recordings for meetings with no recording markers
-  lineinfile:
-    path: /etc/cron.daily/bigbluebutton
-    regexp: '^unrecorded_days'
-    line: 'unrecorded_days={{ bbb_cron_unrecorded_days }}'
-
-- name: Set the retention period of recordings’ raw data
-  lineinfile:
-    path: /etc/cron.daily/bigbluebutton
-    regexp: '^published_days'
-    line: 'published_days={{ bbb_cron_published_days }}'
-
-- name: Set the retention period of old log files
-  lineinfile:
-    path: /etc/cron.daily/bigbluebutton
-    regexp: '^log_history'
-    line: 'log_history={{ bbb_cron_log_history }}'
+- name: Set cron.daily specifications
+  become: true
+  template:
+    src: bbb-config/cron.daily/bigbluebutton
+    dest: /etc/cron.daily/bigbluebutton
+    mode: '0644'
+    owner: root
+    group: root
+  notify:
+    - reload systemd
+    - restart bigbluebutton
