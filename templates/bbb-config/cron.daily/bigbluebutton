@@ -19,6 +19,11 @@
 # 
 # File: https://github.com/bigbluebutton/bigbluebutton/blob/develop/bigbluebutton-config/cron.daily/bigbluebutton
 
+test -x /var/bigbluebutton || exit 0
+
+#
+# How N days back to keep files
+#
 history={{ bbb_cron_history }}
 unrecorded_days={{ bbb_cron_unrecorded_days }}
 published_days={{ bbb_cron_published_days }}
