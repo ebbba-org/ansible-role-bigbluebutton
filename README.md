@@ -86,7 +86,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_guestpolicy` | How guest can access | `ALWAYS_ACCEPT` | acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR |
 | `bbb_default_max_users`| Default maximum number of users a meeting can have. | 0| |
 | `bbb_max_num_pages`| Maximum number of pages allowed for an uploaded presentation (default 100). | 100| |
-| `bbb_max_file_size_upload`| Maximum file size for an uploaded presentation (default 30MB) | 30000000| |
+| `bbb_max_file_size_upload`| Maximum file size for an uploaded presentation (default 30MB - number must be in byte) | 30000000| |
 | `bbb_ntp_cron` | Disable automatic time synchronisation and instead configure a cronjob | `false` |
 | `bbb_ntp_cron_day` | Day of the month the time-sync job should run | `*` |
 | `bbb_ntp_cron_hour` | Hour when the time-sync job should run | `5` |
