@@ -151,6 +151,8 @@ bbb_webrtc_sfu_multikurento:
         request_timeout: 30000
         response_timeout: 30000
   freeswitch:
+    sip_ip: "{{ ansible_default_ipv4.address }}"
+    ip: "{{ ansible_default_ipv4.address }}"
     esl_password: "{{ bbb_freeswitch_socket_password }}"
   log:
     level: warn
