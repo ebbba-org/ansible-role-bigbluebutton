@@ -35,6 +35,12 @@
     mode: '0600'
   notify: restart bigbluebutton
 
+- name: Encode welcome message and footer message to UTF8
+  command: native2ascii -encoding UTF8 /etc/bigbluebutton/bbb-web.properties /etc/bigbluebutton/bbb-web.properties
+  become: true
+  notify:
+    - restart bigbluebutton
+
 - name: register bbb secret
   command: bbb-conf --secret
   changed_when: false
