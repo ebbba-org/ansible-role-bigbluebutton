@@ -46,7 +46,10 @@ bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 
 # BBB Recordings
 bbb_disable_recordings: false
-bbb_recordings_nfs_mount: ''
+#bbb_recordings_nfs_mount: ''
+bbb_recordings_nfs:
+  enable: false
+  path: ""
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
 bbb_guestpolicy: ALWAYS_ACCEPT
 

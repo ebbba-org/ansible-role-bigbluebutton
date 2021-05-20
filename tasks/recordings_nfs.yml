@@ -1,10 +1,9 @@
-- name: Ensure NFS common is installed.
+- name: Install nfs-common
   apt:
     name:
       - nfs-common
     state: latest
-    update_cache: yes
-    cache_valid_time: 180
+  when: bbb_recordings_nfs['enable'] and not bbb_disable_recordings
 
 - name: Ensure group "scalelite-spool" exists
   group:
@@ -30,7 +29,7 @@
 - name: set mountpoints
   mount:
     path: /mnt/scalelite-recordings/var/bigbluebutton/
-    src: '{{ bbb_recordings_nfs_mount }}'
+    src: "{{ bbb_recordings_nfs['path'] }}"
     fstype: nfs
     opts: rw,nfsvers=3,sec=sys,hard,proto=tcp
     passno: '2'
