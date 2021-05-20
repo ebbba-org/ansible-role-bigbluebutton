@@ -221,4 +221,5 @@ bbb_firewall_ufw:
         port: 22
         proto: tcp
 
-bbb_docker_compose_version: 1.24.1
+# https://pypi.org/project/docker-compose/#history
+bbb_docker_compose_version: 1.29.2
