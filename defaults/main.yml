@@ -1,7 +1,7 @@
 ---
 bbb_hostname: "{{ ansible_fqdn }}"
 bbb_state: "present"
-bbb_upgrade_packages: "{% if bbb_state == 'latest'%}yes{% else %}no{%endif%}"
+bbb_upgrade_packages: "{{ 'yes' if bbb_state == 'latest' else 'no' }}"
 bbb_letsencrypt_enable: true
 bbb_letsencrypt_api: https://acme-v02.api.letsencrypt.org/directory
 bbb_nginx_privacy: true
@@ -218,5 +218,5 @@ bbb_firewall_ufw:
         proto: udp
     default:
       - rule: allow
-        port: 22
+        port: '22'
         proto: tcp
