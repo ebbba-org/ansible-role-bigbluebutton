@@ -38,7 +38,7 @@
     src: kurento/kurento-media-server@.service
     dest: "/usr/lib/systemd/system/kurento-media-server-{{ item }}.service"
     mode: '0644'
-  loop: [ 8888, 8889, 8890 ]
+  loop: [ '8888', '8889', '8890' ]
   notify:
     - stop kurento
     - reload systemd
@@ -48,8 +48,8 @@
   replace:
     path: "/usr/lib/systemd/system/kurento-media-server-{{ item }}.service"
     regexp: '%i'
-    replace: '{{ item }}'
-  loop: [ 8888, 8889, 8890 ]
+    replace: "{{ item }}"
+  loop: [ '8888', '8889', '8890' ]
   notify:
     - stop kurento
     - reload systemd
