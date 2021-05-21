@@ -84,11 +84,15 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_dialin_mask_caller` | Mask caller-number in the BBB web-interface for privacy reasons (`01711233121` → `xxx-xxx-3121`) | |
 | `bbb_dialin_overwrite_footer` | Set the default dial-in footer instead of `bbb_default_welcome_message_footer` | `false` | |
 | `bbb_dialin_footer` | The default dial-in notice, if you want to customize it, it is recommended to change `bbb_default_welcome_message_footer` instead | `<br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.` | |
-| `bbb_guestpolicy` | How guest can access | `ALWAYS_ACCEPT` | acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR |
-| `bbb_ntp_cron` | Disable automatic time synchronisation and instead configure a cronjob | `false` |
-| `bbb_ntp_cron_day` | Day of the month the time-sync job should run | `*` |
-| `bbb_ntp_cron_hour` | Hour when the time-sync job should run | `5` |
-| `bbb_ntp_cron_minute` | Minute when the time-sync job should run | `0` |
+| `bbb_guestpolicy` | How guest can access | `ALWAYS_ACCEPT` | acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR | |
+| `bbb_ntp_cron` | Disable automatic time synchronisation and instead configure a cronjob | `false` | |
+| `bbb_ntp_cron_day` | Day of the month the time-sync job should run | `*` | |
+| `bbb_ntp_cron_hour` | Hour when the time-sync job should run | `5` | |
+| `bbb_ntp_cron_minute` | Minute when the time-sync job should run | `0` | |
+| `bbb_cron_history` | Retention period for presentations, kurento, and freeswitch caches | `5` | |
+| `bbb_cron_unrecorded_days` | Retention period of recordings for meetings with no recording markers | `14` | |
+| `bbb_cron_published_days` | Retention period of recordings’ raw data | `14` | |
+| `bbb_cron_log_history` | Set the retention period of old log files | `28` | |
 | `bbb_html5_node_options` | Allow to set extra options for node for the html5-webclient | unset | Could be used for example with <https://github.com/bigbluebutton/bigbluebutton/issues/11183> ; `--max-old-space-size=4096 --max_semi_space_size=128` |
 | `bbb_meeting_inactivity_timeout_minutes` | set the default timeout in minutes | `10` | TBD |
 | `bbb_freeswitch_socket_password` | set password for freeswitch _(required)_ |  | Can be generated with `pwgen -s 16 1` |
@@ -96,6 +100,17 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_html5_frontend_processes` | amount of html5 frontend processes | 1 | min = 1; max = 4; or 0 to let the same process do front- and backend (2.2 behavior) |
 | `bbb_container_compat` | Compatibility with unprivileged containers | `false` | Enabling this option allows to deploy BBB into a unprivileged container |
 | `bbb_firewall_ufw` | A dict of rules for the ufw | see `defaults/main.yml` | can also be used to allow/deny more/less |
+| `bbb_default_max_users` | Default maximum number of users a meeting can have | `0` | Meeting doesn't have a user limit |
+| `bbb_default_meeting_duration` | Default duration of the meeting in minutes | `0` | Meeting doesn't end |
+| `bbb_max_num_pages` | Maximum number of pages allowed for an uploaded presentation | `200` | |
+| `bbb_max_conversion_time` | Number of minutes the conversion should take | `5` | If it takes more than this time, cancel the conversion process |
+| `bbb_num_conversion_threads` | Number of threads in the pool to do the presentation conversion | `5` | |
+| `bbb_num_file_processor_threads` | Number of threads to process file uploads | `2` | |
+| `bbb_freeswitch_muted_sound` | Enable muted sound (`you are now muted`) | `true` | |
+| `bbb_freeswitch_unmuted_sound` | Enable unmuted sound (`you are now unmuted`) | `true` | |
+| `bbb_breakout_rooms_enabled` | Enable or disable breakout rooms | `true` |  |
+| `bbb_breakout_rooms_record` | Enable or disable recording in breakout rooms | `false` |  |
+| `bbb_breakout_rooms_privatechat_enabled` | Enable or disable private chat in breakout rooms | `true` |  |
 
 ### Extra options for Greenlight
 
