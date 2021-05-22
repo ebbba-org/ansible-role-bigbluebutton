@@ -1,0 +1,115 @@
+#!/bin/bash
+
+#
+# BigBlueButton open source conferencing system - http://www.bigbluebutton.org/
+#
+# Copyright (c) 2012 BigBlueButton Inc. and by respective authors (see below).
+#
+# This program is free software; you can redistribute it and/or modify it under the
+# terms of the GNU Lesser General Public License as published by the Free Software
+# Foundation; either version 3.0 of the License, or (at your option) any later
+# version.
+#
+# BigBlueButton is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License along
+# with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
+# 
+# File: https://github.com/bigbluebutton/bigbluebutton/blob/develop/bigbluebutton-config/cron.daily/bigbluebutton
+
+test -x /var/bigbluebutton || exit 0
+
+#
+# How N days back to keep files
+#
+history={{ bbb_cron_history }}
+unrecorded_days={{ bbb_cron_unrecorded_days }}
+published_days={{ bbb_cron_published_days }}
+log_history={{ bbb_cron_log_history }}
+
+#
+# Delete presentations older than N days
+#
+find /var/bigbluebutton/ -maxdepth 1 -type d -name "*-*" -mtime +$history -exec rm -rf '{}' +
+
+#
+# Delete streams in kurento older than N days
+#
+for app in recordings screenshare; do
+	app_dir=/var/kurento/$app
+	if [[ -d $app_dir ]]; then
+		find $app_dir -name "*.mkv" -o -name "*.webm" -mtime +$history -delete
+		find $app_dir -type d -empty -mtime +$history -exec rmdir '{}' +
+	fi
+done
+
+#
+# Delete FreeSWITCH wav/opus recordings older than N days
+#
+find /var/freeswitch/meetings/ -name "*.wav"  -mtime +$history -delete
+find /var/freeswitch/meetings/ -name "*.opus" -mtime +$history -delete
+
+#
+# Delete old/rotated log files
+#
+find /opt/freeswitch/var/log/freeswitch -type f -mtime +$log_history -delete
+[[ -d /var/log/tomcat7 ]] && find /var/log/tomcat7 -type f -mtime +$log_history -delete
+find /var/log/bigbluebutton -type f -mtime +$log_history -delete
+find /var/log/bbb-webrtc-sfu -type f -mtime +$log_history -delete
+find /var/log/kurento-media-server -name "*.pid*.log" -type f -mtime +$log_history -delete
+
+#
+# Delete raw files of recordings without recording marks older than N days
+#
+remove_raw_of_recordings_without_marks() {
+        logger "Removing old raw directory of recordings without marks"
+        find /var/bigbluebutton/recording/status -name '*.norecord' -mtime +$unrecorded_days | while read archived_norecord; do
+                recording_id=${archived_norecord%.norecord}
+                recording_id=${recording_id##*/}
+                bbb-record --delete $recording_id 2>&1 | logger
+        done
+}
+
+# Enabled by default; comment to disable.
+remove_raw_of_recordings_without_marks
+
+#
+# Delete old raw dirs from recordings properly published using 'presentation' scripts.
+#
+
+remove_raw_of_published_recordings(){
+    #TYPES=$(cd /usr/local/bigbluebutton/core/scripts/process; ls *.rb | sed s/.rb//g)
+    logger "Removing raw directory of old recordings:"
+    TYPES="presentation"
+    cd /var/bigbluebutton/recording/raw/
+    old_meetings=$(find . -name events.xml -mtime +$published_days | cut -d"/" -f2 )
+    for meeting in $old_meetings
+    do
+        PROPERLY_PUBLISHED="true"
+        FAILED_TYPES=""
+        for type in $TYPES
+        do
+            file="/var/bigbluebutton/recording/status/published/$meeting-$type.done"
+            if ! [ -f "$file" ]; then
+                PROPERLY_PUBLISHED="false"
+                FAILED_TYPES="$FAILED_TYPES $type"
+            fi
+        done
+        if [ "$PROPERLY_PUBLISHED" == "true" ]; then
+            logger "$meeting properly published, removing raw dir."
+            rm -r /var/bigbluebutton/recording/raw/$meeting/
+        else
+            logger "$meeting was not properly published in [ $FAILED_TYPES ]"
+        fi
+    done
+}
+
+remove_raw_of_published_recordings
+
+#
+# Remove old *.afm and *.pfb files from /tmp directory (if any exist)
+#
+find /tmp -name "*.afm" -mtime +$history -delete
+find /tmp -name "*.pfb" -mtime +$history -delete
