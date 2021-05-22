@@ -2,9 +2,9 @@
 
 > Ansible role for a BigBlueButton installation
 
-This role is following the documentation on <https://docs.bigbluebutton.org/2.2/install.html>
+This role is following the documentation on <https://docs.bigbluebutton.org/2.3/install.html>
 
-Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#before-you-install) and [Minimum server requirements](https://docs.bigbluebutton.org/2.2/install.html#minimum-server-requirements) from the official documentation as they also apply here.
+Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#before-you-install) and [Minimum server requirements](https://docs.bigbluebutton.org/2.3/install.html#minimum-server-requirements) from the official documentation as they also apply here.
 
 ## Role Variables
 
@@ -19,13 +19,14 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_apt_mirror` | apt repo server for BigBlueButton packages | `https://ubuntu.bigbluebutton.org` | other value would be e.g. `https://packages-eu.bigbluebutton.org` |
 | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
 | `bbb_letsencrypt_email` | E-mail for use with letsencrypt | | _(required when letsencrypt is enabled)_ |
+| `bbb_letsencrypt_api` | Set letsencrypt api | `https://acme-v02.api.letsencrypt.org/directory` | Use this variable to change letsencrypt API URL (example: staging API `https://acme-staging-v02.api.letsencrypt.org/directory`) |
 | `bbb_nginx_privacy` | only log errors not access | `yes` |
 | `bbb_nginx_listen_https` | nginx: use https | `yes` | This is useful for a reverse proxy configuration where the BBB server is behind a load balancing server like haproxy that does SSL termination |
 | `bbb_nginx_root` | Default nginx www path of BigBlueButton | `/var/www/bigbluebutton-default` | Set the default nginx `www` path of BigBlueButton |
-| bbb_ssl_cert | Define the ssl cert location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"` | |
-| bbb_ssl_key | Define the ssl key location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"` | |
-| bbb_own_cert | Define the name of the cert file which shall be used | `undefined` | |
-| bbb_own_key | Define the name of the key file which shall be used | `undefined` | |
+| `bbb_ssl_cert` | Define the ssl cert location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"` | |
+| `bbb_ssl_key` | Define the ssl key location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"` | |
+| `bbb_own_cert` | Define the name of the cert file which shall be used | `undefined` | |
+| `bbb_own_key` | Define the name of the key file which shall be used | `undefined` | |
 | `bbb_default_welcome_message` | Welcome Message in the client | Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others. | Needs to be encoded with `native2ascii -encoding UTF8`! |
 | `bbb_default_welcome_message_footer` | Footer of the welcome message | This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>. | Encoded as the welcome message |
 | `bbb_default_presentation` | Location of default presentation | `${bigbluebutton.web.serverURL}/default.pdf` |
@@ -47,7 +48,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_greenlight_secret` | Secret for greenlight _(required when using greenlight)_ |  | can be generated with `openssl rand -hex 64` |
 | `bbb_greenlight_db_password` | Password for greenlight's database  _(required when using greenlight)_ | | can be generated with `openssl rand -hex 16` |
 | `bbb_greenlight_default_registration` | Registration option open(default), invite or approval | `open` | |
-| `bbb_greenlight_users` | Greenlight users' list to create. No email notification will be triggered. As it contains passwords, recommend to put in ansible-vault. for more details see defaults/main.yml | `[]` |
+| `bbb_greenlight_users` | Greenlight users' list to create. No email notification will be triggered. As it contains passwords, recommend to put in ansible-vault. For more details see defaults/main.yml | `[]` |
 | `bbb_allow_mail_notifications`  | Set this to true if you want GreenLight to send verification emails upon the creation of a new account | `true` |
 | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
 | `bbb_api_demos_enable` | enable installation of the api demos | `no` | |
@@ -83,14 +84,15 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_dialin_mask_caller` | Mask caller-number in the BBB web-interface for privacy reasons (`01711233121` → `xxx-xxx-3121`) | |
 | `bbb_dialin_overwrite_footer` | Set the default dial-in footer instead of `bbb_default_welcome_message_footer` | `false` | |
 | `bbb_dialin_footer` | The default dial-in notice, if you want to customize it, it is recommended to change `bbb_default_welcome_message_footer` instead | `<br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.` | |
-| `bbb_guestpolicy` | How guest can access | `ALWAYS_ACCEPT` | acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR |
-| `bbb_default_max_users`| Default maximum number of users a meeting can have. | 0| |
-| `bbb_max_num_pages`| Maximum number of pages allowed for an uploaded presentation (default 100). | 100| |
-| `bbb_max_file_size_upload`| Maximum file size for an uploaded presentation (default 30MB - number must be in byte) | 30000000| |
-| `bbb_ntp_cron` | Disable automatic time synchronisation and instead configure a cronjob | `false` |
-| `bbb_ntp_cron_day` | Day of the month the time-sync job should run | `*` |
-| `bbb_ntp_cron_hour` | Hour when the time-sync job should run | `5` |
-| `bbb_ntp_cron_minute` | Minute when the time-sync job should run | `0` |
+| `bbb_guestpolicy` | How guest can access | `ALWAYS_ACCEPT` | acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR | |
+| `bbb_ntp_cron` | Disable automatic time synchronisation and instead configure a cronjob | `false` | |
+| `bbb_ntp_cron_day` | Day of the month the time-sync job should run | `*` | |
+| `bbb_ntp_cron_hour` | Hour when the time-sync job should run | `5` | |
+| `bbb_ntp_cron_minute` | Minute when the time-sync job should run | `0` | |
+| `bbb_cron_history` | Retention period for presentations, kurento, and freeswitch caches | `5` | |
+| `bbb_cron_unrecorded_days` | Retention period of recordings for meetings with no recording markers | `14` | |
+| `bbb_cron_published_days` | Retention period of recordings’ raw data | `14` | |
+| `bbb_cron_log_history` | Set the retention period of old log files | `28` | |
 | `bbb_html5_node_options` | Allow to set extra options for node for the html5-webclient | unset | Could be used for example with <https://github.com/bigbluebutton/bigbluebutton/issues/11183> ; `--max-old-space-size=4096 --max_semi_space_size=128` |
 | `bbb_meeting_inactivity_timeout_minutes` | set the default timeout in minutes | `10` | TBD |
 | `bbb_freeswitch_socket_password` | set password for freeswitch _(required)_ |  | Can be generated with `pwgen -s 16 1` |
@@ -98,6 +100,18 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.2/install.html#
 | `bbb_html5_frontend_processes` | amount of html5 frontend processes | 1 | min = 1; max = 4; or 0 to let the same process do front- and backend (2.2 behavior) |
 | `bbb_container_compat` | Compatibility with unprivileged containers | `false` | Enabling this option allows to deploy BBB into a unprivileged container |
 | `bbb_firewall_ufw` | A dict of rules for the ufw | see `defaults/main.yml` | can also be used to allow/deny more/less |
+| `bbb_max_file_size_upload`| Maximum file size for an uploaded presentation (default 30MB - number must be in byte) | 30000000| |
+| `bbb_default_max_users` | Default maximum number of users a meeting can have | `0` | Meeting doesn't have a user limit |
+| `bbb_default_meeting_duration` | Default duration of the meeting in minutes | `0` | Meeting doesn't end |
+| `bbb_max_num_pages` | Maximum number of pages allowed for an uploaded presentation | `200` | |
+| `bbb_max_conversion_time` | Number of minutes the conversion should take | `5` | If it takes more than this time, cancel the conversion process |
+| `bbb_num_conversion_threads` | Number of threads in the pool to do the presentation conversion | `5` | |
+| `bbb_num_file_processor_threads` | Number of threads to process file uploads | `2` | |
+| `bbb_freeswitch_muted_sound` | Enable muted sound (`you are now muted`) | `true` | |
+| `bbb_freeswitch_unmuted_sound` | Enable unmuted sound (`you are now unmuted`) | `true` | |
+| `bbb_breakout_rooms_enabled` | Enable or disable breakout rooms | `true` |  |
+| `bbb_breakout_rooms_record` | Enable or disable recording in breakout rooms | `false` |  |
+| `bbb_breakout_rooms_privatechat_enabled` | Enable or disable private chat in breakout rooms | `true` |  |
 
 ### Extra options for Greenlight
 
@@ -321,7 +335,7 @@ bbb_dialin_overwrite_footer: true
 
 ### Greenlight - Server Error: "Invalid BigBlueButton Endpoint and Secret"
 
-check your `/etc/hosts` file if your dns name (example `meet.domain.tld`) has the IP `127.0.1.1`.
+Check your `/etc/hosts` file if your dns name (example `meet.domain.tld`) has the IP `127.0.1.1`.
 Docker will use the internal system DNS to resolve `meet.domain.tld` to `127.0.1.1` which will result in this error.
 Edit this line and replace `127.0.1.1` with your public IP.
 
@@ -332,7 +346,7 @@ This is an example, of how to use this role. Warning: the value of the Variables
 ```yaml
     - hosts: servers
       roles:
-         - { role: n0emis.bigbluebutton, bbb_turn_secret: ee8d093109a9b273, bbb_greenlight_secret: 107308d54ff4a5f, bbb_greenlight_db_password: 2585c27c785e8895ec, bbb_letsencrypt_email: mail@example.com }
+         - { role: ebbba.bigbluebutton, bbb_turn_secret: ee8d093109a9b273, bbb_greenlight_secret: 107308d54ff4a5f, bbb_greenlight_db_password: 2585c27c785e8895ec, bbb_letsencrypt_email: mail@example.com }
 ```
 
 ## License
