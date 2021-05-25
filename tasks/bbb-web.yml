@@ -27,3 +27,18 @@
     - logback.xml
   notify:
     - restart bbb-web
+
+- name: 'Upload {{ bbb_default_presentation_name }}'
+  become: true
+  copy:
+    src: "{{ bbb_default_presentation_upload['path'] }}"
+    path: '/var/www/bigbluebutton-default/{{ bbb_default_presentation_name }}'
+    mode: 0755
+  when: bbb_default_presentation_upload['enable'] | bool and bbb_default_presentation_upload['path'] | length > 0
+
+become: true
+  copy:
+    src: '{{ bbb_own_key }}'
+    dest: '{{ bbb_ssl_key }}'
+    mode: '0644'
+    force: true

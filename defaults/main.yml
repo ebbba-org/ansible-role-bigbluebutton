@@ -100,8 +100,11 @@ bbb_dialin_overwrite_footer: false
 bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.
 
 bbb_meeting_inactivity_timeout_minutes: 10
-bbb_default_presentation: ${bigbluebutton.web.serverURL}/default.pdf
-
+bbb_default_presentation_name: 'default.pdf'
+bbb_default_presentation: '${bigbluebutton.web.serverURL}/{{ bbb_default_presentation_name }}'
+bbb_default_presentation_upload:
+  enable: false
+  path: ''
 # bbb_custom_presentation: "default.pdf"
 # set this to the name the default presentation on the host should have.
 # if its not default.pdf moderators are able to delete the default presentation. Thats sometimes helpful and works fine.
