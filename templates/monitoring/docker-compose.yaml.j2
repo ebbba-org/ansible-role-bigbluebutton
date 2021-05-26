@@ -8,7 +8,7 @@ services:
       # Can be removed if `RECORDINGS_METRICS_READ_FROM_DISK` is set to false (or omitted).
       # See https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations for details.
       - "/var/bigbluebutton:/var/bigbluebutton:ro"
-{% if not bbb_monitoring_all_in_one_external | bool %}
+{% if bbb_monitoring_all_in_one_external | bool %}
     ports:
       - "127.0.0.1:9688:9688"
 {% endif %}
