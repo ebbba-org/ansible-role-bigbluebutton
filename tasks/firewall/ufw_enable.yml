@@ -15,7 +15,7 @@
 
   - name: Set logging
     community.general.ufw:
-      logging: true
+      logging: 'on'
     when:
       - "'logging' in bbb_firewall_ufw"
       - "bbb_firewall_ufw['logging']"
