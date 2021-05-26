@@ -5,7 +5,7 @@ location /monitoring/ {
 }
 {% else %}
 location {{ bbb_monitoring_metrics_endpoint }} {
-  proxy_pass http://127.0.0.1:9100/metrics;
+  proxy_pass http://127.0.0.1:9688/metrics;
   {% if bbb_monitoring_use_nginx_access_module | bool %}
 {% for item in bbb_monitoring_ips %}
     allow {{ item.address }};
@@ -20,7 +20,7 @@ location {{ bbb_monitoring_metrics_endpoint }} {
 }
 
 location {{ bbb_monitoring_node_exporter_endpoint }} {
-  proxy_pass http://127.0.0.1:9688/;
+  proxy_pass http://127.0.0.1:9100/;
   {% if bbb_monitoring_use_nginx_access_module | bool %}
 {% for item in bbb_monitoring_ips %}
     allow {{ item.address }};
