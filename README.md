@@ -111,6 +111,9 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_breakout_rooms_enabled` | Enable or disable breakout rooms | `true` |  |
 | `bbb_breakout_rooms_record` | Enable or disable recording in breakout rooms | `false` |  |
 | `bbb_breakout_rooms_privatechat_enabled` | Enable or disable private chat in breakout rooms | `true` |  |
+| `bbb_docker_compose_version` | Set [docker-compose python package version](https://pypi.org/project/docker/#history) | see `defaults/main.yml` | Sets the version of the docker-compose python package |
+| `bbb_docker_passwd` | Password to Docker Hub login | Not defined (default: disabled) | Set a Docker Hub password. When defined is used to avoid rate limits |
+| `bbb_docker_user` | Username to Docker Hub login | Not defined (default: disabled) | Set a Docker Hub user. When defined is used to avoid rate limits |
 
 ### Extra options for Greenlight
 

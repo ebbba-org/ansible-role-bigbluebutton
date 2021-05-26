@@ -29,6 +29,9 @@
 
 - import_tasks: dial-in/main.yml
 
+- import_tasks: docker.yml
+  when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool
+
 - import_tasks: greenlight.yml
   when: bbb_greenlight_enable | bool
 
