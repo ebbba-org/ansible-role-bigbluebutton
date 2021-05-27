@@ -1,6 +1,13 @@
 ---
 
 - import_tasks: checkvars.yml
+
+- import_tasks: firewall/ufw_enable.yml
+  when: bbb_firewall_ufw['enabled']
+
+- import_tasks: firewall/ufw_disable.yml
+  when: not bbb_firewall_ufw['enabled']
+
 - import_tasks: locale.yml
 - import_tasks: repositories.yml
 - import_tasks: installation.yml
@@ -24,6 +31,9 @@
 
 - import_tasks: recordings_nfs.yml
   when: bbb_recordings_nfs['enable'] | bool and not bbb_disable_recordings | bool and bbb_recordings_nfs['path'] | length > 0
+
+- import_tasks: docker.yml
+  when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool
 
 - import_tasks: greenlight.yml
   when: bbb_greenlight_enable | bool
