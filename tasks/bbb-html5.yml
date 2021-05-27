@@ -25,6 +25,17 @@
   when: not ((((bbb_meteor | default({})).public | default({})).media | default({})).sipjsHackViaWs  | default({})) | bool
   notify: reload nginx
 
+- name: install web.nginx
+  become: true
+  template:
+    src: nginx/web.nginx.j2
+    dest: /etc/bigbluebutton/nginx/web
+    owner: bigbluebutton
+    group: bigbluebutton
+    mode: 755
+  notify:
+    - restart bbb-web
+
 - name: set amount of html5 back- and frontends
   become: true
   template:
