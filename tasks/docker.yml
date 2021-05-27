@@ -18,4 +18,4 @@
   docker_login:
     username: "{{ bbb_docker_user }}"
     password: "{{ bbb_docker_passwd }}"
-  when: bbb_docker_user and bbb_docker_passwd
+  when: bbb_docker_user is defined and bbb_docker_passwd is defined
