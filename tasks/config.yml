@@ -293,3 +293,16 @@
     dest: "{{ bbb_nginx_root | regex_replace('\\/$', '') }}/{{ bbb_custom_presentation_name | default(bbb_custom_presentation) }}"
     mode: '0644'
   when: bbb_custom_presentation is defined
+
+- name: Set cron.daily specifications
+  become: true
+  template:
+    src: bbb-config/cron.daily/bigbluebutton
+    dest: /etc/cron.daily/bigbluebutton
+    mode: '0644'
+    owner: root
+    group: root
+  notify:
+    - reload systemd
+    - restart bigbluebutton
+    

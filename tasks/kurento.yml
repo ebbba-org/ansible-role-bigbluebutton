@@ -38,7 +38,7 @@
     src: kurento/kurento-media-server@.service
     dest: "/usr/lib/systemd/system/kurento-media-server-{{ item }}.service"
     mode: '0644'
-  loop: [ 8888, 8889, 8890 ]
+  loop: [ '8888', '8889', '8890' ]
   notify:
     - stop kurento
     - reload systemd
@@ -48,8 +48,8 @@
   replace:
     path: "/usr/lib/systemd/system/kurento-media-server-{{ item }}.service"
     regexp: '%i'
-    replace: '{{ item }}'
-  loop: [ 8888, 8889, 8890 ]
+    replace: "{{ item }}"
+  loop: [ '8888', '8889', '8890' ]
   notify:
     - stop kurento
     - reload systemd
@@ -100,7 +100,7 @@
     src: kurento/kurento.conf.json
     dest: "/etc/kurento/kurento-{{ item }}.conf.json"
     mode: '0644'
-  loop: [ 8888, 8889, 8890 ]
+  loop: [ '8888', '8889', '8890' ]
 
 - name: enable kurento-media-server instances
   become: true
@@ -108,7 +108,7 @@
      name: "kurento-media-server-{{ item }}"
      state: started
      enabled: true
-  loop: [ 8888, 8889, 8890 ]
+  loop: [ '8888', '8889', '8890' ]
   notify:
     - reload systemd
     - restart bigbluebutton
@@ -117,7 +117,7 @@
   become: true
   sysctl:
     name: kernel.pid_max
-    value: 4194304
+    value: '4194304'
     sysctl_file: /etc/sysctl.d/20-kurento.conf
   when: not bbb_container_compat
   notify:

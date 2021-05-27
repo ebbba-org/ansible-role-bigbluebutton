@@ -71,10 +71,10 @@ services:
     restart: unless-stopped
 {% if bbb_monitoring_all_in_one_prometheus or bbb_monitoring_all_in_one_grafana %}
 volumes:
-  {% if bbb_monitoring_all_in_one_prometheus %}
+{% if bbb_monitoring_all_in_one_prometheus %}
   prometheus_data:
-  {% endif %}
-  {% if bbb_monitoring_all_in_one_grafana %}
+{% endif %}
+{% if bbb_monitoring_all_in_one_grafana %}
   grafana_data:
-  {% endif %}
+{% endif %}
 {% endif %}
