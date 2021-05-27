@@ -60,7 +60,6 @@ bbb_default_welcome_message: Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on 
 bbb_default_welcome_message_footer: This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>.
 
 bbb_web_logouturl: default
-
 bbb_ssl_cert: "/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"
 bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 # These two variables below can be used to copy a local cert/key file to the target
