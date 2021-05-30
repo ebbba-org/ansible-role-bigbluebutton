@@ -4,20 +4,20 @@
     name: bbb-exporter
     shell: /usr/sbin/nologin
     home: "{{ bbb_monitoring_systemd_directory }}"
-    create_home: yes
-
-- name: Delete Ansible tmp file
-  file:
-    path: "{{ bbb_monitoring_systemd_directory }}/.ansible"
-    state: absent
+    create_home: no
 
 - name: Deploy git repository to host
   git:
     repo: https://github.com/greenstatic/bigbluebutton-exporter.git
     dest: "{{ bbb_monitoring_systemd_directory }}"
     version: "{{ bbb_monitoring_systemd_version }}"
-  become: yes
-  become_user: bbb-exporter
+
+- name: Change ownership directory
+  file:
+    path: "{{ bbb_monitoring_systemd_directory }}"
+    state: directory
+    owner: bbb-exporter
+    group: bbb-exporter
 
 - name: Install specified python requirements and custom Index URL
   pip:
