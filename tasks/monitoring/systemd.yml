@@ -40,7 +40,7 @@
 - name: Copy secret file info configuration directory
   template:
     src: "monitoring/bbb_exporter_secrets.env.j2"
-    dest: "/etc/bigbluebutton-exporter/bbb_exporter_secrets.env"
+    dest: "/etc/bigbluebutton-exporter/settings.env"
     mode: '0644'
   notify: restart monitoring service
 
