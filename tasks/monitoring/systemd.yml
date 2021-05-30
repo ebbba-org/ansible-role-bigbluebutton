@@ -4,15 +4,12 @@
     name: bbb-exporter
     shell: /usr/sbin/nologin
     home: "{{ bbb_monitoring_systemd_directory }}"
-    create_home: no
+    create_home: yes
 
-- name: Create systemd directory
+- name: Delete Ansible tmp file
   file:
-    path: "{{ bbb_monitoring_systemd_directory }}"
-    state: directory
-    owner: bbb-exporter
-    group: bbb-exporter
-    mode: '0755'
+    path: "{{ bbb_monitoring_systemd_directory }}/.ansible"
+    state: absent
 
 - name: Deploy git repository to host
   git:
