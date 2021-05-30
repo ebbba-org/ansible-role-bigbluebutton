@@ -8,7 +8,6 @@
 - name: Deploy git repository to host
   git:
     repo: https://github.com/greenstatic/bigbluebutton-exporter.git
-    branch: master
     dest: "{{ bbb_monitoring_systemd_directory }}"
     version: "{{ bbb_monitoring_systemd_version }}"
   become: yes
