@@ -92,7 +92,7 @@ bbb_monitoring_all_in_one_external: false
 
 bbb_monitoring_systemd_enable: false
 bbb_monitoring_systemd_version: HEAD
-bbb_monitoring_systemd_directory: "/opt/bbb-exporter"
+bbb_monitoring_systemd_directory: "/opt/bigbluebutton-exporter"
 bbb_monitoring_systemd_external: false
 
 bbb_dialin_enabled: false
