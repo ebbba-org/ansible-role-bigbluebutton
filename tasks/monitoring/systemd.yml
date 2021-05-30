@@ -32,6 +32,11 @@
     mode: '0644'
     remote_src: yes
 
+- name: Create /etc/bigbluebutton-exporter directory
+  file:
+    path: "/etc/bigbluebutton-exporter"
+    state: directory
+
 - name: Copy secret file info configuration directory
   template:
     src: "monitoring/bbb_exporter_secrets.env.j2"
