@@ -4,6 +4,7 @@
     name: bbb-exporter
     shell: /usr/sbin/nologin
     home: "{{ bbb_monitoring_systemd_directory }}"
+    create_home: no
 
 - name: Deploy git repository to host
   git:
