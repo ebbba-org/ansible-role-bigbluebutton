@@ -77,7 +77,11 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_monitoring_all_in_one_external` | Enable exposure to nginx | `false` | Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user` |
 | `bbb_monitoring_all_in_one_htpasswd_user` | The user for the htpasswd - _(required)_ if external | `Undefined` | |
 | `bbb_monitoring_all_in_one_htpasswd` | The password for the htpasswd - _(required)_ if external | `Undefined` | |
-| `bbb_monitoring_recordings_from_disk` | Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details. | `true` |
+| `bbb_monitoring_all_in_one_recordings_from_disk` | Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details. | `true` |
+| `bbb_monitoring_systemd_enable` | Deploy monitoring as systemd service(not recommended) | `false` | Works only when `bbb_monitoring_all_in_one_enable` is `false` |
+| `bbb_monitoring_systemd_version` | Version of the (greenstatic/bigbluebutton-exporter)[https://github.com/greenstatic/bigbluebutton-exporter] | `HEAD` | Could be a branch or tag |
+| `bbb_monitoring_systemd_directory` | Installation directory for git repository | `"/opt/bbb-exporter"` | |
+| `bbb_monitoring_systemd_external` | Enable exposure to nginx | `false` | |
 | `bbb_dialin_enabled` | enable phone dial-in, will also remove any previous dial-in configuration if set to `false`  | `false` | |
 | `bbb_dialin_provider_proxy` | IP or Domain of your SIP provider, also known as registrar | `sip.example.net` | |
 | `bbb_dialin_provider_username` | Username for authentication on the SIP-server | `provider-account` | |

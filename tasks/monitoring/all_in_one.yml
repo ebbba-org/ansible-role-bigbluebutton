@@ -14,7 +14,7 @@
     - bbb_exporter_secrets.env
     - docker-compose.yaml
     - prometheus.yaml
-  notify: restart monitoring
+  notify: restart monitoring container
 
 - name: copy monitoring nginx configuration file
   template:

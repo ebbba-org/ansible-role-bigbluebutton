@@ -1,0 +1,58 @@
+---
+- name: Create monitoring user
+    user:
+      name: bbb-exporter
+      shell: /usr/sbin/nologin
+      home: "{{ bbb_monitoring_systemd_directory }}"
+
+- name: Deploy git repository to host
+  git:
+    repo: https://github.com/greenstatic/bigbluebutton-exporter.git
+    branch: master
+    dest: "{{ bbb_monitoring_systemd_directory }}"
+    verion: "{{ bbb_monitoring_systemd_version }}"
+  become_user: bbb-exporter
+
+- name: Install specified python requirements and custom Index URL
+  pip:
+    requirements: "{{ bbb_monitoring_systemd_directory }}/requirements.txt"
+
+- name: Copy systemd service into place
+  copy:
+    src: "{{ bbb_monitoring_systemd_directory }}/extras/systemd/bigbluebutton-exporter.service"
+    dest: /lib/systemd/system/
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: yes
+
+- name: Copy secret file info configuration directory
+  template:
+    src: "monitoring/bbb_exporter_secrets.env.j2"
+    dest: "/etc/bigbluebutton-exporter/bbb_exporter_secrets.env"
+    mode: '0644'
+  notify: restart monitoring service
+
+- name: Copy monitoring nginx configuration file
+  template:
+    src: "monitoring/monitoring.nginx.j2"
+    dest: "/etc/bigbluebutton/nginx/monitoring.nginx"
+    mode: '0644'
+  notify: reload nginx
+
+- name: Generate htpasswd file for external access if enabled
+  htpasswd:
+    path: "/etc/bigbluebutton/nginx/.htpasswd"
+    name: "{{ bbb_monitoring_all_in_one_htpasswd_user }}"
+    password: "{{ bbb_monitoring_all_in_one_htpasswd }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload nginx
+  when: bbb_monitoring_systemd_external
+
+- name: start monitoring
+  systemd:
+    name: bigbluebutton-exporter
+    state: started
+    enabled: yes
