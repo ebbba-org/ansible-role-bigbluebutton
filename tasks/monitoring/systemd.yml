@@ -1,9 +1,9 @@
 ---
 - name: Create monitoring user
-    user:
-      name: bbb-exporter
-      shell: /usr/sbin/nologin
-      home: "{{ bbb_monitoring_systemd_directory }}"
+  user:
+    name: bbb-exporter
+    shell: /usr/sbin/nologin
+    home: "{{ bbb_monitoring_systemd_directory }}"
 
 - name: Deploy git repository to host
   git:
