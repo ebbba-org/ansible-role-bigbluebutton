@@ -10,7 +10,8 @@
     repo: https://github.com/greenstatic/bigbluebutton-exporter.git
     branch: master
     dest: "{{ bbb_monitoring_systemd_directory }}"
-    verion: "{{ bbb_monitoring_systemd_version }}"
+    version: "{{ bbb_monitoring_systemd_version }}"
+  become: yes
   become_user: bbb-exporter
 
 - name: Install specified python requirements and custom Index URL
