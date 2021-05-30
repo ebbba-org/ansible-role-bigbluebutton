@@ -10,7 +10,7 @@
   file:
     path: "{{ bbb_monitoring_systemd_directory }}"
     state: directory
-    user: bbb-exporter
+    owner: bbb-exporter
     group: bbb-exporter
     mode: '0755'
 
