@@ -26,7 +26,7 @@
 - name: write custom webrtc-sfu config
   become: true
   copy:
-    content: '{{ bbb_webrtc_sfu_multikurento | to_nice_yaml }}'
+    content: '{{ bbb_webrtc_sfu_multikurento | to_nice_yaml(indent=2) }}'
     dest: /etc/bigbluebutton/bbb-webrtc-sfu/production.yml
     mode: '0644'
   notify:
