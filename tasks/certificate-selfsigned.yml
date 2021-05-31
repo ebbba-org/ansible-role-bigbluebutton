@@ -24,7 +24,7 @@
   when: bbb_own_key is defined
 
 - name: upgrade pip to latest version
-  pip: 
+  pip:
     name: pip
     state: latest
 

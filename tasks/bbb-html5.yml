@@ -32,7 +32,7 @@
     dest: /etc/bigbluebutton/nginx/web
     owner: bigbluebutton
     group: bigbluebutton
-    mode: 755
+    mode: '0755'
   notify:
     - restart bbb-web
 
