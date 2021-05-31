@@ -93,7 +93,7 @@
 
 - name: write back new meteor config
   copy:
-    content: '{{ meteor  | to_nice_yaml }}'
+    content: '{{ meteor | to_nice_yaml(indent=2) }}'
     dest: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
     mode: '0644'
   notify:
