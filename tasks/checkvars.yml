@@ -33,6 +33,10 @@
       debug:
         msg: "value: {{ bbb_monitoring_all_in_one_htpasswd }}"
       when: bbb_monitoring_all_in_one_external
+    - name: bbb_monitoring_systemd_enable
+      debug:
+        msg: "Please disable monitoring for Systemd or Docker, these can not run alongside"
+      failed_when: bbb_monitoring_all_in_one_enable and bbb_monitoring_systemd_enable
   rescue:
     - name: CHECK YOUR VARIABLES!
       debug:
