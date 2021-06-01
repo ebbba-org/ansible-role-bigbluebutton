@@ -18,7 +18,7 @@
     state: directory
     owner: bbb-exporter
     group: bbb-exporter
-    more: '0755'
+    mode: '0755'
 
 - name: Install specified python requirements and custom Index URL
   pip:
