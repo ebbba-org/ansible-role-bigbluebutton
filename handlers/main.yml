@@ -86,5 +86,5 @@
 - name: restart monitoring service
   become: true
   systemd:
-    name: bbb-exporter
+    name: bigbluebutton-exporter
     state: restarted
