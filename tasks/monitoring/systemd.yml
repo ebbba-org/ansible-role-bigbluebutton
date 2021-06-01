@@ -4,7 +4,7 @@
     name: bbb-exporter
     shell: /usr/sbin/nologin
     home: "{{ bbb_monitoring_systemd_directory }}"
-    create_home: no
+    create_home: false
 
 - name: Deploy git repository to host
   git:
@@ -30,12 +30,13 @@
     owner: root
     group: root
     mode: '0644'
-    remote_src: yes
+    remote_src: true
 
 - name: Create /etc/bigbluebutton-exporter directory
   file:
     path: "/etc/bigbluebutton-exporter"
     state: directory
+    mode: '755'
 
 - name: Copy secret file info configuration directory
   template:
@@ -66,4 +67,4 @@
   systemd:
     name: bigbluebutton-exporter
     state: started
-    enabled: yes
+    enabled: true
