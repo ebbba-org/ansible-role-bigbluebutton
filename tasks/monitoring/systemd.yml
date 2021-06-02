@@ -39,7 +39,7 @@
     state: directory
     mode: '0755'
 
-- name: Copy secret file info configuration directory
+- name: Template exporter configuration
   template:
     src: "monitoring/bbb_exporter_secrets.env.j2"
     dest: "/etc/bigbluebutton-exporter/settings.env"
