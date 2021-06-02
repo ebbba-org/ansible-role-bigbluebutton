@@ -16,6 +16,11 @@
     name: nginx
     state: restarted
 
+- name: set bbb hostname
+  become: true
+  command: "bbb-conf --setip {{ bbb_hostname }}"
+  notify: restart bigbluebutton
+
 - name: restart bigbluebutton
   become: true
   command: bbb-conf --restart
@@ -40,7 +45,6 @@
   loop:
     - kurento-media-server
     - kurento-media-server.target
-  ignore_errors: true
 
 - name: stop kurento
   become: true
@@ -50,7 +54,6 @@
   loop:
     - kurento-media-server
     - kurento-media-server.target
-  ignore_errors: true
 
 - name: restart bbb-html5
   become: true
