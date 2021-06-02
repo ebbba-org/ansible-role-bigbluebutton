@@ -32,4 +32,3 @@
     - ppa:rmescandon/yq
     - ppa:certbot/certbot
   when: (item == 'ppa:certbot/certbot' and bbb_letsencrypt_enable | bool) or item != 'ppa:certbot/certbot'
-
