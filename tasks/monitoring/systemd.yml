@@ -5,6 +5,7 @@
     shell: /usr/sbin/nologin
     home: "{{ bbb_monitoring_systemd_directory }}"
     create_home: false
+    system: true
 
 - name: Deploy git repository to host
   git:
