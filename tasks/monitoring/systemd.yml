@@ -12,6 +12,8 @@
     repo: https://github.com/greenstatic/bigbluebutton-exporter.git
     dest: "{{ bbb_monitoring_systemd_directory }}"
     version: "{{ bbb_monitoring_systemd_version }}"
+  notify:
+    - restart monitoring service
 
 - name: Change ownership directory
   file:
@@ -24,6 +26,8 @@
 - name: Install specified python requirements and custom Index URL
   pip:
     requirements: "{{ bbb_monitoring_systemd_directory }}/requirements.txt"
+  notify:
+    - restart monitoring service
 
 - name: Copy systemd service into place
   copy:
@@ -33,6 +37,9 @@
     group: root
     mode: '0644'
     remote_src: true
+  notify:
+    - reload systemd
+    - restart monitoring service
 
 - name: Create /etc/bigbluebutton-exporter directory
   file:
@@ -45,14 +52,16 @@
     src: "monitoring/bbb_exporter_secrets.env.j2"
     dest: "/etc/bigbluebutton-exporter/settings.env"
     mode: '0644'
-  notify: restart monitoring service
+  notify:
+    - restart monitoring service
 
 - name: Copy monitoring nginx configuration file
   template:
     src: "monitoring/monitoring.nginx.j2"
     dest: "/etc/bigbluebutton/nginx/monitoring.nginx"
     mode: '0644'
-  notify: reload nginx
+  notify:
+    - reload nginx
 
 - name: Generate htpasswd file for external access if enabled
   htpasswd:
@@ -62,8 +71,9 @@
     owner: root
     group: root
     mode: 0644
-  notify: reload nginx
   when: bbb_monitoring_systemd_external
+  notify:
+    - reload nginx
 
 - name: start monitoring
   systemd:

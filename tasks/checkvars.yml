@@ -28,11 +28,11 @@
     - name: bbb_monitoring_all_in_one_htpasswd_user
       debug:
         msg: "value: {{ bbb_monitoring_all_in_one_htpasswd_user }}"
-      when: bbb_monitoring_all_in_one_external
+      when: bbb_monitoring_all_in_one_external or bbb_monitoring_systemd_external
     - name: bbb_monitoring_all_in_one_htpasswd
       debug:
         msg: "value: {{ bbb_monitoring_all_in_one_htpasswd }}"
-      when: bbb_monitoring_all_in_one_external
+      when: bbb_monitoring_all_in_one_external or bbb_monitoring_systemd_external
     - name: bbb_monitoring_systemd_enable
       debug:
         msg: "Please disable monitoring for Systemd or Docker, these can not run alongside"

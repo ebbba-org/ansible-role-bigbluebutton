@@ -1,6 +1,11 @@
-{% if not bbb_monitoring_all_in_one_external %}
+{% if not bbb_monitoring_all_in_one_external and not bbb_monitoring_systemd_enable %}
 location /monitoring/ {
   proxy_pass http://127.0.0.1:{{ bbb_monitoring_all_in_one_port }}/;
+  include proxy_params;
+}
+{% elif not bbb_monitoring_systemd_external and not bbb_monitoring_all_in_one_enable %}
+location /monitoring/ {
+  proxy_pass http://127.0.0.1:{{ bbb_monitoring_systemd_port }}/;
   include proxy_params;
 }
 {% else %}

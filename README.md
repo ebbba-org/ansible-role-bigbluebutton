@@ -81,7 +81,9 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_monitoring_systemd_enable` | Deploy monitoring as systemd service (not recommended) | `false` | Works only when `bbb_monitoring_all_in_one_enable` is `false` |
 | `bbb_monitoring_systemd_version` | Version of the (greenstatic/bigbluebutton-exporter)[https://github.com/greenstatic/bigbluebutton-exporter] | `HEAD` | Could be a branch or tag |
 | `bbb_monitoring_systemd_directory` | Installation directory for git repository | `"/opt/bigbluebutton-exporter"` | |
-| `bbb_monitoring_systemd_external` | Enable exposure to nginx | `false` | |
+| `bbb_monitoring_systemd_external` | Enable exposure to nginx | `false` | For the external accessibility the variables `bbb_monitoring_all_in_one_htpasswd_user` and `bbb_monitoring_all_in_one_htpasswd` have to be set |
+| `bbb_monitoring_systemd_port` | Port of bbb-exporter | `9688` | default port 9866 is defined by the exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/bbb-exporter/settings.py#L37) |
+| `bbb_monitoring_systemd_bind_ip` | Port of bbb-exporter | `0.0.0.0` | default bind IP 0.0.0.0 is defined by the exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/bbb-exporter/settings.py#L38) |
 | `bbb_dialin_enabled` | enable phone dial-in, will also remove any previous dial-in configuration if set to `false`  | `false` | |
 | `bbb_dialin_provider_proxy` | IP or Domain of your SIP provider, also known as registrar | `sip.example.net` | |
 | `bbb_dialin_provider_username` | Username for authentication on the SIP-server | `provider-account` | |
