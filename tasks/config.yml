@@ -305,4 +305,18 @@
   notify:
     - reload systemd
     - restart bigbluebutton
-    
+
+- name: config recording formats
+  become: true
+  template:
+    src: recordings/presentation.yml.j2
+    dest: /usr/local/bigbluebutton/core/scripts/presentation.yml
+    mode: '0750'
+    owner: root
+    group: root
+    force: true
+  notify:
+    - restart bigbluebutton
+  when: not bbb_disable_recordings | bool
+
+
