@@ -54,6 +54,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_allow_mail_notifications`  | Set this to true if you want GreenLight to send verification emails upon the creation of a new account | `true` |
 | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
 | `bbb_api_demos_enable` | enable installation of the api demos | `no` | |
+| `bbb_client_log_enable` | enable installation of the nginx-full and config for client logging according to [BBB Customization Docs](https://docs.bigbluebutton.org/2.2/customize.html#collect-feedback-from-the-users). See "METEOR" Section below for needed `bbb_meteor` values. | `false` | |
 | `bbb_mute_on_start:` | start with muted mic on join | `no` | |
 | `bbb_app_log_level:` | set bigbluebutton log level | `DEBUG` | |
 | `bbb_meteor:` | overwrite settings in meteor | `{}` | |
@@ -310,6 +311,19 @@ bbb_meteor:
         mobilePageSizes:
           moderator: 8
           viewer: 8
+```
+
+To enable client logging and/or userfeedback, you need to set `bbb_client_log_enable` to `true` add the following keys here:
+
+```yaml
+bbb_meteor:
+  public:
+    app:
+      askForFeedbackOnLogout: true
+    clientLog:
+      external:
+        enabled: true
+        url: "https://{{ bbb_hostname }}/html5log"
 ```
 
 ### LXD/LXC compatibility
