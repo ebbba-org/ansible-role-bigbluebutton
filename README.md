@@ -68,6 +68,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality` |
 | `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality` |
 | `bbb_webhooks_enable` | install bbb-webhooks | `no` | |
+| `bbb_check_for_running_meetings` | Check server and stop playbook in case of running meetings. Attention: Currently the check is done only after Docker and NodeJS Roles have already run. | `true` | |
 | `bbb_monitoring_all_in_one_enable` | deploy [all in one monitoring stack](https://bigbluebutton-exporter.greenstatic.dev/installation/all_in_one_monitoring_stack/) (docker) | `no` |
 | `bbb_monitoring_all_in_one_version` | Version of the `greenstatic/bigbluebutton-exporter` docker image | `latest` | |
 | `bbb_monitoring_all_in_one_directory` | Directory for the docker compose files | `/root/bbb-monitoring` | |
