@@ -22,6 +22,7 @@
     - "deb http://repo.mongodb.org/apt/ubuntu/ {{ ansible_distribution_release | lower }}/mongodb-org/{{ bbb_mongodb_version }} multiverse"
     - "deb https://ubuntu.bigbluebutton.org/bionic-230/ bigbluebutton-bionic main"
 
+# only install certbot-repo when letsencrypt is used
 - name: add Bionic dependency apt repositories
   become: true
   apt_repository:
@@ -30,3 +31,4 @@
     - ppa:bigbluebutton/support
     - ppa:rmescandon/yq
     - ppa:certbot/certbot
+  when: (item == 'ppa:certbot/certbot' and bbb_letsencrypt_enable | bool) or item != 'ppa:certbot/certbot'
