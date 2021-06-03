@@ -94,6 +94,8 @@ bbb_monitoring_systemd_enable: false
 bbb_monitoring_systemd_version: HEAD
 bbb_monitoring_systemd_directory: "/opt/bigbluebutton-exporter"
 bbb_monitoring_systemd_external: false
+bbb_monitoring_systemd_bind_ip: 0.0.0.0
+bbb_monitoring_systemd_port: 9688
 
 bbb_dialin_enabled: false
 bbb_dialin_provider_proxy: "sip.example.net"
