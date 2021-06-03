@@ -50,7 +50,7 @@ bbb_freeswitch_unmuted_sound: true
 
 # BBB Recordings
 bbb_disable_recordings: false
-bbb_recordings_formats:
+bbb_recording_formats:
   - webm
   # - mp4
 #bbb_recordings_nfs_mount: ''
