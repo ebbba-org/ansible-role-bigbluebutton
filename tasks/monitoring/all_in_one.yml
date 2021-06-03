@@ -31,6 +31,7 @@
     owner: root
     group: root
     mode: 0644
+  no_log: true
   notify: reload nginx
   when: bbb_monitoring_all_in_one_external
 

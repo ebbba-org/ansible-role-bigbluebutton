@@ -18,7 +18,7 @@
   apt:
     name: "{{ bbb_and_dependencies }}"
     state: "{{ bbb_state }}"
-  register: _bbb_install
+  notify: set bbb hostname
 
 - name: install bbb-webhooks
   apt:
@@ -45,4 +45,4 @@
 - name: upgrade packages
   apt:
     upgrade: "{{ bbb_upgrade_packages }}"
-  register: _bbb_upgrade
+  notify: set bbb hostname

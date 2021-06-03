@@ -1,4 +1,7 @@
 # .ansible-lint
+# implicit unless exclude_paths is defined in config
 exclude_paths:
-- .cache/  # implicit unless exclude_paths is defined in config
-- .github/
+  - .cache/
+  - .github/
+warn_list:
+  - package-latest
