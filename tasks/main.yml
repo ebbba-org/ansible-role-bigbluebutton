@@ -3,6 +3,7 @@
 - import_tasks: checkvars.yml
 
 - import_tasks: check-for-sessions.yml
+  when: bbb_check_for_running_meetings
 
 - import_tasks: firewall/ufw_enable.yml
   when: bbb_firewall_ufw['enabled']
