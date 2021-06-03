@@ -15,5 +15,5 @@
     when:
       - not ansible_check_mode
       - not bbb_getmeetings.failed
-      - '<messageKey>noMeetings</messageKey>' is not in bbb_getmeetings.content"
+      - '<messageKey>noMeetings</messageKey>' is not in bbb_getmeetings.content
     tags: always
