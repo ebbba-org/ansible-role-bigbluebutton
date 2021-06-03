@@ -1,16 +1,10 @@
 ---
-- name: register current bbb properties
+- name: register currently configured bbb hostname
   slurp:
     src: /etc/bigbluebutton/bbb-web.properties
   register: properties
-
-- name: set bbb hostname
-  command: "bbb-conf --setip {{ bbb_hostname }}"
-  become: true
-  when: (properties['content'] | b64decode | regex_search(bbb_hostname, multiline=True, ignorecase=True) != bbb_hostname) or
-    _bbb_install.changed or
-    _bbb_upgrade.changed
-  notify: restart bigbluebutton
+  changed_when: properties['content'] | b64decode | regex_search(bbb_hostname, multiline=True, ignorecase=True) != bbb_hostname
+  notify: set bbb hostname
 
 - name: Update /etc/bigbluebutton akka configs
   become: true
