@@ -75,6 +75,13 @@
       port: ssh
       proto: tcp
 
+  - name: allow sip-proxy connection
+    community.general.ufw:
+      rule: allow
+      from: '{{ bbb_dialin_provider_ip }}'
+      to_port: '5060'
+    when: bbb_dialin_enabled | bool and bbb_dialin_provider_ip is defined
+
   - name: Setup default policy
     community.general.ufw:
       policy: deny
@@ -90,5 +97,7 @@
   - name: Reload bbb_firewall_ufw
     community.general.ufw:
       state: reloaded
+
+
   tags:
     - ufw

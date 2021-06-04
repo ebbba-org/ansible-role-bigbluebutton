@@ -91,6 +91,7 @@ bbb_monitoring_all_in_one_external: false
 
 bbb_dialin_enabled: false
 bbb_dialin_provider_proxy: "sip.example.net"
+bbb_dialin_provider_ip: ""
 bbb_dialin_provider_username: "provider-account"
 bbb_dialin_provider_password: "provider-password"
 bbb_dialin_provider_extension: "6135551234"
