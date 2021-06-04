@@ -11,7 +11,7 @@
   git:
     repo: https://github.com/greenstatic/bigbluebutton-exporter.git
     dest: "{{ bbb_monitoring_systemd_directory }}"
-    version: "{{ bbb_monitoring_systemd_version }}"
+    version: "{{ bbb_monitoring_exporter_version }}"
   notify:
     - restart monitoring service
 
