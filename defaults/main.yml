@@ -19,6 +19,7 @@ bbb_coturn_max_port: 65535
 bbb_turn_enable: true
 bbb_stun_servers:
   - server: "{{ bbb_hostname }}"
+    port: " {{ bbb_coturn_port_tls }}"
 bbb_ice_servers: []
 bbb_turn_servers:
   - server: "{{ bbb_hostname }}"

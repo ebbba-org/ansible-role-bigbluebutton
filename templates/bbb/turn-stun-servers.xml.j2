@@ -26,7 +26,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 {% if bbb_turn_enable | bool %}
 {% for item in bbb_stun_servers %}
     <bean id="stun{{ loop.index }}" class="org.bigbluebutton.web.services.turn.StunServer">
-        <constructor-arg index="0" value="stun:{{ item.server }}"/>
+        <constructor-arg index="0" value="stun:{{ item.server }}:{{ item.port }}"/>
     </bean>
 {% endfor %}
 
