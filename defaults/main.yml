@@ -89,7 +89,7 @@ bbb_monitoring_all_in_one_prometheus: true
 bbb_monitoring_all_in_one_external: false
 # bbb_monitoring_all_in_one_htpasswd_user:
 # bbb_monitoring_all_in_one_htpasswd:
-bbb_monitoring_exporter_version: {{ 'latest' if bbb_monitoring_all_in_one_enable | bool else 'HEAD' }}
+bbb_monitoring_exporter_version: "{{ 'latest' if bbb_monitoring_all_in_one_enable | bool else 'HEAD' }}"
 
 bbb_monitoring_systemd_enable: false
 bbb_monitoring_systemd_directory: "/opt/bigbluebutton-exporter"
