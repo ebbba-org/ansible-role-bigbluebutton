@@ -312,7 +312,7 @@ bbb_meteor:
           moderator: 8
           viewer: 8
 ```
-
+#### User Feedback logging
 To enable client logging and/or userfeedback, you need to set `bbb_client_log_enable` to `true` add the following keys here:
 
 ```yaml
