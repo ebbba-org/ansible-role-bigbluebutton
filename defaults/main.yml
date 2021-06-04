@@ -86,8 +86,8 @@ bbb_monitoring_recordings_from_disk: true
 bbb_monitoring_all_in_one_grafana: true
 bbb_monitoring_all_in_one_prometheus: true
 bbb_monitoring_all_in_one_external: false
-bbb_monitoring_metrics_endpoint: "/mon/node/"
-bbb_monitoring_node_exporter_endpoint: "/mon/bbb/"
+bbb_monitoring_metrics_endpoint: "/mon/bbb/"
+bbb_monitoring_node_exporter_endpoint: "/mon/node/"
 bbb_monitoring_use_nginx_access_module: false
 # bbb_monitoring_ips:
 #  - address: 127.0.0.1
