@@ -74,8 +74,8 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_monitoring_all_in_one_grafana` | Enable(true)/Disable(false) the Grafana container | `true` | |
 | `bbb_monitoring_all_in_one_prometheus` | Enable(true)/Disable(false) the prometheus container | `true` | |
 | `bbb_monitoring_all_in_one_external` | Enable exposure to nginx | `false` | Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user` |
-| `bbb_monitoring_metrics_endpoint` | Metrics endpoint | `/mon/node/` | |
-| `bbb_monitoring_node_exporter_endpoint` | Node-exporter endpoint
+| `bbb_monitoring_metrics_endpoint` | Metrics endpoint | `/mon/bbb/` | |
+| `bbb_monitoring_node_exporter_endpoint` | Node-exporter endpoint | `/mon/node/` | |
 | `bbb_monitoring_all_in_one_htpasswd_user` | The user for the htpasswd - _(required)_ if external | `Undefined` | |
 | `bbb_monitoring_all_in_one_htpasswd` | The password for the htpasswd - _(required)_ if external | `Undefined` | |
 | `bbb_monitoring_use_nginx_access_module` | Restricting access by IP Address instead using htpasswd | `false` | |
