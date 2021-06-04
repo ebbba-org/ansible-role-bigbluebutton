@@ -19,7 +19,7 @@
   copy:
     src: '{{ bbb_own_key }}'
     dest: '{{ bbb_ssl_key }}'
-    mode: '0644'
+    mode: '0440'
     force: true
   when: bbb_own_key is defined
 
@@ -74,5 +74,5 @@
   file:
     path: "{{ bbb_ssl_key }}"
     owner: "root"
-    group: "{% if ansible_os_family == 'Debian' %}ssl-cert{% else %}root{% endif %}"
+    group: "{{'ssl-cert' if ansible_os_family == 'Debian' else 'root' }}"
     mode: '0440'
