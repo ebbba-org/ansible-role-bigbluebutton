@@ -23,6 +23,13 @@
     group: bbb-exporter
     mode: '0755'
 
+- name: Ensure pip is installed
+  apt:
+    name:
+      - python3-pip
+      - python3-setuptools
+    state: "{{ bbb_state }}"
+
 - name: Install specified python requirements and custom Index URL
   pip:
     requirements: "{{ bbb_monitoring_systemd_directory }}/requirements.txt"
