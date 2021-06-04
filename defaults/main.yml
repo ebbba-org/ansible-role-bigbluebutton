@@ -80,7 +80,7 @@ bbb_apt_key: 770C4267C5E63474D171B60937B5DD5EFAB46452
 ansible_python_interpreter: "/usr/bin/python3"
 
 bbb_monitoring_all_in_one_enable: false
-bbb_monitoring_all_in_one_version: latest
+bbb_monitoring_all_in_one_version: "{{ bbb_monitoring_exporter_version }}"
 bbb_monitoring_all_in_one_directory: "/root/bbb-monitoring"
 bbb_monitoring_all_in_one_port: 3001
 bbb_monitoring_recordings_from_disk: true
@@ -89,9 +89,9 @@ bbb_monitoring_all_in_one_prometheus: true
 bbb_monitoring_all_in_one_external: false
 # bbb_monitoring_all_in_one_htpasswd_user:
 # bbb_monitoring_all_in_one_htpasswd:
+bbb_monitoring_exporter_version: {{ 'latest' if bbb_monitoring_all_in_one_enable | bool else 'HEAD' }}
 
 bbb_monitoring_systemd_enable: false
-bbb_monitoring_systemd_version: HEAD
 bbb_monitoring_systemd_directory: "/opt/bigbluebutton-exporter"
 bbb_monitoring_systemd_external: false
 bbb_monitoring_systemd_bind_ip: 0.0.0.0
