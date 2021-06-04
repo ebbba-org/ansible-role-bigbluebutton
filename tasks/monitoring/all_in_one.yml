@@ -13,7 +13,6 @@
   with_items:
     - bbb_exporter_secrets.env
     - docker-compose.yaml
-    - prometheus.yaml
   notify: restart monitoring
 
 - name: install prometheus
