@@ -13,6 +13,21 @@
     dest: /etc/alternatives/java
     state: link
 
+- name: install nginx-full for client-logging
+  become: true
+  apt:
+    name: nginx-full
+    state: "{{ bbb_state }}"
+  when: bbb_client_log_enable
+
+- name: install nginx-core, no client-logging
+  become: true
+  apt:
+    name: nginx-core
+    state: "{{ bbb_state }}"
+    autoremove: true
+  when: not bbb_client_log_enable
+
 - name: install bbb and dependencies
   become: true
   apt:

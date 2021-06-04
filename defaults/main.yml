@@ -7,6 +7,7 @@ bbb_letsencrypt_api: https://acme-v02.api.letsencrypt.org/directory
 bbb_nginx_privacy: true
 bbb_nginx_listen_https: true
 bbb_nginx_root: /var/www/bigbluebutton-default
+bbb_client_log_enable: false
 
 bbb_coturn_enable: true
 bbb_coturn_port: 3478
