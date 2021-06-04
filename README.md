@@ -97,7 +97,6 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_cron_published_days` | Retention period of recordings’ raw data | `14` | |
 | `bbb_cron_log_history` | Set the retention period of old log files | `28` | |
 | `bbb_html5_node_options` | Allow to set extra options for node for the html5-webclient | unset | Could be used for example with <https://github.com/bigbluebutton/bigbluebutton/issues/11183> ; `--max-old-space-size=4096 --max_semi_space_size=128` |
-| `bbb_meeting_inactivity_timeout_minutes` | set the default timeout in minutes | `10` | TBD |
 | `bbb_freeswitch_socket_password` | set password for freeswitch _(required)_ |  | Can be generated with `pwgen -s 16 1` |
 | `bbb_html5_backend_processes` | amount of html5 backend processes | 1 | min = 1; max = 4 |
 | `bbb_html5_frontend_processes` | amount of html5 frontend processes | 1 | min = 1; max = 4; or 0 to let the same process do front- and backend (2.2 behavior) |
