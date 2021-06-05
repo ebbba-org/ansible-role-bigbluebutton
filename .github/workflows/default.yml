@@ -44,7 +44,7 @@ jobs:
           ls -l /opt/hostedtoolcache/Python/3.9.1/x64/bin || true
           echo "/opt/hostedtoolcache/Python/3.9.1/x64/bin" >> $GITHUB_PATH
           ansible --version
-          cd $GITHUB_WORKSPACE/juju4.harden
+          cd $GITHUB_WORKSPACE/n0emis.bigbluebutton
           { echo '[defaults]'; echo 'callback_enabled = profile_tasks, timer'; echo 'roles_path = ../'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
       - name: Environment
         run: |
