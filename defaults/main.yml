@@ -40,7 +40,7 @@ bbb_disable_recordings: false
 bbb_api_demos_enable: false
 bbb_mute_on_start: false
 bbb_app_log_level: 'DEBUG'
-bbb_nodejs_version: 8.x
+bbb_nodejs_version: 12.x
 bbb_cpuschedule: true
 bbb_freeswitch_ioschedule_realtime: true
 bbb_freeswitch_ipv6: true
