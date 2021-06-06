@@ -23,7 +23,7 @@ jobs:
             experimental: false
     env:
       ANSIBLE_CALLBACK_ENABLED: profile_tasks
-      ANSIBLE_EXTRA_VARS: ""
+      ANSIBLE_EXTRA_VARS: "-e bbb_freeswitch_socket_password='SuperSecurePassword-123456789'"
 
     steps:
       - uses: actions/checkout@v2
