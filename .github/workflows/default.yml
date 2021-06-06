@@ -46,6 +46,7 @@ jobs:
           ansible --version
           cd $GITHUB_WORKSPACE/n0emis.bigbluebutton
           { echo '[defaults]'; echo 'callback_enabled = profile_tasks, timer'; echo 'roles_path = ../'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
+          ansible-galaxy install -r requirements.yml
       - name: Environment
         run: |
           pwd
