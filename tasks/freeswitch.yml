@@ -1,0 +1,127 @@
+---
+
+- name: install AppArmor packages
+  become: true
+  package:
+    name: ['apparmor-utils', 'auditd']
+  when: not bbb_container_compat
+
+- name: create AppArmor rules
+  become: true
+  template:
+    src: opt.freeswitch.bin.freeswitch
+    dest: /etc/apparmor.d/opt.freeswitch.bin.freeswitch
+    mode: 0600
+  when: not bbb_container_compat
+  notify:
+   - reload apparmor
+   - restart freeswitch
+
+- name: fix freeswitch systemd service permissions
+  become: true
+  file:
+    path: /lib/systemd/system/freeswitch.service
+    mode: '0644'
+    owner: root
+    group: root
+
+- name: delete freeswitch file logging config
+  become: true
+  file:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/logfile.conf.xml
+    state: absent
+  notify: restart freeswitch
+
+- name: add freeswitch module config
+  become: true
+  template:
+    src: modules.conf.xml
+    dest: /opt/freeswitch/etc/freeswitch/autoload_configs/modules.conf.xml
+    mode: '0644'
+    owner: root
+    group: root
+  notify: restart freeswitch
+
+- name: add freeswitch syslog config
+  become: true
+  template:
+    src: syslog.conf.xml
+    dest: /opt/freeswitch/etc/freeswitch/autoload_configs/syslog.conf.xml
+    mode: '0644'
+    owner: root
+    group: root
+  notify: restart freeswitch
+
+- name: deploy conference config
+  become: true
+  template:
+    src: conference.conf.xml
+    dest: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
+    mode: '0644'
+    owner: root
+    group: root
+  notify: restart freeswitch
+
+- name: set socket password
+  become: true
+  xml:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
+    xpath: /configuration/settings/param[@name='password']
+    attribute: "value"
+    value: "{{ bbb_freeswitch_socket_password }}"
+  no_log: true
+  notify: restart freeswitch
+
+- name: set socket listen port
+  become: true
+  xml:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
+    xpath: /configuration/settings/param[@name='listen-ip']
+    attribute: "value"
+    value: "127.0.0.1"
+  notify: restart freeswitch
+
+- name: fix fs_clibbb to accept additional parameters
+  become: true
+  lineinfile:
+    path: /usr/local/bin/fs_clibbb
+    regexp: "^/opt/freeswitch/bin/fs_cli"
+    line: "/opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name=\"password\"]' -v @value /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml) \"$@\""
+
+- name: configure IP {{ bbb_freeswitch_ip_address }} for wss-binding of FreeSWITCH
+  lineinfile:
+    path: /opt/freeswitch/conf/sip_profiles/external.xml
+    regexp: "<param name=\"wss-binding\""
+    line: "    <param name=\"wss-binding\" value=\"{{ bbb_freeswitch_ip_address }}:7443\"/>"
+  notify: restart freeswitch
+
+- name: Flush Handler
+  meta: flush_handlers
+
+- name: configure different mute sound
+  become: true
+  copy:
+    src: sounds/{{ item }}/conf-muted.wav
+    dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
+    mode: '0644'
+    owner: root
+    group: root
+  with_items:
+    - 48000
+    - 32000
+    - 16000
+    - 8000
+
+- name: configure different unmute sound
+  become: true
+  copy:
+    src: sounds/{{ item }}/conf-unmuted.wav
+    dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
+    mode: '0644'
+    owner: root
+    group: root
+  with_items:
+    - 48000
+    - 32000
+    - 16000
+    - 8000

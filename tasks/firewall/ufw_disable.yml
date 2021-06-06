@@ -1,0 +1,13 @@
+---
+- name: Disable ufw when needed
+  block:
+    - name: Gather package facts
+      package_facts:
+        manager: auto
+
+    - name: Disable UFW
+      community.general.ufw:
+        state: disabled
+      when: "'ufw' in packages"
+  tags:
+    - ufw

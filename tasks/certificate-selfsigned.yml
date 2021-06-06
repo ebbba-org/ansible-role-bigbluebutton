@@ -1,8 +1,38 @@
 ---
+- name: Ensure target directory exists
+  file:
+    dest: "{{ bbb_ssl_cert | dirname }}"
+    state: directory
+    mode: '0755'
+
+- name: install own ssl-certs
+  become: true
+  copy:
+    src: '{{ bbb_own_cert }}'
+    dest: '{{ bbb_ssl_cert }}'
+    mode: '0644'
+    force: true
+  when: bbb_own_cert is defined
+
+- name: install own ssl-key
+  become: true
+  copy:
+    src: '{{ bbb_own_key }}'
+    dest: '{{ bbb_ssl_key }}'
+    mode: '0440'
+    force: true
+  when: bbb_own_key is defined
+
+- name: upgrade pip to latest version
+  pip:
+    name: pip
+    state: latest
+
 - name: Ensure openssl-python-module is installed
   pip:
     name: PyOpenSSL
     state: "{{ bbb_state }}"
+  when: bbb_own_cert is not defined
 
 - name: apt | self-signed certificate packages dependencies
   apt:
@@ -12,12 +42,6 @@
     state: "{{ bbb_state }}"
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-- name: Ensure target directory exists
-  file:
-    dest: "{{ bbb_ssl_cert | dirname }}"
-    state: directory
-    mode: '0755'
-
 - name: Check if OpenSSL private key exists
   stat:
     path: "{{ bbb_ssl_key }}"
@@ -26,7 +50,7 @@
 - name: Generate an OpenSSL private key
   openssl_privatekey:
     path: "{{ bbb_ssl_key }}"
-  when: not private_key.stat.exists
+  when: not private_key.stat.exists and bbb_own_cert is not defined
 
 - name: Generate an OpenSSL Certificate Signing Request
   openssl_csr:
@@ -36,6 +60,7 @@
     common_name: "{{ ansible_fqdn }}"
     subject_alt_name: "{{ cert_san | default(omit) }}"
     email_address: "{{ cert_email | default(omit) }}"
+  when: bbb_own_cert is not defined
 
 - name: Generate SSL self-signed certificate
   openssl_certificate:
@@ -43,10 +68,11 @@
     privatekey_path: "{{ bbb_ssl_key }}"
     csr_path: "{{ bbb_ssl_cert }}.csr"
     provider: selfsigned
+  when: bbb_own_cert is not defined
 
 - name: Validate private key file permissions
   file:
     path: "{{ bbb_ssl_key }}"
     owner: "root"
-    group: "{% if ansible_os_family == 'Debian' %}ssl-cert{% else %}root{% endif %}"
+    group: "{{'ssl-cert' if ansible_os_family == 'Debian' else 'root' }}"
     mode: '0440'

@@ -1,32 +1,81 @@
 ---
+- name: reload systemd
+  become: true
+  systemd:
+    daemon_reload: true
+
 - name: reload nginx
-  service:
+  become: true
+  systemd:
     name: nginx
     state: reloaded
 
 - name: restart nginx
-  service:
+  become: true
+  systemd:
     name: nginx
     state: restarted
 
-- name: restart bigbluebutton
-  command: bbb-conf --restart
+- name: set bbb hostname
   become: true
+  command: "bbb-conf --setip {{ bbb_hostname }}"
+
+- name: restart bigbluebutton
+  become: true
+  command: bbb-conf --restart
 
 - name: restart freeswitch
+  become: true
   systemd:
     name: freeswitch
     state: restarted
-  become: true
 
 - name: restart mongo
-  service:
+  become: true
+  systemd:
     name: mongod
     state: restarted
 
-- name: reload systemd
+- name: restart kurento
+  become: true
   systemd:
-    daemon_reload: true
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - kurento-media-server
+    - kurento-media-server.target
+
+- name: stop kurento
+  become: true
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+  loop:
+    - kurento-media-server
+    - kurento-media-server.target
+
+- name: restart bbb-html5
+  become: true
+  systemd:
+    name: bbb-html5
+    state: restarted
+
+- name: restart bbb-web
+  become: true
+  systemd:
+    name: bbb-web
+
+- name: restart bbb-webrtc-sfu
+  become: true
+  systemd:
+    name: bbb-webrtc-sfu
+    state: restarted
+
+- name: reload apparmor
+  become: true
+  systemd:
+    name: apparmor
+    state: reloaded
 
 - name: restart monitoring
   docker_compose:

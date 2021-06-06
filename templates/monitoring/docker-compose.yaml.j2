@@ -15,6 +15,7 @@ services:
       - bbb_exporter_secrets.env
     restart: unless-stopped
 
+{% if bbb_monitoring_all_in_one_prometheus %}
   prometheus:
     container_name: prometheus
     image: prom/prometheus:v2.20.0
@@ -32,7 +33,9 @@ services:
       - "./prometheus.yaml:/etc/prometheus/prometheus.yml"
       - "prometheus_data:/prometheus"
     restart: unless-stopped
+{% endif %}
 
+{% if bbb_monitoring_all_in_one_grafana %}
   grafana:
     container_name: grafana
     image: grafana/grafana:7.1.1
@@ -44,6 +47,7 @@ services:
     volumes:
       - "grafana_data:/var/lib/grafana"
     restart: unless-stopped
+{% endif %}
 
   node_exporter:
     container_name: node_exporter
@@ -59,7 +63,12 @@ services:
         target: "/host"
         read_only: true
     restart: unless-stopped
-
+{% if bbb_monitoring_all_in_one_prometheus or bbb_monitoring_all_in_one_grafana %}
 volumes:
+{% if bbb_monitoring_all_in_one_prometheus %}
   prometheus_data:
+{% endif %}
+{% if bbb_monitoring_all_in_one_grafana %}
   grafana_data:
+{% endif %}
+{% endif %}
