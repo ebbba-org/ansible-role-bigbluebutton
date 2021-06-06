@@ -11,7 +11,6 @@
       - language-pack-en
       - python3-pip
       - mongodb-org
-      - bbb-check
       - bbb-html5
       - bigbluebutton
   - name: Ensure bigbluebutton.properties file is present
