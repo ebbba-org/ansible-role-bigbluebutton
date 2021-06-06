@@ -7,7 +7,6 @@
     no_proxy: "{{ lookup('env', 'no_proxy') }}"
   remote_user: root
   vars:
-    bbb_nodejs_version: 8.x
     bbb_coturn_secret: ee8d093109a9b273
     bbb_greenlight_enable: false
     bbb_greenlight_secret: 107308d54ff4a5f
@@ -17,10 +16,5 @@
     bbb_greenlight_enable: true
     bbb_greenlight_users:
       - { name: 'user1', email: 'user1@example.com', password: 'user1@example.com', type: 'user' }
-  pre_tasks:
-    - name: Bionic+ | Set mongodb to 4.2
-      set_fact:
-        mongodb_version: 4.2
-      when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 18
   roles:
     - n0emis.bigbluebutton
