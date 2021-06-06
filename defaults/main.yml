@@ -185,7 +185,7 @@ bbb_container_compat: false
 
 bbb_firewall_ufw:
   # enable/disable the ufw
-  enabled: true
+  enabled: false
   # enbale/disable ufw logging
   logging: true
   # The default policy
