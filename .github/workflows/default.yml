@@ -70,7 +70,7 @@ jobs:
           pip3 freeze
           ip addr
           cat /etc/resolv.conf
-          host www.google.com
+          host www.google.com || true
           ping -c 1 www.google.com || true
           ping -c 1 8.8.8.8 || true
           host ubuntu.bigbluebutton.org || true
