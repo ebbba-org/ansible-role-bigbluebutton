@@ -107,9 +107,13 @@ jobs:
         continue-on-error: true
       - name: After script - sfiles
         run: |
+          echo "*** mongo"
           cat /etc/mongod.conf
-          cat /var/log/mongodb/mongod.log
+          cat /var/log/mongodb/mongod.log || true
+          echo "*** greenlight"
           cat /root/greenlight/.env
+          echo "*** etc"
+          find /etc/red5 /etc/bigbluebutton/ -type f -ls
         if: ${{ always() }}
         continue-on-error: true
       - name: After script - curl
@@ -143,8 +147,8 @@ jobs:
         continue-on-error: true
       - name: After script - bbb
         run: |
-          bbb-conf --status
-          bbb-conf --check
-          bbb-conf --secret
+          sudo bbb-conf --status
+          sudo bbb-conf --check
+          sudo bbb-conf --secret
         if: ${{ always() }}
         continue-on-error: true
