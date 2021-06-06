@@ -82,6 +82,13 @@ jobs:
           ansible -i inventory --connection=local -m setup localhost
         if: ${{ always() }}
         continue-on-error: true
+      - name: After script - firewall
+        run: |
+          sudo iptables -L -vn
+          sudo ip6tables -L -vn
+          sudo ufw status verbose
+        if: ${{ always() }}
+        continue-on-error: true
       - name: After script - python
         run: |
           which pip
