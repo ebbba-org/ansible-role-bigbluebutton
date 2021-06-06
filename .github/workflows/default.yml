@@ -63,7 +63,6 @@ jobs:
           cd $GITHUB_WORKSPACE/n0emis.bigbluebutton && ansible-playbook -i localhost, --connection=local --become -vvv test/integration/default/default.yml ${ANSIBLE_EXTRA_VARS} | tee /tmp/idempotency.log | grep -q 'changed=0.*failed=0'  && (echo 'Idempotence test: pass' && exit 0)  || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 0)
       - name: On failure
         run: |
-          ansible -i inventory --connection=local -m setup localhost
           systemctl -l --no-pager status
           systemctl -l --no-pager --failed
           ls -l /usr/bin/ | egrep '(python|pip|ansible)'
@@ -77,6 +76,11 @@ jobs:
           host ubuntu.bigbluebutton.org
           curl -v https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
         if: ${{ failure() }}
+        continue-on-error: true
+      - name: After script - ansible setup
+        run: |
+          ansible -i inventory --connection=local -m setup localhost
+        if: ${{ always() }}
         continue-on-error: true
       - name: After script - python
         run: |
