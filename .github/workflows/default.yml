@@ -73,8 +73,8 @@ jobs:
           host www.google.com
           ping -c 1 www.google.com || true
           ping -c 1 8.8.8.8 || true
-          host ubuntu.bigbluebutton.org
-          curl -v https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
+          host ubuntu.bigbluebutton.org || true
+          curl -v https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc || true
         if: ${{ failure() }}
         continue-on-error: true
       - name: After script - ansible setup
