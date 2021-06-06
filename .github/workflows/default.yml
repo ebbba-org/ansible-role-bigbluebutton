@@ -115,6 +115,15 @@ jobs:
           curl -vk https://localhost/default.pdf
         if: ${{ always() }}
         continue-on-error: true
+      - name: After script - systemd-resolve
+        run: |
+          cat /etc/systemd/resolved.conf || true
+          sudo resolvectl status || true
+          sudo systemd-resolve --status || true
+          resolvectl query ubuntu.bigbluebutton.org || true
+          journalctl -u systemd-resolved --no-pager
+        if: ${{ always() }}
+        continue-on-error: true
       - name: After script - system
         run: |
           sudo netstat -tuanp
