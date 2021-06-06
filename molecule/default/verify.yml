@@ -27,6 +27,7 @@
   - name: Validate config present
     assert:
       that: cfg2.stat.exists and cfg2.stat.size != 0
+    failed_when: false
   - name: Ensure bbb nginx config is enabled
     stat:
       path: /etc/nginx/sites-enabled/bigbluebutton
