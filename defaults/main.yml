@@ -2,6 +2,7 @@
 bbb_hostname: "{{ ansible_fqdn }}"
 bbb_state: "present"
 bbb_upgrade_packages: "{{ 'yes' if bbb_state == 'latest' else 'no' }}"
+bbb_check_for_running_meetings: true
 bbb_letsencrypt_enable: true
 bbb_letsencrypt_api: https://acme-v02.api.letsencrypt.org/directory
 bbb_nginx_privacy: true
