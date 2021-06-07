@@ -4,7 +4,8 @@
       url: "https://{{ bbb_hostname }}/bigbluebutton/api/getMeetings?checksum={{ ('getMeetings' + bbb_secret) | hash('sha1') }}"
       return_content: true
     register: bbb_getmeetings
-    ignore_errors: true
+    failed_when: false
+    changed_when: false
     tags: always
 
   - block:
