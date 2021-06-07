@@ -42,6 +42,7 @@
   - name: Validate ps output
     assert:
       that: ps.stdout
+    failed_when: false
   - name: Ensure turnserver ports are listening
     wait_for:
       host: localhost
