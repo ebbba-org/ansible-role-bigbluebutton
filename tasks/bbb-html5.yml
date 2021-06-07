@@ -3,7 +3,7 @@
 - name: write custom meteor config
   become: true
   copy:
-    content: '{{ bbb_meteor | to_nice_yaml }}'
+    content: '{{ bbb_meteor | to_nice_yaml(indent=2) }}'
     dest: /etc/bigbluebutton/bbb-html5.yml
     mode: '0644'
   notify:
@@ -32,7 +32,7 @@
     dest: /etc/bigbluebutton/nginx/web
     owner: bigbluebutton
     group: bigbluebutton
-    mode: 755
+    mode: '0755'
   notify:
     - restart bbb-web
 

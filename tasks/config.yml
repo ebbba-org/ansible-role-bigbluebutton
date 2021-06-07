@@ -1,16 +1,10 @@
 ---
-- name: register current bbb properties
+- name: register currently configured bbb hostname
   slurp:
     src: /etc/bigbluebutton/bbb-web.properties
   register: properties
-
-- name: set bbb hostname
-  command: "bbb-conf --setip {{ bbb_hostname }}"
-  become: true
-  when: (properties['content'] | b64decode | regex_search(bbb_hostname, multiline=True, ignorecase=True) != bbb_hostname) or
-    _bbb_install.changed or
-    _bbb_upgrade.changed
-  notify: restart bigbluebutton
+  changed_when: properties['content'] | b64decode | regex_search(bbb_hostname, multiline=True, ignorecase=True) != bbb_hostname
+  notify: set bbb hostname
 
 - name: Update /etc/bigbluebutton akka configs
   become: true
@@ -93,7 +87,7 @@
 
 - name: write back new meteor config
   copy:
-    content: '{{ meteor  | to_nice_yaml }}'
+    content: '{{ meteor | to_nice_yaml(indent=2) }}'
     dest: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
     mode: '0644'
   notify:
@@ -318,5 +312,3 @@
   notify:
     - restart bigbluebutton
   when: not bbb_disable_recordings | bool
-
-

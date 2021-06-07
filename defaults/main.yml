@@ -2,11 +2,13 @@
 bbb_hostname: "{{ ansible_fqdn }}"
 bbb_state: "present"
 bbb_upgrade_packages: "{{ 'yes' if bbb_state == 'latest' else 'no' }}"
+bbb_check_for_running_meetings: true
 bbb_letsencrypt_enable: true
 bbb_letsencrypt_api: https://acme-v02.api.letsencrypt.org/directory
 bbb_nginx_privacy: true
 bbb_nginx_listen_https: true
 bbb_nginx_root: /var/www/bigbluebutton-default
+bbb_client_log_enable: false
 
 bbb_coturn_enable: true
 bbb_coturn_port: 3478
@@ -66,6 +68,8 @@ bbb_mongodb_version: 4.2
 # Attention, needs to be encoded with "native2ascii -encoding UTF8"
 bbb_default_welcome_message: Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others.
 bbb_default_welcome_message_footer: This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>.
+bbb_web_logouturl: default
+bbb_allow_request_without_session: false
 bbb_ssl_cert: "/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"
 bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 # These two variables below can be used to copy a local cert/key file to the target
@@ -105,7 +109,6 @@ bbb_dialin_mask_caller: false
 bbb_dialin_overwrite_footer: false
 bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.
 
-bbb_meeting_inactivity_timeout_minutes: 10
 bbb_default_presentation: ${bigbluebutton.web.serverURL}/default.pdf
 
 # bbb_custom_presentation: "default.pdf"

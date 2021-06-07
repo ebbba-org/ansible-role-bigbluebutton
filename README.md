@@ -32,6 +32,8 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_default_presentation` | Location of default presentation | `${bigbluebutton.web.serverURL}/default.pdf` |
 | `bbb_custom_presentation` | Overwrite the default.pdf | `None` | Location of a custom presentation will be renamed to `default.pdf` if `bbb_custom_presentation_name` is not defined - see [Ansible search paths](https://docs.ansible.com/ansible/latest/user_guide/playbook_pathing.html) for where to place your custom pdf - Example `playbooks/files/default.pdf` |
 | `bbb_custom_presentation_name` | Set a custom presentation name | `None` | Instead of overwriting the `default.pdf` setting the name will add for example the `customer.pdf` |
+| `bbb_web_logouturl` | set logout URL | `default` | Instead of using `bigbluebutton.web.serverURL` as default logout page, set another URL or customize logout page e.g. ${bigbluebutton.web.serverURL}/logout.html. API create call with the `logoutURL` parameter overwrite this setting |
+| `bbb_allow_request_without_session` | Enable or disable allow request without session | `false` | Allow requests without JSESSIONID to be handled |
 | `bbb_coturn_enable` | enable installation of the TURN-server | `yes` |
 | `bbb_coturn_server` | server name on coturn (realm) | `{{ bbb_hostname }}` |
 | `bbb_coturn_port` | the port for the TURN-Server to use | `3443` |
@@ -53,6 +55,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
 | `bbb_recordings_nfs_mount` | the nfs-mount-point | | |
 | `bbb_api_demos_enable` | enable installation of the api demos | `no` | |
+| `bbb_client_log_enable` | enable installation of the nginx-full and config for client logging according to [BBB Customization Docs](https://docs.bigbluebutton.org/2.2/customize.html#collect-feedback-from-the-users). See "METEOR" Section below for needed `bbb_meteor` values. | `false` | |
 | `bbb_mute_on_start:` | start with muted mic on join | `no` | |
 | `bbb_app_log_level:` | set bigbluebutton log level | `DEBUG` | |
 | `bbb_meteor:` | overwrite settings in meteor | `{}` | |
@@ -66,6 +69,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality` |
 | `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality` |
 | `bbb_webhooks_enable` | install bbb-webhooks | `no` | |
+| `bbb_check_for_running_meetings` | Check server and stop playbook in case of running meetings. Attention: Currently the check is done only after Docker and NodeJS Roles have already run. | `true` | |
 | `bbb_monitoring_all_in_one_enable` | deploy [all in one monitoring stack](https://bigbluebutton-exporter.greenstatic.dev/installation/all_in_one_monitoring_stack/) (docker) | `no` |
 | `bbb_monitoring_all_in_one_version` | Version of the `greenstatic/bigbluebutton-exporter` docker image | `latest` | |
 | `bbb_monitoring_all_in_one_directory` | Directory for the docker compose files | `/root/bbb-monitoring` | |
@@ -95,7 +99,6 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_cron_published_days` | Retention period of recordings’ raw data | `14` | |
 | `bbb_cron_log_history` | Set the retention period of old log files | `28` | |
 | `bbb_html5_node_options` | Allow to set extra options for node for the html5-webclient | unset | Could be used for example with <https://github.com/bigbluebutton/bigbluebutton/issues/11183> ; `--max-old-space-size=4096 --max_semi_space_size=128` |
-| `bbb_meeting_inactivity_timeout_minutes` | set the default timeout in minutes | `10` | TBD |
 | `bbb_freeswitch_socket_password` | set password for freeswitch _(required)_ |  | Can be generated with `pwgen -s 16 1` |
 | `bbb_html5_backend_processes` | amount of html5 backend processes | 1 | min = 1; max = 4 |
 | `bbb_html5_frontend_processes` | amount of html5 frontend processes | 1 | min = 1; max = 4; or 0 to let the same process do front- and backend (2.2 behavior) |
@@ -309,6 +312,19 @@ bbb_meteor:
         mobilePageSizes:
           moderator: 8
           viewer: 8
+```
+#### User Feedback logging
+To enable client logging and/or userfeedback, you need to set `bbb_client_log_enable` to `true` add the following keys here:
+
+```yaml
+bbb_meteor:
+  public:
+    app:
+      askForFeedbackOnLogout: true
+    clientLog:
+      external:
+        enabled: true
+        url: "https://{{ bbb_hostname }}/html5log"
 ```
 
 ### LXD/LXC compatibility
