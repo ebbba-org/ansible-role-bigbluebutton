@@ -109,9 +109,9 @@ jobs:
         run: |
           echo "*** mongo"
           cat /etc/mongod.conf
-          cat /var/log/mongodb/mongod.log || true
+          sudo cat /var/log/mongodb/mongod.log || true
           echo "*** greenlight"
-          cat /root/greenlight/.env
+          cat /root/greenlight/.env || true
           echo "*** etc"
           find /etc/red5 /etc/bigbluebutton/ -type f -ls
         if: ${{ always() }}
