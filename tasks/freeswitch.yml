@@ -69,6 +69,7 @@
     xpath: /configuration/settings/param[@name='password']
     attribute: "value"
     value: "{{ bbb_freeswitch_socket_password }}"
+  no_log: true
   notify: restart freeswitch
 
 - name: set socket listen port

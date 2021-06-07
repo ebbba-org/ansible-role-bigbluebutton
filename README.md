@@ -54,6 +54,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_allow_mail_notifications`  | Set this to true if you want GreenLight to send verification emails upon the creation of a new account | `true` |
 | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
 | `bbb_api_demos_enable` | enable installation of the api demos | `no` | |
+| `bbb_client_log_enable` | enable installation of the nginx-full and config for client logging according to [BBB Customization Docs](https://docs.bigbluebutton.org/2.2/customize.html#collect-feedback-from-the-users). See "METEOR" Section below for needed `bbb_meteor` values. | `false` | |
 | `bbb_mute_on_start:` | start with muted mic on join | `no` | |
 | `bbb_app_log_level:` | set bigbluebutton log level | `DEBUG` | |
 | `bbb_meteor:` | overwrite settings in meteor | `{}` | |
@@ -96,7 +97,6 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_cron_published_days` | Retention period of recordings’ raw data | `14` | |
 | `bbb_cron_log_history` | Set the retention period of old log files | `28` | |
 | `bbb_html5_node_options` | Allow to set extra options for node for the html5-webclient | unset | Could be used for example with <https://github.com/bigbluebutton/bigbluebutton/issues/11183> ; `--max-old-space-size=4096 --max_semi_space_size=128` |
-| `bbb_meeting_inactivity_timeout_minutes` | set the default timeout in minutes | `10` | TBD |
 | `bbb_freeswitch_socket_password` | set password for freeswitch _(required)_ |  | Can be generated with `pwgen -s 16 1` |
 | `bbb_html5_backend_processes` | amount of html5 backend processes | 1 | min = 1; max = 4 |
 | `bbb_html5_frontend_processes` | amount of html5 frontend processes | 1 | min = 1; max = 4; or 0 to let the same process do front- and backend (2.2 behavior) |
@@ -310,6 +310,19 @@ bbb_meteor:
         mobilePageSizes:
           moderator: 8
           viewer: 8
+```
+#### User Feedback logging
+To enable client logging and/or userfeedback, you need to set `bbb_client_log_enable` to `true` add the following keys here:
+
+```yaml
+bbb_meteor:
+  public:
+    app:
+      askForFeedbackOnLogout: true
+    clientLog:
+      external:
+        enabled: true
+        url: "https://{{ bbb_hostname }}/html5log"
 ```
 
 ### LXD/LXC compatibility
