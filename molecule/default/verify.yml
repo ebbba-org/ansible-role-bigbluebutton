@@ -39,6 +39,7 @@
     command: pgrep -u root turnserver
     register: ps
     changed_when: false
+    failed_when: false
   - name: Validate ps output
     assert:
       that: ps.stdout
