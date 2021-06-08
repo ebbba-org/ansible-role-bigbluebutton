@@ -62,26 +62,6 @@
   notify:
     - restart monitoring service
 
-- name: Copy monitoring nginx configuration file
-  template:
-    src: "monitoring/monitoring.nginx.j2"
-    dest: "/etc/bigbluebutton/nginx/monitoring.nginx"
-    mode: '0644'
-  notify:
-    - reload nginx
-
-- name: Generate htpasswd file for external access if enabled
-  htpasswd:
-    path: "/etc/bigbluebutton/nginx/.htpasswd"
-    name: "{{ bbb_monitoring_all_in_one_htpasswd_user }}"
-    password: "{{ bbb_monitoring_all_in_one_htpasswd }}"
-    owner: root
-    group: root
-    mode: 0644
-  when: bbb_monitoring_systemd_external
-  notify:
-    - reload nginx
-
 - name: start monitoring
   systemd:
     name: bigbluebutton-exporter
