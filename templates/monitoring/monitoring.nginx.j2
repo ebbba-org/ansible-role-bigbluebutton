@@ -13,8 +13,7 @@ location /mon/bbb/ {
   include proxy_params;
 }
 {% else %}
-{% set bbb_monitoring_exporter_port = (bbb_monitoring_all_in_one_enabled | bool
-    | ternary(bbb_monitoring_all_in_one_port, bbb_monitoring_systemd_port, 9688)) %}
+{% set bbb_monitoring_exporter_port = (bbb_monitoring_all_in_one_enabled true | ternary(bbb_monitoring_all_in_one_port, bbb_monitoring_systemd_port, 9688)) %}
 location /monitoring/ {
   proxy_pass http://127.0.0.1:{{ bbb_monitoring_exporter_port }}/;
   include proxy_params;
