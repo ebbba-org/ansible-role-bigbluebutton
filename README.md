@@ -368,7 +368,7 @@ This is an example, of how to use this role. Warning: the value of the Variables
 ```yaml
     - hosts: servers
       roles:
-         - { role: ebbba.bigbluebutton, bbb_turn_secret: ee8d093109a9b273, bbb_greenlight_secret: 107308d54ff4a5f, bbb_greenlight_db_password: 2585c27c785e8895ec, bbb_letsencrypt_email: mail@example.com }
+         - { role: ebbba.bigbluebutton, bbb_coturn_secret: ee8d093109a9b273, bbb_greenlight_secret: 107308d54ff4a5f, bbb_greenlight_db_password: 2585c27c785e8895ec, bbb_letsencrypt_email: mail@example.com }
 ```
 
 ## License
