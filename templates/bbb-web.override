@@ -1,4 +1,7 @@
 [Service]
+{% if ansible_processor_vcpus >= 8 %}
+LimitNOFILE=8192
+{% endif %}
 
 
 # PrivateTmp=yes
