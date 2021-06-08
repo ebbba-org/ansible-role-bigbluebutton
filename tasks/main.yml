@@ -1,49 +1,110 @@
 ---
 
 - import_tasks: checkvars.yml
+  tags:
+    - checkvars
 
 - include_tasks: check-for-sessions.yml
   when: bbb_check_for_running_meetings
+  tags:
+    - check-for-sessions
 
 - import_tasks: firewall/ufw_enable.yml
   when: bbb_firewall_ufw['enabled']
+  tags:
+    - ufw
 
 - import_tasks: firewall/ufw_disable.yml
   when: not bbb_firewall_ufw['enabled']
+  tags:
+    - ufw
 
 - import_tasks: locale.yml
+  tags:
+    - locale
+
 - import_tasks: repositories.yml
+  tags:
+    - repositories
+
 - import_tasks: installation.yml
+  tags:
+    - installation
+
 - import_tasks: mongodb.yml
+  tags:
+    - mongodb
+
 - import_tasks: runtimevars.yml
+  tags:
+    - runtimevars
 
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable | bool and not bbbcert.stat.exists
+  tags:
+    - tls
 
 - import_tasks: certificate-selfsigned.yml
   when: not (bbb_letsencrypt_enable | bool) and not bbbcert.stat.exists
+  tags:
+    - tls
 
 - import_tasks: nginx.yml
+  tags:
+    - nginx
+
 - import_tasks: config.yml
+  tags:
+    - config
+
 - import_tasks: ntp.yml
+  tags:
+    - ntp
 
 - import_tasks: coturn.yml
   when: bbb_coturn_enable | bool
+  tags:
+    - coturn
 
 - import_tasks: dial-in/main.yml
+  tags:
+    - dial-in
 
 - import_tasks: docker.yml
   when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool
+  tags:
+    - docker
 
 - import_tasks: greenlight.yml
   when: bbb_greenlight_enable | bool
+  tags:
+    - greenlight
 
 - import_tasks: monitoring/all_in_one.yml
   when: bbb_monitoring_all_in_one_enable | bool
+  tags:
+    - monitoring
 
 - import_tasks: webrtc-sfu.yml
+  tags:
+    - webrtc-sfu
+
 - import_tasks: bbb-web.yml
+  tags:
+    - bbb-web
+
 - import_tasks: bbb-html5.yml
+  tags:
+    - bbb-hml5
+
 - import_tasks: freeswitch.yml
+  tags:
+    - freeswitch
+
 - import_tasks: stun-turn.yml
+  tags:
+    - stun-turn
+
 - import_tasks: kurento.yml
+  tags:
+    - kurento
