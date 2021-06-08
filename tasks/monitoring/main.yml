@@ -16,12 +16,12 @@
 - name: Generate htpasswd file for external access if enabled
   htpasswd:
     path: "/etc/bigbluebutton/nginx/.htpasswd"
-    name: "{{ bbb_monitoring_exporter_htpasswd_user }}"
-    password: "{{ bbb_monitoring_exporter_htpasswd }}"
+    name: "{{ bbb_monitoring_htpasswd_user }}"
+    password: "{{ bbb_monitoring_htpasswd }}"
     owner: root
     group: root
     mode: 0644
   no_log: true
-  when: bbb_monitoring_exporter_external | bool
+  when: bbb_monitoring_external | bool
   notify:
     - reload nginx

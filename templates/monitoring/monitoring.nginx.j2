@@ -1,4 +1,4 @@
-{% if bbb_monitoring_exporter_external %}
+{% if bbb_monitoring_external %}
 location /mon/node/ {
   proxy_pass http://127.0.0.1:9100/metrics;
   auth_basic "BigBlueButton Exporter";

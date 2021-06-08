@@ -31,20 +31,20 @@
       failed_when: bbb_monitoring_all_in_one_version is defined
     - name: bbb_monitoring_all_in_one_htpasswd_user
       debug:
-        msg: "bbb_monitoring_all_in_one_htpasswd_user is deprecated, use bbb_monitoring_exporter_htpasswd_user instead"
+        msg: "bbb_monitoring_all_in_one_htpasswd_user is deprecated, use bbb_monitoring_htpasswd_user instead"
       failed_when: bbb_monitoring_all_in_one_htpasswd_user
-    - name: bbb_monitoring_exporter_htpasswd_user
+    - name: bbb_monitoring_htpasswd_user
       debug:
-        msg: "value: {{ bbb_monitoring_exporter_htpasswd_user }}"
-      when: bbb_monitoring_exporter_external
+        msg: "value: {{ bbb_monitoring_htpasswd_user }}"
+      when: bbb_monitoring_external
     - name: bbb_monitoring_all_in_one_htpasswd
       debug:
-        msg: "bbb_monitoring_all_in_one_htpasswd is deprecated, use bbb_monitoring_exporter_htpasswd instead"
+        msg: "bbb_monitoring_all_in_one_htpasswd is deprecated, use bbb_monitoring_htpasswd instead"
       failed_when: bbb_monitoring_all_in_one_htpasswd
-    - name: bbb_monitoring_exporter_htpasswd
+    - name: bbb_monitoring_htpasswd
       debug:
-        msg: "value: {{ bbb_monitoring_exporter_htpasswd }}"
-      when: bbb_monitoring_exporter_external
+        msg: "value: {{ bbb_monitoring_htpasswd }}"
+      when: bbb_monitoring_external
 
     - name: bbb_monitoring_systemd_enable
       debug:

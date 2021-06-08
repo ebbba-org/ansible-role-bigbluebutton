@@ -74,13 +74,13 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_monitoring_all_in_one_port` | Internal Port for the monitoring werbservice | `3001` | |
 | `bbb_monitoring_all_in_one_grafana` | Enable(true)/Disable(false) the Grafana container | `true` | |
 | `bbb_monitoring_all_in_one_prometheus` | Enable(true)/Disable(false) the prometheus container | `true` | |
-| `bbb_monitoring_all_in_one_external` | Deprecated, use `bbb_monitoring_exporter_external` instead | | Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user` |
-| `bbb_monitoring_all_in_one_htpasswd_user` | Deprecated, use `bbb_monitoring_exporter_htpasswd_user` instead | | |
-| `bbb_monitoring_all_in_one_htpasswd` | Deprecated, use `bbb_monitoring_exporter_htpasswd` instead | | |
+| `bbb_monitoring_all_in_one_external` | Deprecated, use `bbb_monitoring_external` instead | | Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user` |
+| `bbb_monitoring_all_in_one_htpasswd_user` | Deprecated, use `bbb_monitoring_htpasswd_user` instead | | |
+| `bbb_monitoring_all_in_one_htpasswd` | Deprecated, use `bbb_monitoring_htpasswd` instead | | |
 | `bbb_monitoring_recordings_from_disk` | Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details. | `true` |
-| `bbb_monitoring_exporter_external` | Enable exposure to nginx | `false` | Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user`. If `bbb_monitoring_systemd_enable` is enabled, no Node Exporter installation process is included |
-| `bbb_monitoring_exporter_htpasswd_user` | The user for the htpasswd - _(required)_ if external | `Undefined` | |
-| `bbb_monitoring_exporter_htpasswd` | The password for the htpasswd - _(required)_ if external | `Undefined` | |
+| `bbb_monitoring_external` | Enable exposure to nginx | `false` | Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user`. If `bbb_monitoring_systemd_enable` is enabled, no Node Exporter installation process is included |
+| `bbb_monitoring_htpasswd_user` | The user for the htpasswd - _(required)_ if external | `Undefined` | |
+| `bbb_monitoring_htpasswd` | The password for the htpasswd - _(required)_ if external | `Undefined` | |
 | `bbb_monitoring_exporter_version` | Version of the BigBlueButton Exporter for docker and systemd | `latest` if docker image is enabled or `HEAD` if systemd is enabled | If `bbb_monitoring_all_in_one_enable` is enabled, the [Docker images tags](https://hub.docker.com/r/greenstatic/bigbluebutton-exporter/tags?page=1&ordering=last_updated) can be used. If `bbb_monitoring_systemd_enable` is enabled, the [Git release tags](https://github.com/greenstatic/bigbluebutton-exporter/releases) can be used. |
 | `bbb_monitoring_systemd_enable` | Deploy monitoring as systemd service (not recommended) | `false` | Works only when `bbb_monitoring_all_in_one_enable` is `false` |
 | `bbb_monitoring_systemd_directory` | Installation directory for git repository | `"/opt/bigbluebutton-exporter"` | |
