@@ -27,16 +27,25 @@
       failed_when: ansible_distribution_release | lower != 'bionic'
     - name: bbb_monitoring_all_in_one_version
       debug:
-        msg: bbb_monitoring_all_in_one_version is deprecated, use bbb_monitoring_exporter_version instead
+        msg: "bbb_monitoring_all_in_one_version is deprecated, use bbb_monitoring_exporter_version instead"
       failed_when: bbb_monitoring_all_in_one_version is defined
     - name: bbb_monitoring_all_in_one_htpasswd_user
       debug:
-        msg: "value: {{ bbb_monitoring_all_in_one_htpasswd_user }}"
-      when: bbb_monitoring_all_in_one_external or bbb_monitoring_systemd_external
+        msg: "bbb_monitoring_all_in_one_htpasswd_user is deprecated, use bbb_monitoring_exporter_htpasswd_user instead"
+      failed_when: bbb_monitoring_all_in_one_htpasswd_user
+    - name: bbb_monitoring_exporter_htpasswd_user
+      debug:
+        msg: "value: {{ bbb_monitoring_exporter_htpasswd_user }}"
+      when: bbb_monitoring_exporter_external
     - name: bbb_monitoring_all_in_one_htpasswd
       debug:
-        msg: "value: {{ bbb_monitoring_all_in_one_htpasswd }}"
-      when: bbb_monitoring_all_in_one_external or bbb_monitoring_systemd_external
+        msg: "bbb_monitoring_all_in_one_htpasswd is deprecated, use bbb_monitoring_exporter_htpasswd instead"
+      failed_when: bbb_monitoring_all_in_one_htpasswd
+    - name: bbb_monitoring_exporter_htpasswd
+      debug:
+        msg: "value: {{ bbb_monitoring_exporter_htpasswd }}"
+      when: bbb_monitoring_exporter_external
+
     - name: bbb_monitoring_systemd_enable
       debug:
         msg: "Please disable monitoring for Systemd or Docker, these can not run alongside"
