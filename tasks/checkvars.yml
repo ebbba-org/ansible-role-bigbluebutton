@@ -33,10 +33,10 @@
       debug:
         msg: "bbb_monitoring_all_in_one_htpasswd_user is deprecated, use bbb_monitoring_htpasswd_user instead"
       failed_when: bbb_monitoring_all_in_one_htpasswd_user is defined
-    - name: bbb_monitoring_htpasswd_user
-      debug:
-        msg: "value: {{ bbb_monitoring_htpasswd_user }}"
-      when: bbb_monitoring_external
+#    - name: bbb_monitoring_htpasswd_user
+#      debug:
+#        msg: "value: {{ bbb_monitoring_htpasswd_user }}"
+#      when: bbb_monitoring_external
     - name: bbb_monitoring_all_in_one_htpasswd
       debug:
         msg: "bbb_monitoring_all_in_one_htpasswd is deprecated, use bbb_monitoring_htpasswd instead"
