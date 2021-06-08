@@ -39,7 +39,7 @@
   when: bbb_monitoring_all_in_one_enable
 
 - import_tasks: monitoring/systemd.yml
-  when: bbb_monitoring_systemd_enable
+  when: bbb_monitoring_systemd_enable | bool
 
 - import_tasks: webrtc-sfu.yml
 - import_tasks: bbb-web.yml
