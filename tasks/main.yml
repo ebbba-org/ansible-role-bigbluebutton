@@ -3,6 +3,7 @@
 - import_tasks: checkvars.yml
   tags:
     - checkvars
+    - always
 
 - include_tasks: check-for-sessions.yml
   when: bbb_check_for_running_meetings
@@ -38,6 +39,7 @@
 - import_tasks: runtimevars.yml
   tags:
     - runtimevars
+    - always
 
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable | bool and not bbbcert.stat.exists
