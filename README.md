@@ -69,7 +69,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality` |
 | `bbb_webhooks_enable` | install bbb-webhooks | `no` | |
 | `bbb_monitoring_all_in_one_enable` | deploy [all in one monitoring stack](https://bigbluebutton-exporter.greenstatic.dev/installation/all_in_one_monitoring_stack/) (docker) | `no` |
-| `bbb_monitoring_all_in_one_version` | Version of the `greenstatic/bigbluebutton-exporter` docker image | `{{ bbb_monitoring_exporter_version }}` |  |
+| `bbb_monitoring_all_in_one_version` | Deprecated, use `bbb_monitoring_exporter_version` instead | | |
 | `bbb_monitoring_all_in_one_directory` | Directory for the docker compose files | `/root/bbb-monitoring` | |
 | `bbb_monitoring_all_in_one_port` | Internal Port for the monitoring werbservice | `3001` | |
 | `bbb_monitoring_all_in_one_grafana` | Enable(true)/Disable(false) the Grafana container | `true` | |
@@ -81,7 +81,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_monitoring_exporter_version` | Version of the BigBlueButton Exporter for docker and systemd | `latest` if docker image is enabled or `HEAD` if systemd is enabled | If `bbb_monitoring_all_in_one_enable` is enabled, the [Docker images tags](https://hub.docker.com/r/greenstatic/bigbluebutton-exporter/tags?page=1&ordering=last_updated) can be used. If `bbb_monitoring_systemd_enable` is enabled, the [Git release tags](https://github.com/greenstatic/bigbluebutton-exporter/releases) can be used. |
 | `bbb_monitoring_systemd_enable` | Deploy monitoring as systemd service (not recommended) | `false` | Works only when `bbb_monitoring_all_in_one_enable` is `false` |
 | `bbb_monitoring_systemd_directory` | Installation directory for git repository | `"/opt/bigbluebutton-exporter"` | |
-| `bbb_monitoring_systemd_external` | Enable exposure to nginx | `false` | For the external accessibility the variables `bbb_monitoring_all_in_one_htpasswd_user` and `bbb_monitoring_all_in_one_htpasswd` have to be set |
+| `bbb_monitoring_systemd_external` | Enable exposure to nginx | `false` | For the external accessibility the variables `bbb_monitoring_all_in_one_htpasswd_user` and `bbb_monitoring_all_in_one_htpasswd` have to be set. No Node Exporter installation process included |
 | `bbb_monitoring_systemd_port` | Port of bbb-exporter | `9688` | default port 9866 is defined by the exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/bbb-exporter/settings.py#L37) |
 | `bbb_monitoring_systemd_bind_ip` | Port of bbb-exporter | `0.0.0.0` | default bind IP 0.0.0.0 is defined by the exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/bbb-exporter/settings.py#L38) |
 | `bbb_dialin_enabled` | enable phone dial-in, will also remove any previous dial-in configuration if set to `false`  | `false` | |

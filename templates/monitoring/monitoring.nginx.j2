@@ -1,14 +1,4 @@
-{% if not bbb_monitoring_all_in_one_external and not bbb_monitoring_systemd_enable %}
-location /monitoring/ {
-  proxy_pass http://127.0.0.1:{{ bbb_monitoring_all_in_one_port }}/;
-  include proxy_params;
-}
-{% elif not bbb_monitoring_systemd_external and not bbb_monitoring_all_in_one_enable %}
-location /monitoring/ {
-  proxy_pass http://127.0.0.1:{{ bbb_monitoring_systemd_port }}/;
-  include proxy_params;
-}
-{% else %}
+{% if bbb_monitoring_all_in_one_external or bbb_monitoring_systemd_external %}
 location /mon/node/ {
   proxy_pass http://127.0.0.1:9100/metrics;
   auth_basic "BigBlueButton Exporter";
@@ -20,6 +10,13 @@ location /mon/bbb/ {
   proxy_pass http://127.0.0.1:9688/;
   auth_basic "BigBlueButton Exporter";
   auth_basic_user_file /etc/bigbluebutton/nginx/.htpasswd;
+  include proxy_params;
+}
+{% else %}
+{% set bbb_monitoring_exporter_port = (bbb_monitoring_all_in_one_enabled | bool
+    | ternary(bbb_monitoring_all_in_one_port, bbb_monitoring_systemd_port, 9688) %}
+location /monitoring/ {
+  proxy_pass http://127.0.0.1:{{ bbb_monitoring_exporter_port }}/;
   include proxy_params;
 }
 {% endif %}
