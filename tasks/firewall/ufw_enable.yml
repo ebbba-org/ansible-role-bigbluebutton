@@ -67,12 +67,12 @@
   - name: Allow ssh connections
     community.general.ufw:
       rule: allow
-      name: OpenSSH
+      port: "{{ bbb_ssh_port }}"
 
   - name: Connection rate limit for ssh
     community.general.ufw:
       rule: limit
-      port: ssh
+      port: "{{ bbb_ssh_port }}"
       proto: tcp
 
   - name: Setup default policy
