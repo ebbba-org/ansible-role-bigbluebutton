@@ -36,6 +36,7 @@
   copy:
     dest: /etc/default/coturn
     src: etc-default-coturn
+    mode: '0644'
   when: bbb_coturn_enable | bool
 
 - name: Disable coturn server in defaults
