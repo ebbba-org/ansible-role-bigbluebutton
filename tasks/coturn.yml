@@ -4,7 +4,7 @@
   apt:
     name: coturn
     update_cache: true
-    state: "{% if bbb_coturn_enable | bool %}present{% else %}absent{% endif %}"
+    state: "{{ 'present' if bbb_coturn_enable | bool  else 'absent' }}"
 
 - name: Copy coturn config-file
   template:
@@ -49,4 +49,4 @@
   service:
     name: coturn
     enabled: "{{ bbb_coturn_enable | bool }}"
-    state: "{% if bbb_coturn_enable | bool %}started{% else %}stopped{% endif %}"
+    state: "{{ 'started' if bbb_coturn_enable | bool else 'stopped' }}"
