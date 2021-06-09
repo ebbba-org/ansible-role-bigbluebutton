@@ -67,13 +67,20 @@
   - name: Allow ssh connections
     community.general.ufw:
       rule: allow
-      name: OpenSSH
+      port: "{{ bbb_ssh_port }}"
 
   - name: Connection rate limit for ssh
     community.general.ufw:
       rule: limit
-      port: ssh
+      port: "{{ bbb_ssh_port }}"
       proto: tcp
+
+  - name: allow sip-proxy connection
+    community.general.ufw:
+      rule: allow
+      from: '{{ bbb_dialin_provider_ip }}'
+      to_port: '5060'
+    when: bbb_dialin_enabled | bool and bbb_dialin_provider_ip is defined and bbb_dialin_provider_ip | length > 0
 
   - name: Setup default policy
     community.general.ufw:
