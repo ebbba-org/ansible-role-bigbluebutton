@@ -40,7 +40,7 @@
     mode: 0644
   no_log: true
   notify: reload nginx
-  when: bbb_monitoring_all_in_one_external and not bbb_monitoring_use_nginx_access_module | bool
+  when: bbb_monitoring_all_in_one_external and not bbb_monitoring_all_in_one_ip_restriction | bool
 
 - name: start monitoring
   docker_compose:

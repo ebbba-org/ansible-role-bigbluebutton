@@ -79,7 +79,8 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_monitoring_node_exporter_endpoint` | Node-exporter endpoint | `/mon/node/` | |
 | `bbb_monitoring_all_in_one_htpasswd_user` | The user for the htpasswd - _(required)_ if external | `Undefined` | |
 | `bbb_monitoring_all_in_one_htpasswd` | The password for the htpasswd - _(required)_ if external | `Undefined` | |
-| `bbb_monitoring_use_nginx_access_module` | Restricting access by IP Address instead using htpasswd | `false` | |
+| `bbb_monitoring_all_in_one_ip_restriction` | Restricting access by IP Address instead using htpasswd | `false` | |
+| `bbb_monitoring_all_in_one_ip_htpasswd_restriction`| Use combination of IP Address restriction and htpasswd | `false` | |
 | `bbb_monitoring_ips` | a list of ip addresses for restricting access | `[]` | in array with key `address` |
 | `bbb_monitoring_recordings_from_disk` | Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details. | `true` |
 | `bbb_dialin_enabled` | enable phone dial-in, will also remove any previous dial-in configuration if set to `false`  | `false` | |
