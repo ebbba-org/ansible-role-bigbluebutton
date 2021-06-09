@@ -68,6 +68,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality` |
 | `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality` |
 | `bbb_webhooks_enable` | install bbb-webhooks | `no` | |
+| `bbb_check_for_running_meetings` | Check server and stop playbook in case of running meetings. Attention: Currently the check is done only after Docker and NodeJS Roles have already run. | `true` | |
 | `bbb_monitoring_all_in_one_enable` | deploy [all in one monitoring stack](https://bigbluebutton-exporter.greenstatic.dev/installation/all_in_one_monitoring_stack/) (docker) | `no` |
 | `bbb_monitoring_all_in_one_version` | Version of the `greenstatic/bigbluebutton-exporter` docker image | `latest` | |
 | `bbb_monitoring_all_in_one_directory` | Directory for the docker compose files | `/root/bbb-monitoring` | |
@@ -107,6 +108,9 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_html5_frontend_processes` | amount of html5 frontend processes | 1 | min = 1; max = 4; or 0 to let the same process do front- and backend (2.2 behavior) |
 | `bbb_container_compat` | Compatibility with unprivileged containers | `false` | Enabling this option allows to deploy BBB into a unprivileged container |
 | `bbb_firewall_ufw` | A dict of rules for the ufw | see `defaults/main.yml` | can also be used to allow/deny more/less |
+| `bbb_ufw_allow_networks_custom` | List of additional networks to be allowed by UFW | Not defined |  |
+| `bbb_ufw_reject_networks_custom` | List of additional networks to be rejected by UFW | Not defined |  |
+| `bbb_ssh_port` | Allow and limit the port used for SSH access | `22` | |
 | `bbb_max_file_size_upload`| Maximum file size for an uploaded presentation (default 30MB - number must be in byte) | 30000000| |
 | `bbb_default_max_users` | Default maximum number of users a meeting can have | `0` | Meeting doesn't have a user limit |
 | `bbb_default_meeting_duration` | Default duration of the meeting in minutes | `0` | Meeting doesn't end |
@@ -369,7 +373,7 @@ This is an example, of how to use this role. Warning: the value of the Variables
 ```yaml
     - hosts: servers
       roles:
-         - { role: ebbba.bigbluebutton, bbb_turn_secret: ee8d093109a9b273, bbb_greenlight_secret: 107308d54ff4a5f, bbb_greenlight_db_password: 2585c27c785e8895ec, bbb_letsencrypt_email: mail@example.com }
+         - { role: ebbba.bigbluebutton, bbb_coturn_secret: ee8d093109a9b273, bbb_greenlight_secret: 107308d54ff4a5f, bbb_greenlight_db_password: 2585c27c785e8895ec, bbb_letsencrypt_email: mail@example.com }
 ```
 
 ## License
