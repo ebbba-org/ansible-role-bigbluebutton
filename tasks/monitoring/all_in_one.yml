@@ -21,7 +21,7 @@
     dest: "{{ bbb_monitoring_all_in_one_directory }}/prometheus.yaml"
     mode: '0644'
   notify: restart monitoring
-  when: bbb_monitoring_all_in_one_enable | bool
+  when: bbb_monitoring_all_in_one_enable | bool and not bbb_monitoring_all_in_one_external | bool
 
 - name: copy monitoring nginx configuration file
   template:
