@@ -80,7 +80,7 @@
       rule: allow
       from: '{{ bbb_dialin_provider_ip }}'
       to_port: '5060'
-    when: bbb_dialin_enabled | bool and bbb_dialin_provider_ip is defined
+    when: bbb_dialin_enabled | bool and bbb_dialin_provider_ip is defined and bbb_dialin_provider_ip | length > 0
 
   - name: Setup default policy
     community.general.ufw:
