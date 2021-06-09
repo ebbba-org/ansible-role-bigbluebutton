@@ -1,30 +1,51 @@
 ---
-- name: Install coturn
+
+- name: Manage coturn
   apt:
     name: coturn
     update_cache: true
-    state: "{{ bbb_state }}"
+    state: "{% if bbb_coturn_enable | bool %}present{% else %}absent{% endif %}"
 
 - name: Copy coturn config-file
   template:
     src: "turnserver.conf.j2"
     dest: /etc/turnserver.conf
     mode: '0644'
+  when: bbb_coturn_enable | bool
+
+- name: Remove coturn config-file
+  file:
+    path: /etc/turnserver.conf
+    state: "absent"
+  when: not (bbb_coturn_enable | bool)
 
 - name: Enable logrotate for coturn
   template:
     src: logrotate/coturn
     dest: /etc/logrotate.d/coturn
     mode: '0644'
+  when: bbb_coturn_enable | bool
+
+- name: Disable logrotate for coturn
+  file:
+    path: /etc/logrotate.d/coturn
+    state: "absent"
+  when: not (bbb_coturn_enable | bool)
 
 - name: Enable coturn server in defaults
-  lineinfile:
-    path: /etc/default/coturn
-    regexp: 'TURNSERVER_ENABLED'
-    line: 'TURNSERVER_ENABLED=1'
+  copy:
+    dest: /etc/default/coturn
+    src: etc-default-coturn
+  when: bbb_coturn_enable | bool
 
-- name: Enable coturn
+- name: Disable coturn server in defaults
+  file:
+    path: /etc/default/coturn
+    state: "absent"
+  when: not (bbb_coturn_enable | bool)
+
+- name: Manage coturn service
   service:
     name: coturn
-    enabled: true
-    state: started
+    enabled: "{{ bbb_coturn_enable | bool }}"
+    state: "{% if bbb_coturn_enable | bool %}started{% else %}stopped{% endif %}"
