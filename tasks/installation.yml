@@ -50,6 +50,9 @@
     autoremove: true
   when: not bbb_client_log_enable
 
+- debug: 
+    msg: "Installing bbb packages and dependencies, this may take a while..."
+
 - name: install bbb and dependencies
   become: true
   apt:
