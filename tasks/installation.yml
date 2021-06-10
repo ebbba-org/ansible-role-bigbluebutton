@@ -13,6 +13,28 @@
     dest: /etc/alternatives/java
     state: link
 
+- name: Add NGINX sources
+  become: yes
+  block:
+    - name: "Install NGINX sources dependencies"
+      package: 
+        name: "software-properties-common"
+        state: latest
+
+    - name: "Add APT NGINX Signing Key"
+      become: yes
+      apt_key:
+        url: "https://nginx.org/keys/nginx_signing.key"
+
+    - name: "Add NGINX Repository"
+      become: yes
+      apt_repository:
+        repo: "{{ item }}"
+      loop:
+        - "deb https://nginx.org/packages/{{ (nginx_branch == 'mainline')
+          | ternary('mainline/', '') }}{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} nginx"
+  when: bbb_nginx_install_from_source|bool
+
 - name: install nginx-full for client-logging
   become: true
   apt:
