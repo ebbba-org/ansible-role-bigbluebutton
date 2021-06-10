@@ -6,7 +6,7 @@ bbb_check_for_running_meetings: true
 bbb_letsencrypt_enable: true
 bbb_letsencrypt_api: https://acme-v02.api.letsencrypt.org/directory
 bbb_nginx_install_from_source: true
-nginx_branch: 'mainline'
+bbb_nginx_branch: 'mainline'
 bbb_nginx_privacy: true
 bbb_nginx_listen_https: true
 bbb_nginx_root: /var/www/bigbluebutton-default
