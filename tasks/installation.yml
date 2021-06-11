@@ -29,9 +29,7 @@
     - name: "Add NGINX Repository"
       become: yes
       apt_repository:
-        repo: "{{ item }}"
-      loop:
-        - "deb https://nginx.org/packages/{{ (bbb_nginx_branch == 'mainline')
+        repo: "deb [arch=amd64] https://nginx.org/packages/{{ (bbb_nginx_use_mainline_branch|bool)
           | ternary('mainline/', '') }}{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} nginx"
   when: bbb_nginx_install_from_source|bool
 
@@ -40,6 +38,7 @@
   apt:
     name: nginx-full
     state: "{{ bbb_state }}"
+    autoremove: true
   when: bbb_client_log_enable
 
 - name: install nginx-core, no client-logging
