@@ -38,6 +38,8 @@ bbb_greenlight_enable: true
 bbb_greenlight_users: []
 #  - { name: '', email: '', password: '', type: 'user' }
 #  - { name: '', email: '', password: '', type: 'admin' }
+# You can also give the provider name as last argument
+#  - { name: '', email: '', password: '', type: 'admin', provider: 'oauth2' }
 
 bbb_webhooks_enable: false
 bbb_allow_mail_notifications: true
