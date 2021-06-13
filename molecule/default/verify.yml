@@ -2,7 +2,7 @@
 # This is an example playbook to execute Ansible tests.
 
 - name: Verify
-  hosts: all
+  hosts: bbb
   tasks:
   - name: Check if needed packages are installed
     command: "dpkg-query -l {{ item }}"

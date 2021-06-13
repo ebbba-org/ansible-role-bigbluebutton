@@ -1,6 +1,6 @@
 ---
 - name: Converge
-  hosts: all
+  hosts: bbb
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
