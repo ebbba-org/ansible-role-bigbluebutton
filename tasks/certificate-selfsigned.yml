@@ -23,7 +23,7 @@
     force: true
   when: bbb_own_key is defined
 
-- name: upgrade pip to latest version
+- name: upgrade pip to latest version  # noqa package-latest
   pip:
     name: pip
     state: latest
