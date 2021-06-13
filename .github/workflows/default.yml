@@ -141,6 +141,7 @@ jobs:
           systemctl -l --no-pager status nginx
           systemctl -l --no-pager status mongod
           systemctl -l --no-pager status freeswitch
+          systemctl -l --no-pager status coturn
           systemctl -l --no-pager status
           journalctl -xe --no-pager
         if: ${{ always() }}
