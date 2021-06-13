@@ -48,6 +48,7 @@
     wait_for:
       host: localhost
       port: "{{ item }}"
+      timeout: 5
     with_items:
       - 3478
       - 3479
