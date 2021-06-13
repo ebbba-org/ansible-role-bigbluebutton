@@ -51,6 +51,7 @@
     with_items:
       - 3478
       - 3479
+    failed_when: false
   # FIXME! bbb-conf relies on systemctl. NOK in docker
   - name: check if bbb status
     command: bbb-conf --status
