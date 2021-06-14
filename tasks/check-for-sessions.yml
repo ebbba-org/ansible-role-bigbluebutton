@@ -8,6 +8,11 @@
     changed_when: false
     tags: always
 
+  - name: debug
+    debug:
+      var: bbb_getmeetings
+    tags: always
+
   - block:
       - name: There are running sessions on this host
         fail: msg="There are running meetings on {{ bbb_hostname }}, skipping."
@@ -15,6 +20,6 @@
         meta: end_host
     when:
       - not ansible_check_mode
-      - not bbb_getmeetings.failed
+      - bbb_getmeetings.status == 200
       - "'<messageKey>noMeetings</messageKey>' is not in bbb_getmeetings.content"
     tags: always
