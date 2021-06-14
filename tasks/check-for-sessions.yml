@@ -8,11 +8,6 @@
     changed_when: false
     tags: always
 
-  - name: debug
-    debug:
-      var: bbb_getmeetings
-    tags: always
-
   - block:
       - name: There are running sessions on this host
         fail: msg="There are running meetings on {{ bbb_hostname }}, skipping."
