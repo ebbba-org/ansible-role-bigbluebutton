@@ -4,6 +4,7 @@
   stat:
     path: "{{ bbb_ssl_cert }}"
   register: bbbcert
+  when: not bbbcert is defined
 
 - name: register bbb secret
   become: true
