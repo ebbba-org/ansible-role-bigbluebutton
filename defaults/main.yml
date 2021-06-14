@@ -205,7 +205,7 @@ bbb_ufw_allow_networks: "{{ bbb_ufw_allow_networks_custom | default([]) + bbb_uf
 bbb_ufw_reject_networks: "{{ bbb_ufw_reject_networks_custom | default([]) + bbb_ufw_reject_networks_default }}"
 bbb_firewall_ufw:
   # enable/disable the ufw
-  enabled: false
+  enabled: true
   # enbale/disable ufw logging
   logging: true
   # The default policy
