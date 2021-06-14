@@ -6,6 +6,7 @@
   register: bbbcert
 
 - name: register bbb secret
+  become: true
   command: bbb-conf --secret
   changed_when: false
   register: result

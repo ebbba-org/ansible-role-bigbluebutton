@@ -5,7 +5,9 @@
     - checkvars
 
 - include_tasks: check-for-sessions.yml
-  when: bbb_check_for_running_meetings
+  when:
+    - bbb_check_for_running_meetings
+    - bbb_secret is defined
   tags:
     - check-for-sessions
 

@@ -47,6 +47,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_turn_servers` | a list of TURN-Server to use | `{{ bbb_hostname }}` with `{{ bbb_coturn_secret }}` | take a look in defaults/main.yml |
 | `bbb_greenlight_enable` | enable installation of the greenlight client | `yes` | |
 | `bbb_greenlight_hosts` | the hostname that greenlight is accessible from | `{{ bbb_hostname }}` | |
+| `bbb_greenlight_image` | the Docker image to be used for greenlight, so you can use a custom version | `bigbluebutton/greenlight:v2` | |
 | `bbb_greenlight_secret` | Secret for greenlight _(required when using greenlight)_ |  | can be generated with `openssl rand -hex 64` |
 | `bbb_greenlight_db_password` | Password for greenlight's database  _(required when using greenlight)_ | | can be generated with `openssl rand -hex 16` |
 | `bbb_greenlight_default_registration` | Registration option open(default), invite or approval | `open` | |
@@ -94,6 +95,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_dialin_provider_extension` | Extension of your SIP account | `6135551234` | |
 | `bbb_dialin_default_number` | Number to present to users for dial-in. Enable `bbb_dialin_overwrite_footer` or use `%%DIALNUM%%` and `%%CONFNUM%%` in you footer (see `bbb_default_welcome_message_footer`) | `6135551234` | |
 | `bbb_dialin_mask_caller` | Mask caller-number in the BBB web-interface for privacy reasons (`01711233121` → `xxx-xxx-3121`) | |
+| `bbb_dialin_default_play_and_get_digits` | Phone dialin-pin entry voice dialog | `5 5 3 7000 #` | Usage `<min> <max> <tries> <timeout> <terminators>` See [this](https://freeswitch.org/confluence/display/FREESWITCH/mod_dptools%3A+play_and_get_digits) for more details | 
 | `bbb_dialin_overwrite_footer` | Set the default dial-in footer instead of `bbb_default_welcome_message_footer` | `false` | |
 | `bbb_dialin_footer` | The default dial-in notice, if you want to customize it, it is recommended to change `bbb_default_welcome_message_footer` instead | `<br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.` | |
 | `bbb_guestpolicy` | How guest can access | `ALWAYS_ACCEPT` | acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR | |
@@ -376,7 +378,7 @@ This is an example, of how to use this role. Warning: the value of the Variables
 ```yaml
     - hosts: servers
       roles:
-         - { role: ebbba.bigbluebutton, bbb_turn_secret: ee8d093109a9b273, bbb_greenlight_secret: 107308d54ff4a5f, bbb_greenlight_db_password: 2585c27c785e8895ec, bbb_letsencrypt_email: mail@example.com }
+         - { role: ebbba.bigbluebutton, bbb_coturn_secret: ee8d093109a9b273, bbb_greenlight_secret: 107308d54ff4a5f, bbb_greenlight_db_password: 2585c27c785e8895ec, bbb_letsencrypt_email: mail@example.com }
 ```
 
 ## License
