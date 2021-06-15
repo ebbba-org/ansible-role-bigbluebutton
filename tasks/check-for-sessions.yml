@@ -15,6 +15,6 @@
         meta: end_host
     when:
       - not ansible_check_mode
-      - not bbb_getmeetings.failed
+      - bbb_getmeetings.status == 200
       - "'<messageKey>noMeetings</messageKey>' is not in bbb_getmeetings.content"
     tags: always
