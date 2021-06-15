@@ -49,4 +49,5 @@
   service:
     name: coturn
     enabled: "{{ bbb_coturn_enable | bool }}"
-    state: "{{ 'started' if bbb_coturn_enable | bool else 'stopped' }}"
+    state: started
+  when: bbb_coturn_enable | bool
