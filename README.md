@@ -71,15 +71,23 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_webhooks_enable` | install bbb-webhooks | `no` | |
 | `bbb_check_for_running_meetings` | Check server and stop playbook in case of running meetings. Attention: Currently the check is done only after Docker and NodeJS Roles have already run. | `true` | |
 | `bbb_monitoring_all_in_one_enable` | deploy [all in one monitoring stack](https://bigbluebutton-exporter.greenstatic.dev/installation/all_in_one_monitoring_stack/) (docker) | `no` |
-| `bbb_monitoring_all_in_one_version` | Version of the `greenstatic/bigbluebutton-exporter` docker image | `latest` | |
+| `bbb_monitoring_all_in_one_version` | Deprecated, use `bbb_monitoring_exporter_version` instead | | |
 | `bbb_monitoring_all_in_one_directory` | Directory for the docker compose files | `/root/bbb-monitoring` | |
 | `bbb_monitoring_all_in_one_port` | Internal Port for the monitoring werbservice | `3001` | |
 | `bbb_monitoring_all_in_one_grafana` | Enable(true)/Disable(false) the Grafana container | `true` | |
 | `bbb_monitoring_all_in_one_prometheus` | Enable(true)/Disable(false) the prometheus container | `true` | |
-| `bbb_monitoring_all_in_one_external` | Enable exposure to nginx | `false` | Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user` |
-| `bbb_monitoring_all_in_one_htpasswd_user` | The user for the htpasswd - _(required)_ if external | `Undefined` | |
-| `bbb_monitoring_all_in_one_htpasswd` | The password for the htpasswd - _(required)_ if external | `Undefined` | |
+| `bbb_monitoring_all_in_one_external` | Deprecated, use `bbb_monitoring_external` instead | | Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user` |
+| `bbb_monitoring_all_in_one_htpasswd_user` | Deprecated, use `bbb_monitoring_htpasswd_user` instead | | |
+| `bbb_monitoring_all_in_one_htpasswd` | Deprecated, use `bbb_monitoring_htpasswd` instead | | |
 | `bbb_monitoring_recordings_from_disk` | Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details. | `true` |
+| `bbb_monitoring_external` | Enable exposure to nginx | `false` | Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user`. If `bbb_monitoring_systemd_enable` is enabled, no Node Exporter installation process is included |
+| `bbb_monitoring_htpasswd_user` | The user for the htpasswd - _(required)_ if external | `Undefined` | |
+| `bbb_monitoring_htpasswd` | The password for the htpasswd - _(required)_ if external | `Undefined` | |
+| `bbb_monitoring_exporter_version` | Version of the BigBlueButton Exporter for docker and systemd | `latest` if docker image is enabled or `HEAD` if systemd is enabled | If `bbb_monitoring_all_in_one_enable` is enabled, the [Docker images tags](https://hub.docker.com/r/greenstatic/bigbluebutton-exporter/tags?page=1&ordering=last_updated) can be used. If `bbb_monitoring_systemd_enable` is enabled, the [Git release tags](https://github.com/greenstatic/bigbluebutton-exporter/releases) can be used. |
+| `bbb_monitoring_systemd_enable` | Deploy monitoring as systemd service (not recommended) | `false` | Works only when `bbb_monitoring_all_in_one_enable` is `false` |
+| `bbb_monitoring_systemd_directory` | Installation directory for git repository | `"/opt/bigbluebutton-exporter"` | |
+| `bbb_monitoring_systemd_port` | Port of bbb-exporter | `9688` | default port 9866 is defined by the exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/bbb-exporter/settings.py#L37) |
+| `bbb_monitoring_systemd_bind_ip` | Port of bbb-exporter | `0.0.0.0` | default bind IP 0.0.0.0 is defined by the exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/bbb-exporter/settings.py#L38) |
 | `bbb_dialin_enabled` | enable phone dial-in, will also remove any previous dial-in configuration if set to `false`  | `false` | |
 | `bbb_dialin_provider_proxy` | IP or Domain of your SIP provider, also known as registrar | `sip.example.net` | |
 | `bbb_dialin_provider_username` | Username for authentication on the SIP-server | `provider-account` | |

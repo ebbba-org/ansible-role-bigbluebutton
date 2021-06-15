@@ -2,7 +2,7 @@ version: '3.2'
 services:
   bbb-exporter:
     container_name: bbb-exporter
-    image: greenstatic/bigbluebutton-exporter:{{ bbb_monitoring_all_in_one_version }}
+    image: greenstatic/bigbluebutton-exporter:{{ bbb_monitoring_exporter_version }}
     network_mode: host
     volumes:
       # Can be removed if `RECORDINGS_METRICS_READ_FROM_DISK` is set to false (or omitted).
