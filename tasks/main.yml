@@ -77,7 +77,6 @@
     - ntp
 
 - import_tasks: coturn.yml
-  when: bbb_coturn_enable | bool
   tags:
     - coturn
 
