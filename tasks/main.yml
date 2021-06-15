@@ -5,7 +5,9 @@
     - checkvars
     - always
 
-- import_tasks: runtimevars.yml
+- block:
+  - name: include runtimevars (first time)
+    include_tasks: runtimevars.yml
   tags:
     - runtimevars
     - always
@@ -47,7 +49,9 @@
   tags:
     - mongodb
 
-- import_tasks: runtimevars.yml
+- block:
+  - name: include runtimevars (second time)
+    include_tasks: runtimevars.yml
   tags:
     - runtimevars
     - always
