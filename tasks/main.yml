@@ -5,7 +5,12 @@
     - checkvars
     - always
 
-- include_tasks: runtimevars.yml
+- include_tasks:
+    file: runtimevars.yml
+    apply:
+      tags:
+        - runtimevars
+        - always
   tags:
     - runtimevars
     - always
