@@ -10,7 +10,7 @@
     - runtimevars
     - always
   when:
-    - not bbb_secret is defined or not bbb_baseurl is defined or not bbbcert is defined
+    - not bbb_secret is defined or not bbbcert is defined
   ignore_errors: true
 
 - include_tasks: check-for-sessions.yml
@@ -52,7 +52,7 @@
     - runtimevars
     - always
   when:
-    - not bbb_secret is defined or not bbb_baseurl is defined or not bbbcert is defined
+    - not bbb_secret is defined or not bbbcert is defined
 
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable | bool and not bbbcert.stat.exists
