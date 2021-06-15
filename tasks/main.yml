@@ -5,6 +5,7 @@
     - checkvars
     - always
 
+# this is included as block to pass tags to included tasks
 - block:
   - name: include bbb_secret
     include_tasks: bbb_secret.yml
@@ -14,7 +15,10 @@
   ignore_errors: true
   when: bbb_secret is not defined
 
-- include_tasks: check-for-sessions.yml
+# this is included as block to pass tags to included tasks
+- block:
+  - name: include check-for-sessions
+    include_tasks: check-for-sessions.yml
   when:
     - bbb_check_for_running_meetings
     - bbb_secret is defined
@@ -48,6 +52,7 @@
   tags:
     - mongodb
 
+# this is included as block to pass tags to included tasks
 - block:
   - name: include runtimevars
     include_tasks: runtimevars.yml
@@ -90,6 +95,8 @@
   when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool
   tags:
     - docker
+    - greenlight
+    - monitoring
 
 - import_tasks: greenlight.yml
   when: bbb_greenlight_enable | bool
