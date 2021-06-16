@@ -20,7 +20,14 @@
     - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
     - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
     - "deb http://repo.mongodb.org/apt/ubuntu/ {{ ansible_distribution_release | lower }}/mongodb-org/{{ bbb_mongodb_version }} multiverse"
-    - "deb https://ubuntu.bigbluebutton.org/bionic-230/ bigbluebutton-bionic main"
+    - "deb {{ bbb_apt_mirror }}/bionic-230/ bigbluebutton-bionic main"
+
+- name: remove bigbluebutton.org repo when using a mirror
+  become: true
+  apt_repository:
+    repo: "deb https://ubuntu.bigbluebutton.org/bionic-230/ bigbluebutton-bionic main"
+    state: absent
+  when: bbb_apt_mirror != 'https://ubuntu.bigbluebutton.org'
 
 # only install certbot-repo when letsencrypt is used
 - name: add Bionic dependency apt repositories
