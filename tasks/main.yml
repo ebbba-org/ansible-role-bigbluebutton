@@ -6,14 +6,13 @@
     - always
 
 - block:
-  - name: include runtimevars (first time)
-    include_tasks: runtimevars.yml
+  - name: include bbb_secret
+    include_tasks: bbb_secret.yml
   tags:
-    - runtimevars
+    - bbb_secret
     - always
-  when:
-    - not bbb_secret is defined or not bbbcert is defined
   ignore_errors: true
+  when: bbb_secret is not defined
 
 - include_tasks: check-for-sessions.yml
   when:
@@ -50,13 +49,12 @@
     - mongodb
 
 - block:
-  - name: include runtimevars (second time)
+  - name: include runtimevars
     include_tasks: runtimevars.yml
   tags:
     - runtimevars
+    - bbb_secret
     - always
-  when:
-    - not bbb_secret is defined or not bbbcert is defined
 
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable | bool and not bbbcert.stat.exists
