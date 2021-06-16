@@ -95,4 +95,3 @@
 - name: Reload bbb_firewall_ufw
   community.general.ufw:
     state: reloaded
-
