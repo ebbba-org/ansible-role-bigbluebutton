@@ -5,17 +5,9 @@
     state: directory
     mode: '0644'
 
-- name: register bbb secret
-  command: bbb-conf --secret
-  changed_when: false
-  register: result
-  when: not bbb_secret is defined
-
-- name: parse bbb secret
-  set_fact:
-    bbb_secret: "{{ result.stdout | regex_search('Secret: ([a-zA-Z0-9]*)', multiline=True) |  regex_replace('Secret: ') }}"
-    cacheable: true
-  when: not bbb_secret is defined
+- name: ensure bbb_secret is defined
+  import_tasks: bbb_secret.yml
+  when: bbb_secret is not defined
 
 - name: copy greenlight config file
   template:

@@ -48,7 +48,7 @@
   set_fact:
     bbb_secret: "{{ current_bbb_secret }}"
     cacheable: true
-  when: not bbb_secret is defined
+  when: bbb_secret is not defined
 
 - name: serve recordings via https
   become: true
