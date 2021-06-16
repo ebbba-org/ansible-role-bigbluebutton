@@ -65,11 +65,13 @@
   when: bbb_letsencrypt_enable | bool and not bbbcert.stat.exists
   tags:
     - tls
+    - certificates
 
 - import_tasks: certificate-selfsigned.yml
   when: not (bbb_letsencrypt_enable | bool) and not bbbcert.stat.exists
   tags:
     - tls
+    - certificates
 
 - import_tasks: nginx.yml
   tags:
