@@ -6,6 +6,7 @@ bbb_check_for_running_meetings: true
 bbb_letsencrypt_enable: true
 bbb_letsencrypt_api: https://acme-v02.api.letsencrypt.org/directory
 bbb_nginx_install_from_source: true
+# If this is set to 'false', the current stable branch will be used instead.
 bbb_nginx_use_mainline_branch: false
 bbb_nginx_privacy: true
 bbb_nginx_listen_https: true
