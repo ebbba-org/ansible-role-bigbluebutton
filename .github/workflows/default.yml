@@ -14,7 +14,6 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
-      max-parallel: 4
       matrix:
         include:
           - distribution: 'ubuntu-20.04'
@@ -24,11 +23,12 @@ jobs:
     env:
       ANSIBLE_CALLBACK_ENABLED: profile_tasks
       ANSIBLE_EXTRA_VARS: "-e bbb_freeswitch_socket_password='SuperSecurePassword-123456789'"
+      ROLEPATH: ebba.bigbluebutton
 
     steps:
       - uses: actions/checkout@v2
         with:
-          path: n0emis.bigbluebutton
+          path: ${ROLEPATH}
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -44,7 +44,7 @@ jobs:
           ls -l /opt/hostedtoolcache/Python/3.9.1/x64/bin || true
           echo "/opt/hostedtoolcache/Python/3.9.1/x64/bin" >> $GITHUB_PATH
           ansible --version
-          cd $GITHUB_WORKSPACE/n0emis.bigbluebutton
+          cd $GITHUB_WORKSPACE/${ROLEPATH}
           { echo '[defaults]'; echo 'callback_enabled = profile_tasks, timer'; echo 'roles_path = ../'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
           ansible-galaxy install -r requirements.yml
       - name: Environment
@@ -54,16 +54,16 @@ jobs:
           find -ls
       - name: run test
         run: |
-          cd $GITHUB_WORKSPACE/n0emis.bigbluebutton && ansible-playbook -i localhost, --connection=local --become -vvv test/integration/default/default.yml ${ANSIBLE_EXTRA_VARS}
+          cd $GITHUB_WORKSPACE/${ROLEPATH} && ansible-playbook -i localhost, --connection=local --become -vvv test/integration/default/default.yml ${ANSIBLE_EXTRA_VARS}
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
       - name: idempotency run
         run: |
-          cd $GITHUB_WORKSPACE/n0emis.bigbluebutton && ansible-playbook -i localhost, --connection=local --become -vvv test/integration/default/default.yml ${ANSIBLE_EXTRA_VARS} | tee /tmp/idempotency.log | grep -q 'changed=0.*failed=0'  && (echo 'Idempotence test: pass' && exit 0)  || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 0)
+          cd $GITHUB_WORKSPACE/${ROLEPATH} && ansible-playbook -i localhost, --connection=local --become -vvv test/integration/default/default.yml ${ANSIBLE_EXTRA_VARS} | tee /tmp/idempotency.log | grep -q 'changed=0.*failed=0'  && (echo 'Idempotence test: pass' && exit 0)  || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 0)
       - name: verify
         run: |
-          cd $GITHUB_WORKSPACE/n0emis.bigbluebutton && ansible-playbook -i localhost, --connection=local --become -v molecule/default/verify.yml  ${ANSIBLE_EXTRA_VARS}
+          cd $GITHUB_WORKSPACE/${ROLEPATH} && ansible-playbook -i localhost, --connection=local --become -v molecule/default/verify.yml ${ANSIBLE_EXTRA_VARS}
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
