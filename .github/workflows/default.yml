@@ -34,7 +34,6 @@ jobs:
         with:
           python-version: '3.x'
       - name: Install dependencies
-        working-directory: $GITHUB_WORKSPACE/${{ env.ROLEPATH }}
         run: |
           python3 -m pip install --upgrade pip
           pip3 install ansible-lint flake8 yamllint
@@ -45,6 +44,7 @@ jobs:
           ls -l /opt/hostedtoolcache/Python/3.9.1/x64/bin || true
           echo "/opt/hostedtoolcache/Python/3.9.1/x64/bin" >> $GITHUB_PATH
           ansible --version
+          cd $GITHUB_WORKSPACE/${{ env.ROLEPATH }}
           { echo '[defaults]'; echo 'callback_enabled = profile_tasks, timer'; echo 'roles_path = ../'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
           ansible-galaxy install -r requirements.yml
       - name: Environment
