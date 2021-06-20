@@ -16,4 +16,4 @@
     bbb_greenlight_users:
       - { name: 'user1', email: 'user1@example.com', password: 'user1@example.com', type: 'user' }
   roles:
-    - ebba.bigbluebutton
+    - ebbba.bigbluebutton

@@ -15,4 +15,4 @@
     bbb_letsencrypt_enable: false
     bbb_letsencrypt_email: mail@example.com
   roles:
-    - ebba.bigbluebutton
+    - ebbba.bigbluebutton
