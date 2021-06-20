@@ -23,12 +23,12 @@ jobs:
     env:
       ANSIBLE_CALLBACK_ENABLED: profile_tasks
       ANSIBLE_EXTRA_VARS: "-e bbb_freeswitch_socket_password='SuperSecurePassword-123456789'"
-      ROLEPATH: ebba.bigbluebutton
+      ROLEPATH: ebbba.bigbluebutton
 
     steps:
       - uses: actions/checkout@v2
         with:
-          path: ebba.bigbluebutton
+          path: ebbba.bigbluebutton
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
