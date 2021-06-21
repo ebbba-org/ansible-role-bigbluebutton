@@ -1,3 +1,7 @@
 ---
-- src: geerlingguy.nodejs
-- src: geerlingguy.docker
+roles:
+  - src: geerlingguy.nodejs
+  - src: geerlingguy.docker
+
+collections:
+  - name: community.general

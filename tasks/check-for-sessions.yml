@@ -15,4 +15,4 @@
   when:
     - not ansible_check_mode
     - bbb_getmeetings.status == 200
-    - "'<messageKey>noMeetings</messageKey>' is not in bbb_getmeetings.content"
+    - "'<messageKey>noMeetings</messageKey>' not in bbb_getmeetings.content"

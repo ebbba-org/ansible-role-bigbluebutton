@@ -9,7 +9,7 @@
 - name: create AppArmor rules
   become: true
   template:
-    src: opt.freeswitch.bin.freeswitch
+    src: freeswitch/freeswitch_apparmor_profile
     dest: /etc/apparmor.d/opt.freeswitch.bin.freeswitch
     mode: 0600
   when: not bbb_container_compat
@@ -35,7 +35,7 @@
 - name: add freeswitch module config
   become: true
   template:
-    src: modules.conf.xml
+    src: freeswitch/modules.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/modules.conf.xml
     mode: '0644'
     owner: root
@@ -45,7 +45,7 @@
 - name: add freeswitch syslog config
   become: true
   template:
-    src: syslog.conf.xml
+    src: freeswitch/syslog.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/syslog.conf.xml
     mode: '0644'
     owner: root
@@ -55,7 +55,7 @@
 - name: deploy conference config
   become: true
   template:
-    src: conference.conf.xml
+    src: freeswitch/conference.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
     mode: '0644'
     owner: root
