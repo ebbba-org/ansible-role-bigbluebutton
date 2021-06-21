@@ -28,29 +28,23 @@
 
 - import_tasks: firewall/ufw_enable.yml
   when: bbb_firewall_ufw['enabled']
-  tags:
-    - ufw
+  tags: ufw
 
 - import_tasks: firewall/ufw_disable.yml
   when: not bbb_firewall_ufw['enabled']
-  tags:
-    - ufw
+  tags: ufw
 
 - import_tasks: locale.yml
-  tags:
-    - locale
+  tags: locale
 
 - import_tasks: repositories.yml
-  tags:
-    - repositories
+  tags: repositories
 
 - import_tasks: installation.yml
-  tags:
-    - installation
+  tags: installation
 
 - import_tasks: mongodb.yml
-  tags:
-    - mongodb
+  tags: mongodb
 
 # this is included as block to pass tags to included tasks
 - block:
@@ -74,24 +68,19 @@
     - certificates
 
 - import_tasks: nginx.yml
-  tags:
-    - nginx
+  tags: nginx
 
 - import_tasks: config.yml
-  tags:
-    - config
+  tags: config
 
 - import_tasks: ntp.yml
-  tags:
-    - ntp
+  tags: ntp
 
 - import_tasks: coturn.yml
-  tags:
-    - coturn
+  tags: coturn
 
 - import_tasks: dial-in/main.yml
-  tags:
-    - dial-in
+  tags: dial-in
 
 - import_tasks: docker.yml
   when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool
@@ -102,34 +91,26 @@
 
 - import_tasks: greenlight.yml
   when: bbb_greenlight_enable | bool
-  tags:
-    - greenlight
+  tags: greenlight
 
 - import_tasks: monitoring/main.yml
   when: bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_systemd_enable | bool
-  tags:
-    - monitoring
+  tags: monitoring
 
 - import_tasks: webrtc-sfu.yml
-  tags:
-    - webrtc-sfu
+  tags: webrtc-sfu
 
 - import_tasks: bbb-web.yml
-  tags:
-    - bbb-web
+  tags: bbb-web
 
 - import_tasks: bbb-html5.yml
-  tags:
-    - bbb-hml5
+  tags: bbb-hml5
 
 - import_tasks: freeswitch.yml
-  tags:
-    - freeswitch
+  tags: freeswitch
 
 - import_tasks: stun-turn.yml
-  tags:
-    - stun-turn
+  tags: stun-turn
 
 - import_tasks: kurento.yml
-  tags:
-    - kurento
+  tags: kurento
