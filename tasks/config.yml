@@ -224,6 +224,22 @@
   - restart freeswitch
   - reload nginx
 
+- name: kurento only listen on specified interfaces
+  replace:
+    path: /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
+    regexp: '^;?networkInterfaces=.*$'
+    replace: 'networkInterfaces={{ bbb_kurento_interfaces | join(",") }}'
+  when: (bbb_kurento_interfaces | default([]) | length) > 0
+  notify: restart kurento
+
+- name: kurento listen on all interfaces
+  replace:
+    path: /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
+    regexp: '^;?networkInterfaces=.*$'
+    replace: ';networkInterfaces='
+  when: (bbb_kurento_interfaces | default([]) | length) == 0
+  notify: restart kurento
+
 - name: set nodejs options for the html5-webclient
   replace:
     path: /usr/share/meteor/bundle/systemd_start.sh
