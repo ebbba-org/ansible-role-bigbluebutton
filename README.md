@@ -373,16 +373,17 @@ Edit this line and replace `127.0.1.1` with your public IP.
 
 ## Example Playbook
 
-This is an example, of how to use this role. Warning: the value of the Variables should be changed!
+This is an example of how to use this role. *Warning:* the values of the variables should be changed!
 
-Assuming the following directory stacture:
+Assuming the following directory structure:
 ```
 ├── ansible
     ├── roles
     │   └── ansible-role-bigbluebutton
     ├── playbooks
     │   └── bigbluebutton.yml
-    ├── inventory
+    └── inventory
+	    ├── hosts
         └── host_vars
             └── your-domain.example.com
                 └── vars.yml
@@ -401,7 +402,7 @@ You can clone the repository in your roles directory and then follow these steps
 
 1. Copy the sample playbook (`cp roles/ansible-role-bigbluebutton/examples/playbook/bigbluebutton.yml playbooks`)
 
-1. Run the playbook using `ansible-playbook playbooks/bigbluebutton.yml`.
+1. Run the playbook using `ansible-playbook -i inventory/hosts playbooks/bigbluebutton.yml`.
 
 ## License
 
