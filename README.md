@@ -18,7 +18,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_state` | Install BigBlueButton to state | `present` | for updating BigBlueButton with this role use `latest` |
 | | `bbb_apt_mirror` | apt repo server for BigBlueButton packages | `https://ubuntu.bigbluebutton.org` | other value would be e.g. `https://packages-eu.bigbluebutton.org` |
 | | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
-| ⚠️ when letsencrypt is enabled| `bbb_letsencrypt_email` | E-mail for use with letsencrypt | | |
+| ⚠️ when using letsencrypt| `bbb_letsencrypt_email` | E-mail for use with letsencrypt | | |
 | | `bbb_letsencrypt_api` | Set letsencrypt api | `https://acme-v02.api.letsencrypt.org/directory` | Use this variable to change letsencrypt API URL (example: staging API `https://acme-staging-v02.api.letsencrypt.org/directory`) |
 | | `bbb_nginx_privacy` | only log errors not access | `yes` |
 | | `bbb_nginx_listen_https` | nginx: use https | `yes` | This is useful for a reverse proxy configuration where the BBB server is behind a load balancing server like haproxy that does SSL termination |
@@ -38,7 +38,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_coturn_server` | server name on coturn (realm) | `{{ bbb_hostname }}` |
 | | `bbb_coturn_port` | the port for the TURN-Server to use | `3443` |
 | | `bbb_coturn_port_tls` | the port for tls for the TURN-Server to use | `3443` |
-| ⚠️ | `bbb_coturn_secret` | Secret for the TURN-Server | | can be generated with `openssl rand -hex 16` |
+| ⚠️ when using coturn | `bbb_coturn_secret` | Secret for the TURN-Server | | can be generated with `openssl rand -hex 16` |
 | | `bbb_coturn_min_port` | Lower bound of the UDP relay endpoints | `49152` | |
 | | `bbb_coturn_max_port` | Upper bound of the UDP relay endpoints | `65535` | |
 | | `bbb_turn_enable` | enable the use uf TURN in general | `yes` | |
@@ -81,8 +81,8 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_monitoring_all_in_one_htpasswd` | Deprecated, use `bbb_monitoring_htpasswd` instead | | |
 | | `bbb_monitoring_recordings_from_disk` | Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details. | `true` |
 | | `bbb_monitoring_external` | Enable exposure to nginx | `false` | Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user`. If `bbb_monitoring_systemd_enable` is enabled, no Node Exporter installation process is included |
-| ⚠️ if external monitoring enabled | `bbb_monitoring_htpasswd_user` | The user for the htpasswd | `Undefined` | |
-| ⚠️ if external monitoring enabled | `bbb_monitoring_htpasswd` | The password for the htpasswd | `Undefined` | |
+| ⚠️ when using external monitoring | `bbb_monitoring_htpasswd_user` | The user for the htpasswd | `Undefined` | |
+| ⚠️ when using external monitoring | `bbb_monitoring_htpasswd` | The password for the htpasswd | `Undefined` | |
 | | `bbb_monitoring_exporter_version` | Version of the BigBlueButton Exporter for docker and systemd | `latest` if docker image is enabled or `HEAD` if systemd is enabled | If `bbb_monitoring_all_in_one_enable` is enabled, the [Docker images tags](https://hub.docker.com/r/greenstatic/bigbluebutton-exporter/tags?page=1&ordering=last_updated) can be used. If `bbb_monitoring_systemd_enable` is enabled, the [Git release tags](https://github.com/greenstatic/bigbluebutton-exporter/releases) can be used. |
 | | `bbb_monitoring_systemd_enable` | Deploy monitoring as systemd service (not recommended) | `false` | Works only when `bbb_monitoring_all_in_one_enable` is `false` |
 | | `bbb_monitoring_systemd_directory` | Installation directory for git repository | `"/opt/bigbluebutton-exporter"` | |
