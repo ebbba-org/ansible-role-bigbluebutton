@@ -90,6 +90,7 @@
       - kurento-media-server.service
       - mongod.service
       - nginx.service
+    failed_when: false
     when: >
       not (ansible_virtualization_type is defined and
             (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
