@@ -35,7 +35,7 @@
   - name: Validate config present
     assert:
       that: cfg3.stat.exists and cfg3.stat.size != 0
-  - name: Ensure process is running
+  - name: Ensure turnserver process is running
     command: pgrep -u root turnserver
     register: ps
     changed_when: false
@@ -53,12 +53,57 @@
       - 3478
       - 3479
     failed_when: false
-  # FIXME! bbb-conf relies on systemctl. NOK in docker
+
+  - name: Ensure mongodb process is running
+    command: pgrep -u mongodb mongod
+    register: ps2
+    changed_when: false
+    failed_when: false
+  - name: Validate mongodb ps output
+    assert:
+      that: ps2.stdout
+  - name: Ensure mongod port is listening
+    wait_for:
+      host: 127.0.1.1
+      port: 27017
+      timeout: 5
+
+  - name: Populate service facts
+    ansible.builtin.service_facts:
+
+  - name: Validate services started
+    assert:
+      that:
+        - ansible_facts.services[item]['state'] == 'running'
+        - ansible_facts.services[item]['status'] == 'enabled'
+    with_items:
+      - bbb-apps-akka.service
+      - bbb-html5-frontend@1.service
+      - bbb-html5-frontend@2.service
+      - bbb-html5-backend@1.service
+      - bbb-html5-backend@2.service
+      - bbb-html5.service
+      - bbb-rap-caption-inbox.service
+      - bbb-web.service
+      - bbb-webrtc-sfu.service
+      - coturn.service
+      - kurento-media-server.service
+      - mongod.service
+      - nginx.service
+    when: >
+      not (ansible_virtualization_type is defined and
+            (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+          )
+
   - name: check if bbb status
     command: bbb-conf --status
     register: bbbconf
     changed_when: false
-  # - name: Validate bbb-conf output
-  #   assert:
-  #     that: >
-  #       "'Failed to connect to bus: No such file or directory' not in bbbconf.stderr"
+  - name: Validate bbb-conf output
+    assert:
+      that: >
+        "'Failed to connect to bus: No such file or directory' not in bbbconf.stderr or 'failed' not in bbbconf.stdout"
+    when: >
+      not (ansible_virtualization_type is defined and
+            (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+          )
