@@ -187,7 +187,7 @@ bbb_container_compat: false
 bbb_ssh_port: '22'
 bbb_ufw_reject_networks_default:
     - 0.0.0.0/8
-    - 10.0.0.0/8
+    # - 10.0.0.0/8
     - 100.64.0.0/10
     - 169.0.2.0/16
     - 192.0.2.0/24
