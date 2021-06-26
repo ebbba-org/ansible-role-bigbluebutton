@@ -44,6 +44,12 @@
       docker_compose:
         pull: true
         project_src: /root/greenlight/
+      register: greenlightstart
+
+    - name: Ensure greenlight container fully started
+      pause:
+        seconds: 10
+      when: greenlightstart is changed
 
     # https://docs.bigbluebutton.org/greenlight/gl-admin.html#creating-accounts
     - name: Create greenlight users
