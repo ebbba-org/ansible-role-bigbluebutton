@@ -144,6 +144,8 @@ bbb_breakout_rooms_privatechat_enabled: true
 bbb_html5_backend_processes: 2
 bbb_html5_frontend_processes: 2
 
+bbb_etherpad_disable_cursortrace_plugin: false
+
 bbb_webrtc_sfu_multikurento:
   balancing-strategy: MEDIA_TYPE
   kurento:

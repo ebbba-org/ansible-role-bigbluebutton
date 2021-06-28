@@ -1,0 +1,24 @@
+---
+- name: Disable etherpad ep_cursortrace plugin
+  become: true
+  community.general.archive:
+    path: /usr/share/etherpad-lite/node_modules/ep_cursortrace
+    dest: /usr/share/etherpad-lite/ep_cursortrace.tgz
+    owner: etherpad
+    group: etherpad
+    remove: true
+  notify: restart etherpad
+  when: bbb_etherpad_disable_cursortrace_plugin | bool
+
+
+- name: Enable etherpad ep_cursortrace plugin
+  become: true
+  ansible.builtin.unarchive:
+    src: /usr/share/etherpad-lite/ep_cursortrace.tgz
+    dest: /usr/share/etherpad-lite/node_modules
+    owner: etherpad
+    group: etherpad
+    remote_src: true
+    creates: /usr/share/etherpad-lite/node_modules/ep_cursortrace
+  notify: restart etherpad
+  when: not bbb_etherpad_disable_cursortrace_plugin | bool

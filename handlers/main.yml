@@ -94,3 +94,9 @@
   systemd:
     name: bigbluebutton-exporter
     state: restarted
+
+- name: restart etherpad
+  ansible.builtin.systemd:
+    name: etherpad.service
+    enabled: true
+    state: restarted
