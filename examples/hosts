@@ -1,5 +1,5 @@
 # To connect using a specific user (and elevate to root with sudo later),
-# add `ansible_ssh_user=<your user>` next to <your domain> below.
+# add `ansible_user=<your user>` next to <your domain> below.
 #
 # For improved Ansible performance, SSH pipelining is enabled by default in `ansible.cfg`.
 # If this causes SSH connection troubles, disable it by adding `ansible_ssh_pipelining=False`
