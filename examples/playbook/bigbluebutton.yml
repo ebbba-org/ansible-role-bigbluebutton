@@ -1,6 +1,6 @@
 ---
 
-- hosts: [ 'bigbluebutton' ]
+- hosts: bigbluebutton
   become: true
 
   roles:
