@@ -81,6 +81,11 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_monitoring_all_in_one_htpasswd` | Deprecated, use `bbb_monitoring_htpasswd` instead | | |
 | `bbb_monitoring_recordings_from_disk` | Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details. | `true` |
 | `bbb_monitoring_external` | Enable exposure to nginx | `false` | Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user`. If `bbb_monitoring_systemd_enable` is enabled, no Node Exporter installation process is included |
+| `bbb_monitoring_external_metrics_port` | Port of bbb-exporter | `9688` |  default port 9866 is defined by the exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/bbb-exporter/settings.py#L37) |
+| `bbb_monitoring_external_node_port` | Port of node-exporter | `9100` | default port 9100 is by the bbb-exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/extras/node_exporter/docker-compose.yaml#L10) |
+| `bbb_monitoring_use_ip_restriction` | Restricting access by IP Address instead using htpasswd | `false` | |
+| `bbb_monitoring_use_restriction_combination`| Use combination of IP Address restriction and htpasswd | `false` | |
+| `bbb_monitoring_external_ip_list` | A list of ip addresses for restricting access | `[]` | in array with key `address` |
 | `bbb_monitoring_htpasswd_user` | The user for the htpasswd - _(required)_ if external | `Undefined` | |
 | `bbb_monitoring_htpasswd` | The password for the htpasswd - _(required)_ if external | `Undefined` | |
 | `bbb_monitoring_exporter_version` | Version of the BigBlueButton Exporter for docker and systemd | `latest` if docker image is enabled or `HEAD` if systemd is enabled | If `bbb_monitoring_all_in_one_enable` is enabled, the [Docker images tags](https://hub.docker.com/r/greenstatic/bigbluebutton-exporter/tags?page=1&ordering=last_updated) can be used. If `bbb_monitoring_systemd_enable` is enabled, the [Git release tags](https://github.com/greenstatic/bigbluebutton-exporter/releases) can be used. |

@@ -95,7 +95,7 @@
     - greenlight
 
 - import_tasks: monitoring/main.yml
-  when: bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_systemd_enable | bool
+  when: bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_systemd_enable | bool or bbb_monitoring_external | bool
   tags:
     - monitoring
 

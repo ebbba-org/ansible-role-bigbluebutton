@@ -90,13 +90,22 @@ bbb_monitoring_all_in_one_prometheus: true
 bbb_monitoring_all_in_one_external: false
 # bbb_monitoring_htpasswd_user:
 # bbb_monitoring_htpasswd:
+#bbb_monitoring_external_ip_list:
+#  - address: 127.0.0.1
+bbb_monitoring_use_htpasswd: true
+bbb_monitoring_use_ip_restriction: false
+bbb_monitoring_use_restriction_combination: false
 bbb_monitoring_external: false
+bbb_monitoring_external_metrics_port: 9688
+bbb_monitoring_external_node_port: 9100
 bbb_monitoring_exporter_version: "{{ 'latest' if bbb_monitoring_all_in_one_enable | bool else 'HEAD' }}"
 
 bbb_monitoring_systemd_enable: false
 bbb_monitoring_systemd_directory: "/opt/bigbluebutton-exporter"
 bbb_monitoring_systemd_bind_ip: 0.0.0.0
 bbb_monitoring_systemd_port: 9688
+bbb_monitoring_node_exporter_endpoint: "/mon/node/"
+bbb_monitoring_metrics_endpoint: "/mon/bbb/"
 
 bbb_dialin_enabled: false
 bbb_dialin_provider_proxy: "sip.example.net"

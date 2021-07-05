@@ -1,15 +1,35 @@
 {% if bbb_monitoring_external %}
-location /mon/node/ {
-  proxy_pass http://127.0.0.1:9100/metrics;
-  auth_basic "BigBlueButton Exporter";
-  auth_basic_user_file /etc/bigbluebutton/nginx/.htpasswd;
+location {{ bbb_monitoring_metrics_endpoint }} {
+  proxy_pass http://127.0.0.1:{{ bbb_monitoring_external_metrics_port }}/metrics;
+{% if bbb_monitoring_use_ip_restriction | bool %}
+{% for item in bbb_monitoring_ips %}
+    allow {{ item.address }};
+{% endfor %}
+    # drop rest of the world
+    deny all;
+  {% endif %}
+
+  {% if not bbb_monitoring_use_ip_restriction or bbb_monitoring_use_restriction_combination %}
+    auth_basic "BigBlueButton Exporter";
+    auth_basic_user_file /etc/bigbluebutton/nginx/.htpasswd;
+  {% endif %}
   include proxy_params;
 }
 
-location /mon/bbb/ {
-  proxy_pass http://127.0.0.1:9688/;
-  auth_basic "BigBlueButton Exporter";
-  auth_basic_user_file /etc/bigbluebutton/nginx/.htpasswd;
+location {{ bbb_monitoring_node_exporter_endpoint }} {
+  proxy_pass http://127.0.0.1:{{ bbb_monitoring_external_node_port }}/;
+{% if bbb_monitoring_use_ip_restriction | bool %}
+{% for item in bbb_monitoring_ips %}
+    allow {{ item.address }};
+{% endfor %}
+    # drop rest of the world
+    deny all;
+  {% endif %}
+
+  {% if not bbb_monitoring_use_ip_restriction or bbb_monitoring_use_restriction_combination %}
+    auth_basic "BigBlueButton Exporter";
+    auth_basic_user_file /etc/bigbluebutton/nginx/.htpasswd;
+  {% endif %}
   include proxy_params;
 }
 {% else %}

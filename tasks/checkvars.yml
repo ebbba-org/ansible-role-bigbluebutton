@@ -36,7 +36,7 @@
     - name: bbb_monitoring_htpasswd_user
       debug:
         msg: "value: {{ bbb_monitoring_htpasswd_user }}"
-      when: bbb_monitoring_external
+      when: bbb_monitoring_external and (bbb_monitoring_use_htpasswd or bbb_monitoring_use_restriction_combination)
     - name: bbb_monitoring_all_in_one_htpasswd
       debug:
         msg: "bbb_monitoring_all_in_one_htpasswd is deprecated, use bbb_monitoring_htpasswd instead"
@@ -44,7 +44,11 @@
     - name: bbb_monitoring_htpasswd
       debug:
         msg: "value: {{ bbb_monitoring_htpasswd }}"
-      when: bbb_monitoring_external
+      when: bbb_monitoring_external and (bbb_monitoring_use_htpasswd or bbb_monitoring_use_restriction_combination)
+    - name: bbb_monitoring_external_ip_list
+      debug:
+        msg: "value: {{ bbb_monitoring_external_ip_list }}"
+      when: bbb_monitoring_external and (bbb_monitoring_use_ip_restriction or bbb_monitoring_use_restriction_combination)
     - name: bbb_monitoring_systemd_enable
       debug:
         msg: "Please disable monitoring for Systemd or Docker, these can not run alongside"
