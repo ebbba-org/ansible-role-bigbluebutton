@@ -1,5 +1,8 @@
 ---
 
+# Consider using ansible vault for the passwords you need to generate and fill below.
+# More information on ansible vault at: https://docs.ansible.com/ansible/latest/user_guide/vault.html
+
 # BBB
 bbb_state: present # For updating BigBlueButton with this role use 'latest'
 #bbb_hostname: <your host fqdn> # Uncomment and fill if bbb fqdn is different than default {{ ansible_fqdn }}
