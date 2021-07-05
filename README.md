@@ -383,7 +383,7 @@ Assuming the following directory structure:
     ├── playbooks
     │   └── bigbluebutton.yml
     └── inventory
-	    ├── hosts
+	├── hosts
         └── host_vars
             └── your-domain.example.com
                 └── vars.yml
