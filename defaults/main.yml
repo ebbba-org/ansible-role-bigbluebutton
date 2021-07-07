@@ -52,6 +52,10 @@ bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 bbb_freeswitch_muted_sound: true
 bbb_freeswitch_unmuted_sound: true
 
+bbb_kurento_interfaces:
+- "{{ ansible_default_ipv4.interface }}"
+- lo
+
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
 bbb_guestpolicy: ALWAYS_ACCEPT
 
