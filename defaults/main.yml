@@ -76,6 +76,7 @@ bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 # bbb_own_key:
 
 bbb_meteor: {}
+bbb_recording_config: {}
 bbb_dialplan_quality: "cdquality"
 bbb_dialplan_energy_level: 100
 bbb_dialplan_comfort_noise: 1400
