@@ -25,6 +25,10 @@
       debug:
         msg: "distribution should be bionic and was detected as {{ ansible_distribution_release }}"
       failed_when: ansible_distribution_release | lower != 'bionic'
+    - name: bbb_monitoring_all_in_one_external
+      debug:
+        msg: "bbb_monitoring_all_in_one_external is deprecated, use bbb_monitoring_external instead"
+      failed_when: bbb_monitoring_all_in_one_external is defined
     - name: bbb_monitoring_all_in_one_version
       debug:
         msg: "bbb_monitoring_all_in_one_version is deprecated, use bbb_monitoring_exporter_version instead"

@@ -131,6 +131,8 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_docker_compose_version` | Set [docker-compose python package version](https://pypi.org/project/docker/#history) | see `defaults/main.yml` | Sets the version of the docker-compose python package |
 | | `bbb_docker_passwd` | Password to Docker Hub login | Not defined (default: disabled) | Set a Docker Hub password. When defined is used to avoid rate limits |
 | | `bbb_docker_user` | Username to Docker Hub login | Not defined (default: disabled) | Set a Docker Hub user. When defined is used to avoid rate limits |
+| `bbb_recording_config` | overwrite recording settings | `{}` | See [Enable playback of recordings on iOS](https://docs.bigbluebutton.org/admin/customize.html#enable-playback-of-recordings-on-ios). It works like `bbb_meteor` by merging your custom config with the server config. |
+| `bbb_kurento_interfaces` | Specify the listening interfaces for kurento | `{{ [ansible_default_ipv4.interface, 'lo'] }}` | |
 
 ### Extra options for Greenlight
 
