@@ -133,6 +133,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_docker_compose_version` | Set [docker-compose python package version](https://pypi.org/project/docker/#history) | see `defaults/main.yml` | Sets the version of the docker-compose python package |
 | `bbb_docker_passwd` | Password to Docker Hub login | Not defined (default: disabled) | Set a Docker Hub password. When defined is used to avoid rate limits |
 | `bbb_docker_user` | Username to Docker Hub login | Not defined (default: disabled) | Set a Docker Hub user. When defined is used to avoid rate limits |
+| `bbb_etherpad_disable_cursortrace_plugin` | Disable or enable cursortrace plugin for etherpad | `false` | Set to `true` if you want to avoid displaying names at cursor position in shared notes |
 
 ### Extra options for Greenlight
 
