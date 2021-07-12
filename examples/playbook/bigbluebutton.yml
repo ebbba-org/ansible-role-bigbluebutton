@@ -1,0 +1,7 @@
+---
+
+- hosts: bigbluebutton
+  become: true
+
+  roles:
+    - role: ansible-role-bigbluebutton
