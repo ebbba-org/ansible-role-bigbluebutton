@@ -117,4 +117,3 @@
 
 - import_tasks: etherpad.yml
   tags: etherpad
-
