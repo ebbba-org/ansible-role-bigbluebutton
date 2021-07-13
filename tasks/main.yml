@@ -114,3 +114,7 @@
 
 - import_tasks: kurento.yml
   tags: kurento
+
+- import_tasks: etherpad.yml
+  tags: etherpad
+

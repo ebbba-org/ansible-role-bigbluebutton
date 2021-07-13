@@ -38,8 +38,8 @@
     src: freeswitch/modules.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/modules.conf.xml
     mode: '0644'
-    owner: root
-    group: root
+    owner: freeswitch
+    group: daemon
   notify: restart freeswitch
 
 - name: add freeswitch syslog config
@@ -48,8 +48,8 @@
     src: freeswitch/syslog.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/syslog.conf.xml
     mode: '0644'
-    owner: root
-    group: root
+    owner: freeswitch
+    group: daemon
   notify: restart freeswitch
 
 - name: deploy conference config
@@ -58,8 +58,8 @@
     src: freeswitch/conference.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
     mode: '0644'
-    owner: root
-    group: root
+    owner: freeswitch
+    group: daemon
   notify: restart freeswitch
 
 - name: set socket password
@@ -104,8 +104,8 @@
     src: sounds/{{ item }}/conf-muted.wav
     dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
     mode: '0644'
-    owner: root
-    group: root
+    owner: freeswitch
+    group: daemon
   with_items:
     - 48000
     - 32000
@@ -118,8 +118,8 @@
     src: sounds/{{ item }}/conf-unmuted.wav
     dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
     mode: '0644'
-    owner: root
-    group: root
+    owner: freeswitch
+    group: daemon
   with_items:
     - 48000
     - 32000

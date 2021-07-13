@@ -52,6 +52,10 @@ bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 bbb_freeswitch_muted_sound: true
 bbb_freeswitch_unmuted_sound: true
 
+bbb_kurento_interfaces:
+- "{{ ansible_default_ipv4.interface }}"
+- lo
+
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
 bbb_guestpolicy: ALWAYS_ACCEPT
 
@@ -72,6 +76,7 @@ bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 # bbb_own_key:
 
 bbb_meteor: {}
+bbb_recording_config: {}
 bbb_dialplan_quality: "cdquality"
 bbb_dialplan_energy_level: 100
 bbb_dialplan_comfort_noise: 1400
@@ -87,7 +92,6 @@ bbb_monitoring_all_in_one_port: 3001
 bbb_monitoring_recordings_from_disk: true
 bbb_monitoring_all_in_one_grafana: true
 bbb_monitoring_all_in_one_prometheus: true
-bbb_monitoring_all_in_one_external: false
 # bbb_monitoring_htpasswd_user:
 # bbb_monitoring_htpasswd:
 bbb_monitoring_external: false
@@ -143,6 +147,8 @@ bbb_breakout_rooms_privatechat_enabled: true
 # bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
 bbb_html5_backend_processes: 2
 bbb_html5_frontend_processes: 2
+
+bbb_etherpad_disable_cursortrace_plugin: false
 
 bbb_webrtc_sfu_multikurento:
   balancing-strategy: MEDIA_TYPE

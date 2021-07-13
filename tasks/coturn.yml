@@ -12,6 +12,7 @@
     dest: /etc/turnserver.conf
     mode: '0644'
   when: bbb_coturn_enable | bool
+  notify: restart coturn
 
 - name: Remove coturn config-file
   file:
@@ -38,6 +39,7 @@
     src: etc-default-coturn
     mode: '0644'
   when: bbb_coturn_enable | bool
+  notify: restart coturn
 
 - name: Disable coturn server in defaults
   file:
