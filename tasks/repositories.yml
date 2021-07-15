@@ -20,7 +20,17 @@
     - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
     - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
     - "deb http://repo.mongodb.org/apt/ubuntu/ {{ ansible_distribution_release | lower }}/mongodb-org/{{ bbb_mongodb_version }} multiverse"
-    - "deb {{ bbb_apt_mirror }}/bionic-230/ bigbluebutton-bionic main"
+
+- name: add bbb latest/present apt repository
+  apt_repository:
+    repo: "deb {{ bbb_apt_mirror }}/bionic-230/ bigbluebutton-bionic main"
+  when: bbb_version is undefined
+
+- name: add apt repository for selected bbb version
+  apt_repository:
+    repo: "deb {{ bbb_apt_mirror }}/bionic-230-{{ bbb_version }} bigbluebutton-bionic main"
+    filename: ubuntu_bigbluebutton_org_bionic_230
+  when: bbb_version is defined
 
 - name: remove bigbluebutton.org repo when using a mirror
   become: true
