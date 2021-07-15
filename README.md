@@ -16,6 +16,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | ------------- | -------- | ------------- | ------- |
 | `bbb_hostname` | Hostname for this BigBlueButton instance _(required)_ | `{{ ansible_fqdn }}` |
 | `bbb_state` | Install BigBlueButton to state | `present` | for updating BigBlueButton with this role use `latest` |
+| `bbb_version` | Install specified BigBlueButton version | `undefined` | For installing specified BigBlueButton version e.g. `2.3.1` |
 | `bbb_apt_mirror` | apt repo server for BigBlueButton packages | `https://ubuntu.bigbluebutton.org` | other value would be e.g. `https://packages-eu.bigbluebutton.org` |
 | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
 | `bbb_letsencrypt_email` | E-mail for use with letsencrypt | | _(required when letsencrypt is enabled)_ |
