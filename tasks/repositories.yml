@@ -29,7 +29,7 @@
 - name: add apt repository for selected bbb version
   copy:
     content: "deb {{ bbb_apt_mirror }}/bionic-230-{{ bbb_version }} bigbluebutton-bionic main"
-    dest: "/etc/apt/sources.list.d/ubuntu_bigbluebutton_org_bionic_230"
+    dest: "/etc/apt/sources.list.d/ubuntu_bigbluebutton_org_bionic_230.list"
   when: bbb_version is defined
 
 - name: remove bigbluebutton.org repo when using a mirror
