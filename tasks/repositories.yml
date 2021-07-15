@@ -27,9 +27,9 @@
   when: bbb_version is undefined
 
 - name: add apt repository for selected bbb version
-  apt_repository:
-    repo: "deb {{ bbb_apt_mirror }}/bionic-230-{{ bbb_version }} bigbluebutton-bionic main"
-    filename: ubuntu_bigbluebutton_org_bionic_230
+  copy:
+    content: "deb {{ bbb_apt_mirror }}/bionic-230-{{ bbb_version }} bigbluebutton-bionic main"
+    dest: "/etc/apt/sources.list.d/ubuntu_bigbluebutton_org_bionic_230"
   when: bbb_version is defined
 
 - name: remove bigbluebutton.org repo when using a mirror
