@@ -85,7 +85,7 @@
     - dial-in
 
 - import_tasks: docker.yml
-  when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool
+  when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_external | bool
   tags:
     - docker
 

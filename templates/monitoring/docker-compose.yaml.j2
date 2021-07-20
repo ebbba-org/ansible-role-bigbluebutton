@@ -3,7 +3,7 @@ services:
   bbb-exporter:
     container_name: bbb-exporter
     image: greenstatic/bigbluebutton-exporter:{{ bbb_monitoring_exporter_version }}
-{% if bbb_monitoring_external && not bbb_monitoring_all_in_one_enable %}
+{% if bbb_monitoring_external and not bbb_monitoring_all_in_one_enable %}
     ports:
       - "127.0.0.1:{{ bbb_monitoring_external_metrics_port }}:{{ bbb_monitoring_external_metrics_port }}"
 {% else %}
@@ -14,7 +14,7 @@ services:
       # See https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations for details.
       - "/var/bigbluebutton:/var/bigbluebutton:ro"
     environment:
-{% if not bbb_monitoring_external && bbb_monitoring_all_in_one_enable %}
+{% if not bbb_monitoring_external and bbb_monitoring_all_in_one_enable %}
       BIND_IP: "127.0.0.1"
 {% endif %}
       RECORDINGS_METRICS_READ_FROM_DISK: "{{ bbb_monitoring_recordings_from_disk | ternary("true", "false") }}"

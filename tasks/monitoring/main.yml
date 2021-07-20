@@ -1,6 +1,6 @@
 ---
 - import_tasks: all_in_one.yml
-  when: bbb_monitoring_all_in_one_enable | bool or or bbb_monitoring_external | bool
+  when: bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_external | bool
 
 - import_tasks: systemd.yml
   when: bbb_monitoring_systemd_enable | bool
