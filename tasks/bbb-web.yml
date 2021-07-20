@@ -19,7 +19,7 @@
 
 - name: configure bbb-web application settings
   become: true
-  template:
+  copy:
     src: '{{ item }}'
     dest: '/usr/share/bbb-web/WEB-INF/classes/{{ item }}'
     mode: '0644'
