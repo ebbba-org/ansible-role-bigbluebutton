@@ -13,7 +13,6 @@
   with_items:
     - bbb_exporter_secrets.env
     - docker-compose.yaml
-    - prometheus.yaml
   notify: restart monitoring container
 
 - name: copy prometheus files into place

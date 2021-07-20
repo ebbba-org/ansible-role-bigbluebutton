@@ -2,7 +2,7 @@
 location {{ bbb_monitoring_metrics_endpoint }} {
   proxy_pass http://127.0.0.1:{{ bbb_monitoring_external_metrics_port }}/metrics;
 {% if bbb_monitoring_use_ip_restriction | bool %}
-{% for item in bbb_monitoring_ips %}
+{% for item in bbb_monitoring_external_ip_list %}
     allow {{ item.address }};
 {% endfor %}
     # drop rest of the world
@@ -19,7 +19,7 @@ location {{ bbb_monitoring_metrics_endpoint }} {
 location {{ bbb_monitoring_node_exporter_endpoint }} {
   proxy_pass http://127.0.0.1:{{ bbb_monitoring_external_node_port }}/;
 {% if bbb_monitoring_use_ip_restriction | bool %}
-{% for item in bbb_monitoring_ips %}
+{% for item in bbb_monitoring_external_ip_list %}
     allow {{ item.address }};
 {% endfor %}
     # drop rest of the world

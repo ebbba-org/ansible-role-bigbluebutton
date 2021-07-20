@@ -22,6 +22,6 @@
     group: root
     mode: 0644
   no_log: true
-  when: bbb_monitoring_external | bool
+  when: bbb_monitoring_external | bool and bbb_monitoring_htpasswd_user is defined and bbb_monitoring_htpasswd is defined
   notify:
     - reload nginx
