@@ -32,6 +32,7 @@
 - name: register bbb secret
   command: bbb-conf --secret
   changed_when: false
+  check_mode: false
   register: result
 
 - name: parse bbb secret
@@ -48,7 +49,7 @@
   set_fact:
     bbb_secret: "{{ current_bbb_secret }}"
     cacheable: true
-  when: not bbb_secret is defined
+  when: bbb_secret is not defined
 
 - name: serve recordings via https
   become: true
@@ -92,6 +93,28 @@
     mode: '0644'
   notify:
     - restart bigbluebutton
+
+- name: configure custom recording config
+  block:
+    - name: read recording config
+      slurp:
+        path: /usr/local/bigbluebutton/core/scripts/presentation.yml
+      register: r_recording_config
+
+    - name: extract recording config
+      set_fact:
+        recording_config: "{{ r_recording_config['content'] | b64decode | from_yaml }}"
+
+    - name: combine recording config
+      set_fact:
+        recording_config: "{{ recording_config | combine(bbb_recording_config, recursive=true) }}"
+
+    - name: write back recording config
+      copy:
+        content: '{{ recording_config | to_nice_yaml(indent=2) }}'
+        dest: /usr/local/bigbluebutton/core/scripts/presentation.yml
+        mode: '0644'
+  when: bbb_recording_config | default({}) | length > 0
 
 - name: configure CPU and IO Scheduling in FreeSWITCH service
   lineinfile:
@@ -227,8 +250,8 @@
 - name: set nodejs options for the html5-webclient
   replace:
     path: /usr/share/meteor/bundle/systemd_start.sh
-    regexp:  'PORT=3000 /usr/share/\$NODE_VERSION/bin/node.*main.js'
-    replace: 'PORT=3000 /usr/share/$NODE_VERSION/bin/node {{ bbb_html5_node_options }} main.js'
+    regexp: '/usr/share/\$NODE_VERSION/bin/node.*main.js'
+    replace: '/usr/share/$NODE_VERSION/bin/node {{ bbb_html5_node_options }} main.js'
   when: bbb_html5_node_options is defined
   notify: restart bigbluebutton
 
@@ -284,7 +307,7 @@
   become: true
   copy:
     src: "{{ bbb_custom_presentation }}"
-    dest: "{{ bbb_nginx_root | regex_replace('\\/$', '') }}/{{ bbb_custom_presentation_name | default(bbb_custom_presentation) }}"
+    dest: "{{ bbb_nginx_root | regex_replace('\\/$', '') }}/{{ bbb_custom_presentation_name | default('default.pdf') }}"
     mode: '0644'
   when: bbb_custom_presentation is defined
 
@@ -299,16 +322,3 @@
   notify:
     - reload systemd
     - restart bigbluebutton
-
-- name: config recording formats
-  become: true
-  template:
-    src: recordings/presentation.yml.j2
-    dest: /usr/local/bigbluebutton/core/scripts/presentation.yml
-    mode: '0750'
-    owner: root
-    group: root
-    force: true
-  notify:
-    - restart bigbluebutton
-  when: not bbb_disable_recordings | bool

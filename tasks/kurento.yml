@@ -32,6 +32,22 @@
     mode: 0640
   notify: restart freeswitch
 
+- name: kurento only listen on specified interfaces
+  replace:
+    path: /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
+    regexp: '^;?networkInterfaces=.*$'
+    replace: 'networkInterfaces={{ bbb_kurento_interfaces | join(",") }}'
+  when: (bbb_kurento_interfaces | default([]) | length) > 0
+  notify: restart kurento
+
+- name: kurento listen on all interfaces
+  replace:
+    path: /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
+    regexp: '^;?networkInterfaces=.*$'
+    replace: ';networkInterfaces='
+  when: (bbb_kurento_interfaces | default([]) | length) == 0
+  notify: restart kurento
+
 - name: add kurento-media-server@.service
   become: true
   template:

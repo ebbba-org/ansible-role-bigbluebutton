@@ -40,6 +40,7 @@ bbb_greenlight_users: []
 bbb_webhooks_enable: false
 bbb_allow_mail_notifications: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
+bbb_greenlight_image: bigbluebutton/greenlight:v2
 bbb_api_demos_enable: false
 bbb_mute_on_start: false
 bbb_app_log_level: "DEBUG"
@@ -50,15 +51,10 @@ bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 bbb_freeswitch_muted_sound: true
 bbb_freeswitch_unmuted_sound: true
 
-# BBB Recordings
-bbb_disable_recordings: false
-bbb_recording_formats:
-  - webm
-  # - mp4
-#bbb_recordings_nfs_mount: ''
-bbb_recordings_nfs:
-  enable: false
-  path: ""
+
+bbb_kurento_interfaces:
+- "{{ ansible_default_ipv4.interface }}"
+- lo
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
 bbb_guestpolicy: ALWAYS_ACCEPT
 
@@ -79,6 +75,11 @@ bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 # bbb_own_key:
 
 bbb_meteor: {}
+bbb_disable_recordings: false
+bbb_recordings_nfs:
+  enable: false
+  path: ""
+bbb_recording_config: {}
 bbb_dialplan_quality: "cdquality"
 bbb_dialplan_energy_level: 100
 bbb_dialplan_comfort_noise: 1400
@@ -89,22 +90,29 @@ bbb_apt_key: 770C4267C5E63474D171B60937B5DD5EFAB46452
 ansible_python_interpreter: "/usr/bin/python3"
 
 bbb_monitoring_all_in_one_enable: false
-bbb_monitoring_all_in_one_version: latest
 bbb_monitoring_all_in_one_directory: "/root/bbb-monitoring"
 bbb_monitoring_all_in_one_port: 3001
 bbb_monitoring_recordings_from_disk: true
 bbb_monitoring_all_in_one_grafana: true
 bbb_monitoring_all_in_one_prometheus: true
-bbb_monitoring_all_in_one_external: false
-# bbb_monitoring_all_in_one_htpasswd_user:
-# bbb_monitoring_all_in_one_htpasswd:
+# bbb_monitoring_htpasswd_user:
+# bbb_monitoring_htpasswd:
+bbb_monitoring_external: false
+bbb_monitoring_exporter_version: "{{ 'latest' if bbb_monitoring_all_in_one_enable | bool else 'HEAD' }}"
+
+bbb_monitoring_systemd_enable: false
+bbb_monitoring_systemd_directory: "/opt/bigbluebutton-exporter"
+bbb_monitoring_systemd_bind_ip: 0.0.0.0
+bbb_monitoring_systemd_port: 9688
 
 bbb_dialin_enabled: false
 bbb_dialin_provider_proxy: "sip.example.net"
+bbb_dialin_provider_ip: ""
 bbb_dialin_provider_username: "provider-account"
 bbb_dialin_provider_password: "provider-password"
 bbb_dialin_provider_extension: "6135551234"
 bbb_dialin_default_number: "613-555-1234"
+bbb_dialin_default_play_and_get_digits: "5 5 3 7000 #"
 bbb_dialin_mask_caller: false
 bbb_dialin_overwrite_footer: false
 bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.
@@ -142,6 +150,8 @@ bbb_breakout_rooms_privatechat_enabled: true
 # bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
 bbb_html5_backend_processes: 2
 bbb_html5_frontend_processes: 2
+
+bbb_etherpad_disable_cursortrace_plugin: false
 
 bbb_webrtc_sfu_multikurento:
   balancing-strategy: MEDIA_TYPE
@@ -190,16 +200,8 @@ bbb_webrtc_sfu_multikurento:
 # Skip all tasks that are incompatible with (unprivileged) containers
 bbb_container_compat: false
 
-bbb_firewall_ufw:
-  # enable/disable the ufw
-  enabled: true
-  # enbale/disable ufw logging
-  logging: true
-  # The default policy
-  policy: deny
-  # A list of reject_networks that will be reject - https://github.com/ebbba-org/ansible-role-bigbluebutton/issues/31
-  # Default reject BOGON https://bgpfilterguide.nlnog.net/guides/bogon_prefixes/#bird
-  reject_networks:
+bbb_ssh_port: '22'
+bbb_ufw_reject_networks_default:
     - 0.0.0.0/8
     - 10.0.0.0/8
     - 100.64.0.0/10
@@ -212,10 +214,25 @@ bbb_firewall_ufw:
     - 203.0.113.0/24
     - 224.0.0.0/4
     - 240.0.0.0/4
-  # A list of allow_networks - for docker and localhost
-  allow_networks:
+bbb_ufw_allow_networks_default:
     - 172.17.0.0/16
     - 127.0.0.1/23
+bbb_ufw_allow_networks: "{{ bbb_ufw_allow_networks_custom | default([]) + bbb_ufw_allow_networks_default }}"
+bbb_ufw_reject_networks: "{{ bbb_ufw_reject_networks_custom | default([]) + bbb_ufw_reject_networks_default }}"
+bbb_firewall_ufw:
+  # enable/disable the ufw
+  enabled: true
+  # enbale/disable ufw logging
+  logging: true
+  # The default policy
+  policy: deny
+  # A list of reject_networks that will be reject - https://github.com/ebbba-org/ansible-role-bigbluebutton/issues/31
+  # Default reject BOGON https://bgpfilterguide.nlnog.net/guides/bogon_prefixes/#bird
+  reject_networks:
+    - "{{ bbb_ufw_reject_networks }}"
+  # A list of allow_networks - for docker and localhost
+  allow_networks:
+    - "{{ bbb_ufw_allow_networks }}"
   rules:
     # SSH is allowed by default and limited
     nginx:
@@ -247,7 +264,7 @@ bbb_firewall_ufw:
         proto: udp
     default:
       - rule: allow
-        port: '22'
+        port: "{{ bbb_ssh_port }}"
         proto: tcp
 
 # https://pypi.org/project/docker-compose/#history
