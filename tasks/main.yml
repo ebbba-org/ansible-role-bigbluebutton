@@ -104,7 +104,7 @@
   tags: bbb-web
 
 - import_tasks: bbb-html5.yml
-  tags: bbb-hml5
+  tags: bbb-html5
 
 - import_tasks: freeswitch.yml
   tags: freeswitch
