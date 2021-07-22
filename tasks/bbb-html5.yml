@@ -44,3 +44,10 @@
     mode: '0644'
   notify:
     - restart bbb-web
+
+- name: setup html5-frontend nginx connections
+  template:
+    src: nginx/bbb-html5-loadbalancer.conf.j2
+    dest: /etc/nginx/conf.d/bbb-html5-loadbalancer.conf
+    mode: '0644'
+  notify: reload nginx
