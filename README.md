@@ -34,7 +34,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_custom_presentation_name` | Set a custom presentation name | `None` | Instead of overwriting the `default.pdf` setting the name will add for example the `customer.pdf` |
 | `bbb_web_logouturl` | set logout URL | `default` | Instead of using `bigbluebutton.web.serverURL` as default logout page, set another URL or customize logout page e.g. ${bigbluebutton.web.serverURL}/logout.html. API create call with the `logoutURL` parameter overwrite this setting |
 | `bbb_allow_request_without_session` | Enable or disable allow request without session | `false` | Allow requests without JSESSIONID to be handled |
-| `bbb_coturn_enable` | enable installation of the TURN-server | `yes` |
+| `bbb_coturn_enable` | enable installation of the TURN-server | `true` |
 | `bbb_coturn_server` | server name on coturn (realm) | `{{ bbb_hostname }}` |
 | `bbb_coturn_port` | the port for the TURN-Server to use | `3443` |
 | `bbb_coturn_port_tls` | the port for tls for the TURN-Server to use | `3443` |
