@@ -4,11 +4,8 @@
 # More information on ansible vault at: https://docs.ansible.com/ansible/latest/user_guide/vault.html
 
 # BBB
-bbb_state: present # For updating BigBlueButton with this role use 'latest'
+#bbb_state: present # For updating BigBlueButton with this role use 'latest'
 #bbb_hostname: <your host fqdn> # Uncomment and fill if bbb fqdn is different than default {{ ansible_fqdn }}
-
-# LETSENCRYPT
-#bbb_letsencrypt_email: "<your email>" # Uncomment and fill if using letsencrypt for TLS certificates
 
 # COTURN
 #bbb_coturn_secret: <secret> # Uncomment, generate and fill using `openssl rand -hex 16`, when using coturn
@@ -26,9 +23,5 @@ bbb_freeswitch_socket_password: "<secret>" # Generate and fill using `pwgen -s 1
 # MONITORING
 #bbb_monitoring_htpasswd_user: <htpasswd_user> # Uncomment and fill, when using external monitoring
 #bbb_monitoring_htpasswd: <htpasswd> # Uncomment and fill, when using external monitoring
-
-# GEERLINGGUY
-nodejs_install_npm_user: <your-user> # needed by geerlingguy.nodejs, fill your ansible user
-docker_compose_version: "{{ bbb_docker_compose_version }}" # needed by geerlingguy.docker, don't change
 
 # OPTIONAL
