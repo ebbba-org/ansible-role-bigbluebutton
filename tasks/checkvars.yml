@@ -49,9 +49,9 @@
       debug:
         msg: "value: {{ bbb_monitoring_htpasswd }}"
       when: bbb_monitoring_external and (bbb_monitoring_use_htpasswd or bbb_monitoring_use_restriction_combination)
-    - name: bbb_monitoring_external_ip_list
+    - name: bbb_monitoring_external_ip_whitelist
       debug:
-        msg: "value: {{ bbb_monitoring_external_ip_list }}"
+        msg: "value: {{ bbb_monitoring_external_ip_whitelist }}"
       when: bbb_monitoring_external and (bbb_monitoring_use_ip_restriction or bbb_monitoring_use_restriction_combination)
     - name: bbb_monitoring_systemd_enable
       debug:

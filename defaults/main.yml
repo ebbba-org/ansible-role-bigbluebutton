@@ -94,7 +94,7 @@ bbb_monitoring_all_in_one_grafana: true
 bbb_monitoring_all_in_one_prometheus: true
 # bbb_monitoring_htpasswd_user:
 # bbb_monitoring_htpasswd:
-#bbb_monitoring_external_ip_list:
+#bbb_monitoring_external_ip_whitelist:
 #  - address: 127.0.0.1
 bbb_monitoring_use_htpasswd: true
 bbb_monitoring_use_ip_restriction: false
