@@ -387,7 +387,7 @@ Assuming the following directory structure:
     └── inventory
         ├── hosts
         ├── group_vars
-	    │   └── bigbluebutton
+        │   └── bigbluebutton
         │       └── bbb.yml
         └── host_vars
             └── your-domain.example.com
