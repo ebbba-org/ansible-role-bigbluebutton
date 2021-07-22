@@ -1,0 +1,7 @@
+upstream poolhtml5servers {
+  zone poolhtml5servers 32k;
+  least_conn;
+{% for i in range(bbb_html5_frontend_processes | default(2) | int(2)) %}
+  server 127.0.0.1:410{{ i }} fail_timeout=5s max_fails=3;
+{% endfor %}
+}
