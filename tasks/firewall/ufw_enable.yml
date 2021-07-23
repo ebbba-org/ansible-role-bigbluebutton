@@ -13,6 +13,10 @@
       state: enabled
       policy: allow
 
+  - name: reset ufw rules
+    community.general.ufw:
+      state: reset
+
   - name: Set logging
     community.general.ufw:
       logging: 'on'
