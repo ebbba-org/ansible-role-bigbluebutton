@@ -382,7 +382,7 @@ Assuming the following directory structure:
 ```
 ├── ansible
     ├── roles
-    │   └── ansible-role-bigbluebutton
+    │   └── ebbba.bigbluebutton
     ├── playbooks
     │   └── bigbluebutton.yml
     └── inventory
@@ -394,29 +394,31 @@ Assuming the following directory structure:
             └── your-domain.example.com
                 └── vars.yml
 ```
-You can clone the repository in your roles directory and then follow these steps inside the parent directory:
+You can follow these steps inside your ansible directory to clone the repository and use the example playbook and variable configuration files:
 
-1. Copy the sample inventory hosts file or append its containt to your already existing hosts file(`cp roles/ansible-role-bigbluebutton/examples/hosts inventory/hosts`).
+1. Clone the repository in your roles directory. (`git clone https://github.com/ebbba-org/ansible-role-bigbluebutton.git roles/ebbba.bigbluebutton`)
 
-2. Edit the inventory hosts file (`inventory/hosts`) to include all the hosts you want in the `bigbluebutton` group.
+2. Copy the sample inventory hosts file or append its containt to your already existing hosts file(`cp roles/ebbba.bigbluebutton/examples/hosts inventory/hosts`).
 
-3. Create a directory with the name of the group inside group_vars (`mkdir inventory/group_vars/bigbluebutton`).
+3. Edit the inventory hosts file (`inventory/hosts`) to include all the hosts you want in the `bigbluebutton` group.
 
-4. Copy the group_vars sample configuration file to the directory you created (`cp roles/ansible-role-bigbluebutton/examples/bbb.yml inventory/group_vars/bigbluebutton/bbb.yml`).
+4. Create a directory with the name of the group inside group_vars (`mkdir inventory/group_vars/bigbluebutton`).
 
-5. Edit the group configuration file (`inventory/group_vars/bigbluebutton/bbb.yml`) to your liking. You should put here all the options that are common among all your bbb servers.
+5. Copy the group_vars sample configuration file to the directory you created (`cp roles/ebbba.bigbluebutton/examples/bbb.yml inventory/group_vars/bigbluebutton/bbb.yml`).
 
-6. Create a directory for each of your servers to hold its configuration (`mkdir inventory/host_vars/<your-domain>`).
+6. Edit the group configuration file (`inventory/group_vars/bigbluebutton/bbb.yml`) to your liking. You should put here all the options that are common among all your bbb servers.
 
-7. Copy the sample configuration file to each of the servers configuration directory (`cp roles/ansible-role-bigbluebutton/examples/vars.yml inventory/host_vars/<your-domain>/vars.yml`).
+7. Create a directory for each of your servers to hold its configuration (`mkdir inventory/host_vars/<your-domain>`).
 
-8. Edit the host configuration file (`inventory/host_vars/<your-domain>/vars.yml`) to your liking. You should put here all the host specific options. Setting a variable here will override its value set in `inventory/group_vars/bigbluebutton/bbb.yml`.
+8. Copy the sample configuration file to each of the servers configuration directory (`cp roles/ebbba.bigbluebutton/examples/vars.yml inventory/host_vars/<your-domain>/vars.yml`).
 
-9. Copy the sample playbook (`cp roles/ansible-role-bigbluebutton/examples/playbook/bigbluebutton.yml playbooks`).
+9. Edit the host configuration file (`inventory/host_vars/<your-domain>/vars.yml`) to your liking. You should put here all the host specific options. Setting a variable here will override its value set in `inventory/group_vars/bigbluebutton/bbb.yml`.
 
-10. Run the playbook using `ansible-playbook -i inventory/hosts playbooks/bigbluebutton.yml`.
+10. Copy the sample playbook (`cp roles/ebbba.bigbluebutton/examples/playbook/bigbluebutton.yml playbooks`).
 
-#### Event though all the variables are explained above, you may also take a look at `roles/ansible-role-bigbluebutton/defaults/main.yml` and see if there's something you'd like to copy over and override in your `vars.yml` and `bbb.yml` configuration files.
+11. Run the playbook using `ansible-playbook -i inventory/hosts playbooks/bigbluebutton.yml`.
+
+#### Event though all the variables are explained above, you may also take a look at `roles/ebbba.bigbluebutton/defaults/main.yml` and see if there's something you'd like to copy over and override in your `vars.yml` and `bbb.yml` configuration files.
 
 ## License
 

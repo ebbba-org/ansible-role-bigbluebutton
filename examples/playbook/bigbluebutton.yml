@@ -4,4 +4,4 @@
   become: true
 
   roles:
-    - role: ansible-role-bigbluebutton
+    - role: ebbba.bigbluebutton
