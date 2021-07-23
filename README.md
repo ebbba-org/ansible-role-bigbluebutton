@@ -27,7 +27,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_ssl_key` | Define the ssl key location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"` | |
 | | `bbb_own_cert` | Define the name of the cert file which shall be used | `undefined` | |
 | | `bbb_own_key` | Define the name of the key file which shall be used | `undefined` | |
-| | `bbb_default_welcome_message` | Welcome Message in the client | Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others. | Needs to be encoded with `native2ascii -encoding UTF8`! |
+| | `bbb_default_welcome_message` | Welcome Message in the client | Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others. | Needs to be encoded with `native2ascii -encoding UTF8`! |
 | | `bbb_default_welcome_message_footer` | Footer of the welcome message | This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>. | Encoded as the welcome message |
 | | `bbb_default_presentation` | Location of default presentation | `${bigbluebutton.web.serverURL}/default.pdf` |
 | | `bbb_custom_presentation` | Overwrite the default.pdf | `None` | Location of a custom presentation will be renamed to `default.pdf` if `bbb_custom_presentation_name` is not defined - see [Ansible search paths](https://docs.ansible.com/ansible/latest/user_guide/playbook_pathing.html) for where to place your custom pdf - Example `playbooks/files/default.pdf` |
@@ -55,7 +55,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_allow_mail_notifications`  | Set this to true if you want GreenLight to send verification emails upon the creation of a new account | `true` |
 | | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
 | | `bbb_api_demos_enable` | enable installation of the api demos | `no` | |
-| | `bbb_client_log_enable` | enable installation of the nginx-full and config for client logging according to [BBB Customization Docs](https://docs.bigbluebutton.org/2.2/customize.html#collect-feedback-from-the-users). See "METEOR" Section below for needed `bbb_meteor` values. | `false` | |
+| | `bbb_client_log_enable` | enable installation of the nginx-full and config for client logging according to [BBB Customization Docs](https://docs.bigbluebutton.org/admin/customize.html#collect-feedback-from-the-users). See "METEOR" Section below for needed `bbb_meteor` values. | `false` | |
 | | `bbb_mute_on_start` | start with muted mic on join | `no` | |
 | | `bbb_app_log_level` | set bigbluebutton log level | `DEBUG` | |
 | | `bbb_meteor` | overwrite settings in meteor | `{}` | |
@@ -424,4 +424,4 @@ You can follow these steps inside your ansible directory to clone the repository
 
 MIT
 
-[bbb_freeswitch_ipv6]: https://docs.bigbluebutton.org/2.2/troubleshooting.html#freeswitch-fails-to-bind-to-port-8021
+[bbb_freeswitch_ipv6]: https://docs.bigbluebutton.org/support/troubleshooting.html#freeswitch-fails-to-bind-to-port-8021
