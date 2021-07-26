@@ -52,6 +52,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | `bbb_greenlight_db_password` | Password for greenlight's database  _(required when using greenlight)_ | | can be generated with `openssl rand -hex 16` |
 | `bbb_greenlight_default_registration` | Registration option open(default), invite or approval | `open` | |
 | `bbb_greenlight_users` | Greenlight users' list to create. No email notification will be triggered. As it contains passwords, recommend to put in ansible-vault. For more details see defaults/main.yml | `[]` |
+| `bbb_greenlight_enable_recording_thumbnails` | Toggle thumbnails for recordings | `true` | This is usefull if you dont want thumbnails - this can fix a default presentation issue where greenlight fails to generate the thumbnail |
 | `bbb_allow_mail_notifications`  | Set this to true if you want GreenLight to send verification emails upon the creation of a new account | `true` |
 | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
 | `bbb_api_demos_enable` | enable installation of the api demos | `no` | |
