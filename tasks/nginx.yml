@@ -75,6 +75,8 @@
   become: true
   file:
     state: touch
+    access_time: preserve
+    modification_time: preserve
     path: /var/log/nginx/html5-client.log
     mode: '0644'
     owner: bigbluebutton
