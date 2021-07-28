@@ -1,0 +1,8 @@
+---
+
+# GEERLINGGUY
+nodejs_install_npm_user: <your-user> # needed by geerlingguy.nodejs, fill your ansible user
+docker_compose_version: "{{ bbb_docker_compose_version }}" # needed by geerlingguy.docker, don't change
+
+# LETSENCRYPT
+#bbb_letsencrypt_email: "<your email>" # Uncomment and fill if using letsencrypt for TLS certificates
