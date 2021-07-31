@@ -40,6 +40,7 @@ bbb_greenlight_users: []
 bbb_webhooks_enable: false
 bbb_allow_mail_notifications: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
+bbb_greenlight_image: bigbluebutton/greenlight:v2
 bbb_disable_recordings: false
 bbb_api_demos_enable: false
 bbb_mute_on_start: false
@@ -50,6 +51,10 @@ bbb_freeswitch_ip_address: "{{ ansible_default_ipv4.address }}"
 bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 bbb_freeswitch_muted_sound: true
 bbb_freeswitch_unmuted_sound: true
+
+bbb_kurento_interfaces:
+- "{{ ansible_default_ipv4.interface }}"
+- lo
 
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
 bbb_guestpolicy: ALWAYS_ACCEPT
@@ -71,6 +76,7 @@ bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 # bbb_own_key:
 
 bbb_meteor: {}
+bbb_recording_config: {}
 bbb_dialplan_quality: "cdquality"
 bbb_dialplan_energy_level: 100
 bbb_dialplan_comfort_noise: 1400
@@ -81,15 +87,20 @@ bbb_apt_key: 770C4267C5E63474D171B60937B5DD5EFAB46452
 ansible_python_interpreter: "/usr/bin/python3"
 
 bbb_monitoring_all_in_one_enable: false
-bbb_monitoring_all_in_one_version: latest
 bbb_monitoring_all_in_one_directory: "/root/bbb-monitoring"
 bbb_monitoring_all_in_one_port: 3001
 bbb_monitoring_recordings_from_disk: true
 bbb_monitoring_all_in_one_grafana: true
 bbb_monitoring_all_in_one_prometheus: true
-bbb_monitoring_all_in_one_external: false
-# bbb_monitoring_all_in_one_htpasswd_user:
-# bbb_monitoring_all_in_one_htpasswd:
+# bbb_monitoring_htpasswd_user:
+# bbb_monitoring_htpasswd:
+bbb_monitoring_external: false
+bbb_monitoring_exporter_version: "{{ 'latest' if bbb_monitoring_all_in_one_enable | bool else 'HEAD' }}"
+
+bbb_monitoring_systemd_enable: false
+bbb_monitoring_systemd_directory: "/opt/bigbluebutton-exporter"
+bbb_monitoring_systemd_bind_ip: 0.0.0.0
+bbb_monitoring_systemd_port: 9688
 
 bbb_dialin_enabled: false
 bbb_dialin_provider_proxy: "sip.example.net"
@@ -103,7 +114,7 @@ bbb_dialin_mask_caller: false
 bbb_dialin_overwrite_footer: false
 bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.
 
-bbb_default_presentation: ${bigbluebutton.web.serverURL}/default.pdf
+bbb_default_presentation: "${bigbluebutton.web.serverURL}/{{ bbb_custom_presentation_name | default('default.pdf') }}"
 
 # bbb_custom_presentation: "default.pdf"
 # set this to the name the default presentation on the host should have.
@@ -136,6 +147,8 @@ bbb_breakout_rooms_privatechat_enabled: true
 # bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
 bbb_html5_backend_processes: 2
 bbb_html5_frontend_processes: 2
+
+bbb_etherpad_disable_cursortrace_plugin: false
 
 bbb_webrtc_sfu_multikurento:
   balancing-strategy: MEDIA_TYPE

@@ -9,7 +9,7 @@
 - name: create AppArmor rules
   become: true
   template:
-    src: opt.freeswitch.bin.freeswitch
+    src: freeswitch/freeswitch_apparmor_profile
     dest: /etc/apparmor.d/opt.freeswitch.bin.freeswitch
     mode: 0600
   when: not bbb_container_compat
@@ -35,31 +35,31 @@
 - name: add freeswitch module config
   become: true
   template:
-    src: modules.conf.xml
+    src: freeswitch/modules.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/modules.conf.xml
     mode: '0644'
-    owner: root
-    group: root
+    owner: freeswitch
+    group: daemon
   notify: restart freeswitch
 
 - name: add freeswitch syslog config
   become: true
   template:
-    src: syslog.conf.xml
+    src: freeswitch/syslog.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/syslog.conf.xml
     mode: '0644'
-    owner: root
-    group: root
+    owner: freeswitch
+    group: daemon
   notify: restart freeswitch
 
 - name: deploy conference config
   become: true
   template:
-    src: conference.conf.xml
+    src: freeswitch/conference.conf.xml
     dest: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
     mode: '0644'
-    owner: root
-    group: root
+    owner: freeswitch
+    group: daemon
   notify: restart freeswitch
 
 - name: set socket password
@@ -104,8 +104,8 @@
     src: sounds/{{ item }}/conf-muted.wav
     dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
     mode: '0644'
-    owner: root
-    group: root
+    owner: freeswitch
+    group: daemon
   with_items:
     - 48000
     - 32000
@@ -118,8 +118,8 @@
     src: sounds/{{ item }}/conf-unmuted.wav
     dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
     mode: '0644'
-    owner: root
-    group: root
+    owner: freeswitch
+    group: daemon
   with_items:
     - 48000
     - 32000

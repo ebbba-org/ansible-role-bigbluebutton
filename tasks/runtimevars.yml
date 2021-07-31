@@ -1,25 +1,8 @@
 ---
-
 - name: Check if bbb_ssl_cert exists
   stat:
     path: "{{ bbb_ssl_cert }}"
   register: bbbcert
+  when: bbbcert is not defined
 
-- name: register bbb secret
-  become: true
-  command: bbb-conf --secret
-  changed_when: false
-  register: result
-  when: not bbb_secret is defined or not bbb_baseurl is defined
-
-- name: parse bbb secret
-  set_fact:
-    bbb_secret: "{{ result.stdout | regex_search('Secret: ([a-zA-Z0-9]*)', multiline=True) |  regex_replace('Secret: ') }}"
-    cacheable: true
-  when: not bbb_secret is defined
-
-- name: parse bbb baseurl
-  set_fact:
-    bbb_baseurl: "{{ result.stdout | regex_search('URL:\\s*(https?:\\/\\/.*)', multiline=True) |  regex_replace('URL: ') }}"
-    cacheable: true
-  when: not bbb_baseurl is defined
+- import_tasks: bbb_secret.yml

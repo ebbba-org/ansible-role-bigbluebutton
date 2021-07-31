@@ -3,6 +3,16 @@
 - import_tasks: checkvars.yml
   tags:
     - checkvars
+    - always
+
+- block:
+  - name: include bbb_secret
+    include_tasks: bbb_secret.yml
+  tags:
+    - bbb_secret
+    - always
+  ignore_errors: true
+  when: bbb_secret is not defined
 
 - include_tasks: check-for-sessions.yml
   when:
@@ -10,6 +20,7 @@
     - bbb_secret is defined
   tags:
     - check-for-sessions
+    - always
 
 - import_tasks: firewall/ufw_enable.yml
   when: bbb_firewall_ufw['enabled']
@@ -37,9 +48,13 @@
   tags:
     - mongodb
 
-- import_tasks: runtimevars.yml
+- block:
+  - name: include runtimevars
+    include_tasks: runtimevars.yml
   tags:
     - runtimevars
+    - bbb_secret
+    - always
 
 - import_tasks: letsencrypt.yml
   when: bbb_letsencrypt_enable | bool and not bbbcert.stat.exists
@@ -64,7 +79,6 @@
     - ntp
 
 - import_tasks: coturn.yml
-  when: bbb_coturn_enable | bool
   tags:
     - coturn
 
@@ -82,8 +96,8 @@
   tags:
     - greenlight
 
-- import_tasks: monitoring/all_in_one.yml
-  when: bbb_monitoring_all_in_one_enable | bool
+- import_tasks: monitoring/main.yml
+  when: bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_systemd_enable | bool
   tags:
     - monitoring
 
@@ -110,3 +124,6 @@
 - import_tasks: kurento.yml
   tags:
     - kurento
+
+- import_tasks: etherpad.yml
+  tags: etherpad

@@ -77,8 +77,26 @@
     name: apparmor
     state: reloaded
 
-- name: restart monitoring
+- name: restart coturn
+  become: true
+  systemd:
+    name: coturn
+    state: restarted
+
+- name: restart monitoring container
   docker_compose:
     pull: false
     restarted: true
     project_src: "{{ bbb_monitoring_all_in_one_directory }}"
+
+- name: restart monitoring service
+  become: true
+  systemd:
+    name: bigbluebutton-exporter
+    state: restarted
+
+- name: restart etherpad
+  ansible.builtin.systemd:
+    name: etherpad.service
+    enabled: true
+    state: restarted

@@ -1,0 +1,16 @@
+# To connect using a specific user (and elevate to root with sudo later),
+# add `ansible_user=<your user>` next to <your domain> below.
+#
+# For improved Ansible performance, consider enabling SSH pipelining in your `ansible.cfg` by adding `ansible_ssh_pipelining: True`.
+# Beware that this might cause SSH connection troubles. If so, disable it by removing the line in `ansible.cfg`, or adding `ansible_ssh_pipelining=False`
+# to a specific host's line below or by adding `ansible_ssh_pipelining: False` to its variables file.
+#
+# If you're running this Ansible playbook on the same server as the one you're installing to,
+# consider adding an additional `ansible_connection=local` argument to the host line below.
+#
+# Ansible may fail to discover which Python interpreter to use on the host.
+# You may sometimes need to explicitly add the argument `ansible_python_interpreter=/usr/bin/python3`
+# to the host line below.
+
+[bigbluebutton]
+<your-domain>
