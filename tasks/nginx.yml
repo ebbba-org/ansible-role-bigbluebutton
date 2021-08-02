@@ -78,7 +78,7 @@
     access_time: preserve
     modification_time: preserve
     path: /var/log/nginx/html5-client.log
-    mode: '0644'
+    mode: '0640'
     owner: www-data
     group: adm
   when: bbb_client_log_enable
