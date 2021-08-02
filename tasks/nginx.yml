@@ -75,9 +75,11 @@
   become: true
   file:
     state: touch
+    access_time: preserve
+    modification_time: preserve
     path: /var/log/nginx/html5-client.log
     mode: '0644'
-    owner: bigbluebutton
-    group: bigbluebutton
+    owner: www-data
+    group: adm
   when: bbb_client_log_enable
   notify: reload nginx
