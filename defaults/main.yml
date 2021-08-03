@@ -144,6 +144,10 @@ bbb_breakout_rooms_enabled: true
 bbb_breakout_rooms_record: false
 bbb_breakout_rooms_privatechat_enabled: true
 
+bbb_user_inactivity_inspect_timer: 0
+bbb_user_inactivity_threshold: 30
+bbb_user_activity_sign_response_delay: 5
+
 # bbb_freeswitch_socket_password needs to be defined by the User
 # bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
 bbb_html5_backend_processes: 2
