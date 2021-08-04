@@ -41,6 +41,7 @@ bbb_webhooks_enable: false
 bbb_allow_mail_notifications: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
 bbb_greenlight_image: bigbluebutton/greenlight:v2
+bbb_greenlight_enable_recording_thumbnails: true
 bbb_disable_recordings: false
 bbb_api_demos_enable: false
 bbb_mute_on_start: false
@@ -114,7 +115,7 @@ bbb_dialin_mask_caller: false
 bbb_dialin_overwrite_footer: false
 bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.
 
-bbb_default_presentation: ${bigbluebutton.web.serverURL}/default.pdf
+bbb_default_presentation: "${bigbluebutton.web.serverURL}/{{ bbb_custom_presentation_name | default('default.pdf') }}"
 
 # bbb_custom_presentation: "default.pdf"
 # set this to the name the default presentation on the host should have.
@@ -142,6 +143,10 @@ bbb_num_file_processor_threads: 2
 bbb_breakout_rooms_enabled: true
 bbb_breakout_rooms_record: false
 bbb_breakout_rooms_privatechat_enabled: true
+
+bbb_user_inactivity_inspect_timer: 0
+bbb_user_inactivity_threshold: 30
+bbb_user_activity_sign_response_delay: 5
 
 # bbb_freeswitch_socket_password needs to be defined by the User
 # bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
