@@ -111,6 +111,7 @@
     - 32000
     - 16000
     - 8000
+  when: bbb_freeswitch_muted_sound | bool
 
 - name: configure different unmute sound
   become: true
@@ -125,3 +126,4 @@
     - 32000
     - 16000
     - 8000
+  when: bbb_freeswitch_unmuted_sound | bool
