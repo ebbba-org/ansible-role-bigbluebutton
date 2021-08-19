@@ -1,20 +1,18 @@
 ---
-  - name: Check for running meetings
-    uri:
-      url: "https://{{ bbb_hostname }}/bigbluebutton/api/getMeetings?checksum={{ ('getMeetings' + bbb_secret) | hash('sha1') }}"
-      return_content: true
-    register: bbb_getmeetings
-    failed_when: false
-    changed_when: false
-    tags: always
+- name: Check for running meetings
+  uri:
+    url: "https://{{ bbb_hostname }}/bigbluebutton/api/getMeetings?checksum={{ ('getMeetings' + bbb_secret) | hash('sha1') }}"
+    return_content: true
+  register: bbb_getmeetings
+  failed_when: false
+  changed_when: false
 
-  - block:
-      - name: There are running sessions on this host
-        fail: msg="There are running meetings on {{ bbb_hostname }}, skipping."
-      - name: Stop play for Hosts with running meetings
-        meta: end_host
-    when:
-      - not ansible_check_mode
-      - bbb_getmeetings.status == 200
-      - "'<messageKey>noMeetings</messageKey>' not in bbb_getmeetings.content"
-    tags: always
+- block:
+    - name: There are running sessions on this host
+      fail: msg="There are running meetings on {{ bbb_hostname }}, skipping."
+    - name: Stop play for Hosts with running meetings
+      meta: end_host
+  when:
+    - not ansible_check_mode
+    - bbb_getmeetings.status == 200
+    - "'<messageKey>noMeetings</messageKey>' not in bbb_getmeetings.content"
