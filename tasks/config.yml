@@ -29,6 +29,13 @@
     mode: '0600'
   notify: restart bigbluebutton
 
+- name: don't leave BBB secrets readable for others
+  ansible.builtin.file:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    owner: bigbluebutton
+    group: bigbluebutton
+    mode: '640'
+
 - name: register bbb secret
   command: bbb-conf --secret
   changed_when: false
