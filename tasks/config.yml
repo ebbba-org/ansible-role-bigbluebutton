@@ -192,9 +192,6 @@
   template:
     src: bbb-config/cron.daily/bigbluebutton
     dest: /etc/cron.daily/bigbluebutton
-    mode: '0644'
+    mode: '0755'
     owner: root
     group: root
-  notify:
-    - reload systemd
-    - restart bigbluebutton
