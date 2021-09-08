@@ -195,6 +195,3 @@
     mode: '0755'
     owner: root
     group: root
-  notify:
-    - reload systemd
-    - restart bigbluebutton
