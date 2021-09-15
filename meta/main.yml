@@ -22,4 +22,11 @@ dependencies:
   - role: geerlingguy.nodejs
     vars:
       nodejs_version: "{{ bbb_nodejs_version }}"
+    tags:
+      - geerlingguy
+      - geerlingguy_nodejs
+
   - role: geerlingguy.docker
+    tags:
+      - geerlingguy
+      - geerlingguy_docker

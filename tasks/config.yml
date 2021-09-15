@@ -29,6 +29,13 @@
     mode: '0600'
   notify: restart bigbluebutton
 
+- name: don't leave BBB secrets readable for others
+  ansible.builtin.file:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    owner: bigbluebutton
+    group: bigbluebutton
+    mode: '640'
+
 - name: register bbb secret
   command: bbb-conf --secret
   changed_when: false
@@ -116,137 +123,6 @@
         mode: '0644'
   when: bbb_recording_config | default({}) | length > 0
 
-- name: configure CPU and IO Scheduling in FreeSWITCH service
-  lineinfile:
-    path: /lib/systemd/system/freeswitch.service
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
-    state: '{{ item.state }}'
-    insertbefore: '^CPUSchedulingPriority='
-  with_items:
-    - line: 'CPUSchedulingPolicy=rr'
-      regexp: '^#?CPUSchedulingPolicy='
-      state: '{{ "present" if not bbb_container_compat | bool else "absent" }}'
-    - line: 'IOSchedulingClass=realtime'
-      regexp: '^#?IOSchedulingClass='
-      state: '{{ "present" if not bbb_container_compat | bool else "absent" }}'
-  notify:
-  - restart freeswitch
-  - reload systemd
-
-- name: Set FreeSWITCH local IPv4
-  replace:
-    path: /opt/freeswitch/etc/freeswitch/vars.xml
-    regexp:  '<X-PRE-PROCESS cmd="set" data="local_ip_v4=.*"\/>'
-    replace: '<X-PRE-PROCESS cmd="set" data="local_ip_v4={{ ansible_default_ipv4.address }}"/>'
-  notify:
-    - restart freeswitch
-    - reload nginx
-
-- name: enable IPv6 in FreeSWITCH service 1/2
-  command:
-    cmd: mv {{ item }}_ {{ item }}
-    creates: "{{ item }}"
-    removes: "{{ item }}_"
-  with_items:
-    - "/opt/freeswitch/etc/freeswitch/sip_profiles/internal-ipv6.xml"
-    - "/opt/freeswitch/etc/freeswitch/sip_profiles/external-ipv6.xml"
-  when: bbb_freeswitch_ipv6 | bool
-  notify:
-  - restart freeswitch
-  - reload nginx
-
-- name: enable IPv6 in FreeSWITCH service 2/2
-  lineinfile:
-    path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
-    regexp: '<param name="listen-ip" value="[a-fA-F0-9.:]+"/>'
-    line: '    <param name="listen-ip" value="::"/>'
-  when: bbb_freeswitch_ipv6 | bool
-  notify:
-  - restart freeswitch
-  - reload nginx
-
-- name: disable IPv6 in FreeSWITCH service 1/2
-  command:
-    cmd: mv {{ item }} {{ item }}_
-    creates: "{{ item }}_"
-    removes: "{{ item }}"
-  with_items:
-    - "/opt/freeswitch/etc/freeswitch/sip_profiles/internal-ipv6.xml"
-    - "/opt/freeswitch/etc/freeswitch/sip_profiles/external-ipv6.xml"
-  when: not bbb_freeswitch_ipv6 | bool
-  notify:
-  - restart freeswitch
-  - reload nginx
-
-- name: disable IPv6 in FreeSWITCH service 2/2
-  lineinfile:
-    path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
-    regexp: '<param name="listen-ip" value="[a-fA-F0-9.:]+"/>'
-    line: '    <param name="listen-ip" value="127.0.0.1"/>'
-  when: not bbb_freeswitch_ipv6 | bool
-  notify:
-  - restart freeswitch
-  - reload nginx
-
-- name: FreeSWITCH dialplan quality
-  replace:
-    path: /opt/freeswitch/conf/dialplan/default/bbb_conference.xml
-    regexp: '<action application="conference" data="\$1@.*"\/>'
-    replace: '<action application="conference" data="$1@{{ bbb_dialplan_quality }}"/>'
-  notify:
-  - restart freeswitch
-  - reload nginx
-
-- name: FreeSWITCH dialplan quality (echo)
-  replace:
-    path: /opt/freeswitch/conf/dialplan/default/bbb_echo_to_conference.xml
-    regexp: '<action application="conference" data="\${vbridge}@.*"\/>'
-    replace: '<action application="conference" data="${vbridge}@{{ bbb_dialplan_quality }}"/>'
-  notify:
-  - restart freeswitch
-  - reload nginx
-
-- name: FreeSWITCH dialplan energy-level
-  replace:
-    path: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
-    after: '<profile name="{{ bbb_dialplan_quality }}">'
-    before: '</profile>'
-    regexp: '<param name="energy-level" value=".*"\/>'
-    replace: '<param name="energy-level" value="{{ bbb_dialplan_energy_level }}"/>'
-  notify:
-  - restart freeswitch
-  - reload nginx
-
-- name: FreeSWITCH dialplan comfort-noise
-  replace:
-    path: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
-    after:   '<profile name="{{ bbb_dialplan_quality }}">'
-    before:  '</profile>'
-    regexp:  '<param name="comfort-noise" value=".*"\/>'
-    replace: '<param name="comfort-noise" value="{{ bbb_dialplan_comfort_noise }}"/>'
-  notify:
-  - restart freeswitch
-  - reload nginx
-
-- name: FreeSWITCH external ip (rtp)
-  replace:
-    path: /opt/freeswitch/etc/freeswitch/vars.xml
-    regexp:  '<X-PRE-PROCESS cmd="set" data="external_rtp_ip=.*"\/>'
-    replace: '<X-PRE-PROCESS cmd="set" data="external_rtp_ip={{ bbb_freeswitch_external_ip }}"/>'
-  notify:
-  - restart freeswitch
-  - reload nginx
-
-- name: FreeSWITCH external ip (sip)
-  replace:
-    path: /opt/freeswitch/etc/freeswitch/vars.xml
-    regexp:  '<X-PRE-PROCESS cmd="set" data="external_sip_ip=.*"\/>'
-    replace: '<X-PRE-PROCESS cmd="set" data="external_sip_ip={{ bbb_freeswitch_external_ip }}"/>'
-  notify:
-  - restart freeswitch
-  - reload nginx
-
 - name: set nodejs options for the html5-webclient
   replace:
     path: /usr/share/meteor/bundle/systemd_start.sh
@@ -316,9 +192,6 @@
   template:
     src: bbb-config/cron.daily/bigbluebutton
     dest: /etc/cron.daily/bigbluebutton
-    mode: '0644'
+    mode: '0755'
     owner: root
     group: root
-  notify:
-    - reload systemd
-    - restart bigbluebutton

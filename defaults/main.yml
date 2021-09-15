@@ -42,23 +42,18 @@ bbb_webhooks_enable: false
 bbb_allow_mail_notifications: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
 bbb_greenlight_image: bigbluebutton/greenlight:v2
-bbb_disable_recordings: false
+bbb_greenlight_enable_recording_thumbnails: true
 bbb_api_demos_enable: false
-bbb_mute_on_start: false
 bbb_app_log_level: "DEBUG"
-bbb_nodejs_version: 12.x
+
+# freeswitch
 bbb_freeswitch_ipv6: true
 bbb_freeswitch_ip_address: "{{ ansible_default_ipv4.address }}"
 bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
 bbb_freeswitch_muted_sound: true
 bbb_freeswitch_unmuted_sound: true
-
-bbb_kurento_interfaces:
-- "{{ ansible_default_ipv4.interface }}"
-- lo
-
-# ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
-bbb_guestpolicy: ALWAYS_ACCEPT
+# bbb_freeswitch_socket_password needs to be defined by the User
+# bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
 
 bbb_system_locale: en_US.UTF-8
 bbb_mongodb_version: 4.2
@@ -77,6 +72,10 @@ bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 # bbb_own_key:
 
 bbb_meteor: {}
+bbb_html5_backend_processes: 2
+bbb_html5_frontend_processes: 2
+
+bbb_disable_recordings: false
 bbb_recording_config: {}
 bbb_dialplan_quality: "cdquality"
 bbb_dialplan_energy_level: 100
@@ -115,13 +114,6 @@ bbb_dialin_mask_caller: false
 bbb_dialin_overwrite_footer: false
 bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.
 
-bbb_default_presentation: ${bigbluebutton.web.serverURL}/default.pdf
-
-# bbb_custom_presentation: "default.pdf"
-# set this to the name the default presentation on the host should have.
-# if its not default.pdf moderators are able to delete the default presentation. Thats sometimes helpful and works fine.
-# bbb_custom_presentation_name: "default.pdf"
-
 bbb_ntp_cron: false
 bbb_ntp_cron_day: "*"
 bbb_ntp_cron_hour: "5"
@@ -132,6 +124,17 @@ bbb_cron_unrecorded_days: 14
 bbb_cron_published_days: 14
 bbb_cron_log_history: 28
 
+
+# additional bbb-web.properties
+bbb_default_presentation: "${bigbluebutton.web.serverURL}/{{ bbb_custom_presentation_name | default('default.pdf') }}"
+# bbb_custom_presentation: "default.pdf"
+# set this to the name the default presentation on the host should have.
+# if its not default.pdf moderators are able to delete the default presentation. Thats sometimes helpful and works fine.
+# bbb_custom_presentation_name: "default.pdf"
+
+bbb_mute_on_start: false
+# ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
+bbb_guestpolicy: ALWAYS_ACCEPT
 bbb_default_max_users: 0
 bbb_default_meeting_duration: 0
 bbb_max_num_pages: 200
@@ -144,12 +147,18 @@ bbb_breakout_rooms_enabled: true
 bbb_breakout_rooms_record: false
 bbb_breakout_rooms_privatechat_enabled: true
 
-# bbb_freeswitch_socket_password needs to be defined by the User
-# bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
-bbb_html5_backend_processes: 2
-bbb_html5_frontend_processes: 2
+bbb_user_inactivity_inspect_timer: 0
+bbb_user_inactivity_threshold: 30
+bbb_user_activity_sign_response_delay: 5
+
+bbb_use_default_logo: false
+bbb_default_logo_url: '${bigbluebutton.web.serverURL}/images/logo.png'
 
 bbb_etherpad_disable_cursortrace_plugin: false
+
+bbb_kurento_interfaces:
+- "{{ ansible_default_ipv4.interface }}"
+- lo
 
 bbb_webrtc_sfu_multikurento:
   balancing-strategy: MEDIA_TYPE
@@ -267,3 +276,5 @@ bbb_firewall_ufw:
 
 # https://pypi.org/project/docker-compose/#history
 bbb_docker_compose_version: 1.29.2
+
+bbb_nodejs_version: 12.x
