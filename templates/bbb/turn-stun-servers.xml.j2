@@ -43,7 +43,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 {% for item in bbb_turn_servers %}
     <bean id="turn{{ loop.index }}" class="org.bigbluebutton.web.services.turn.TurnServer">
         <constructor-arg index="0" value="{{ item.secret }}"/>
-        <constructor-arg index="1" value="turn{% if item.tls | bool %}s{% endif %}:{{item.server}}:{{ item.port }}?transport=tcp"/>
+        <constructor-arg index="1" value="turn{% if item.tls | bool %}s{% endif %}:{{ item.server }}:{{ item.port }}?transport={{ item.transport | default("tcp") }}"/>
         <constructor-arg index="2" value="86400"/>
     </bean>
 {% endfor %}
