@@ -25,10 +25,12 @@ bbb_ice_servers: []
 bbb_turn_servers:
   - server: "{{ bbb_hostname }}"
     port: "{{ bbb_coturn_port }}"
+    transport: tcp
     secret: "{{ bbb_coturn_secret }}"
     tls: false
   - server: "{{ bbb_hostname }}"
     port: "{{ bbb_coturn_port_tls }}"
+    transport: tcp
     secret: "{{ bbb_coturn_secret }}"
     tls: true
 
