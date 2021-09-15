@@ -2,7 +2,7 @@
  <condition field="destination_number" expression="^{{ bbb_dialin_provider_extension }}">
    <action application="answer"/>
    <action application="sleep" data="1000"/>
-   <action application="play_and_get_digits" data="{{ bbb_dialin_default_play_and_get_digits }} conference/conf-pin.wav ivr/ivr-that_was_an_invalid_entry.wav pin \d+"/>
+   <action application="play_and_get_digits" data="{{ bbb_dialin_default_play_and_get_digits }}"/>
 
    <!-- Uncomment the following block if you want to mask the phone number in the list of participants. -->
    <!-- Instead of `01711233121` it will then show `xxx-xxx-3121`. -->
