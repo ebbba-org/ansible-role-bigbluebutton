@@ -100,7 +100,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_dialin_provider_extension` | Extension of your SIP account | `6135551234` | |
 | | `bbb_dialin_default_number` | Number to present to users for dial-in. Enable `bbb_dialin_overwrite_footer` or use `%%DIALNUM%%` and `%%CONFNUM%%` in you footer (see `bbb_default_welcome_message_footer`) | `6135551234` | |
 | | `bbb_dialin_mask_caller` | Mask caller-number in the BBB web-interface for privacy reasons (`01711233121` → `xxx-xxx-3121`) | |
-| | `bbb_dialin_default_play_and_get_digits` | Phone dialin-pin entry voice dialog | `5 5 3 7000 # conference/conf-pin.wav ivr/ivr-that_was_an_invalid_entry.wav pin \d+` | Usage `<min> <max> <tries> <timeout> <terminators>` See [this](https://freeswitch.org/confluence/display/FREESWITCH/mod_dptools%3A+play_and_get_digits) for more details |
+| | `bbb_dialin_default_play_and_get_digits` | Phone dialin-pin entry voice dialog | `5 5 3 7000 # conference/conf-pin.wav ivr/ivr-that_was_an_invalid_entry.wav pin \\d+` | Usage `<min> <max> <tries> <timeout> <terminators>` See [this](https://freeswitch.org/confluence/display/FREESWITCH/mod_dptools%3A+play_and_get_digits) for more details |
 | | `bbb_dialin_overwrite_footer` | Set the default dial-in footer instead of `bbb_default_welcome_message_footer` | `false` | |
 | | `bbb_dialin_footer` | The default dial-in notice, if you want to customize it, it is recommended to change `bbb_default_welcome_message_footer` instead | `<br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.` | |
 | | `bbb_guestpolicy` | How guest can access | `ALWAYS_ACCEPT` | acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR | |
