@@ -43,7 +43,7 @@
       <!-- Number of milliseconds per frame -->
       <param name="interval" value="20"/>
       <!-- Energy level required for audio to be sent to the other users -->
-      <param name="energy-level" value="100"/>
+      <param name="energy-level" value="{{ bbb_dialplan_energy_level if bbb_dialplan_quality == 'default' else 100 }}"/>
 
       <!--Can be | delim of waste|mute|deaf|dist-dtmf waste will always transmit data to each channel
           even during silence.  dist-dtmf propagates dtmfs to all other members, but channel controls
@@ -114,7 +114,7 @@
       <!-- Suppress start and stop talking events -->
       <!-- <param name="suppress-events" value="start-talking,stop-talking"/> -->
       <!-- enable comfort noise generation -->
-      <!-- <param name="comfort-noise" value="true"/> -->
+      <param name="comfort-noise" value="{{ bbb_dialplan_comfort_noise if bbb_dialplan_quality == 'default' else 'true' }}"/>
       <!-- Uncomment auto-record to toggle recording every conference call. -->
       <!-- Another valid value is   shout://user:pass@server.com/live.mp3   -->
       <!--
@@ -140,7 +140,7 @@
       <param name="domain" value="$${domain}"/>
       <param name="rate" value="16000"/>
       <param name="interval" value="20"/>
-      <param name="energy-level" value="100"/>
+      <param name="energy-level" value="{{ bbb_dialplan_energy_level if bbb_dialplan_quality == 'wideband' else 100 }}"/>
       <!-- <param name="sound-prefix" value="$${sounds_dir}/en/us/callie"/> -->
       <param name="muted-sound" value="conference/conf-muted.wav"/>
       <param name="unmuted-sound" value="conference/conf-unmuted.wav"/>
@@ -156,7 +156,7 @@
       <param name="bad-pin-sound" value="conference/conf-bad-pin.wav"/>
       <param name="caller-id-name" value="$${outbound_caller_name}"/>
       <param name="caller-id-number" value="$${outbound_caller_id}"/>
-      <!-- <param name="comfort-noise" value="true"/> -->
+      <param name="comfort-noise" value="{{ bbb_dialplan_comfort_noise if bbb_dialplan_quality == 'wideband' else 'true' }}"/>
       <!-- <param name="tts-engine" value="flite"/> -->
       <!-- <param name="tts-voice" value="kal16"/> -->
     </profile>
@@ -165,7 +165,7 @@
       <param name="domain" value="$${domain}"/>
       <param name="rate" value="32000"/>
       <param name="interval" value="20"/>
-      <param name="energy-level" value="100"/>
+      <param name="energy-level" value="{{ bbb_dialplan_energy_level if bbb_dialplan_quality == 'ultrawideband' else 100 }}"/>
       <!-- <param name="sound-prefix" value="$${sounds_dir}/en/us/callie"/> -->
       <param name="muted-sound" value="conference/conf-muted.wav"/>
       <param name="unmuted-sound" value="conference/conf-unmuted.wav"/>
@@ -181,7 +181,7 @@
       <param name="bad-pin-sound" value="conference/conf-bad-pin.wav"/>
       <param name="caller-id-name" value="$${outbound_caller_name}"/>
       <param name="caller-id-number" value="$${outbound_caller_id}"/>
-      <!-- <param name="comfort-noise" value="true"/> -->
+      <param name="comfort-noise" value="{{ bbb_dialplan_comfort_noise if bbb_dialplan_quality == 'ultrawideband' else 'true' }}"/>
 
       <!-- <param name="conference-flags" value="video-floor-only|rfc-4579|livearray-sync|auto-3d-position|transcode-video|minimize-video-encoding"/> -->
 
@@ -204,7 +204,7 @@
       <param name="domain" value="$${domain}"/>
       <param name="rate" value="48000"/>
       <param name="interval" value="20"/>
-      <param name="energy-level" value="100"/>
+      <param name="energy-level" value="{{ bbb_dialplan_energy_level if bbb_dialplan_quality == 'cdquality' else 1400 }}"/>
       <!-- <param name="sound-prefix" value="$${sounds_dir}/en/us/callie"/> -->
       <!-- File to play to acknowledge muted -->
       {% if bbb_freeswitch_muted_sound == true -%}
@@ -230,8 +230,7 @@
       <param name="bad-pin-sound" value="conference/conf-bad-pin.wav"/>
       <param name="caller-id-name" value="$${outbound_caller_name}"/>
       <param name="caller-id-number" value="$${outbound_caller_id}"/>
-      <!-- param name="comfort-noise" value="true"/ -->
-      <!-- <param name="comfort-noise" value="1400"/> -->
+      <param name="comfort-noise" value="{{ bbb_dialplan_comfort_noise if bbb_dialplan_quality == 'cdquality' else 100 }}"/>
       <param name="video-auto-floor-msec" value="2000"/>
 
       <!-- <param name="conference-flags" value="video-floor-only|rfc-4579|livearray-sync|auto-3d-position|minimize-video-encoding"/> -->
@@ -252,7 +251,7 @@
       <param name="rate" value="48000"/>
       <param name="channels" value="2"/>
       <param name="interval" value="20"/>
-      <param name="energy-level" value="100"/>
+      <param name="energy-level" value="{{ bbb_dialplan_energy_level if bbb_dialplan_quality == 'video-mcu-stereo' else 100 }}"/>
       <!-- <param name="tts-engine" value="flite"/> -->
       <!-- <param name="tts-voice" value="kal16"/> -->
       <param name="muted-sound" value="conference/conf-muted.wav"/>
@@ -269,7 +268,7 @@
       <param name="bad-pin-sound" value="conference/conf-bad-pin.wav"/>
       <param name="caller-id-name" value="$${outbound_caller_name}"/>
       <param name="caller-id-number" value="$${outbound_caller_id}"/>
-      <!-- <param name="comfort-noise" value="false"/> -->
+      <param name="comfort-noise" value="false"/>
       <param name="conference-flags" value="video-floor-only|rfc-4579|livearray-sync|minimize-video-encoding"/>
       <param name="video-mode" value="mux"/>
       <param name="video-layout-name" value="3x3"/>

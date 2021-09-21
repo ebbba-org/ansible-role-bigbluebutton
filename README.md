@@ -72,7 +72,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_recording_config` | overwrite recording settings | `{}` | See [Enable playback of recordings on iOS](https://docs.bigbluebutton.org/admin/customize.html#enable-playback-of-recordings-on-ios). It works like `bbb_meteor` by merging your custom config with the server config. |
 | | `bbb_dialplan_quality` | Set quality of dailplan for FreeSWITCH | `cdquality` | |
 | | `bbb_dialplan_energy_level` | Set energy level of dailplan for FreeSWITCH | `100` | only for selected profile `bbb_dialplan_quality` |
-| | `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | only for selected profile `bbb_dialplan_quality` |
+| | `bbb_dialplan_comfort_noise` | Set comfort noise of dailplan for FreeSWITCH | `1400` | Allowed values: (0-10000|true), 0 disables comfort-noise, true sets to default (1400), only for selected profile `bbb_dialplan_quality` |
 | | `bbb_webhooks_enable` | install bbb-webhooks | `no` | |
 | | `bbb_check_for_running_meetings` | Check server and stop playbook in case of running meetings. Attention: Currently the check is done only after Docker and NodeJS Roles have already run. | `true` | |
 | | `bbb_monitoring_all_in_one_enable` | deploy [all in one monitoring stack](https://bigbluebutton-exporter.greenstatic.dev/installation/all_in_one_monitoring_stack/) (docker) | `no` |
