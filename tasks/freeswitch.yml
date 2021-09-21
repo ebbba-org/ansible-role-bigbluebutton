@@ -119,7 +119,7 @@
 
     - name: manage ipv6 sip_profiles
       become: true
-      ansible.builtin.command: |
+      command: >
         mv
           "{{ sip_profile.item + '.disabled' if bbb_freeswitch_ipv6 | bool else sip_profile.item }}"
           "{{ sip_profile.item if bbb_freeswitch_ipv6 | bool else sip_profile.item + '.disabled' }}"
