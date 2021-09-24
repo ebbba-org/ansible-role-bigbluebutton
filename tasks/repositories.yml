@@ -29,7 +29,6 @@
     state: absent
   when: bbb_apt_mirror != 'https://ubuntu.bigbluebutton.org'
 
-# only install certbot-repo when letsencrypt is used
 - name: add Bionic dependency apt repositories
   become: true
   apt_repository:
@@ -37,5 +36,3 @@
   with_items:
     - ppa:bigbluebutton/support
     - ppa:rmescandon/yq
-    - ppa:certbot/certbot
-  when: (item == 'ppa:certbot/certbot' and bbb_letsencrypt_enable | bool) or item != 'ppa:certbot/certbot'

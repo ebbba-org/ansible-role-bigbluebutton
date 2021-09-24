@@ -1,0 +1,27 @@
+---
+
+- name: Ensure target directory exists
+  become: true
+  file:
+    dest: "{{ bbb_ssl_cert | dirname }}"
+    state: directory
+    mode: '0755'
+
+- import_tasks: certificate-letsencrypt.yml
+  when: bbb_letsencrypt_enable|bool
+
+- import_tasks: certificate-custom.yml
+  when: bbb_own_cert is defined
+
+- name: Ensure bbb_ssl_cert exists
+  become: true
+  file:
+    path: "{{ bbb_ssl_cert }}"
+
+- name: Ensure proper file permissions on bbb_ssl_key
+  become: true
+  file:
+    path: "{{ bbb_ssl_key }}"
+    owner: "root"
+    group: "{{'ssl-cert' if ansible_os_family == 'Debian' else 'root' }}"
+    mode: '0440'

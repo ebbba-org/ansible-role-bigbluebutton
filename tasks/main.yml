@@ -46,23 +46,7 @@
 - import_tasks: mongodb.yml
   tags: mongodb
 
-# this is included as block to pass tags to included tasks
-- block:
-  - name: include runtimevars
-    include_tasks: runtimevars.yml
-  tags:
-    - runtimevars
-    - bbb_secret
-    - always
-
-- import_tasks: letsencrypt.yml
-  when: bbb_letsencrypt_enable | bool and not bbbcert.stat.exists
-  tags:
-    - tls
-    - certificates
-
-- import_tasks: certificate-selfsigned.yml
-  when: not (bbb_letsencrypt_enable | bool) and not bbbcert.stat.exists
+- import_tasks: certificate.yml
   tags:
     - tls
     - certificates
