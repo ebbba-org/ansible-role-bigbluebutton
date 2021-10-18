@@ -80,27 +80,6 @@
     regexp: 'ws://'
     replace: 'wss://'
 
-- name: Read meteor
-  slurp:
-    path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
-  register: r_meteor
-
-- name: extract config of meteor
-  set_fact:
-    meteor: "{{ r_meteor['content'] | b64decode | from_yaml }}"
-
-- name: combine meteor config
-  set_fact:
-    meteor: "{{ meteor | combine(bbb_meteor, recursive=true) }}"
-
-- name: write back new meteor config
-  copy:
-    content: '{{ meteor | to_nice_yaml(indent=2) }}'
-    dest: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
-    mode: '0644'
-  notify:
-    - restart bigbluebutton
-
 - name: configure custom recording config
   block:
     - name: read recording config
