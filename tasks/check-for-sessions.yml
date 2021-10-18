@@ -1,7 +1,7 @@
 ---
 - name: Check for running meetings
   uri:
-    url: "https://{{ bbb_hostname }}/bigbluebutton/api/getMeetings?checksum={{ ('getMeetings' + bbb_secret) | hash('sha1') }}"
+    url: "https://{{ bbb_hostname }}/bigbluebutton/api/getMeetings?checksum={{ ('getMeetings' + (bbb_secret | string)) | hash('sha1') }}"
     return_content: true
   register: bbb_getmeetings
   failed_when: false
