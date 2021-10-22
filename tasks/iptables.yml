@@ -1,0 +1,22 @@
+- name: Stop and disable UFW
+  systemd:
+    name: ufw
+    enabled: false
+    state: stopped
+
+- name: install iptables-persistent and netfilter-persistent
+  become: true
+  apt:
+    pkg:
+    - iptables-persistent
+    - netfilter-persistent
+    update_cache: true
+
+- name: Configure iptables rules
+  template:
+    src: iptables.j2
+    dest: /etc/iptables/rules.v4
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart netfilter-persistent

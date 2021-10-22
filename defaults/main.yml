@@ -48,6 +48,8 @@ bbb_api_demos_enable: false
 bbb_app_log_level: "DEBUG"
 
 # freeswitch
+bbb_freeswitch_min_port: 49152
+bbb_freeswitch_max_port: 65535
 bbb_freeswitch_ipv6: true
 bbb_freeswitch_ip_address: "{{ ansible_default_ipv4.address }}"
 bbb_freeswitch_external_ip: "stun:{{ (bbb_stun_servers | first).server }}"
@@ -209,7 +211,7 @@ bbb_webrtc_sfu_multikurento:
 bbb_container_compat: false
 
 bbb_ssh_port: '22'
-bbb_ufw_reject_networks_default:
+bbb_firewall_reject_networks_default:
     - 0.0.0.0/8
     - 10.0.0.0/8
     - 100.64.0.0/10
@@ -222,58 +224,11 @@ bbb_ufw_reject_networks_default:
     - 203.0.113.0/24
     - 224.0.0.0/4
     - 240.0.0.0/4
-bbb_ufw_allow_networks_default:
+bbb_firewall_allow_networks_default:
     - 172.17.0.0/16
     - 127.0.0.1/23
-bbb_ufw_allow_networks: "{{ bbb_ufw_allow_networks_custom | default([]) + bbb_ufw_allow_networks_default }}"
-bbb_ufw_reject_networks: "{{ bbb_ufw_reject_networks_custom | default([]) + bbb_ufw_reject_networks_default }}"
-bbb_firewall_ufw:
-  # enable/disable the ufw
-  enabled: true
-  # enbale/disable ufw logging
-  logging: true
-  # The default policy
-  policy: deny
-  # A list of reject_networks that will be reject - https://github.com/ebbba-org/ansible-role-bigbluebutton/issues/31
-  # Default reject BOGON https://bgpfilterguide.nlnog.net/guides/bogon_prefixes/#bird
-  reject_networks:
-    - "{{ bbb_ufw_reject_networks }}"
-  # A list of allow_networks - for docker and localhost
-  allow_networks:
-    - "{{ bbb_ufw_allow_networks }}"
-  rules:
-    # SSH is allowed by default and limited
-    nginx:
-      # Allow port 443 - Used by NGINX
-      - rule: allow
-        port: "443"
-        proto: any
-      # Allow port 80 - Used by NGINX
-      - rule: allow
-        port: "80"
-        proto: any
-    coturn:
-      # Allow coturn http port - default used
-      - rule: allow
-        port: "{{ bbb_coturn_port }}"
-        proto: any
-      # Allow coturn https (TLS) port - default used
-      - rule: allow
-        port: "{{ bbb_coturn_port_tls }}"
-        proto: any
-      # Allow coturn relay ports range - default used
-      - rule: allow
-        port: "{{ bbb_coturn_min_port }}:{{ bbb_coturn_max_port }}"
-        proto: udp
-    bigbluebutton:
-      # Allow BigBlueButton 16384-32768 FreeSWITCH/HTML5 client RTP
-      - rule: allow
-        port: 16384:32768
-        proto: udp
-    default:
-      - rule: allow
-        port: "{{ bbb_ssh_port }}"
-        proto: tcp
+bbb_firewall_allow_networks: "{{ bbb_firewall_allow_networks_custom | default([]) + bbb_firewall_allow_networks_default }}"
+bbb_firewall_reject_networks: "{{ bbb_firewall_reject_networks_custom | default([]) + bbb_firewall_reject_networks_default }}"
 
 # https://pypi.org/project/docker-compose/#history
 bbb_docker_compose_version: 1.29.2

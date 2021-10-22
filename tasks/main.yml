@@ -26,13 +26,10 @@
     - check-for-sessions
     - always
 
-- import_tasks: firewall/ufw_enable.yml
-  when: bbb_firewall_ufw['enabled']
-  tags: ufw
-
-- import_tasks: firewall/ufw_disable.yml
-  when: not bbb_firewall_ufw['enabled']
-  tags: ufw
+- import_tasks: iptables.yml
+  tags:
+    - firewall
+    - iptables
 
 - import_tasks: locale.yml
   tags: locale

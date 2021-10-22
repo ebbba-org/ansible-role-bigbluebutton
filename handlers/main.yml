@@ -100,3 +100,9 @@
     name: etherpad.service
     enabled: true
     state: restarted
+
+- name: restart netfilter-persistent
+  become: true
+  systemd:
+    name: netfilter-persistent
+    state: restarted
