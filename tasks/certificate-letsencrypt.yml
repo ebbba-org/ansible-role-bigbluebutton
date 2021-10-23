@@ -1,0 +1,28 @@
+---
+- name: Add certbot apt repo
+  become: true
+  apt_repository:
+    repo: ppa:certbot/certbot
+    state: present
+
+- name: Install certbot
+  become: true
+  apt:
+    pkg:
+      - certbot
+      - python3-certbot-nginx
+    update_cache: true
+    state: "{{ bbb_state }}"
+
+- name: Set Let's Encrypt API
+  become: true
+  lineinfile:
+    path: /etc/letsencrypt/cli.ini
+    line: "server = {{ bbb_letsencrypt_api }}"
+
+- name: Generate or renew certificate with certbot
+  become: true
+  command: certbot certonly -d {{ bbb_hostname }} --agree-tos -n --nginx --email {{ bbb_letsencrypt_email }}
+  register: result
+  changed_when: "'new certificate deployed' in result.stdout"
+  notify: reload nginx

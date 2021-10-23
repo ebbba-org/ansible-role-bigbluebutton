@@ -66,9 +66,8 @@ bbb_web_logouturl: default
 bbb_allow_request_without_session: false
 bbb_ssl_cert: "/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"
 bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
-# These two variables below can be used to copy a local cert/key file to the target
-# which then is used.
-# Need to set `bbb_letsencrypt_enable: false` then
+# Set `bbb_letsencrypt_enable: false` to deploy custom certificate and private
+# key files.
 # bbb_own_cert:
 # bbb_own_key:
 

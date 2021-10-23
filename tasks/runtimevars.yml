@@ -1,8 +1,0 @@
----
-- name: Check if bbb_ssl_cert exists
-  stat:
-    path: "{{ bbb_ssl_cert }}"
-  register: bbbcert
-  when: bbbcert is not defined
-
-- import_tasks: bbb_secret.yml

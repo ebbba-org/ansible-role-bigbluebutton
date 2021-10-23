@@ -20,13 +20,13 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
 | ⚠️ when using letsencrypt| `bbb_letsencrypt_email` | E-mail for use with letsencrypt | | |
 | | `bbb_letsencrypt_api` | Set letsencrypt api | `https://acme-v02.api.letsencrypt.org/directory` | Use this variable to change letsencrypt API URL (example: staging API `https://acme-staging-v02.api.letsencrypt.org/directory`) |
+| | `bbb_own_cert` | Custom ssl cert file to deploy (instead of letsencrypt) | | |
+| | `bbb_own_key` | Custom ssl private key file to deploy | | |
 | | `bbb_nginx_privacy` | only log errors not access | `yes` |
 | | `bbb_nginx_listen_https` | nginx: use https | `yes` | This is useful for a reverse proxy configuration where the BBB server is behind a load balancing server like haproxy that does SSL termination |
 | | `bbb_nginx_root` | Default nginx www path of BigBlueButton | `/var/www/bigbluebutton-default` | Set the default nginx `www` path of BigBlueButton |
 | | `bbb_ssl_cert` | Define the ssl cert location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"` | |
 | | `bbb_ssl_key` | Define the ssl key location/name | `"/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"` | |
-| | `bbb_own_cert` | Define the name of the cert file which shall be used | `undefined` | |
-| | `bbb_own_key` | Define the name of the key file which shall be used | `undefined` | |
 | | `bbb_default_welcome_message` | Welcome Message in the client | Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://bigbluebutton.org/html5"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others. | Needs to be encoded with `native2ascii -encoding UTF8`! |
 | | `bbb_default_welcome_message_footer` | Footer of the welcome message | This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>. | Encoded as the welcome message |
 | | `bbb_default_presentation` | Location of default presentation | `"${bigbluebutton.web.serverURL}/{{ bbb_custom_presentation_name \| default('default.pdf') }}"` |
