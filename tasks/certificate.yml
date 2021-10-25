@@ -7,6 +7,14 @@
     state: directory
     mode: '0755'
 
+- name: Install ssl-cert package
+  become: true
+  apt:
+    pkg:
+      - ssl-cert
+    update_cache: true
+    state: "{{ bbb_state }}"
+
 - import_tasks: certificate-letsencrypt.yml
   when: bbb_letsencrypt_enable|bool
 
