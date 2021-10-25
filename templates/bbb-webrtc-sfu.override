@@ -1,3 +1,6 @@
+[Unit]
+After=syslog.target network.target freeswitch.service kurento-media-server-8888.service kurento-media-server-8889.service kurento-media-server-8890.service
+
 [Service]
 Environment=NODE_CONFIG_DIR=/usr/local/bigbluebutton/bbb-webrtc-sfu/config:/etc/bigbluebutton/bbb-webrtc-sfu
 
