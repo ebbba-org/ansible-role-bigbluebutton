@@ -41,7 +41,7 @@
 - name: add kurento-media-server service-instances
   become: true
   template:
-    src: kurento/kurento-media-server@.service
+    src: kurento/kurento-media-server.service.tpl
     dest: "/usr/lib/systemd/system/kurento-media-server-{{ item }}.service"
     mode: '0644'
   vars:
