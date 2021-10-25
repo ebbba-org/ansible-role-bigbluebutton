@@ -1,14 +1,4 @@
 ---
-- name: ensure .rnd exists
-  become: true
-  copy:
-    content: ""
-    dest: /root/.rnd
-    force: true
-    group: root
-    owner: root
-    mode: '0644'
-
 - name: generate DTLS-SRTP certificate for kurento
   become: true
   shell:
@@ -48,23 +38,14 @@
   when: (bbb_kurento_interfaces | default([]) | length) == 0
   notify: restart kurento
 
-- name: add kurento-media-server@.service
+- name: add kurento-media-server service-instances
   become: true
   template:
     src: kurento/kurento-media-server@.service
     dest: "/usr/lib/systemd/system/kurento-media-server-{{ item }}.service"
     mode: '0644'
-  loop: [ '8888', '8889', '8890' ]
-  notify:
-    - stop kurento
-    - reload systemd
-
-- name: replace port
-  become: true
-  replace:
-    path: "/usr/lib/systemd/system/kurento-media-server-{{ item }}.service"
-    regexp: '%i'
-    replace: "{{ item }}"
+  vars:
+    port: "{{ item }}"
   loop: [ '8888', '8889', '8890' ]
   notify:
     - stop kurento
