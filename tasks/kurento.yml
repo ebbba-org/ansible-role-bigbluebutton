@@ -8,7 +8,7 @@
     enabled: false
     state: stopped
   loop: [ '8888', '8889', '8890' ]
-  ignore_errors: true
+  failed_when: false
   notify: reload systemd
 
 - name: remove old kurento-media-server service definitions
@@ -22,7 +22,7 @@
 - name: remove old kurento-media-server service relations
   become: true
   file:
-    path: /etc/systemd/system/kurento-media-server.service.wants.d
+    path: /etc/systemd/system/kurento-media-server.service.wants
     state: absent
 ## End of transient tasks
 
