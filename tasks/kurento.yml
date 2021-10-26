@@ -1,4 +1,16 @@
 ---
+## Transient tasks, removing unused files
+# Remove after next release
+- name: remove kurento-media-server.target
+  become: true
+  file:
+    path: /usr/lib/systemd/system/kurento-media-server.target
+    state: absent
+  notify:
+    - reload systemd
+
+# End of transient tasks
+
 - name: generate DTLS-SRTP certificate for kurento
   become: true
   shell:
@@ -49,15 +61,6 @@
   loop: [ '8888', '8889', '8890' ]
   notify:
     - stop kurento
-    - reload systemd
-
-- name: add kurento-media-server.target
-  become: true
-  template:
-    src: kurento/kurento-media-server.target
-    dest: /usr/lib/systemd/system/kurento-media-server.target
-    mode: '0644'
-  notify:
     - reload systemd
 
 - name: remove kurento-media-server.service

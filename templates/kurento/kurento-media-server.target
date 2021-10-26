@@ -1,5 +1,0 @@
-[Unit]
-Description=Kurento Media Server daemon
-
-[Install]
-WantedBy=multi-user.target
