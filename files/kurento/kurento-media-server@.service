@@ -1,8 +1,7 @@
 [Unit]
 Description=Kurento Media Server daemon (%i)
 After=network.target
-PartOf=kurento-media-server.service
-After=kurento-media-server.service
+PartOf=kurento-media-server.target
 
 [Service]
 UMask=0002
@@ -19,4 +18,4 @@ PIDFile=/var/run/kurento-media-server-%i.pid
 Restart=always
 
 [Install]
-WantedBy=kurento-media-server.service
+WantedBy=kurento-media-server.target

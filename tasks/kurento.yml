@@ -1,4 +1,31 @@
 ---
+## Transient tasks for backwards-compatibility
+## Remove after next release
+- name: disable old kurento-media-server services
+  become: true
+  systemd:
+    name: kurento-media-server-{{ item }}.service
+    enabled: false
+    state: stopped
+  loop: [ '8888', '8889', '8890' ]
+  ignore_errors: true
+  notify: reload systemd
+
+- name: remove old kurento-media-server service definitions
+  become: true
+  file:
+    path: /usr/lib/systemd/system/kurento-media-server-{{ item }}.service
+    state: absent
+  loop: [ '8888', '8889', '8890' ]
+  notify: reload systemd
+
+- name: remove old kurento-media-server service relations
+  become: true
+  file:
+    path: /etc/systemd/system/kurento-media-server.service.wants.d
+    state: absent
+## End of transient tasks
+
 - name: generate DTLS-SRTP certificate for kurento
   become: true
   shell:
@@ -38,10 +65,17 @@
   when: (bbb_kurento_interfaces | default([]) | length) == 0
   notify: restart kurento
 
+# Kurento services
+- name: remove kurento-media-server.service
+  become: true
+  file:
+     path: /usr/lib/systemd/system/kurento-media-server.service
+     state: absent
+
 - name: add kurento-media-server@.service
   become: true
-  template:
-    src: kurento/kurento-media-server@.service
+  copy:
+    src: "kurento/kurento-media-server@.service"
     dest: "/usr/lib/systemd/system/kurento-media-server@.service"
     mode: '0644'
   notify:
@@ -50,18 +84,12 @@
 
 - name: add kurento-media-server.target
   become: true
-  template:
+  copy:
     src: kurento/kurento-media-server.target
     dest: /usr/lib/systemd/system/kurento-media-server.target
     mode: '0644'
   notify:
     - reload systemd
-
-- name: remove kurento-media-server.service
-  become: true
-  file:
-     path: /usr/lib/systemd/system/kurento-media-server.service
-     state: absent
 
 - name: prevent creation of transient systemd service for sysv service
   become: true
@@ -74,16 +102,6 @@
   file:
      path: /etc/systemd/system/kurento-media-server.service.d/override.conf
      state: absent
-
-- name: deploy kurento service override configuration
-  become: true
-  template:
-    src: kurento/kurento-mk.override
-    dest: /etc/systemd/system/kurento-media-server.service
-    force: true
-    mode: '0644'
-  notify:
-    - reload systemd
 
 - name: Flush Handlers
   meta: flush_handlers
@@ -102,15 +120,16 @@
      name: "kurento-media-server@{{ item }}"
      state: started
      enabled: true
+     force: true
   loop: [ '8888', '8889', '8890' ]
   notify:
     - reload systemd
     - restart bigbluebutton
 
-- name: enable kurento-media-server service
+- name: enable kurento-media-server target
   become: true
   systemd:
-     name: kurento-media-server
+     name: "kurento-media-server.target"
      state: started
      enabled: true
 
