@@ -43,6 +43,7 @@ bbb_webhooks_enable: false
 bbb_allow_mail_notifications: true
 bbb_greenlight_hosts: "{{ bbb_hostname }}"
 bbb_greenlight_image: bigbluebutton/greenlight:v2
+bbb_greenlight_image_pull: true
 bbb_greenlight_enable_recording_thumbnails: true
 bbb_api_demos_enable: false
 bbb_app_log_level: "DEBUG"
