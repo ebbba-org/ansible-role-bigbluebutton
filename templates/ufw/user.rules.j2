@@ -1,0 +1,83 @@
+*filter
+:ufw-user-input - [0:0]
+:ufw-user-output - [0:0]
+:ufw-user-forward - [0:0]
+:ufw-before-logging-input - [0:0]
+:ufw-before-logging-output - [0:0]
+:ufw-before-logging-forward - [0:0]
+:ufw-user-logging-input - [0:0]
+:ufw-user-logging-output - [0:0]
+:ufw-user-logging-forward - [0:0]
+:ufw-after-logging-input - [0:0]
+:ufw-after-logging-output - [0:0]
+:ufw-after-logging-forward - [0:0]
+:ufw-logging-deny - [0:0]
+:ufw-logging-allow - [0:0]
+:ufw-user-limit - [0:0]
+:ufw-user-limit-accept - [0:0]
+### RULES ###
+
+### tuple ### limit tcp {{ bbb_ssh_port }} 0.0.0.0/0 any 0.0.0.0/0 in
+-A ufw-user-input -p tcp --dport {{ bbb_ssh_port }} -m conntrack --ctstate NEW -m recent --set
+-A ufw-user-input -p tcp --dport {{ bbb_ssh_port }} -m conntrack --ctstate NEW -m recent --update --seconds 30 --hitcount 6 -j ufw-user-limit
+-A ufw-user-input -p tcp --dport {{ bbb_ssh_port }} -j ufw-user-limit-accept
+
+### tuple ### allow tcp {{ bbb_ssh_port }} 0.0.0.0/0 any 0.0.0.0/0 in
+-A ufw-user-input -p tcp --dport {{ bbb_ssh_port }} -j ACCEPT
+
+### tuple ### allow tcp 443 0.0.0.0/0 any 0.0.0.0/0 in
+-A ufw-user-input -p tcp --dport 443 -j ACCEPT
+
+### tuple ### allow tcp 80 0.0.0.0/0 any 0.0.0.0/0 in
+-A ufw-user-input -p tcp --dport 80 -j ACCEPT
+
+{% if (bbb_coturn_enable | bool) %}
+### tuple ### allow any {{ bbb_coturn_port }} 0.0.0.0/0 any 0.0.0.0/0 in
+-A ufw-user-input -p tcp --dport {{ bbb_coturn_port }} -j ACCEPT
+-A ufw-user-input -p udp --dport {{ bbb_coturn_port }} -j ACCEPT
+
+### tuple ### allow any {{ bbb_coturn_port_tls }} 0.0.0.0/0 any 0.0.0.0/0 in
+-A ufw-user-input -p tcp --dport {{ bbb_coturn_port_tls }} -j ACCEPT
+-A ufw-user-input -p udp --dport {{ bbb_coturn_port_tls }} -j ACCEPT
+
+### tuple ### allow udp {{ bbb_coturn_min_port }}:{{ bbb_coturn_max_port }} 0.0.0.0/0 any 0.0.0.0/0 in
+-A ufw-user-input -p udp -m multiport --dports {{ bbb_coturn_min_port }}:{{ bbb_coturn_max_port }} -j ACCEPT
+
+{% endif %}
+### tuple ### allow udp 16384:32768 0.0.0.0/0 any 0.0.0.0/0 in
+-A ufw-user-input -p udp -m multiport --dports 16384:32768 -j ACCEPT
+
+{% for network in bbb_ufw_allow_networks %}
+### tuple ### allow any any 0.0.0.0/0 any {{ network }} out
+-A ufw-user-output -s {{ network }} -j ACCEPT
+
+{% endfor %}
+{% for network in bbb_ufw_reject_networks %}
+### tuple ### reject any any 0.0.0.0/0 any {{ network }} out
+-A ufw-user-output -s {{ network }} -j REJECT
+
+{% endfor %}
+{% if (bbb_dialin_enabled | bool and bbb_dialin_provider_ip is defined and bbb_dialin_provider_ip | length > 0) %}
+### tuple ### allow any 5060 0.0.0.0/0 any {{ bbb_dialin_provider_ip }} in
+-A ufw-user-input -p tcp --dport 5060 -s {{ bbb_dialin_provider_ip }} -j ACCEPT
+-A ufw-user-input -p udp --dport 5060 -s {{ bbb_dialin_provider_ip }} -j ACCEPT
+
+{% endif %}
+### END RULES ###
+
+{% if (bbb_firewall_ufw['logging'] | bool) %}
+### LOGGING ###
+-A ufw-after-logging-input -j LOG --log-prefix "[UFW BLOCK] " -m limit --limit 3/min --limit-burst 10
+-A ufw-after-logging-forward -j LOG --log-prefix "[UFW BLOCK] " -m limit --limit 3/min --limit-burst 10
+-I ufw-logging-deny -m conntrack --ctstate INVALID -j RETURN -m limit --limit 3/min --limit-burst 10
+-A ufw-logging-deny -j LOG --log-prefix "[UFW BLOCK] " -m limit --limit 3/min --limit-burst 10
+-A ufw-logging-allow -j LOG --log-prefix "[UFW ALLOW] " -m limit --limit 3/min --limit-burst 10
+### END LOGGING ###
+{% endif %}
+
+### RATE LIMITING ###
+-A ufw-user-limit -m limit --limit 3/minute -j LOG --log-prefix "[UFW LIMIT BLOCK] "
+-A ufw-user-limit -j REJECT
+-A ufw-user-limit-accept -j ACCEPT
+### END RATE LIMITING ###
+COMMIT
