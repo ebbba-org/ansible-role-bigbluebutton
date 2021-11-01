@@ -1,12 +1,5 @@
 ---
 
-- name: Ensure target directory exists
-  become: true
-  file:
-    dest: "{{ bbb_ssl_cert | dirname }}"
-    state: directory
-    mode: '0755'
-
 - name: Install ssl-cert package
   become: true
   apt:
