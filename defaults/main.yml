@@ -36,13 +36,13 @@ bbb_turn_servers:
 
 bbb_greenlight_enable: true
 bbb_greenlight_users: []
-  # - name: '' 
-  #   email: '' 
-  #   password: '' 
-  #   type: 'user' 
-  # - name: '' 
-  #   email: '' 
-  #   password: '' 
+  # - name: ''
+  #   email: ''
+  #   password: ''
+  #   type: 'user'
+  # - name: ''
+  #   email: ''
+  #   password: ''
   #   type: 'admin'
 
 bbb_webhooks_enable: false
