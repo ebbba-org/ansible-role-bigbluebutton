@@ -13,11 +13,15 @@
   service:
     name: chrony
     enabled: "{{ bbb_ntp_cron | ternary('false', 'true') }}"
+    state: "{{ bbb_ntp_cron | ternary('stopped', 'started') }}"
   when: "'chrony' in ansible_facts.packages"
 
-- name: Set timedatectl to (not-)use ntp
-  command: "timedatectl set-ntp {{ bbb_ntp_cron | ternary('no', 'yes') }}"
-  changed_when: false
+  # on Ubuntu 18.04 timedatectl set-ntp just controls systemd-timesynd, so this is an idempotent alternative
+- name: Disable/enable systemd-timesyncd
+  ansible.builtin.systemd:
+    name: systemd-timesyncd
+    enabled: "{{ (bbb_ntp_cron | bool or 'chrony' in ansible_facts.packages) | ternary('false', 'true') }}"
+    state: "{{ (bbb_ntp_cron | bool or 'chrony' in ansible_facts.packages) | ternary('stopped', 'started') }}"
 
 - name: Add/remove time syncronisation cronjob
   cron:
