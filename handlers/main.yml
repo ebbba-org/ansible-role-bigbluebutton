@@ -39,20 +39,14 @@
 - name: restart kurento
   become: true
   systemd:
-    name: "{{ item }}"
+    name: kurento-media-server
     state: restarted
-  loop:
-    - kurento-media-server
-    - kurento-media-server.target
 
 - name: stop kurento
   become: true
   systemd:
-    name: "{{ item }}"
+    name: kurento-media-server
     state: stopped
-  loop:
-    - kurento-media-server
-    - kurento-media-server.target
 
 - name: restart bbb-html5
   become: true
