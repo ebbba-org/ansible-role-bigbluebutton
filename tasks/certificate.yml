@@ -6,6 +6,7 @@
     pkg:
       - ssl-cert
     update_cache: true
+    cache_valid_time: 60
     state: "{{ bbb_state }}"
 
 - import_tasks: certificate-letsencrypt.yml
