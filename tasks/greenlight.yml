@@ -37,12 +37,23 @@
         pull: "{{ bbb_greenlight_image_pull }}"
         project_src: /root/greenlight/
 
+    - name: wait until rake did all necessary migrations
+      community.docker.docker_container_exec:
+        container: greenlight-v2
+        command: bundle exec rake db:abort_if_pending_migrations
+      register: greenlight_rake
+      until: greenlight_rake.rc == 0
+      retries: 10
+      when: not ansible_check_mode
+
     # https://docs.bigbluebutton.org/greenlight/gl-admin.html#creating-accounts
     - name: Create greenlight users
-      command: "docker exec greenlight-v2 bundle exec rake user:create[\"{{ item.name }}\",\"{{ item.email }}\",\"{{ item.password }}\",\"{{ item.type }}\"]"
+      community.docker.docker_container_exec:
+        container: greenlight-v2
+        command: "bundle exec rake user:create[\"{{ item.name }}\",\"{{ item.email }}\",\"{{ item.password }}\",\"{{ item.type }}\"]"
       loop: "{{ bbb_greenlight_users | flatten(levels=1) }}"
       register: usercreate
       failed_when: "'Invalid Arguments' in usercreate.stdout"
-      changed_when: "'Account with that email already exists' not in usercreate.stdout"
+      changed_when: "'Account successfully created' in usercreate.stdout"
 
   when: bbb_greenlight_enable | bool
