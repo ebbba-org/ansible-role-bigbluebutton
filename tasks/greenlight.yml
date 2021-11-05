@@ -50,7 +50,7 @@
     - name: Create greenlight users
       community.docker.docker_container_exec:
         container: greenlight-v2
-      command: "docker exec greenlight-v2 bundle exec rake user:create[\"{{ item.name }}\",\"{{ item.email }}\",\"{{ item.password }}\",\"{{ item.type }}{{ ',' + item.provider if 'provider' in item.keys() else '' }}\"]"
+      command: "docker exec greenlight-v2 bundle exec rake user:create[\"{{ item.name }}\",\"{{ item.email }}\",\"{{ item.password }}\",\"{{ item.type }}\"{{ ',\"' + item.provider + '\"' if 'provider' in item.keys() else '' }}]"
       loop: "{{ bbb_greenlight_users | flatten(levels=1) }}"
       register: usercreate
       failed_when: "'Invalid Arguments' in usercreate.stdout"
