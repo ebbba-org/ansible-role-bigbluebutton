@@ -4,6 +4,7 @@
   apt:
     name: coturn
     update_cache: true
+    cache_valid_time: 60
     state: "{{ 'present' if bbb_coturn_enable | bool  else 'absent' }}"
 
 - name: Copy coturn config-file

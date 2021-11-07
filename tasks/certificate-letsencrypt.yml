@@ -12,6 +12,7 @@
       - certbot
       - python3-certbot-nginx
     update_cache: true
+    cache_valid_time: 60
     state: "{{ bbb_state }}"
 
 - name: Set Let's Encrypt API
