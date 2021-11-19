@@ -20,7 +20,19 @@
     - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
     - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
     - "deb http://repo.mongodb.org/apt/ubuntu/ {{ ansible_distribution_release | lower }}/mongodb-org/{{ bbb_mongodb_version }} multiverse"
-    - "deb {{ bbb_apt_mirror }}/bionic-230/ bigbluebutton-bionic main"
+
+# temporarily needed, remove in a future release.
+- name: remove deprecated bigbluebutton sources-list file
+  become: true
+  ansible.builtin.file:
+    path: '/etc/apt/sources.list.d/ubuntu_bigbluebutton_org_bionic_230.list'
+    state: absent
+
+- name: add apt repository for bbb version {{ bbb_version }}
+  copy:
+    content: "deb {{ bbb_apt_mirror }}/{{ bbb_version }} bigbluebutton-bionic main"
+    dest: "/etc/apt/sources.list.d/ubuntu_bigbluebutton_org.list"
+    mode: '0644'
 
 - name: remove bigbluebutton.org repo when using a mirror
   become: true
