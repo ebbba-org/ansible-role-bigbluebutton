@@ -1,0 +1,156 @@
+---
+name: AnsibleCI
+
+on:
+  push:
+  pull_request:
+  # schedule:  # run weekly, every monday 01:00
+  #   - cron: '0 1 * * 1'
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.distribution }}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - distribution: 'ubuntu-20.04'
+            experimental: true
+          - distribution: 'ubuntu-18.04'
+            experimental: false
+    env:
+      ANSIBLE_CALLBACK_ENABLED: profile_tasks
+      ANSIBLE_EXTRA_VARS: "-e bbb_freeswitch_socket_password='SuperSecurePassword-123456789'"
+      ROLEPATH: ebbba.bigbluebutton
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ebbba.bigbluebutton
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible-lint flake8 yamllint
+          which ansible
+          pip3 install ansible
+          pip3 show ansible
+          ls -l $HOME/.local/bin || true
+          ls -l /opt/hostedtoolcache/Python/3.9.1/x64/bin || true
+          echo "/opt/hostedtoolcache/Python/3.9.1/x64/bin" >> $GITHUB_PATH
+          ansible --version
+          cd $GITHUB_WORKSPACE/${{ env.ROLEPATH }}
+          { echo '[defaults]'; echo 'callback_enabled = profile_tasks, timer'; echo 'roles_path = ../'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
+          { echo '[bbb]'; echo 'localhost ansible_connection=local'; } > inventory
+          ansible-galaxy install -r requirements.yml
+      - name: Environment
+        run: |
+          pwd
+          env
+          find -ls
+      - name: run test
+        run: |
+          cd $GITHUB_WORKSPACE/${{ env.ROLEPATH }} && ansible-playbook -i inventory --become -vvv test/integration/default/default.yml ${ANSIBLE_EXTRA_VARS}
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+      - name: idempotency run
+        run: |
+          cd $GITHUB_WORKSPACE/${{ env.ROLEPATH }} && ansible-playbook -i inventory --become -vvv test/integration/default/default.yml ${ANSIBLE_EXTRA_VARS} | tee /tmp/idempotency.log | grep -q 'changed=0.*failed=0'  && (echo 'Idempotence test: pass' && exit 0)  || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 0)
+      - name: verify
+        run: |
+          cd $GITHUB_WORKSPACE/${{ env.ROLEPATH }} && ansible-playbook -i inventory --become -v molecule/default/verify.yml ${ANSIBLE_EXTRA_VARS}
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+      - name: On failure
+        run: |
+          systemctl -l --no-pager status
+          systemctl -l --no-pager --failed
+          ls -l /usr/bin/ | egrep '(python|pip|ansible)'
+          pip freeze
+          pip3 freeze
+          ip addr
+          cat /etc/resolv.conf
+          host www.google.com || true
+          ping -c 1 www.google.com || true
+          ping -c 1 8.8.8.8 || true
+          host ubuntu.bigbluebutton.org || true
+          dig ubuntu.bigbluebutton.org || true
+          dig @1.1.1.1 ubuntu.bigbluebutton.org || true
+          curl -v https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc || true
+        if: ${{ failure() }}
+        continue-on-error: true
+      - name: After script - ansible setup
+        run: |
+          ansible -i inventory --connection=local -m setup localhost
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - firewall
+        run: |
+          sudo iptables -L -vn
+          sudo ip6tables -L -vn
+          sudo ufw status verbose
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - python
+        run: |
+          which pip
+          pip freeze
+          which pip3
+          pip3 freeze
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - sfiles
+        run: |
+          echo "*** mongo"
+          cat /etc/mongod.conf
+          sudo cat /var/log/mongodb/mongod.log || true
+          echo "*** greenlight"
+          cat /root/greenlight/.env || true
+          echo "*** etc"
+          find /etc/red5 /etc/bigbluebutton/ -type f -ls
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - curl
+        run: |
+          curl -v http://localhost
+          curl -vk https://localhost
+          curl -vk https://localhost/b/
+          curl -vk https://localhost/check/
+          curl -vk https://localhost/default.pdf
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - systemd-resolve
+        run: |
+          cat /etc/systemd/resolved.conf || true
+          sudo resolvectl status || true
+          sudo systemd-resolve --status || true
+          resolvectl query ubuntu.bigbluebutton.org || true
+          journalctl -u systemd-resolved --no-pager
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - system
+        run: |
+          sudo netstat -tuanp
+          sudo ss -nlp
+          systemctl -l --no-pager status nginx
+          systemctl -l --no-pager status mongod
+          systemctl -l --no-pager status freeswitch
+          systemctl -l --no-pager status coturn
+          systemctl -l --no-pager status
+          journalctl -xe --no-pager
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - bbb
+        run: |
+          sudo bbb-conf --status
+          sudo bbb-conf --check
+          sudo bbb-conf --secret
+        if: ${{ always() }}
+        continue-on-error: true
