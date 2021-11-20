@@ -16,8 +16,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - distribution: 'ubuntu-20.04'
-            experimental: true
           - distribution: 'ubuntu-18.04'
             experimental: false
     env:
