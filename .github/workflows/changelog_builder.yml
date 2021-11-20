@@ -1,8 +1,8 @@
 name: 'Release and Changelog Builder'
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - "testing/github_actions"
 
 jobs:
   release:
