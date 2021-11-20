@@ -151,7 +151,7 @@ bbb_breakout_rooms_privatechat_enabled: true
 bbb_user_inactivity_inspect_timer: 0
 bbb_user_inactivity_threshold: 30
 bbb_user_activity_sign_response_delay: 5
-bbb_learningDashboardEnabled: true
+bbb_learningdashboardenabled: true
 
 bbb_use_default_logo: false
 bbb_default_logo_url: '${bigbluebutton.web.serverURL}/images/logo.png'
