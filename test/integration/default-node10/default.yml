@@ -7,6 +7,7 @@
     no_proxy: "{{ lookup('env', 'no_proxy') }}"
   remote_user: root
   vars:
+    bbb_nodejs_version: 10.x
     bbb_coturn_secret: ee8d093109a9b273
     bbb_greenlight_enable: false
     bbb_greenlight_secret: 107308d54ff4a5f
