@@ -16,5 +16,8 @@
     bbb_greenlight_enable: true
     bbb_greenlight_users:
       - { name: 'user1', email: 'user1@example.com', password: 'user1@example.com', type: 'user' }
+    bbb_letsencrypt_enable: false
+    bbb_own_cert: test/integration/example.crt
+    bbb_own_key: test/integration/example.key
   roles:
     - ebbba.bigbluebutton

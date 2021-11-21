@@ -15,5 +15,8 @@
     bbb_letsencrypt_email: dev@bigbluebutton.dev
     bbb_letsencrypt_api: "https://acme-staging-v02.api.letsencrypt.org/directory"
     bbb_freeswitch_socket_password: ca5ee03d47e26f2f48a9c900d06bf95e
+    bbb_letsencrypt_enable: false
+    bbb_own_cert: test/integration/example.crt
+    bbb_own_key: test/integration/example.key
   roles:
     - ebbba.bigbluebutton
