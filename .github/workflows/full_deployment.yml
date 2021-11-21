@@ -1,11 +1,10 @@
 ---
-name: AnsibleCI
+name: 'Ansible Deployment Test'
 
 on:
   push:
   pull_request:
-  # schedule:  # run weekly, every monday 01:00
-  #   - cron: '0 1 * * 1'
+
 
 jobs:
   build:
