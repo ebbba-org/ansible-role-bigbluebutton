@@ -18,5 +18,6 @@
     bbb_letsencrypt_enable: false
     bbb_own_cert: test/integration/example.crt
     bbb_own_key: test/integration/example.key
+    bbb_secret: ecf63d36d27344eab229a5767180c973
   roles:
     - ebbba.bigbluebutton
