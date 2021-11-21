@@ -26,10 +26,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           path: ebbba.bigbluebutton
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
+
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
@@ -45,30 +47,38 @@ jobs:
           { echo '[defaults]'; echo 'callback_enabled = profile_tasks, timer'; echo 'roles_path = ../'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
           { echo '[bbb]'; echo 'localhost ansible_connection=local'; } > inventory
           ansible-galaxy install -r requirements.yml
+
       - name: Environment
         run: |
           pwd
           env
           find -ls
+
       - name: run test
-        run: |
-          cd $GITHUB_WORKSPACE/${{ env.ROLEPATH }} && ansible-playbook -i inventory --become -vvv test/integration/default/default.yml ${ANSIBLE_EXTRA_VARS}
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
+        run: |
+          cd $GITHUB_WORKSPACE/${{ env.ROLEPATH }} && ansible-playbook -i inventory --become -vvv test/integration/default/default.yml ${ANSIBLE_EXTRA_VARS}
+
+
       - name: idempotency run
         run: |
           cd $GITHUB_WORKSPACE/${{ env.ROLEPATH }} && ansible-playbook -i inventory --become -vvv test/integration/default/default.yml ${ANSIBLE_EXTRA_VARS} | tee /tmp/idempotency.log | grep -q 'changed=0.*failed=0'  && (echo 'Idempotence test: pass' && exit 0)  || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 0)
+
       - name: verify
-        run: |
-          cd $GITHUB_WORKSPACE/${{ env.ROLEPATH }} && ansible-playbook -i inventory --become -v molecule/default/verify.yml ${ANSIBLE_EXTRA_VARS}
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
-      - name: On failure
         run: |
-          systemctl -l --no-pager status
-          systemctl -l --no-pager --failed
+          cd $GITHUB_WORKSPACE/${{ env.ROLEPATH }} && ansible-playbook -i inventory --become -v molecule/default/verify.yml ${ANSIBLE_EXTRA_VARS}
+
+      - name: On failure
+        if: ${{ failure() }}
+        continue-on-error: true
+        run: |
+          systemctl --full --no-pager status
+          systemctl --full --no-pager --failed
           ls -l /usr/bin/ | egrep '(python|pip|ansible)'
           pip freeze
           pip3 freeze
@@ -80,30 +90,34 @@ jobs:
           host ubuntu.bigbluebutton.org || true
           dig ubuntu.bigbluebutton.org || true
           dig @1.1.1.1 ubuntu.bigbluebutton.org || true
-          curl -v https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc || true
-        if: ${{ failure() }}
-        continue-on-error: true
+          curl --verbose https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc || true
+
       - name: After script - ansible setup
-        run: |
-          ansible -i inventory --connection=local -m setup localhost
         if: ${{ always() }}
         continue-on-error: true
+        run: |
+          ansible --inventory inventory --connection=local --module-name setup localhost
+
       - name: After script - firewall
-        run: |
-          sudo iptables -L -vn
-          sudo ip6tables -L -vn
-          sudo ufw status verbose
         if: ${{ always() }}
         continue-on-error: true
+        run: |
+          sudo iptables --list --verbose --numeric
+          sudo ip6tables --list --verbose --numeric
+          sudo ufw status verbose
+
       - name: After script - python
+        if: ${{ always() }}
+        continue-on-error: true
         run: |
           which pip
           pip freeze
           which pip3
           pip3 freeze
+
+      - name: After script - sfiles
         if: ${{ always() }}
         continue-on-error: true
-      - name: After script - sfiles
         run: |
           echo "*** mongo"
           cat /etc/mongod.conf
@@ -112,42 +126,44 @@ jobs:
           cat /root/greenlight/.env || true
           echo "*** etc"
           find /etc/red5 /etc/bigbluebutton/ -type f -ls
-        if: ${{ always() }}
-        continue-on-error: true
+
       - name: After script - curl
-        run: |
-          curl -v http://localhost
-          curl -vk https://localhost
-          curl -vk https://localhost/b/
-          curl -vk https://localhost/check/
-          curl -vk https://localhost/default.pdf
         if: ${{ always() }}
         continue-on-error: true
+        run: |
+          curl --verbose http://localhost
+          curl --verbose --insecure https://localhost
+          curl --verbose --insecure https://localhost/b/
+          curl --verbose --insecure https://localhost/check/
+          curl --verbose --insecure https://localhost/default.pdf
+
       - name: After script - systemd-resolve
+        if: ${{ always() }}
+        continue-on-error: true
         run: |
           cat /etc/systemd/resolved.conf || true
           sudo resolvectl status || true
           sudo systemd-resolve --status || true
           resolvectl query ubuntu.bigbluebutton.org || true
-          journalctl -u systemd-resolved --no-pager
-        if: ${{ always() }}
-        continue-on-error: true
+          journalctl --unit systemd-resolved --no-pager
+
       - name: After script - system
-        run: |
-          sudo netstat -tuanp
-          sudo ss -nlp
-          systemctl -l --no-pager status nginx
-          systemctl -l --no-pager status mongod
-          systemctl -l --no-pager status freeswitch
-          systemctl -l --no-pager status coturn
-          systemctl -l --no-pager status
-          journalctl -xe --no-pager
         if: ${{ always() }}
         continue-on-error: true
+        run: |
+          sudo netstat --tcp --udp --all --numeric --processes
+          sudo ss --numeric --listening --processes
+          systemctl --full --no-pager status nginx
+          systemctl --full --no-pager status mongod
+          systemctl --full --no-pager status freeswitch
+          systemctl --full --no-pager status coturn
+          systemctl --full --no-pager status
+          journalctl --catalog --pager-end --no-pager
+
       - name: After script - bbb
+        if: ${{ always() }}
+        continue-on-error: true
         run: |
           sudo bbb-conf --status
           sudo bbb-conf --check
           sudo bbb-conf --secret
-        if: ${{ always() }}
-        continue-on-error: true
