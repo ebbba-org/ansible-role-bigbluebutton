@@ -36,12 +36,6 @@
       docker_compose:
         pull: "{{ bbb_greenlight_image_pull }}"
         project_src: /root/greenlight/
-      register: greenlightstart
-
-    - name: Ensure greenlight container fully started
-      pause:
-        seconds: 10
-      when: greenlightstart is changed
 
     - name: wait until rake did all necessary migrations
       community.docker.docker_container_exec:
