@@ -90,7 +90,7 @@
   - reload systemd
 
 - name: Set the Freeswitch default password
-  xml:
+  community.general.xml:
     path: "/opt/freeswitch/etc/freeswitch/vars.xml"
     xpath: '/include/X-PRE-PROCESS[contains(@data, "default_password")]'
     attribute: data
