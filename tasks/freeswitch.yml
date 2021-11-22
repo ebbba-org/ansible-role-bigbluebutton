@@ -63,7 +63,7 @@
 
 - name: set socket password
   become: true
-  xml:
+  community.general.xml:
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
     xpath: /configuration/settings/param[@name='password']
     attribute: "value"
@@ -96,12 +96,15 @@
     attribute: data
     value: "default_password={{ bbb_freeswitch_default_password }}"
 
-- name: Change freeswitch vars.xml file permission
+- name: Set restrictive permissions of freeswitch config files including passwords
   ansible.builtin.file:
-    path: "/opt/freeswitch/etc/freeswitch/vars.xml"
+    path: "{{ item }}"
     owner: freeswitch
     group: daemon
     mode: '0600'
+  with_items:
+    - "/opt/freeswitch/etc/freeswitch/vars.xml"
+    - "/opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml"
 
 - name: Set FreeSWITCH local IPv4
   replace:
@@ -114,7 +117,7 @@
   block:
     - name: configure listen-ip in event_socket.conf.xml
       become: true
-      ansible.builtin.xml:
+      community.general.xml:
         path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
         xpath: '/configuration/settings/param[@name="listen-ip"]'
         attribute: 'value'
