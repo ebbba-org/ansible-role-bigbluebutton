@@ -64,7 +64,7 @@
       failed_when: bbb_monitoring_all_in_one_enable and bbb_monitoring_systemd_enable
     - name: bbb_freeswitch_default_password
       debug:
-        msg: "Please define the bbb_freeswitch_default_password variable"
+        msg: "value of bbb_freeswitch_default_password variable is: {{ bbb_freeswitch_default_password variable }}"
   rescue:
     - name: CHECK YOUR VARIABLES!
       debug:
