@@ -57,6 +57,7 @@ bbb_freeswitch_muted_sound: true
 bbb_freeswitch_unmuted_sound: true
 # bbb_freeswitch_socket_password needs to be defined by the User
 # bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
+# bbb_freeswitch_default_password: "Needs_To_Be_Defined_By_The_User"
 
 bbb_system_locale: en_US.UTF-8
 bbb_mongodb_version: 4.2
