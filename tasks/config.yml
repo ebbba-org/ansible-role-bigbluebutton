@@ -6,37 +6,8 @@
   changed_when: properties['content'] | b64decode | regex_search(bbb_hostname, multiline=True, ignorecase=True) != bbb_hostname
   notify: set bbb hostname
 
-- name: Update /etc/bigbluebutton akka configs
-  become: true
-  template:
-    src: "{{ item }}"
-    dest: "/etc/bigbluebutton/{{ item }}"
-    owner: bigbluebutton
-    group: root
-    mode: '0600'
-  loop:
-    - bbb-apps-akka.conf
-    - bbb-fsesl-akka.conf
-  notify: restart bigbluebutton
-
-- name: Update /etc/bigbluebutton/bbb-web.properties
-  become: true
-  template:
-    src: bbb-web.properties
-    dest: /etc/bigbluebutton/bbb-web.properties
-    owner: bigbluebutton
-    group: root
-    mode: '0600'
-  notify: restart bigbluebutton
-
-- name: don't leave BBB secrets readable for others
-  ansible.builtin.file:
-    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    owner: bigbluebutton
-    group: bigbluebutton
-    mode: '640'
-
 - name: register bbb secret
+  become: true
   command: bbb-conf --secret
   changed_when: false
   check_mode: false
@@ -48,6 +19,7 @@
     cacheable: true
 
 - name: set BBB secret
+  become: true
   command: "bbb-conf --setsecret {{ bbb_secret }}"
   when: bbb_secret is defined and bbb_secret != current_bbb_secret
   notify: restart bigbluebutton
@@ -57,6 +29,30 @@
     bbb_secret: "{{ current_bbb_secret }}"
     cacheable: true
   when: bbb_secret is not defined
+
+- name: don't leave BBB secrets readable for others
+  become: true
+  ansible.builtin.file:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    owner: bigbluebutton
+    group: bigbluebutton
+    mode: '640'
+
+
+- name: Update /etc/bigbluebutton override configs
+  become: true
+  ansible.builtin.template:
+    src: "bbb-config/{{ item }}.j2"
+    dest: "/etc/bigbluebutton/{{ item }}"
+    owner: bigbluebutton
+    group: root
+    mode: '0600'
+  loop:
+    - bbb-apps-akka.conf
+    - bbb-fsesl-akka.conf
+    - bbb-web.properties
+  notify: restart bigbluebutton
+
 
 - name: serve recordings via https
   become: true
