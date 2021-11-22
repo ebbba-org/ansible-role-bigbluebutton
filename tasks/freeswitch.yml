@@ -89,6 +89,13 @@
   - restart freeswitch
   - reload systemd
 
+- name: Set the Freeswitch default password
+  xml:
+    path: "/opt/freeswitch/etc/freeswitch/vars.xml"
+    xpath: '/include/X-PRE-PROCESS[contains(@data, "default_password")]'
+    attribute: data
+    value: "default_password={{ bbb_freeswitch_default_password }}"
+
 - name: Set FreeSWITCH local IPv4
   replace:
     path: /opt/freeswitch/etc/freeswitch/vars.xml
