@@ -96,6 +96,13 @@
     attribute: data
     value: "default_password={{ bbb_freeswitch_default_password }}"
 
+- name: Change freeswitch vars.xml file permission
+  ansible.builtin.file:
+    path: "/opt/freeswitch/etc/freeswitch/vars.xml"
+    owner: freeswitch
+    group: daemon
+    mode: '0600'
+
 - name: Set FreeSWITCH local IPv4
   replace:
     path: /opt/freeswitch/etc/freeswitch/vars.xml
