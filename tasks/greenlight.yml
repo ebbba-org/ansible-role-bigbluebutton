@@ -56,4 +56,11 @@
       failed_when: "'Invalid Arguments' in usercreate.stdout"
       changed_when: "'Account successfully created' in usercreate.stdout"
 
+    - name: Set greenlight branding image
+      community.docker.docker_container_exec:
+        container: greenlight-v2
+        command: "bundle exec rails runner 'Setting.create(provider: \"greenlight\") if Setting.count.zero?; Setting.first.update_value(\"Branding Image\", \"{{ bbb_default_logo_url }}\")'"
+      when: bbb_use_default_logo
+      changed_when: true
+
   when: bbb_greenlight_enable | bool
