@@ -1,5 +1,9 @@
 # BigBlueButton
 
+[![Ansible Deployment Test](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/full_deployment.yml/badge.svg)](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/full_deployment.yml)
+[![Ansible Lint](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/ansible-lint.yaml/badge.svg)](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/ansible-lint.yaml)
+[![Release and Changelog Builder](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/changelog_builder.yml/badge.svg)](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/changelog_builder.yml)
+
 > Ansible role for a BigBlueButton installation
 
 This role is following the documentation on <https://docs.bigbluebutton.org/2.3/install.html>
