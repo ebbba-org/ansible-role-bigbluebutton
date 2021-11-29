@@ -1,4 +1,4 @@
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 #include <tunables/global>
 
 /opt/freeswitch/bin/freeswitch {

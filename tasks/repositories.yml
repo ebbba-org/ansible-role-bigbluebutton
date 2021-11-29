@@ -4,6 +4,9 @@
   apt_key:
     url: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
     id: '{{ bbb_apt_key }}'
+    state: present
+  register: apt_key_dl
+  until: apt_key_dl is success
 
 - name: add mongodb repo key
   become: true
