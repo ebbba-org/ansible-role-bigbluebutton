@@ -86,7 +86,6 @@
       - bbb-rap-caption-inbox.service
       - bbb-web.service
       - bbb-webrtc-sfu.service
-      - coturn.service
       - kurento-media-server.service
       - mongod.service
       - nginx.service

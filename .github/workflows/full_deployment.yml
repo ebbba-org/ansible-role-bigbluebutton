@@ -156,7 +156,6 @@ jobs:
           systemctl --full --no-pager status nginx
           systemctl --full --no-pager status mongod
           systemctl --full --no-pager status freeswitch
-          systemctl --full --no-pager status coturn
           systemctl --full --no-pager status
           journalctl --catalog --pager-end --no-pager
 

@@ -11,28 +11,20 @@ bbb_nginx_listen_https: true
 bbb_nginx_root: /var/www/bigbluebutton-default
 bbb_client_log_enable: false
 
-bbb_coturn_enable: true
-bbb_coturn_port: 3478
-bbb_coturn_port_tls: 3443
-bbb_coturn_server: "{{ bbb_hostname }}"
-bbb_coturn_min_port: 49152
-bbb_coturn_max_port: 65535
-#bbb_coturn_secret: "" <- undefined to set as required
-
 bbb_turn_enable: true
 bbb_stun_servers:
-  - server: "{{ bbb_hostname }}"
+  - server: "example.domain.tld"
 bbb_ice_servers: []
 bbb_turn_servers:
-  - server: "{{ bbb_hostname }}"
-    port: "{{ bbb_coturn_port }}"
+  - server: "example.domain.tld"
+    port: "example_port"
     transport: tcp
-    secret: "{{ bbb_coturn_secret }}"
+    secret: "example_secret"
     tls: false
-  - server: "{{ bbb_hostname }}"
-    port: "{{ bbb_coturn_port_tls }}"
+  - server: "example.domain.tld"
+    port: "example_port"
     transport: tcp
-    secret: "{{ bbb_coturn_secret }}"
+    secret: "example_secret"
     tls: true
 
 bbb_greenlight_enable: true
@@ -255,19 +247,6 @@ bbb_firewall_ufw:
       - rule: allow
         port: "80"
         proto: any
-    coturn:
-      # Allow coturn http port - default used
-      - rule: allow
-        port: "{{ bbb_coturn_port }}"
-        proto: any
-      # Allow coturn https (TLS) port - default used
-      - rule: allow
-        port: "{{ bbb_coturn_port_tls }}"
-        proto: any
-      # Allow coturn relay ports range - default used
-      - rule: allow
-        port: "{{ bbb_coturn_min_port }}:{{ bbb_coturn_max_port }}"
-        proto: udp
     bigbluebutton:
       # Allow BigBlueButton 16384-32768 FreeSWITCH/HTML5 client RTP
       - rule: allow

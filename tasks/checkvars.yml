@@ -15,10 +15,6 @@
       fail:
         msg: "bbb_own_cert is set but bbb_own_key is not"
       when: bbb_own_cert is defined and bbb_own_key is not defined
-    - name: check bbb_coturn_secret
-      debug:
-        msg: "value: {{ bbb_coturn_secret }}"
-      when: bbb_coturn_enable
     - name: check bbb_greenlight_secret
       debug:
         msg: "value: {{ bbb_greenlight_secret }}"

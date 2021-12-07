@@ -71,12 +71,6 @@
     name: apparmor
     state: reloaded
 
-- name: restart coturn
-  become: true
-  systemd:
-    name: coturn
-    state: restarted
-
 - name: restart monitoring container
   docker_compose:
     pull: false
