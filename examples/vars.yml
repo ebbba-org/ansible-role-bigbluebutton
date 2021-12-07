@@ -10,13 +10,6 @@
 # COTURN
 #bbb_coturn_secret: <secret> # Uncomment, generate and fill using `openssl rand -hex 16`, when using coturn
 
-# GREENLIGHT
-#bbb_greenlight_secret: <secret> # Uncomment, generate and fill using `openssl rand -hex 64`, when using greenlight
-#bbb_greenlight_db_password: <secret> # Uncomment, generate and fill using `openssl rand -hex 16`, when using greenlight
-#bbb_greenlight_users: # Uncomment and fill if using greenlight, to create users
-#  - { name: '', email: '', password: '', type: 'user' }
-#  - { name: '', email: '', password: '', type: 'admin' }
-
 # FREESWITCH
 bbb_freeswitch_socket_password: "<secret>" # Generate and fill using `pwgen -s 16 1`
 

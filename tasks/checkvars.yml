@@ -19,14 +19,6 @@
       debug:
         msg: "value: {{ bbb_coturn_secret }}"
       when: bbb_coturn_enable
-    - name: check bbb_greenlight_secret
-      debug:
-        msg: "value: {{ bbb_greenlight_secret }}"
-      when: bbb_greenlight_enable
-    - name: check bbb_greenlight_db_password
-      debug:
-        msg: "value: {{ bbb_greenlight_db_password }}"
-      when: bbb_greenlight_enable
     - name: check bbb_freeswitch_socket_password
       debug:
         msg: "value: {{ bbb_freeswitch_socket_password }}"

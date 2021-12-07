@@ -67,15 +67,10 @@
   tags: dial-in
 
 - import_tasks: docker.yml
-  when: bbb_greenlight_enable | bool or bbb_monitoring_all_in_one_enable | bool
+  when: bbb_monitoring_all_in_one_enable | bool
   tags:
     - docker
-    - greenlight
     - monitoring
-
-- import_tasks: greenlight.yml
-  when: bbb_greenlight_enable | bool
-  tags: greenlight
 
 - import_tasks: monitoring/main.yml
   when: bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_systemd_enable | bool
