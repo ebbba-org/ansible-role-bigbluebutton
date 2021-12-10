@@ -53,6 +53,8 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server` |
 | | `bbb_turn_servers` | a list of TURN-Server to use | `{{ bbb_hostname }}` with `{{ bbb_coturn_secret }}` | take a look in defaults/main.yml |
 | | `bbb_greenlight_enable` | enable installation of the greenlight client | `yes` | |
+| | `bbb_mongodb_version` | version of mongodb to be installed | `4.2` | | 
+| | `bbb_mongodb_tmpfs_size' | tmpfs size for the mongodb | `512m` | |
 | | `bbb_greenlight_hosts` | the hostname that greenlight is accessible from | `{{ bbb_hostname }}` | |
 | | `bbb_greenlight_image` | the Docker image to be used for greenlight, so you can use a custom version | `bigbluebutton/greenlight:v2` | |
 | | `bbb_greenlight_image_pull` | control the image pull for the greenlight image | `true` | if you are using a custom `bbb_greenlight_image` value, you might want to disable the pull and use a local image |

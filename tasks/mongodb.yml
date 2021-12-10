@@ -22,6 +22,16 @@
   notify:
     - restart mongo
 
+- name: set tmpfs size for mongodb
+  become: true
+  lineinfile:
+    path: /usr/share/meteor/bundle/mongod_start_pre.sh
+    regexp: "^  mount -t tmpfs"
+    line: "  mount -t tmpfs -o size={{ bbb_mongodb_tmpfs_size }} tmpfs /mnt/mongo-ramdisk"
+  notify:
+    - stop mongo
+    - restart mongo
+
 - name: Ensure mongod is started and enabled to start at boot.
   become: true
   systemd:
