@@ -16,14 +16,6 @@
     name: nginx
     state: restarted
 
-- name: set bbb hostname
-  become: true
-  command: "bbb-conf --setip {{ bbb_hostname }}"
-
-- name: restart bigbluebutton
-  become: true
-  command: bbb-conf --restart
-
 - name: restart freeswitch
   become: true
   systemd:
@@ -94,3 +86,12 @@
     name: etherpad.service
     enabled: true
     state: restarted
+
+- name: set bbb hostname
+  become: true
+  command: "bbb-conf --setip {{ bbb_hostname }}"
+
+# This should be the last handler. In case it is necessary that bbb is restarted all togehter.
+- name: restart bigbluebutton
+  become: true
+  command: bbb-conf --restart
