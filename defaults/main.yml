@@ -1,7 +1,7 @@
 ---
 bbb_hostname: "{{ ansible_fqdn }}"
 bbb_state: "present"
-bbb_version: "bionic-230"
+bbb_version: "bionic-240"
 bbb_upgrade_packages: "{{ 'yes' if bbb_state == 'latest' else 'no' }}"
 bbb_check_for_running_meetings: true
 bbb_letsencrypt_enable: true
@@ -166,6 +166,20 @@ bbb_kurento_interfaces:
 
 bbb_webrtc_sfu_multikurento:
   balancing-strategy: MEDIA_TYPE
+  videoMediaServer: mediasoup
+  screenshareMediaServer: mediasoup
+  audioMediaServer: mediasoup
+  listenOnlyMediaServer: mediasoup
+  localIpAddress: "{{ ansible_default_ipv4.address }}"
+  mediasoup:
+    webrtc:
+      listenIps:
+        - ip: "0.0.0.0"
+          announcedIp: "{{ ansible_default_ipv4.address }}"
+    plainRtp:
+      listenIps:
+        - ip: "0.0.0.0"
+          announcedIp: "{{ ansible_default_ipv4.address }}"
   kurento:
     - ip: "{{ ansible_default_ipv4.address }}"
       url: ws://127.0.0.1:8888/kurento
