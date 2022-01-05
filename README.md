@@ -6,9 +6,9 @@
 
 > Ansible role for a BigBlueButton installation
 
-This role is following the documentation on <https://docs.bigbluebutton.org/2.3/install.html>
+This role is following the documentation on <https://docs.bigbluebutton.org/2.4/install.html>
 
-Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#before-you-install) and [Minimum server requirements](https://docs.bigbluebutton.org/2.3/install.html#minimum-server-requirements) from the official documentation as they also apply here.
+Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#before-you-install) and [Minimum server requirements](https://docs.bigbluebutton.org/2.4/install.html#minimum-server-requirements) from the official documentation as they also apply here.
 
 ## Role Variables
 
@@ -19,7 +19,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | Required | Variable Name | Function | Default value | Comment |
 | -------- | ------------- | -------- | ------------- | ------- |
 | ⚠️ | `bbb_hostname` | Hostname for this BigBlueButton instance | `{{ ansible_fqdn }}` |
-| | `bbb_version` | Install specified BigBlueButton version | `bionic-230` | For installing specified BigBlueButton version e.g. `bionic-230-2.3.15` |
+| | `bbb_version` | Install specified BigBlueButton version | `bionic-240` | For installing specified BigBlueButton version e.g. `bionic-230-2.3.15` |
 | | `bbb_state` | Install BigBlueButton to state | `present` | for updating BigBlueButton with this role use `latest` |
 | | `bbb_apt_mirror` | apt repo server for BigBlueButton packages | `https://ubuntu.bigbluebutton.org` | other value would be e.g. `https://packages-eu.bigbluebutton.org` |
 | | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
