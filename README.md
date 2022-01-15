@@ -99,7 +99,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 | | `bbb_monitoring_systemd_directory` | Installation directory for git repository | `"/opt/bigbluebutton-exporter"` | |
 | | `bbb_monitoring_systemd_port` | Port of bbb-exporter | `9688` | default port 9866 is defined by the exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/bbb-exporter/settings.py#L37) |
 | | `bbb_monitoring_systemd_bind_ip` | Port of bbb-exporter | `0.0.0.0` | default bind IP 0.0.0.0 is defined by the exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/bbb-exporter/settings.py#L38) |
-| | `bbb_dialin_enabled` | enable phone dial-in, will also remove any previous dial-in configuration if set to `false`  | `false` | |
+| | `bbb_dialin_enabled` | enable phone dial-in, will also remove any previous dial-in configuration if set to `false` | `false` | |
 | | `bbb_dialin_provider_proxy` | IP or Domain of your SIP provider, also known as registrar | `sip.example.net` | |
 | | `bbb_dialin_provider_username` | Username for authentication on the SIP-server | `provider-account` | |
 | | `bbb_dialin_provider_password` | Password for authentication on the SIP-server | `provider-password` | |
@@ -148,6 +148,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 | | `bbb_user_inactivity_threshold` | Number of minutes to consider a user inactive | `30` | A warning message is send to client to check if really inactive |
 | | `bbb_user_activity_sign_response_delay` | Number of minutes for user to respond to inactivity warning before being logged out | `5` |  |
 | | `bbb_learning_dashboard_enabled` | Enable `true` / Disable `false` the [Learning Dashboard](https://docs.bigbluebutton.org/2.4/new.html#learning-dashboard) | `true` | |
+| | `bbb_default_meeting_layout` | Default Meeting Layout. Default Meeting Layout. Valid values are CUSTOM_LAYOUT, SMART_LAYOUT, PRESENTATION_FOCUS, VIDEO_FOCUS | `SMART_LAYOUT` | |
 
 ### Extra options for Greenlight
 

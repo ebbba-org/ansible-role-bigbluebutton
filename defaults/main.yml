@@ -154,6 +154,7 @@ bbb_user_inactivity_inspect_timer: 0
 bbb_user_inactivity_threshold: 30
 bbb_user_activity_sign_response_delay: 5
 bbb_learning_dashboard_enabled: true
+bbb_default_meeting_layout: 'SMART_LAYOUT'
 
 bbb_use_default_logo: false
 bbb_default_logo_url: '${bigbluebutton.web.serverURL}/images/logo.png'
