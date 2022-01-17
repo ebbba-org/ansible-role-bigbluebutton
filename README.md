@@ -217,6 +217,18 @@ bbb_greenlight_office365:
     hd:
 ```
 
+#### OPENID CONNECT
+
+For in-depth steps on setting up a OpenID Connect Login Provider, see: <https://docs.bigbluebutton.org/greenlight/gl-config.html#openid-connect>
+
+```yaml
+bbb_greenlight_openid_connect:
+    id:
+    secret:
+    issuer:
+    uid_field:
+```
+
 #### In Application Authentication
 
 By default, the ability for anyone to create a Greenlight account is enabled. To disable this, use `false`.
