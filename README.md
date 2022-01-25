@@ -50,6 +50,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_web_logouturl` | set logout URL | `default` | Instead of using `bigbluebutton.web.serverURL` as default logout page, set another URL or customize logout page e.g. ${bigbluebutton.web.serverURL}/logout.html. API create call with the `logoutURL` parameter overwrite this setting |
 | | `bbb_allow_request_without_session` | Enable or disable allow request without session | `false` | Allow requests without JSESSIONID to be handled |
 | | `bbb_turn_enable` | enable the use uf TURN in general | `yes` | |
+| ⚠️ when using coturn | `bbb_coturn_secret` | Secret for the TURN-Server | | can be generated with `openssl rand -hex 16` |
 | | `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml |
 | | `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server` |
 | | `bbb_turn_servers` | a list of TURN-Server to use | `{}` | take a look in defaults/main.yml |
