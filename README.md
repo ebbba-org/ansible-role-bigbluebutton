@@ -10,6 +10,13 @@ This role is following the documentation on <https://docs.bigbluebutton.org/2.3/
 
 Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#before-you-install) and [Minimum server requirements](https://docs.bigbluebutton.org/2.3/install.html#minimum-server-requirements) from the official documentation as they also apply here.
 
+---
+
+ℹ️ - PR [#275](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/275) removed the option of installing Greenlight. Please checkout another projoct for Greenlight support
+
+---
+
+
 ## Role Variables
 
 > ⚠️ **WATCH OUT FOR _REQUIRED_ VARIABLES!** ⚠️
@@ -282,14 +289,6 @@ bbb_dialin_overwrite_footer: true
 
 - [geerlingguy.nodejs](https://github.com/geerlingguy/ansible-role-nodejs)
 - [geerlingguy.docker](https://github.com/geerlingguy/ansible-role-docker)
-
-## Pitfalls
-
-### Greenlight - Server Error: "Invalid BigBlueButton Endpoint and Secret"
-
-Check your `/etc/hosts` file if your dns name (example `meet.domain.tld`) has the IP `127.0.1.1`.
-Docker will use the internal system DNS to resolve `meet.domain.tld` to `127.0.1.1` which will result in this error.
-Edit this line and replace `127.0.1.1` with your public IP.
 
 ## Example Playbook
 
