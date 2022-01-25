@@ -122,8 +122,6 @@ jobs:
           echo "*** mongo"
           cat /etc/mongod.conf
           sudo cat /var/log/mongodb/mongod.log || true
-          echo "*** greenlight"
-          cat /root/greenlight/.env || true
           echo "*** etc"
           find /etc/red5 /etc/bigbluebutton/ -type f -ls
 

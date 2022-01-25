@@ -35,24 +35,6 @@
   - name: Validate config present
     assert:
       that: cfg3.stat.exists and cfg3.stat.size != 0
-  - name: Ensure turnserver process is running
-    command: pgrep -u root turnserver
-    register: ps
-    changed_when: false
-    failed_when: false
-  - name: Validate ps output
-    assert:
-      that: ps.stdout
-    failed_when: false
-  - name: Ensure turnserver ports are listening
-    wait_for:
-      host: localhost
-      port: "{{ item }}"
-      timeout: 5
-    with_items:
-      - 3478
-      - 3479
-    failed_when: false
 
   - name: Ensure mongodb process is running
     command: pgrep -u mongodb mongod

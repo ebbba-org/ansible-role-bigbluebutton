@@ -7,15 +7,11 @@
     no_proxy: "{{ lookup('env', 'no_proxy') }}"
   remote_user: root
   vars:
-    bbb_greenlight_secret: 107308d54ff4a5f
-    bbb_greenlight_db_password: 2585c27c785e8895ec
+    bbb_coturn_secret: ee8d093109a9b273
     bbb_letsencrypt_email: dev@bigbluebutton.dev
     bbb_letsencrypt_api: "https://acme-staging-v02.api.letsencrypt.org/directory"
     bbb_freeswitch_socket_password: ca5ee03d47e26f2f48a9c900d06bf95e
     bbb_freeswitch_default_password: f0fd0fa1f4123fde875d3ea3d3220a35
-    bbb_greenlight_enable: true
-    bbb_greenlight_users:
-      - { name: 'user1', email: 'user1@example.com', password: 'user1@example.com', type: 'user' }
     bbb_letsencrypt_enable: false
     bbb_own_cert: test/integration/example.crt
     bbb_own_key: test/integration/example.key
