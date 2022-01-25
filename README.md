@@ -10,6 +10,13 @@ This role is following the documentation on <https://docs.bigbluebutton.org/2.3/
 
 Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#before-you-install) and [Minimum server requirements](https://docs.bigbluebutton.org/2.3/install.html#minimum-server-requirements) from the official documentation as they also apply here.
 
+---
+
+ℹ️ - PR [#275](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/275) removed the option of installing Greenlight. Please checkout another projoct for Greenlight support
+
+---
+
+
 ## Role Variables
 
 > ⚠️ **WATCH OUT FOR _REQUIRED_ VARIABLES!** ⚠️
@@ -52,16 +59,6 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml |
 | | `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server` |
 | | `bbb_turn_servers` | a list of TURN-Server to use | `{{ bbb_hostname }}` with `{{ bbb_coturn_secret }}` | take a look in defaults/main.yml |
-| | `bbb_greenlight_enable` | enable installation of the greenlight client | `yes` | |
-| | `bbb_greenlight_hosts` | the hostname that greenlight is accessible from | `{{ bbb_hostname }}` | |
-| | `bbb_greenlight_image` | the Docker image to be used for greenlight, so you can use a custom version | `bigbluebutton/greenlight:v2` | |
-| | `bbb_greenlight_image_pull` | control the image pull for the greenlight image | `true` | if you are using a custom `bbb_greenlight_image` value, you might want to disable the pull and use a local image |
-| ⚠️ when using greenlight | `bbb_greenlight_secret` | Secret for greenlight |  | can be generated with `openssl rand -hex 64` |
-| ⚠️ when using greenlight | `bbb_greenlight_db_password` | Password for greenlight's database | | can be generated with `openssl rand -hex 16` |
-| | `bbb_greenlight_default_registration` | Registration option open(default), invite or approval | `open` | |
-| | `bbb_greenlight_users` | Greenlight users' list to create. No email notification will be triggered. As it contains passwords, recommend to put in ansible-vault. For more details see defaults/main.yml | `[]` |
-| | `bbb_greenlight_enable_recording_thumbnails` | Toggle thumbnails for recordings | `true` | This is usefull if you dont want thumbnails - this can fix a default presentation issue where greenlight fails to generate the thumbnail |
-| | `bbb_allow_mail_notifications`  | Set this to true if you want GreenLight to send verification emails upon the creation of a new account | `true` |
 | | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
 | | `bbb_api_demos_enable` | enable installation of the api demos | `no` | |
 | | `bbb_client_log_enable` | enable installation of the nginx-full and config for client logging according to [BBB Customization Docs](https://docs.bigbluebutton.org/admin/customize.html#collect-feedback-from-the-users). See "METEOR" Section below for needed `bbb_meteor` values. | `false` | |
@@ -149,95 +146,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_user_activity_sign_response_delay` | Number of minutes for user to respond to inactivity warning before being logged out | `5` |  |
 | | `bbb_learning_dashboard_enabled` | Enable `true` / Disable `false` the [Learning Dashboard](https://docs.bigbluebutton.org/2.4/new.html#learning-dashboard) | `true` | |
 
-### Extra options for Greenlight
-
-The Web-Frontend has some extra configuration options, listed below:
-
-#### SMTP
-
-The notifications are sent using sendmail, unless the `bbb_greenlight_smtp.server` variable is set.
-In that case, make sure the rest of the variables are properly set.
-
-The default value for `bbb_greenlight_smtp.sender` is `bbb@{{ bbb_hostname }}`
-
-Example Setup:
-
-```yaml
-bbb_greenlight_smtp:
-  server: smtp.gmail.com
-  port: 587
-  domain: gmail.com
-  username: youremail@gmail.com
-  password: yourpassword
-  auth: plain
-  starttls_auto: true
-  sender: youremail@gmail.com
-```
-
-#### LDAP
-
-You can enable LDAP authentication by providing values for the variables below.
-Configuring LDAP authentication will take precedence over all other providers.
-For information about setting up LDAP, see: <https://docs.bigbluebutton.org/greenlight/gl-config.html#ldap-auth>
-
-Example Setup:
-
-```yaml
-bbb_greenlight_ldap:
-  server: ldap.example.com
-  port: 389
-  method: plain
-  uid: uid
-  base: dc=example,dc=com
-  bind_dn: cn=admin,dc=example,dc=com
-  password: password
-  role_field: ou
-```
-
-#### GOOGLE_OAUTH2
-
-For in-depth steps on setting up a Google Login Provider, see:  <https://docs.bigbluebutton.org/greenlight/gl-config.html#google-oauth2>
-The `bbb_greenlight_google_oauth2.hd` variable is used to limit sign-ins to a particular set of Google Apps hosted domains. This can be a string with separating commas such as, 'domain.com, example.com' or a string that specifies a single domain restriction such as, 'domain.com'. If left blank, GreenLight will allow sign-in from all Google Apps hosted domains.
-
-```yaml
-bbb_greenlight_google_oauth2:
-  id:
-  secret:
-  hd:
-```
-
-#### OFFICE365
-
-For in-depth steps on setting up a Office 365 Login Provider, see: <https://docs.bigbluebutton.org/greenlight/gl-config.html#office365-oauth2>
-
-```yaml
-bbb_greenlight_office365:
-    id:
-    secret:
-    hd:
-```
-
-#### In Application Authentication
-
-By default, the ability for anyone to create a Greenlight account is enabled. To disable this, use `false`.
-For more information see: <https://docs.bigbluebutton.org/greenlight/gl-config.html#in-application-greenlight>
-
-```yaml
-bbb_greenlight_accounts: false
-```
-
-#### RECAPTCHA
-
-To enable reCaptcha on the user sign up, define these 2 keys.
-You can obtain these keys by registering your domain using the following url: <https://www.google.com/recaptcha/admin>
-
-```yaml
-bbb_greenlight_recaptcha:
-  site_key:
-  secret_key:
-```
-
-#### METEOR
+### METEOR
 
 With settings `bbb_meteor` it is possible to overwrite / change settings of meteor.
 
@@ -342,7 +251,8 @@ bbb_meteor:
           moderator: 8
           viewer: 8
 ```
-#### User Feedback logging
+
+### User Feedback logging
 To enable client logging and/or userfeedback, you need to set `bbb_client_log_enable` to `true` add the following keys here:
 
 ```yaml
@@ -380,20 +290,13 @@ bbb_dialin_overwrite_footer: true
 - [geerlingguy.nodejs](https://github.com/geerlingguy/ansible-role-nodejs)
 - [geerlingguy.docker](https://github.com/geerlingguy/ansible-role-docker)
 
-## Pitfalls
-
-### Greenlight - Server Error: "Invalid BigBlueButton Endpoint and Secret"
-
-Check your `/etc/hosts` file if your dns name (example `meet.domain.tld`) has the IP `127.0.1.1`.
-Docker will use the internal system DNS to resolve `meet.domain.tld` to `127.0.1.1` which will result in this error.
-Edit this line and replace `127.0.1.1` with your public IP.
-
 ## Example Playbook
 
 This is an example of how to use this role. *Warning:* the values of the variables should be changed!
 
 Assuming the following directory structure:
-```
+
+```tree
 ├── ansible
     ├── roles
     │   └── ebbba.bigbluebutton
@@ -408,6 +311,7 @@ Assuming the following directory structure:
             └── your-domain.example.com
                 └── vars.yml
 ```
+
 You can follow these steps inside your ansible directory to clone the repository and use the example playbook and variable configuration files:
 
 1. Clone the repository in your roles directory. (`git clone https://github.com/ebbba-org/ansible-role-bigbluebutton.git roles/ebbba.bigbluebutton`)
@@ -432,7 +336,7 @@ You can follow these steps inside your ansible directory to clone the repository
 
 11. Run the playbook using `ansible-playbook -i inventory/hosts playbooks/bigbluebutton.yml`.
 
-#### Event though all the variables are explained above, you may also take a look at `roles/ebbba.bigbluebutton/defaults/main.yml` and see if there's something you'd like to copy over and override in your `vars.yml` and `bbb.yml` configuration files.
+## Event though all the variables are explained above, you may also take a look at `roles/ebbba.bigbluebutton/defaults/main.yml` and see if there's something you'd like to copy over and override in your `vars.yml` and `bbb.yml` configuration files.
 
 ## License
 
