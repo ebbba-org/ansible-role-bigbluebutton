@@ -36,6 +36,15 @@
   notify:
     - restart bbb-web
 
+- name: increase max-old-space-size in frontends
+  become: true
+  replace:
+    path: /usr/share/meteor/bundle/systemd_start_frontend.sh
+    regexp: '(--max-old-space-size)=(\d*)'
+    replace: '\1={{ bbb_html5_frontend_max_old_space_size }}'
+  notify:
+    - restart bbb-html5
+
 - name: set amount of html5 back- and frontends
   become: true
   template:

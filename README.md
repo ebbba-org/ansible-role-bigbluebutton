@@ -117,6 +117,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | ⚠️ | `bbb_freeswitch_default_password` | set the default password for freeswitch | | Can be generated with `pwgen -s 16 1` |
 | | `bbb_html5_backend_processes` | amount of html5 backend processes | 1 | min = 1; max = 4 |
 | | `bbb_html5_frontend_processes` | amount of html5 frontend processes | 1 | min = 1; max = 4; or 0 to let the same process do front- and backend (2.2 behavior) |
+| | `bbb_html5_frontend_max_old_space_size` | max-old-space-size in frontends | `2048` | |
 | | `bbb_container_compat` | Compatibility with unprivileged containers | `false` | Enabling this option allows to deploy BBB into a unprivileged container |
 | | `bbb_firewall_ufw` | A dict of rules for the ufw | see `defaults/main.yml` | can also be used to allow/deny more/less |
 | | `bbb_ufw_allow_networks_custom` | List of additional networks to be allowed by UFW | Not defined | |

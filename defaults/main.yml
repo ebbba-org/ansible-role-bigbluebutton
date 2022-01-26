@@ -60,6 +60,7 @@ bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
 bbb_meteor: {}
 bbb_html5_backend_processes: 2
 bbb_html5_frontend_processes: 2
+bbb_html5_frontend_max_old_space_size: '2048'
 
 bbb_disable_recordings: false
 bbb_recording_config: {}
