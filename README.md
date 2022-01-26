@@ -12,8 +12,8 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 
 ---
 
-- ℹ️ PR [#275](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/275) removed the option of installing Greenlight. Please checkout another projoct for Greenlight support
-- ℹ️ PR [#276](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/276) removed the option of installing coturn. Please checkout another projoct for coturn support
+- ℹ️ PR [#275](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/275) removed the option of installing Greenlight. Please checkout another project for Greenlight support
+- ℹ️ PR [#276](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/276) removed the option of installing coturn. Please checkout another project for coturn support
 
 ---
 
