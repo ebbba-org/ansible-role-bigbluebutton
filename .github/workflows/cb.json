@@ -16,5 +16,6 @@
         "title": "## 🧪 Tests",
         "labels": ["test"]
       }
-    ]
+    ],
+    "pr_template": "- ${{TITLE}} - by ${{AUTHOR}}\n   - PR: #${{NUMBER}}"
 }
