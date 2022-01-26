@@ -22,6 +22,12 @@
     name: freeswitch
     state: restarted
 
+- name: stop mongo
+  become: true
+  systemd:
+    name: mongod
+    state: stopped
+
 - name: restart mongo
   become: true
   systemd:
@@ -62,12 +68,6 @@
   systemd:
     name: apparmor
     state: reloaded
-
-- name: restart coturn
-  become: true
-  systemd:
-    name: coturn
-    state: restarted
 
 - name: restart monitoring container
   docker_compose:

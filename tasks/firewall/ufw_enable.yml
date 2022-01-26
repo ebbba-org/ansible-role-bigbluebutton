@@ -30,14 +30,6 @@
   when:
     - "'rules' in bbb_firewall_ufw and 'nginx' in bbb_firewall_ufw['rules']"
 
-- name: Setup coturn rules
-  community.general.ufw: "{{ item }}"
-  with_items: "{{ bbb_firewall_ufw['rules']['coturn'] }}"
-  when:
-    - "'rules' in bbb_firewall_ufw"
-    - "'coturn' in bbb_firewall_ufw['rules']"
-    - bbb_coturn_enable | bool
-
 - name: Setup bigbluebutton rules
   community.general.ufw: "{{ item }}"
   with_items: "{{ bbb_firewall_ufw['rules']['bigbluebutton'] }}"
