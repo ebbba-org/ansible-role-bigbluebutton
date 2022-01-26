@@ -60,9 +60,6 @@
 - import_tasks: ntp.yml
   tags: ntp
 
-- import_tasks: coturn.yml
-  tags: coturn
-
 - import_tasks: dial-in/main.yml
   tags: dial-in
 

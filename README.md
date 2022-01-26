@@ -12,7 +12,8 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 
 ---
 
-ℹ️ - PR [#275](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/275) removed the option of installing Greenlight. Please checkout another projoct for Greenlight support
+- ℹ️ PR [#275](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/275) removed the option of installing Greenlight. Please checkout another projoct for Greenlight support
+- ℹ️ PR [#276](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/276) removed the option of installing coturn. Please checkout another projoct for coturn support
 
 ---
 
@@ -48,17 +49,11 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.3/install.html#
 | | `bbb_default_logo_url` | Set a URL for the default logo | `${bigbluebutton.web.serverURL}/images/logo.png` | |
 | | `bbb_web_logouturl` | set logout URL | `default` | Instead of using `bigbluebutton.web.serverURL` as default logout page, set another URL or customize logout page e.g. ${bigbluebutton.web.serverURL}/logout.html. API create call with the `logoutURL` parameter overwrite this setting |
 | | `bbb_allow_request_without_session` | Enable or disable allow request without session | `false` | Allow requests without JSESSIONID to be handled |
-| | `bbb_coturn_enable` | enable installation of the TURN-server | `true` |
-| | `bbb_coturn_server` | server name on coturn (realm) | `{{ bbb_hostname }}` |
-| | `bbb_coturn_port` | the port for the TURN-Server to use | `3443` |
-| | `bbb_coturn_port_tls` | the port for tls for the TURN-Server to use | `3443` |
-| ⚠️ when using coturn | `bbb_coturn_secret` | Secret for the TURN-Server | | can be generated with `openssl rand -hex 16` |
-| | `bbb_coturn_min_port` | Lower bound of the UDP relay endpoints | `49152` | |
-| | `bbb_coturn_max_port` | Upper bound of the UDP relay endpoints | `65535` | |
 | | `bbb_turn_enable` | enable the use uf TURN in general | `yes` | |
+| ⚠️ when using coturn | `bbb_coturn_secret` | Secret for the TURN-Server | | can be generated with `openssl rand -hex 16` |
 | | `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml |
 | | `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server` |
-| | `bbb_turn_servers` | a list of TURN-Server to use | `{{ bbb_hostname }}` with `{{ bbb_coturn_secret }}` | take a look in defaults/main.yml |
+| | `bbb_turn_servers` | a list of TURN-Server to use | `{}` | take a look in defaults/main.yml |
 | | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
 | | `bbb_api_demos_enable` | enable installation of the api demos | `no` | |
 | | `bbb_client_log_enable` | enable installation of the nginx-full and config for client logging according to [BBB Customization Docs](https://docs.bigbluebutton.org/admin/customize.html#collect-feedback-from-the-users). See "METEOR" Section below for needed `bbb_meteor` values. | `false` | |
