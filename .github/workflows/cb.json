@@ -17,5 +17,5 @@
         "labels": ["test"]
       }
     ],
-    "pr_template": "- ${{TITLE}} - by ${{AUTHOR}}\n   - PR: #${{NUMBER}}"
+    "pr_template": "- ${{TITLE}} - Thanks to @${{AUTHOR}} 💙\n   - PR: #${{NUMBER}}"
 }
