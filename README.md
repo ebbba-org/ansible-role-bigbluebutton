@@ -25,7 +25,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 > ⚠️ **IF NOT SET THIS ROLE WILL FAIL!** ⚠️
 
 | Required | Variable Name | Function | Default value | Comment |
-| -------- | ------------- | -------- | ------------- | ------- |
+| -------- | ------------- | -------- | ------------ | ------- |
 | ⚠️ | `bbb_hostname` | Hostname for this BigBlueButton instance | `{{ ansible_fqdn }}` |
 | | `bbb_version` | Install specified BigBlueButton version | `bionic-240` | For installing specified BigBlueButton version e.g. `bionic-230-2.3.15` |
 | | `bbb_state` | Install BigBlueButton to state | `present` | for updating BigBlueButton with this role use `latest` |
@@ -50,7 +50,6 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 | | `bbb_web_logouturl` | set logout URL | `default` | Instead of using `bigbluebutton.web.serverURL` as default logout page, set another URL or customize logout page e.g. ${bigbluebutton.web.serverURL}/logout.html. API create call with the `logoutURL` parameter overwrite this setting |
 | | `bbb_allow_request_without_session` | Enable or disable allow request without session | `false` | Allow requests without JSESSIONID to be handled |
 | | `bbb_turn_enable` | enable the use uf TURN in general | `yes` | |
-| ⚠️ when using coturn | `bbb_coturn_secret` | Secret for the TURN-Server | | can be generated with `openssl rand -hex 16` |
 | | `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml |
 | | `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server` |
 | | `bbb_turn_servers` | a list of TURN-Server to use | `{}` | take a look in defaults/main.yml |
@@ -61,6 +60,10 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 | | `bbb_client_log_enable` | enable installation of the nginx-full and config for client logging according to [BBB Customization Docs](https://docs.bigbluebutton.org/admin/customize.html#collect-feedback-from-the-users). See "METEOR" Section below for needed `bbb_meteor` values. | `false` | |
 | | `bbb_mute_on_start` | start with muted mic on join | `no` | |
 | | `bbb_app_log_level` | set bigbluebutton log level | `DEBUG` | |
+| | `bbb_freeswitch_log_level` | set freeswitch log level | `warning` | |
+| | `bbb_etherpad_log_level` | set etherpad log level | `INFO` | |
+| | `bbb_fsels_akka_log_level` | set the loglevel between freeswitch and bbb-apps | `ERROR` | |
+| | `bbb_apps_akka_log_level` | set the loglevel for bbb-apps-akka | `ERROR` | |
 | | `bbb_meteor` | overwrite settings in meteor | `{}` | |
 | | `bbb_kurento_interfaces` | Specify the listening interfaces for kurento | `{{ [ansible_default_ipv4.interface, 'lo'] }}` | |
 | | `bbb_nodejs_version` | version of nodejs to be installed | `12.x` | |
@@ -130,6 +133,8 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 | | `bbb_max_conversion_time` | Number of minutes the conversion should take | `5` | If it takes more than this time, cancel the conversion process |
 | | `bbb_num_conversion_threads` | Number of threads in the pool to do the presentation conversion | `5` | |
 | | `bbb_num_file_processor_threads` | Number of threads to process file uploads | `2` | |
+| | `bbb_office_to_pdf_conversion_timeout` | Timeout(secs) to wait for conversion script execution | `60` | |
+| | `bbb_office_to_pdf_max_concurrent_conversions` | Max concurrent of conversion script execution | `4` | |
 | | `bbb_freeswitch_muted_sound` | Enable muted sound (`you are now muted`) | `true` | |
 | | `bbb_freeswitch_unmuted_sound` | Enable unmuted sound (`you are now unmuted`) | `true` | |
 | | `bbb_breakout_rooms_enabled` | Enable or disable breakout rooms | `true` | |
@@ -141,8 +146,10 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 | | `bbb_etherpad_disable_cursortrace_plugin` | Disable or enable cursortrace plugin for etherpad | `false` | Set to `true` if you want to avoid displaying names at cursor position in shared notes |
 | | `bbb_user_inactivity_inspect_timer` | User inactivity audit timer interval in minutes | `0` | If `0` inactivity inspection is deactivated |
 | | `bbb_user_inactivity_threshold` | Number of minutes to consider a user inactive | `30` | A warning message is send to client to check if really inactive |
+| | `bbb_webcams_only_for_moderator` | Allow webcams streaming reception only to and from moderators | `false` |  |
 | | `bbb_user_activity_sign_response_delay` | Number of minutes for user to respond to inactivity warning before being logged out | `5` |  |
 | | `bbb_learning_dashboard_enabled` | Enable `true` / Disable `false` the [Learning Dashboard](https://docs.bigbluebutton.org/2.4/new.html#learning-dashboard) | `true` | |
+| `bbb_default_meeting_layout` | Default Meeting Layout. Default Meeting Layout. Valid values are CUSTOM_LAYOUT, SMART_LAYOUT, PRESENTATION_FOCUS, VIDEO_FOCUS | `SMART_LAYOUT` | |
 
 ### METEOR
 

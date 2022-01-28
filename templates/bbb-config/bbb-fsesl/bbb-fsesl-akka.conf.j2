@@ -1,0 +1,20 @@
+// include default config from upstream
+include "/usr/share/bbb-fsesl-akka/conf/application.conf"
+
+akka {
+  actor {
+    debug {
+       autoreceive = {% if bbb_fsels_akka_log_level == 'DEBUG' %}on{% else +%}off{% endif +%}
+       lifecycle = {%+ if bbb_fsels_akka_log_level == 'DEBUG' %}on{% else +%}off{% endif +%}
+    }
+  }
+  loglevel = "{{ bbb_fsels_akka_log_level }}"
+  stdout-loglevel = "{{ bbb_fsels_akka_log_level }}"
+}
+
+freeswitch {
+    esl {
+        password="{{ bbb_freeswitch_socket_password }}"
+    }
+}
+

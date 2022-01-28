@@ -1,0 +1,22 @@
+// include default config from upstream
+include "/usr/share/bbb-apps-akka/conf/application.conf"
+
+// you can customize everything here. API endpoint and secret have to be changed
+// This file will not be overridden by packages
+akka {
+  actor {
+    debug {
+      # enable DEBUG logging of all AutoReceiveMessages (Kill, PoisonPill et.c.)
+      autoreceive = {% if bbb_apps_akka_log_level == 'DEBUG' %}on{% else +%}off{% endif +%}
+      # enable DEBUG logging of actor lifecycle changes
+      lifecycle = {% if bbb_apps_akka_log_level == 'DEBUG' %}on{% else +%}off{% endif +%}
+    }
+  }
+  loggers = ["akka.event.slf4j.Slf4jLogger"]
+  loglevel = "{{ bbb_apps_akka_log_level }}"
+}
+
+services {
+  bbbWebAPI="https://{{ bbb_hostname }}/bigbluebutton/api"
+  sharedSecret="{{ bbb_secret }}"
+}

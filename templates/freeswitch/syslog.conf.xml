@@ -11,7 +11,7 @@
   <settings>
     <param name="facility" value="daemon"/>
     <param name="ident" value="freeswitch"/>
-    <param name="loglevel" value="info"/>
+    <param name="loglevel" value="{{ bbb_freeswitch_log_level }}"/>
     <param name="uuid" value="true"/>
   </settings>
 </configuration>
