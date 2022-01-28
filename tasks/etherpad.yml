@@ -11,7 +11,6 @@
   notify: restart etherpad
   when: bbb_etherpad_disable_cursortrace_plugin | bool
 
-
 - name: Enable etherpad ep_cursortrace plugin
   become: true
   ansible.builtin.unarchive:
@@ -23,3 +22,12 @@
     creates: /usr/share/etherpad-lite/node_modules/ep_cursortrace
   notify: restart etherpad
   when: not bbb_etherpad_disable_cursortrace_plugin | bool
+
+- name: Set loglevel
+  become: true
+  replace:
+    path: /usr/share/etherpad-lite/settings.json
+    regexp: '"loglevel":.*,'
+    replace: '"loglevel": "{{ bbb_etherpad_log_level }}",'
+  notify: restart etherpad
+

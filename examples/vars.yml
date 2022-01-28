@@ -7,9 +7,6 @@
 #bbb_state: present # For updating BigBlueButton with this role use 'latest'
 #bbb_hostname: <your host fqdn> # Uncomment and fill if bbb fqdn is different than default {{ ansible_fqdn }}
 
-# COTURN
-#bbb_coturn_secret: <secret> # Uncomment, generate and fill using `openssl rand -hex 16`, when using coturn
-
 # FREESWITCH
 bbb_freeswitch_socket_password: "<secret>" # Generate and fill using `pwgen -s 16 1`
 

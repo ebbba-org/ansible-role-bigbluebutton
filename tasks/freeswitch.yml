@@ -71,6 +71,16 @@
   no_log: true
   notify: restart freeswitch
 
+- name: set switch.conf loglevel
+  become: true
+  community.general.xml:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/switch.conf.xml
+    xpath: /configuration/settings/param[@name='loglevel']
+    attribute: "value"
+    value: "{{ bbb_freeswitch_log_level }}"
+  no_log: true
+  notify: restart freeswitch
+
 - name: configure CPU and IO Scheduling in FreeSWITCH service
   lineinfile:
     path: /lib/systemd/system/freeswitch.service

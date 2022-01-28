@@ -30,6 +30,10 @@ bbb_turn_servers:
 bbb_webhooks_enable: false
 bbb_api_demos_enable: false
 bbb_app_log_level: "DEBUG"
+bbb_fsels_akka_log_level: "ERROR"
+bbb_apps_akka_log_level: "ERROR"
+bbb_freeswitch_log_level: "warning"
+bbb_etherpad_log_level: "INFO"
 
 # freeswitch
 bbb_freeswitch_ipv6: true
@@ -129,6 +133,8 @@ bbb_max_file_size_upload: 30000000
 bbb_max_conversion_time: 5
 bbb_num_conversion_threads: 5
 bbb_num_file_processor_threads: 2
+bbb_office_to_pdf_conversion_timeout: 60
+bbb_office_to_pdf_max_concurrent_conversions: 4
 
 bbb_breakout_rooms_enabled: true
 bbb_breakout_rooms_record: false
@@ -138,6 +144,8 @@ bbb_user_inactivity_inspect_timer: 0
 bbb_user_inactivity_threshold: 30
 bbb_user_activity_sign_response_delay: 5
 bbb_learning_dashboard_enabled: true
+bbb_default_meeting_layout: 'SMART_LAYOUT'
+bbb_webcams_only_for_moderator: false
 
 bbb_use_default_logo: false
 bbb_default_logo_url: '${bigbluebutton.web.serverURL}/images/logo.png'

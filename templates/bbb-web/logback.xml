@@ -22,22 +22,22 @@
 		</layout>
 	</appender>
 
-	<logger name="akka" level="INFO" />
-	<logger name="io.lettuce" level="INFO" />
-	<logger name="org.bigbluebutton" level="ERROR" />
+	<logger name="akka" level="{{ bbb_app_log_level }}" />
+	<logger name="io.lettuce" level="{{ bbb_app_log_level }}" />
+	<logger name="org.bigbluebutton" level="{{ bbb_app_log_level }}" />
 
-	<logger name="grails.app.controllers" level="ERROR" />
-	<logger name="grails.app.services" level="ERROR" />
+	<logger name="grails.app.controllers" level="{{ bbb_app_log_level }}" />
+	<logger name="grails.app.services" level="{{ bbb_app_log_level }}" />
 
-	<logger name="org.grails.web.servlet" level="ERROR" />
-	<logger name="org.grails.web.pages" level="ERROR" />
-	<logger name="org.grails.web.sitemesh" level="ERROR" />
-	<logger name="org.grails.web.mapping.filter" level="ERROR" />
-	<logger name="org.grails.web.mapping" level="ERROR" />
-	<logger name="org.grails.commons" level="ERROR" />
-	<logger name="org.springframework" level="ERROR" />
+	<logger name="org.grails.web.servlet" level="{{ bbb_app_log_level }}" />
+	<logger name="org.grails.web.pages" level="{{ bbb_app_log_level }}" />
+	<logger name="org.grails.web.sitemesh" level="{{ bbb_app_log_level }}" />
+	<logger name="org.grails.web.mapping.filter" level="{{ bbb_app_log_level }}" />
+	<logger name="org.grails.web.mapping" level="{{ bbb_app_log_level }}" />
+	<logger name="org.grails.commons" level="{{ bbb_app_log_level }}" />
+	<logger name="org.springframework" level="{{ bbb_app_log_level }}" />
 
-	<root level="ERROR">
+	<root level="{{ bbb_app_log_level }}">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILE" />
 	</root>

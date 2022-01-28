@@ -15,8 +15,8 @@
 - name: Ensure mongodb4+ does not use nojournal - config
   become: true
   template:
-    src: mongo4-ramdisk.conf
-    dest: /usr/share/meteor/bundle/mongo-ramdisk.conf
+    src: "mongodb/mongo4-ramdisk.conf"
+    dest: "/usr/share/meteor/bundle/mongo-ramdisk.conf"
     mode: '0644'
   when: bbb_mongodb_version|string == '4.2'
   notify:

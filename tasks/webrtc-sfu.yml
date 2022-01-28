@@ -9,8 +9,8 @@
 - name: deploy webrtc-sfu service override configuration
   become: true
   template:
-    src: bbb-webrtc-sfu.override
-    dest: /etc/systemd/system/bbb-webrtc-sfu.service.d/override.conf
+    src: "bbb-webrtc-sfu/bbb-webrtc-sfu.override"
+    dest: "/etc/systemd/system/bbb-webrtc-sfu.service.d/override.conf"
     mode: '0644'
   notify:
     - reload systemd
