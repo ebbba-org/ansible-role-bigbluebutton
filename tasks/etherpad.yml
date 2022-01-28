@@ -30,4 +30,3 @@
     regexp: '"loglevel":.*,'
     replace: '"loglevel": "{{ bbb_etherpad_log_level }}",'
   notify: restart etherpad
-
