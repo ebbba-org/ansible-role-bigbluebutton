@@ -73,6 +73,7 @@
   ansible.builtin.template:
     src: "bbb-config/bbb-apps/logback.xml"
     dest: "/etc/bbb-apps-akka/logback.xml"
+    mode: '0644'
   notify: restart bigbluebutton
 
 - name: Update bbb-fsesl logback.xml
