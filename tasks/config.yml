@@ -80,6 +80,7 @@
   ansible.builtin.template:
     src: "bbb-config/bbb-fsesl/logback.xml"
     dest: "/etc/bbb-fsesl-akka/logback.xml"
+    mode: '0644'
   notify: restart bigbluebutton
 
 - name: serve recordings via https
