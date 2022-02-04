@@ -273,6 +273,21 @@ bbb_meteor:
         url: "https://{{ bbb_hostname }}/html5log"
 ```
 
+### Modification of `bbb_webrtc_sfu_multikurento`
+
+To add new keys to `bbb_webrtc_sfu_multikurento`, the defaults are actually stored in `bbb_webrtc_sfu_multikurento_default` and then assigned to `bbb_webrtc_sfu_multikurento`.
+
+That way you can add new keys like something like this:
+```yaml
+tempvar:
+  conference-media-specs:
+    OPUS:
+      maxaveragebitrate: "64000"
+
+
+bbb_webrtc_sfu_multikurento: "{{ bbb_webrtc_sfu_multikurento_default | combine(tempvar)  }}"
+```
+
 ### LXD/LXC compatibility
 
 To run BigBlueButton in unprivileged LXD/LXC containers, you have to set `bbb_container_compat` to `true`.
