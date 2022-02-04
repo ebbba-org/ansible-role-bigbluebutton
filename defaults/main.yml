@@ -159,7 +159,9 @@ bbb_kurento_interfaces:
 - "{{ ansible_default_ipv4.interface }}"
 - lo
 
-bbb_webrtc_sfu_multikurento:
+# Define default as "internal" variable, as to allow using combine() on this.
+# That way we can add to the default values while redefining 'bbb_webrtc_sfu_multikurento'.
+_bbb_webrtc_sfu_multikurento:
   balancing-strategy: MEDIA_TYPE
   kurento:
     - ip: "{{ ansible_default_ipv4.address }}"
@@ -202,6 +204,10 @@ bbb_webrtc_sfu_multikurento:
   log:
     level: warn
     filename:
+
+# Put default values into actual variable.
+bbb_webrtc_sfu_multikurento: "{{ _bbb_webrtc_sfu_multikurento }}"
+
 
 # Skip all tasks that are incompatible with (unprivileged) containers
 bbb_container_compat: false
