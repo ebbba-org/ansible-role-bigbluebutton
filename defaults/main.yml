@@ -148,7 +148,10 @@ bbb_default_meeting_layout: 'SMART_LAYOUT'
 bbb_webcams_only_for_moderator: false
 
 bbb_use_default_logo: false
-bbb_default_logo_url: '${bigbluebutton.web.serverURL}/images/logo.png'
+bbb_default_logo_url: "${bigbluebutton.web.serverURL}/images/{{ bbb_custom_logo_name | default ('logo.png') }}"
+# bbb_custom_logo: "logo.png"
+# set this to the name the default logo on the host should have.
+# bbb_custom_logo_name: "logo.png"
 
 bbb_etherpad_disable_cursortrace_plugin: false
 

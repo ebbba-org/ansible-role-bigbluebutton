@@ -47,6 +47,8 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 | | `bbb_custom_presentation_name` | Set a custom presentation name | `None` | Instead of overwriting the `default.pdf` setting the name will add for example the `customer.pdf` |
 | | `bbb_use_default_logo` | Determines if a default-logo should be used if api-parameter "logo" is not used | `false` | The (default) logo is displayed at the top left corner. |
 | | `bbb_default_logo_url` | Set a URL for the default logo | `${bigbluebutton.web.serverURL}/images/logo.png` | |
+| | `bbb_custom_logo` | Overwrite default logo.png | `None` | Location of a custom presentation will be renamed to `logo.png` if `bbb_custom_logo_name` is not defined - see [Ansible search paths](https://docs.ansible.com/ansible/latest/user_guide/playbook_pathing.html) for where to place your custom png - Example `playbooks/files/logo.png` |
+| | `bbb_custom_logo_name` | Set a custom logo name | `None` | Instead of overwriting the `logo.png` setting the name will add for example the `custom-logo.png` |
 | | `bbb_web_logouturl` | set logout URL | `default` | Instead of using `bigbluebutton.web.serverURL` as default logout page, set another URL or customize logout page e.g. ${bigbluebutton.web.serverURL}/logout.html. API create call with the `logoutURL` parameter overwrite this setting |
 | | `bbb_allow_request_without_session` | Enable or disable allow request without session | `false` | Allow requests without JSESSIONID to be handled |
 | | `bbb_turn_enable` | enable the use uf TURN in general | `yes` | |
