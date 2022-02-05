@@ -192,6 +192,14 @@
     mode: '0644'
   when: bbb_custom_presentation is defined
 
+- name: set custom logo
+  become: true
+  copy:
+    src: "{{ bbb_custom_logo }}"
+    dest: "{{ bbb_nginx_root | regex_replace('\\/$', '') }}/images/{{ bbb_custom_logo_name | default('logo.png') }}"
+    mode: '0644'
+  when: bbb_custom_logo is defined
+
 - name: Set cron.daily specifications
   become: true
   template:
