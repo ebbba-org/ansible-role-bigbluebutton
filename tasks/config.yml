@@ -47,8 +47,8 @@
     group: root
     mode: '0600'
   loop:
-    - bbb-apps-akka
-    - bbb-fsesl-akka
+    - bbb-apps-akka.conf
+    - bbb-fsesl-akka.conf
     - bbb-web.properties
   notify: restart bigbluebutton
 
