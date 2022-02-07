@@ -4,8 +4,8 @@ include "/usr/share/bbb-fsesl-akka/conf/application.conf"
 akka {
   actor {
     debug {
-       autoreceive = {% if bbb_fsels_akka_log_level == 'DEBUG' %}on{% else +%}off{% endif +%}
-       lifecycle = {%+ if bbb_fsels_akka_log_level == 'DEBUG' %}on{% else +%}off{% endif +%}
+       autoreceive = {{ 'on' if bbb_fsels_akka_log_level == 'DEBUG' else 'off' }}
+       lifecycle = {{ 'on' if bbb_fsels_akka_log_level == 'DEBUG' else 'off' }}
     }
   }
   loglevel = "{{ bbb_fsels_akka_log_level }}"

@@ -7,9 +7,9 @@ akka {
   actor {
     debug {
       # enable DEBUG logging of all AutoReceiveMessages (Kill, PoisonPill et.c.)
-      autoreceive = {% if bbb_apps_akka_log_level == 'DEBUG' %}on{% else +%}off{% endif +%}
+      autoreceive = {{ 'on' if bbb_apps_akka_log_level == 'DEBUG' else 'off' }}
       # enable DEBUG logging of actor lifecycle changes
-      lifecycle = {% if bbb_apps_akka_log_level == 'DEBUG' %}on{% else +%}off{% endif +%}
+      lifecycle = {{ 'on' if bbb_apps_akka_log_level == 'DEBUG' else 'off' }}
     }
   }
   loggers = ["akka.event.slf4j.Slf4jLogger"]
