@@ -41,15 +41,15 @@
 - name: Update apps, fsesl and web override-configuration
   become: true
   ansible.builtin.template:
-    src: "bbb-config/bbb-apps/{{ item }}.j2"
-    dest: "/etc/bigbluebutton/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "/etc/bigbluebutton/{{ item.dest }}"
     owner: bigbluebutton
     group: root
     mode: '0600'
   loop:
-    - bbb-apps-akka.conf
-    - bbb-fsesl-akka.conf
-    - bbb-web.properties
+    - { src: "bbb-config/bbb-apps/bbb-apps-akka.conf.j2", dest: "bbb-apps-akka.conf" }
+    - { src: "bbb-config/bbb-fsesl/bbb-fsesl-akka.conf.j2", dest: "bbb-fsesl-akka.conf" }
+    - { src: "bbb-web/bbb-web.properties.j2", dest: "bbb-web.properties" }
   notify: restart bigbluebutton
 
 - name: Update apps and fsesl logback.xml
