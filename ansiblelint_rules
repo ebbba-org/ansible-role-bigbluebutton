@@ -1,0 +1,5 @@
+rules:
+  line-length: false
+  document-start: enable
+  truthy: enable
+
