@@ -38,50 +38,29 @@
     group: bigbluebutton
     mode: '640'
 
-- name: Update bbb-apps-akka.conf
+- name: Update apps, fsesl and web override-configuration
   become: true
   ansible.builtin.template:
-    src: "bbb-config/bbb-apps/bbb-apps-akka.conf.j2"
-    dest: "/etc/bigbluebutton/bbb-apps-akka.conf"
+    src: "{{ item.src }}"
+    dest: "/etc/bigbluebutton/{{ item.dest }}"
     owner: bigbluebutton
     group: root
     mode: '0600'
+  loop:
+    - { src: "bbb-config/bbb-apps/bbb-apps-akka.conf.j2", dest: "bbb-apps-akka.conf" }
+    - { src: "bbb-config/bbb-fsesl/bbb-fsesl-akka.conf.j2", dest: "bbb-fsesl-akka.conf" }
+    - { src: "bbb-web/bbb-web.properties.j2", dest: "bbb-web.properties" }
   notify: restart bigbluebutton
 
-- name: Update bbb-fsesl-akka.conf
+- name: Update apps and fsesl logback.xml
   become: true
   ansible.builtin.template:
-    src: "bbb-config/bbb-fsesl/bbb-fsesl-akka.conf.j2"
-    dest: "/etc/bigbluebutton/bbb-fsesl-akka.conf"
-    owner: bigbluebutton
-    group: root
-    mode: '0600'
-  notify: restart bigbluebutton
-
-- name: Update bbb-web-properties
-  become: true
-  ansible.builtin.template:
-    src: "bbb-web/bbb-web.properties.j2"
-    dest: "/etc/bigbluebutton/bbb-web.properties"
-    owner: bigbluebutton
-    group: root
-    mode: '0600'
-  notify: restart bigbluebutton
-
-- name: Update bbb-apps logback.xml
-  become: true
-  ansible.builtin.template:
-    src: "bbb-config/bbb-apps/logback.xml"
-    dest: "/etc/bbb-apps-akka/logback.xml"
+    src: "bbb-config/bbb-{{ item }}/logback.xml"
+    dest: "/etc/bbb-{{ item }}-akka/logback.xml"
     mode: '0644'
-  notify: restart bigbluebutton
-
-- name: Update bbb-fsesl logback.xml
-  become: true
-  ansible.builtin.template:
-    src: "bbb-config/bbb-fsesl/logback.xml"
-    dest: "/etc/bbb-fsesl-akka/logback.xml"
-    mode: '0644'
+  loop:
+    - fsesl
+    - apps
   notify: restart bigbluebutton
 
 - name: serve recordings via https
