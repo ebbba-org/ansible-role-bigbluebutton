@@ -263,4 +263,4 @@ bbb_firewall_ufw:
 # https://pypi.org/project/docker-compose/#history
 bbb_docker_compose_version: 1.29.2
 
-bbb_nodejs_version: 12.x
+bbb_nodejs_version: 14.x
