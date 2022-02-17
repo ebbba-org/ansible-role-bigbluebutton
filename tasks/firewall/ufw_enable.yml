@@ -59,12 +59,6 @@
     rule: allow
     port: "{{ bbb_ssh_port }}"
 
-- name: Connection rate limit for ssh
-  community.general.ufw:
-    rule: limit
-    port: "{{ bbb_ssh_port }}"
-    proto: tcp
-
 - name: allow sip-proxy connection
   community.general.ufw:
     rule: allow
