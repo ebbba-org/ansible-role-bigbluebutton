@@ -146,6 +146,7 @@ bbb_user_activity_sign_response_delay: 5
 bbb_learning_dashboard_enabled: true
 bbb_default_meeting_layout: 'SMART_LAYOUT'
 bbb_webcams_only_for_moderator: false
+bbb_allow_mods_to_eject_cameras: false
 
 bbb_use_default_logo: false
 bbb_default_logo_url: "${bigbluebutton.web.serverURL}/images/{{ bbb_custom_logo_name | default ('logo.png') }}"
