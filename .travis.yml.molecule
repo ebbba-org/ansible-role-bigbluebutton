@@ -13,8 +13,8 @@ install:
   - pip install molecule docker ansible-lint flake8 testinfra
 
 before_script:
-  - cd ../ && mv ansible-role-bigbluebutton n0emis.bigbluebutton
-  - cd n0emis.bigbluebutton
+  - cd ../ && mv ansible-role-bigbluebutton ebbba-org/ansible-role-bigbluebutton
+  - cd ebbba-org/ansible-role-bigbluebutton
   - ansible-galaxy install -p .. -r requirements.yml
 
 script:

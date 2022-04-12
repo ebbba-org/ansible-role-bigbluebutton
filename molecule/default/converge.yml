@@ -11,6 +11,6 @@
     bbb_letsencrypt_enable: false
     bbb_letsencrypt_email: mail@example.com
   tasks:
-    - name: "Include n0emis.bigbluebutton"
+    - name: "Include ebbba-org/ansible-role-bigbluebutton"
       include_role:
-        name: "n0emis.bigbluebutton"
+        name: "ebbba-org/ansible-role-bigbluebutton"

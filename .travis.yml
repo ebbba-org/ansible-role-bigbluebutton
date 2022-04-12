@@ -68,8 +68,8 @@ before_install:
   - find -ls
   - sudo apt-get install python3-pip python3-setuptools
   - pip3 install ansible ansible-lint
-  - cd ../ && mv ansible-role-bigbluebutton n0emis.bigbluebutton
-  - cd n0emis.bigbluebutton
+  - cd ../ && mv ansible-role-bigbluebutton ebbba-org/ansible-role-bigbluebutton
+  - cd ebbba-org/ansible-role-bigbluebutton
   - ansible-galaxy install -p .. -r requirements.yml
   - echo "deb http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse" | sudo tee /etc/apt/sources.list.d/xenial-backports.list
   - sudo apt-get update -qq
