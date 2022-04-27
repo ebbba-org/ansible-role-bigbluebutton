@@ -14,5 +14,6 @@
       meta: end_host
   when:
     - not ansible_check_mode
+    - not bbb_force_install
     - bbb_getmeetings.status == 200
     - "'<messageKey>noMeetings</messageKey>' not in bbb_getmeetings.content"

@@ -54,7 +54,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 | | `bbb_turn_enable` | enable the use uf TURN in general | `yes` | |
 | | `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml |
 | | `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server` |
-| | `bbb_turn_servers` | a list of TURN-Server to use | `{}` | take a look in defaults/main.yml |
+| | `bbb_force_install` | install even if meetings are running | `no` | current meetings will be terminated |
 | | `bbb_mongodb_version` | version of mongodb to be installed | `4.2` | |
 | | `bbb_mongodb_tmpfs_size' | tmpfs size for the mongodb | `512m` | |
 | | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
