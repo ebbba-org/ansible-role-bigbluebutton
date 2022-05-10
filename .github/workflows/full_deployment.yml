@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - distribution: 'ubuntu-18.04'
+          - distribution: 'ubuntu-20.04'
             experimental: false
     env:
       ANSIBLE_CALLBACK_ENABLED: profile_tasks
