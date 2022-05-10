@@ -33,7 +33,12 @@
 
 - name: add apt repository for bbb version {{ bbb_version }}
   copy:
-    content: "deb {{ bbb_apt_mirror }}/{{ bbb_version }} bigbluebutton-bionic main"
+    content: "deb {{ bbb_apt_mirror }}/{{ bbb_version }} bigbluebutton-focal main"
+    dest: "/etc/apt/sources.list.d/ubuntu_bigbluebutton_org.list"
+    mode: '0644'
+- name: add apt repository for bbb-html5 {{ bbb_version }}
+  copy:
+    content: "deb {{ bbb_apt_mirror }}/{{ bbb_version }} bigbluebutton-focal main"
     dest: "/etc/apt/sources.list.d/ubuntu_bigbluebutton_org.list"
     mode: '0644'
 
@@ -44,10 +49,11 @@
     state: absent
   when: bbb_apt_mirror != 'https://ubuntu.bigbluebutton.org'
 
-- name: add Bionic dependency apt repositories
+- name: add focal dependency apt repositories
   become: true
   apt_repository:
     repo: "{{ item }}"
   with_items:
     - ppa:bigbluebutton/support
-    - ppa:rmescandon/yq
+# Uncomment the following to enable yq 4 after bigbluebutton/bigbluebutton#14511 is resolved
+#    - ppa:rmescandon/yq

@@ -1,7 +1,7 @@
 ---
 bbb_hostname: "{{ ansible_fqdn }}"
 bbb_state: "present"
-bbb_version: "bionic-240"
+bbb_version: "focal-250"
 bbb_upgrade_packages: "{{ 'yes' if bbb_state == 'latest' else 'no' }}"
 bbb_check_for_running_meetings: true
 bbb_letsencrypt_enable: true
@@ -46,7 +46,7 @@ bbb_freeswitch_unmuted_sound: true
 # bbb_freeswitch_default_password: "Needs_To_Be_Defined_By_The_User"
 
 bbb_system_locale: en_US.UTF-8
-bbb_mongodb_version: 4.2
+bbb_mongodb_version: 4.4
 bbb_mongodb_tmpfs_size: "512m"
 
 # Attention, needs to be encoded with "native2ascii -encoding UTF8"
@@ -269,4 +269,4 @@ bbb_firewall_ufw:
 # https://pypi.org/project/docker-compose/#history
 bbb_docker_compose_version: 1.29.2
 
-bbb_nodejs_version: 12.x
+bbb_nodejs_version: 16.x

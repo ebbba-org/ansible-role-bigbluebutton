@@ -11,7 +11,7 @@
 
 - name: Enable sipjsHackViaWs
   replace:
-    path: /etc/bigbluebutton/nginx/sip.nginx
+    path: /usr/share/bigbluebutton/nginx/sip.nginx
     regexp: 'proxy_pass .*'
     replace: 'proxy_pass http://{{ bbb_freeswitch_ip_address }}:5066;'
   when: ((((bbb_meteor | default({})).public | default({})).media | default({})).sipjsHackViaWs  | default({})) | bool
@@ -19,7 +19,7 @@
 
 - name: Disable sipjsHackViaWs
   replace:
-    path: /etc/bigbluebutton/nginx/sip.nginx
+    path: /usr/share/bigbluebutton/nginx/sip.nginx
     regexp: 'proxy_pass .*'
     replace: 'proxy_pass https://{{ bbb_freeswitch_ip_address }}:7443;'
   when: not ((((bbb_meteor | default({})).public | default({})).media | default({})).sipjsHackViaWs  | default({})) | bool
@@ -29,7 +29,7 @@
   become: true
   template:
     src: nginx/web.nginx.j2
-    dest: /etc/bigbluebutton/nginx/web
+    dest: /usr/share/bigbluebutton/nginx/web
     owner: bigbluebutton
     group: bigbluebutton
     mode: '0755'
