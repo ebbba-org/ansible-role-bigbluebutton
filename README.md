@@ -33,6 +33,12 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 | | `bbb_letsencrypt_enable` | Enable letsencrypt/HTTPS | `yes` |
 | ⚠️ when using letsencrypt| `bbb_letsencrypt_email` | E-mail for use with letsencrypt | | |
 | | `bbb_letsencrypt_api` | Set letsencrypt api | `https://acme-v02.api.letsencrypt.org/directory` | Use this variable to change letsencrypt API URL (example: staging API `https://acme-staging-v02.api.letsencrypt.org/directory`) |
+| | `bbb_letsencrypt_repo` | The github rebo to use for renewal handling - default acme.sh | <https://github.com/acmesh-official/acme.sh.git> | |
+| | `bbb_letsencrypt_dir` | The directory to store the acme.sh repo | `/opt/acme` | |
+| | `bbb_letsencrypt_version` | Which version to clone | `master` | |
+| | `bbb_letsencrypt_keep_updated` | Keep acme.sh updated | `true` | |
+| | `bbb_letsencrypt_install_command` | The command to install acme.sh | See defaults/main.yaml | |
+| | `bbb_letsencrypt_create_command` | The command to create certificate | See defaults/main.yaml | |
 | | `bbb_own_cert` | Custom ssl cert file to deploy (instead of letsencrypt) | | |
 | | `bbb_own_key` | Custom ssl private key file to deploy | | |
 | | `bbb_nginx_privacy` | only log errors not access | `yes` |

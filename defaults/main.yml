@@ -54,8 +54,32 @@ bbb_default_welcome_message: Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on 
 bbb_default_welcome_message_footer: This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>.
 bbb_web_logouturl: default
 bbb_allow_request_without_session: false
-bbb_ssl_cert: "/etc/letsencrypt/live/{{ bbb_hostname }}/fullchain.pem"
-bbb_ssl_key: "/etc/letsencrypt/live/{{ bbb_hostname }}/privkey.pem"
+bbb_ssl_cert: "/root/.acme.sh/{{ bbb_hostname }}_ecc/fullchain.cer"
+bbb_ssl_key: "/root/.acme.sh/{{ bbb_hostname }}_ecc/{{ bbb_hostname }}.key"
+bbb_letsencrypt_repo: https://github.com/acmesh-official/acme.sh.git
+bbb_letsencrypt_dir: /opt/acme
+bbb_letsencrypt_version: master
+bbb_letsencrypt_keep_updated: true
+# https://github.com/acmesh-official/acme.sh/wiki/How-to-issue-a-cert
+bbb_letsencrypt_install_command: >-
+  {{ bbb_letsencrypt_script }} --install
+  --home /root/.acme.sh
+  --config-home /root/.acme.sh
+  --certhome /root/.acme.sh
+  --days 30
+  --accountemail {{ bbb_letsencrypt_email }}
+  --accountkey /root/.acme.sh/account.key
+
+bbb_letsencrypt_create_command: >-
+  {{ bbb_letsencrypt_script }} --issue --domain {{ bbb_hostname }}
+  --standalone
+  --server letsencrypt
+  --keylength ec-256
+  --pre-hook "systemctl stop nginx.service"
+  --post-hook "systemctl start nginx.service"
+  --server {{ bbb_letsencrypt_api }}
+  --force
+
 # Set `bbb_letsencrypt_enable: false` to deploy custom certificate and private
 # key files.
 # bbb_own_cert:
