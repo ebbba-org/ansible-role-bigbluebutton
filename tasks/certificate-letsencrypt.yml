@@ -27,7 +27,7 @@
   args:
     chdir: "{{ bbb_letsencrypt_dir }}"
   register: acme_install_result
-  changed_when: "'ok' in result.stdout"
+  changed_when: "'ok' in acme_install_result.stdout"
 
 - name: Generate or renew certificate with acme.sh
   become: true
