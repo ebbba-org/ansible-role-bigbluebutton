@@ -5,6 +5,7 @@ exclude_paths:
   - .github/
 warn_list:
   - package-latest
+  - unnamed-task
 skip_list:
   - fqcn-builtins
   - internal-error
