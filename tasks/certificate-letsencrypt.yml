@@ -1,29 +1,39 @@
 ---
-- name: Add certbot apt repo
-  become: true
-  apt_repository:
-    repo: ppa:certbot/certbot
-    state: present
-
-- name: Install certbot
-  become: true
+- name: Install socat package
   apt:
-    pkg:
-      - certbot
-      - python3-certbot-nginx
-    update_cache: true
-    cache_valid_time: 60
+    name: socat
     state: "{{ bbb_state }}"
 
-- name: Set Let's Encrypt API
-  become: true
-  lineinfile:
-    path: /etc/letsencrypt/cli.ini
-    line: "server = {{ bbb_letsencrypt_api }}"
+- name: Clone acme into configured directory.
+  git:
+    repo: "{{ bbb_letsencrypt_repo }}"
+    dest: "{{ bbb_letsencrypt_dir }}"
+    version: "{{ bbb_letsencrypt_version }}"
+    update: "{{ bbb_letsencrypt_keep_updated }}"
+    force: true
 
-- name: Generate or renew certificate with certbot
+- name: Set acme.sh script variable.
+  set_fact:
+    bbb_letsencrypt_script: "{{ bbb_letsencrypt_dir }}/acme.sh"
+
+- name: Ensure acme.sh is executable.
+  file:
+    path: "{{ bbb_letsencrypt_script }}"
+    mode: 0755
+
+- name: acme install
   become: true
-  command: certbot certonly -d {{ bbb_hostname }} --agree-tos -n --nginx --email {{ bbb_letsencrypt_email }}
+  command: "{{ bbb_letsencrypt_install_command }}"
+  args:
+    chdir: "{{ bbb_letsencrypt_dir }}"
+  register: acme_install_result
+  changed_when: "'ok' in acme_install_result.stdout"
+
+- name: Generate or renew certificate with acme.sh
+  become: true
+  command: "{{ bbb_letsencrypt_create_command }}"
+  environment:
+     email: "{{ bbb_letsencrypt_email }}"
   register: result
   changed_when: "'new certificate deployed' in result.stdout"
   notify: reload nginx

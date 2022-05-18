@@ -8,3 +8,5 @@ warn_list:
 skip_list:
   - fqcn-builtins
   - internal-error
+  - unnamed-task
+  - ignore-errors

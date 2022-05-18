@@ -1,10 +1,4 @@
 ---
-- name: register currently configured bbb hostname
-  slurp:
-    src: /etc/bigbluebutton/bbb-web.properties
-  register: properties
-  changed_when: properties['content'] | b64decode | regex_search(bbb_hostname, multiline=True, ignorecase=True) != bbb_hostname
-  notify: set bbb hostname
 
 - name: register bbb secret
   become: true
@@ -29,6 +23,15 @@
     bbb_secret: "{{ current_bbb_secret }}"
     cacheable: true
   when: bbb_secret is not defined
+
+- name: Ensure /etc/bigbluebutton/nginx folder exists
+  become: true
+  file:
+    path: /etc/bigbluebutton/nginx
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
 
 - name: don't leave BBB secrets readable for others
   become: true
