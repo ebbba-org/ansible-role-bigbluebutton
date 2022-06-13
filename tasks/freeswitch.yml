@@ -202,7 +202,7 @@
 # See https://github.com/bigbluebutton/bigbluebutton/issues/7007#issuecomment-621414985
 - name: Revert upstream freeswitch jitterbuffer experiments
   ansible.builtin.replace:
-    path: "{{item}}"
+    path: "{{ item }}"
     regexp: '(\s+)<action application="jitterbuffer" data="120"/>(\s+)'
     replace: '\1<action application="jitterbuffer" data="60:120"/>\2'
   loop:
