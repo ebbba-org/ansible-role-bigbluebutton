@@ -199,6 +199,16 @@
     line: "    <param name=\"wss-binding\" value=\"{{ bbb_freeswitch_ip_address }}:7443\"/>"
   notify: restart freeswitch
 
+# See https://github.com/bigbluebutton/bigbluebutton/issues/7007#issuecomment-621414985
+- name: Revert upstream freeswitch jitterbuffer experiments
+  ansible.builtin.replace:
+    path: "{{item}}"
+    regexp: '(\s+)<action application="jitterbuffer" data="120"/>(\s+)'
+    replace: '\1<action application="jitterbuffer" data="60:120"/>\2'
+  loop:
+  - /opt/freeswitch/etc/freeswitch/dialplan/default/bbb_conference.xml
+  - /opt/freeswitch/etc/freeswitch/dialplan/default/bbb_echo_to_conference.xml
+
 - name: Flush Handler
   meta: flush_handlers
 
