@@ -199,6 +199,17 @@
     line: "    <param name=\"wss-binding\" value=\"{{ bbb_freeswitch_ip_address }}:7443\"/>"
   notify: restart freeswitch
 
+# Freeswitch sometimes spontaneously corrupts /dev/shm/core.db and produces GBs
+# of fatal error logs until manually restarted. This tries to fix that issue.
+- name: use in-memory sqlite instead of /dev/shm/core.db
+  ansible.builtin.lineinfile:
+    state: present
+    backrefs: true
+    path: "/opt/freeswitch/etc/freeswitch/autoload_configs/switch.conf.xml"
+    regexp: '^(\s*)<param +name="core-db-name".*?/>'
+    line: '\1<param name="core-db-dsn" value="sqlite://memory://file:core?mode=memory&amp;cache=shared"/>'
+  notify: restart freeswitch
+
 - name: Flush Handler
   meta: flush_handlers
 
