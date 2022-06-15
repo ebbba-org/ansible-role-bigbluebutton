@@ -78,7 +78,6 @@ bbb_letsencrypt_create_command: >-
   --pre-hook "systemctl stop nginx.service"
   --post-hook "systemctl start nginx.service"
   --server {{ bbb_letsencrypt_api }}
-  --force
 
 # Set `bbb_letsencrypt_enable: false` to deploy custom certificate and private
 # key files.
