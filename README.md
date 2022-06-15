@@ -178,7 +178,6 @@ bbb_meteor:
       enableNetworkInformation: true
       breakoutRoomLimit: 16
     chat:
-      bufferChatInsertsMs: 100
       typingIndicator:
         enabled: false
     media:
