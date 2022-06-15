@@ -9,6 +9,9 @@
   package_facts:
     manager: "apt"
 
+- name: Get the list of services
+  service_facts:
+
 - name: Disable/enable chrony service
   service:
     name: chrony
@@ -22,6 +25,7 @@
     name: systemd-timesyncd
     enabled: "{{ (bbb_ntp_cron | bool or 'chrony' in ansible_facts.packages) | ternary('false', 'true') }}"
     state: "{{ (bbb_ntp_cron | bool or 'chrony' in ansible_facts.packages) | ternary('stopped', 'started') }}"
+  when: "'systemd-timesyncd.service' in services and services['systemd-timesyncd.service'].status not in ['not-found','masked']"
 
 - name: Add/remove time syncronisation cronjob
   cron:
