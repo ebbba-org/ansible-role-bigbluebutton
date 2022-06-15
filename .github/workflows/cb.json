@@ -13,6 +13,10 @@
         "labels": ["fix", "bug"]
       },
       {
+        "title": "## 📘 Documentation",
+        "labels": ["documentation"]
+      },
+      {
         "title": "## 🧪 Tests",
         "labels": ["test"]
       }
