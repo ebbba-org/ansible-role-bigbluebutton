@@ -51,11 +51,11 @@
     - tls
     - certificates
 
-- import_tasks: nginx.yml
-  tags: nginx
-
 - import_tasks: config.yml
   tags: config
+
+- import_tasks: nginx.yml
+  tags: nginx
 
 - import_tasks: ntp.yml
   tags: ntp
