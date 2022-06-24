@@ -37,6 +37,15 @@
     state: absent
   notify: reload nginx
 
+- name: Ensure /etc/bigbluebutton/nginx folder exists
+  become: true
+  file:
+    path: /etc/bigbluebutton/nginx
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
 - name: copy HTML5-Client-Log location snippet
   become: true
   copy:
