@@ -24,6 +24,15 @@
     regexp: 'pemCertificateRSA='
     line: 'pemCertificateRSA=/etc/kurento/dtls-srtp.pem'
 
+- name: Ensure /opt/freeswitch/etc/freeswitch/tls folder exists
+  become: true
+  file:
+    state: directory
+    path: /opt/freeswitch/etc/freeswitch/tls
+    owner: freeswitch
+    group: daemon
+    mode: 0700
+
 - name: use DTLS-SRTP for freeswitch
   become: true
   copy:
