@@ -123,7 +123,7 @@ bbb_dialin_provider_username: "provider-account"
 bbb_dialin_provider_password: "provider-password"
 bbb_dialin_provider_extension: "6135551234"
 bbb_dialin_default_number: "613-555-1234"
-bbb_dialin_default_play_and_get_digits: "5 5 3 7000 # conference/conf-pin.wav ivr/ivr-that_was_an_invalid_entry.wav pin \\d+"
+bbb_dialin_default_play_and_get_digits: "5 7 3 10000 # conference/conf-pin.wav ivr/ivr-that_was_an_invalid_entry.wav pin \\d+ 5000"
 bbb_dialin_mask_caller: false
 bbb_dialin_overwrite_footer: false
 bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.
