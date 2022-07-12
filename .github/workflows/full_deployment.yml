@@ -2,9 +2,13 @@
 name: 'Ansible Deployment Test'
 
 on:
-  push:
   pull_request:
-
+    types: [opened, reopened]
+  push:
+      branches:    
+        - 'bbb/2.5'
+      tags:
+        - ".*"
 
 jobs:
   build:
