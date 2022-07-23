@@ -25,17 +25,6 @@
   when: not ((((bbb_meteor | default({})).public | default({})).media | default({})).sipjsHackViaWs  | default({})) | bool
   notify: reload nginx
 
-- name: install web.nginx
-  become: true
-  template:
-    src: nginx/web.nginx.j2
-    dest: /usr/share/bigbluebutton/nginx/web
-    owner: bigbluebutton
-    group: bigbluebutton
-    mode: '0755'
-  notify:
-    - restart bbb-web
-
 - name: increase max-old-space-size in frontends
   become: true
   replace:
