@@ -5,12 +5,13 @@ exclude_paths:
   - .github/
 warn_list:
   - package-latest
-  - template-instead-of-copy
+  - jinja[invalid]
   - name[casing]
   - schema[tasks]
+  - template-instead-of-copy
   - jinja[spacing]
+  - ignore-errors
 skip_list:
   - fqcn-builtins
   - internal-error
   - unnamed-task
-  - ignore-error
