@@ -6,9 +6,9 @@
 
 > Ansible role for a BigBlueButton installation
 
-This role is following the documentation on <https://docs.bigbluebutton.org/2.4/install.html>
+This role is following the documentation on <https://docs.bigbluebutton.org/2.5/install.html>
 
-Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#before-you-install) and [Minimum server requirements](https://docs.bigbluebutton.org/2.4/install.html#minimum-server-requirements) from the official documentation as they also apply here.
+Also check [Before you install](https://docs.bigbluebutton.org/2.5/install.html#before-you-install) and [Minimum server requirements](https://docs.bigbluebutton.org/2.5/install.html#minimum-server-requirements) from the official documentation as they also apply here.
 
 ---
 
