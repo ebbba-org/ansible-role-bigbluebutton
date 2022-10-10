@@ -32,18 +32,26 @@ log_history={{ bbb_cron_log_history }}
 #
 # Delete presentations older than N days
 #
-find /var/bigbluebutton/ -maxdepth 1 -type d -name "*-*" -mtime +$history -exec rm -rf '{}' +
+find /var/bigbluebutton/ -maxdepth 1 -type d -name "*-[0-9]*" -mtime +$history -exec rm -rf '{}' +
 
 #
-# Delete streams in kurento older than N days
+# Delete streams from Kurento and mediasoup older than N days
 #
-for app in recordings screenshare; do
-	app_dir=/var/kurento/$app
-	if [[ -d $app_dir ]]; then
-		find $app_dir -name "*.mkv" -o -name "*.webm" -mtime +$history -delete
-		find $app_dir -type d -empty -mtime +$history -exec rmdir '{}' +
-	fi
-done
+kurento_dir=/var/kurento/
+mediasoup_dir=/var/mediasoup/
+
+remove_stale_sfu_raw_files() {
+  for app in recordings screenshare; do
+      app_dir="${1}${app}"
+      if [[ -d $app_dir ]]; then
+          find "$app_dir" -name "*.mkv" -o -name "*.webm" -mtime +"$history" -delete
+          find "$app_dir" -type d -empty -mtime +"$history" -exec rmdir '{}' +
+      fi
+  done
+}
+
+remove_stale_sfu_raw_files "$kurento_dir"
+remove_stale_sfu_raw_files "$mediasoup_dir"
 
 #
 # Delete FreeSWITCH wav/opus recordings older than N days
@@ -55,7 +63,6 @@ find /var/freeswitch/meetings/ -name "*.opus" -mtime +$history -delete
 # Delete old/rotated log files
 #
 find /opt/freeswitch/var/log/freeswitch -type f -mtime +$log_history -delete
-[[ -d /var/log/tomcat7 ]] && find /var/log/tomcat7 -type f -mtime +$log_history -delete
 find /var/log/bigbluebutton -type f -mtime +$log_history -delete
 find /var/log/bbb-webrtc-sfu -type f -mtime +$log_history -delete
 find /var/log/kurento-media-server -name "*.pid*.log" -type f -mtime +$log_history -delete
