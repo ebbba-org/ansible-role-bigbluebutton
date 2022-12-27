@@ -60,6 +60,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.5/install.html#
 | | `bbb_turn_enable` | enable the use uf TURN in general | `yes` | |
 | | `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml |
 | | `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server` |
+| | `bbb_ignore_running_meetings` | install even if meetings are running | `no` | current meetings will be terminated |
 | | `bbb_turn_servers` | a list of TURN-Server to use | `{}` | take a look in defaults/main.yml |
 | | `bbb_mongodb_version` | version of mongodb to be installed | `4.2` | |
 | | `bbb_mongodb_tmpfs_size` | tmpfs size for the mongodb | `512m` | |
