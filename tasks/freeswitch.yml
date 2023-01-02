@@ -131,7 +131,7 @@
         path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
         xpath: '/configuration/settings/param[@name="listen-ip"]'
         attribute: 'value'
-        value: "{{ '::' if bbb_freeswitch_ipv6 | bool else '127.0.0.1' }}"
+        value: "::1"
       notify: restart freeswitch
 
     - name: stat ipv6 sip_profiles
