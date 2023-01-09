@@ -1,6 +1,7 @@
 #
 # Use this file to override default entries in /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 #
+{# #jinja2: trim_blocks: "True" #}
 
 bigbluebutton.web.serverURL=https://{{ bbb_hostname }}
 securitySalt={{ bbb_secret }}
@@ -34,14 +35,12 @@ numConversionThreads={{ bbb_num_conversion_threads }}
 numFileProcessorThreads={{ bbb_num_file_processor_threads }}
 officeToPdfConversionTimeout={{ bbb_office_to_pdf_conversion_timeout }}
 officeToPdfMaxConcurrentConversions={{ bbb_office_to_pdf_max_concurrent_conversions }}
-breakoutRoomsEnabled={{ bbb_breakout_rooms_enabled | ternary('true', 'false') }}
 breakoutRoomsRecord={{ bbb_breakout_rooms_record | ternary('true', 'false') }}
 breakoutRoomsPrivateChatEnabled={{ bbb_breakout_rooms_privatechat_enabled | ternary('true', 'false') }}
 userInactivityInspectTimerInMinutes={{ bbb_user_inactivity_inspect_timer }}
 userInactivityThresholdInMinutes={{ bbb_user_inactivity_threshold }}
 userActivitySignResponseDelayInMinutes={{ bbb_user_activity_sign_response_delay }}
 webcamsOnlyForModerator={{ bbb_webcams_only_for_moderator | ternary("true", "false") }}
-learningDashboardEnabled={{ bbb_learning_dashboard_enabled }}
 allowModsToEjectCameras={{ bbb_allow_mods_to_eject_cameras }}
 meetingCameraCap={{ bbb_meeting_camera_cap }}
 userCameraCap={{ bbb_user_camera_cap }}
@@ -50,6 +49,11 @@ endWhenNoModerator={{ bbb_end_when_no_moderator | ternary('true', 'false') }}
 endWhenNoModeratorDelayInMinutes={{ bbb_end_when_delay_in_minutes }}
 notifyRecordingIsOn={{ bbb_notify_recording_is_on | ternary('true', 'false') }}
 allowRevealOfBBBVersion={{ bbb_allow_reveal_of_bbb_version | ternary('true', 'false') }}
+
+{%- set disabledFeatures = [] -%}
+{{ disabledFeatures.append(bbb_breakout_rooms_enabled | ternary('', 'BreakoutRooms')) }}
+{{ disabledFeatures.append(bbb_learning_dashboard_enabled | ternary('', 'learningDashboard')) }}
+disabledFeatures={{ disabledFeatures | reject('equalto','') | join(',') }}
 
 # show a logo in top left corner
 useDefaultLogo={{ bbb_use_default_logo | ternary('true', 'false') }}
