@@ -1,4 +1,6 @@
 ---
+- import_tasks: virtual-backgrounds.yml
+  when: bbb_virtual_backgrounds|bool
 
 - name: write custom meteor config
   become: true

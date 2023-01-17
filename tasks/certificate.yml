@@ -10,7 +10,7 @@
     state: "{{ bbb_state }}"
 
 - import_tasks: certificate-letsencrypt.yml
-  when: bbb_letsencrypt_enable|bool
+  when: bbb_virtual_back|bool
 
 - import_tasks: certificate-custom.yml
   when: bbb_own_cert is defined
