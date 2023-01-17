@@ -296,7 +296,7 @@ bbb_docker_compose_version: 1.29.2
 bbb_nodejs_version: 16.x
 
 #virtual backgrounds
-bbb_virtual_backgrounds: []
-bbb_virtual_background_path: "../../files/"
+# bbb_virtual_backgrounds:
+bbb_virtual_background_path: "../../../files/"
 # bbb_vb_download_url:
 bbb_jpeg_optimization: true
