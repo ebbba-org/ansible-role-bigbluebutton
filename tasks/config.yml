@@ -169,7 +169,7 @@
   become: true
   copy:
     src: "{{ bbb_custom_logo }}"
-    dest: "{{ bbb_nginx_root | regex_replace('\\/$', '') }}/images/{{ bbb_custom_logo_name | default('logo.png') }}"
+    dest: "{{ bbb_nginx_root | regex_replace('\\/$', '') }}/assets/images/{{ bbb_custom_logo_name | default('logo.png') }}"
     mode: '0644'
   when: bbb_custom_logo is defined
 
