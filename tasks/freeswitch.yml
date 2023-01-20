@@ -125,13 +125,13 @@
 
 - name: configure IPv6-Support in freeswitch
   block:
-    - name: configure listen-ip in event_socket.conf.xml
+    - name: make sure listen-ip in event_socket.conf.xml stays ipv4-localhost
       become: true
       community.general.xml:
         path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
         xpath: '/configuration/settings/param[@name="listen-ip"]'
         attribute: 'value'
-        value: "::1"
+        value: "127.0.0.1"
       notify: restart freeswitch
 
     - name: stat ipv6 sip_profiles
