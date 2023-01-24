@@ -1,6 +1,6 @@
 ---
 # Download images if download url is defined
-- name: download virtual backgrounds
+- name: Download virtual backgrounds
   get_url:
     url: "{{ bbb_vb_download_url }}/{{ item }}"
     dest: "/usr/share/meteor/bundle/programs/web.browser/app/resources/images/virtual-backgrounds/{{ item }}"
@@ -11,7 +11,7 @@
   when: bbb_vb_download_url is defined
 
 # Use images provided outside of the role
-- name: copy virtual backgrounds to the bbb node
+- name: Copy virtual backgrounds to the bbb node
   copy:
     src: "{{ bbb_virtual_background_path }}{{ item }}"
     dest: "/usr/share/meteor/bundle/programs/web.browser/app/resources/images/virtual-backgrounds/{{ item }}"
@@ -21,36 +21,34 @@
   loop: "{{ bbb_virtual_backgrounds }}"
   when: bbb_vb_download_url is not defined
 
-- name: optimize jpegs
+- name: Optimize jpegs
+  when: bbb_jpeg_optimization | bool
   block:
-    - name: install jpegoptim
+    - name: Install jpegoptim
       apt:
         package: jpegoptim
-        state: latest
         update_cache: true
 
-    - name: optimze vb
+    - name: Optimze vb
       command: jpegoptim /usr/share/meteor/bundle/programs/web.browser/app/resources/images/virtual-backgrounds/* .jpg --strip-all
 
-  when: bbb_jpeg_optimization|bool
-
-- name: copy shell script for creation of thumbnails
+- name: Copy shell script for creation of thumbnails
   copy:
-    src: ../files/vb-thumbnail.sh
+    src: vb-thumbnail.sh
     dest: /root/vb-thumbnail.sh
-    mode: 700
+    mode: 0700
     owner: root
     group: root
 
-- name: create thumbnails
+- name: Create thumbnails
   command: '/root/vb-thumbnail.sh'
 
-- name: remove thumbnail script
+- name: Remove thumbnail script
   file:
     path: /root/vb-thumbnail.sh
     state: absent
 
-- name: add config for vb to html config
+- name: Add config for vb to html config
   become: true
   blockinfile:
     path: /etc/bigbluebutton/bbb-html5.yml
