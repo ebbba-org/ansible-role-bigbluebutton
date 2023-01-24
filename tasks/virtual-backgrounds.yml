@@ -2,7 +2,7 @@
 # Download images if download url is defined
 - name: Download virtual backgrounds
   get_url:
-    url: "{{ bbb_vb_download_url }}/{{ item }}"
+    url: "{{ bbb_vb_download_url | regex_replace('\\/$', '')}}/{{ item }}"
     dest: "/usr/share/meteor/bundle/programs/web.browser/app/resources/images/virtual-backgrounds/{{ item }}"
     owner: root
     group: root
@@ -13,7 +13,7 @@
 # Use images provided outside of the role
 - name: Copy virtual backgrounds to the bbb node
   copy:
-    src: "{{ bbb_virtual_background_path }}{{ item }}"
+    src: "{{ bbb_virtual_background_path | regex_replace('\\/$', '') }}/{{ item }}"
     dest: "/usr/share/meteor/bundle/programs/web.browser/app/resources/images/virtual-backgrounds/{{ item }}"
     owner: root
     group: root
