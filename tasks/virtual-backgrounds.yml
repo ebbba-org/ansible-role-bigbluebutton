@@ -42,12 +42,10 @@
 
 - name: Create thumbnails
   command: '/root/vb-thumbnail.sh'
+  notify:
+    - restart bbb-html5
 
 - name: Remove thumbnail script
   file:
     path: /root/vb-thumbnail.sh
     state: absent
-
-- name: restart bbb-html5
-  notify:
-    - restart bbb-html5
