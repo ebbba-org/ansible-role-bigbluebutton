@@ -52,3 +52,5 @@
 
 - import_tasks: virtual-backgrounds.yml
   when: "{{ bbb_meteor.public.virtualBackgrounds is defined }}"
+  notify:
+    - restart bbb-html5

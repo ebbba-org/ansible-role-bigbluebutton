@@ -32,20 +32,6 @@
     - name: Optimze vb
       command: jpegoptim /usr/share/meteor/bundle/programs/web.browser/app/resources/images/virtual-backgrounds/* .jpg --strip-all
 
-- name: Copy shell script for creation of thumbnails
-  copy:
-    src: vb-thumbnail.sh
-    dest: /root/vb-thumbnail.sh
-    mode: 0700
-    owner: root
-    group: root
-
-- name: Create thumbnails
-  command: '/root/vb-thumbnail.sh'
-  notify:
-    - restart bbb-html5
-
-- name: Remove thumbnail script
-  file:
-    path: /root/vb-thumbnail.sh
-    state: absent
+- name: create thumbnails
+  command: convert /usr/share/meteor/bundle/programs/web.browser/app/resources/images/virtual-backgrounds/"{{ item }}" -resize 50x50^ -gravity Center -extent 50x50 "/usr/share/meteor/bundle/programs/web.browser/app/resources/images/virtual-backgrounds/thumbnails/"{{ item }}""
+  with_items: "{{ bbb_meteor.public.virtualBackgrounds.fileNames }}"
