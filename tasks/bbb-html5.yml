@@ -51,4 +51,4 @@
   notify: reload nginx
 
 - import_tasks: virtual-backgrounds.yml
-  when: bbb_virtual_backgrounds is defined
+  when: {{ bbb_meteor.public.virtualBackgrounds is defined }}

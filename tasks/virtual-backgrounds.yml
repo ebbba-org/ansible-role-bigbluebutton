@@ -7,7 +7,7 @@
     owner: root
     group: root
     mode: '0644'
-  loop: "{{ bbb_virtual_backgrounds }}"
+  with_items: "{{ bbb_meteor.public.virtualBackgrounds.fileNames }}"
   when: bbb_vb_download_url is defined
 
 # Use images provided outside of the role
@@ -18,7 +18,7 @@
     owner: root
     group: root
     mode: '0644'
-  loop: "{{ bbb_virtual_backgrounds }}"
+  with_items: "{{ bbb_meteor.public.virtualBackgrounds.fileNames }}"
   when: bbb_vb_download_url is not defined
 
 - name: Optimize jpegs
@@ -48,18 +48,6 @@
     path: /root/vb-thumbnail.sh
     state: absent
 
-- name: Add config for vb to html config
-  become: true
-  blockinfile:
-    path: /etc/bigbluebutton/bbb-html5.yml
-    marker_begin: "begin virtual backgrounds"
-    marker_end: "end virtual background"
-    insertafter: "public:"
-    block: |2
-        virtualBackgrounds:
-          fileNames:
-          {% for item in bbb_virtual_backgrounds -%}
-            - "{{ item }}"
-          {% endfor -%}
+- name: restart bbb-html5
   notify:
     - restart bbb-html5
