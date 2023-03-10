@@ -157,6 +157,13 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 | | `bbb_webcams_only_for_moderator` | Allow webcams streaming reception only to and from moderators | `false` |  |
 | | `bbb_allow_mods_to_eject_cameras` | Allow moderators to eject webcams | `false` |  |
 | | `bbb_user_activity_sign_response_delay` | Number of minutes for user to respond to inactivity warning before being logged out | `5` |  |
+| | `bbb_meeting_camera_cap` | Per meeting camera share limit, if 0, there's no limit | `0` |  |
+| | `bbb_user_camera_cap` | Per user camera share limit, if 0, there's no limit | `3` |  |
+| | `bbb_pinned_cameras` | Maximum number of cameras pinned simultaneously | `3` |  |
+| | `bbb_end_when_no_moderator` |  | `false` |  |
+| | `bbb_end_when_delay_in_minutes` |  | `1` |  |
+| | `bbb_notify_recording_is_on` |  | `false` |  |
+| | `bbb_allow_reveal_of_bbb_version` |  | `false` |  |
 | | `bbb_learning_dashboard_enabled` | Enable `true` / Disable `false` the [Learning Dashboard](https://docs.bigbluebutton.org/2.4/new.html#learning-dashboard) | `true` | |
 | `bbb_default_meeting_layout` | Default Meeting Layout. Default Meeting Layout. Valid values are CUSTOM_LAYOUT, SMART_LAYOUT, PRESENTATION_FOCUS, VIDEO_FOCUS | `SMART_LAYOUT` | |
 
