@@ -17,6 +17,7 @@
   command: "bbb-conf --setsecret {{ bbb_secret }}"
   when: bbb_secret is defined and bbb_secret != current_bbb_secret
   notify: restart bigbluebutton
+  changed_when: "bbb_secret != current_bbb_secret"
 
 - name: set bbb secret variable
   set_fact:
