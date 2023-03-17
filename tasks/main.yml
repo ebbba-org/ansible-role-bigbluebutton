@@ -10,7 +10,7 @@
   tags:
     - bbb_secret
     - always
-  failed_when: false
+  ignore_errors: false
   block:
     - name: Include bbb_secret
       include_tasks: bbb_secret.yml
