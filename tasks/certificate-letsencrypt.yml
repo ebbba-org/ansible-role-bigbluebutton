@@ -19,9 +19,9 @@
 - name: Ensure acme.sh is executable.
   file:
     path: "{{ bbb_letsencrypt_script }}"
-    mode: 0755
+    mode: "0755"
 
-- name: acme install
+- name: ACME install
   become: true
   command: "{{ bbb_letsencrypt_install_command }}"
   args:
@@ -33,8 +33,8 @@
   become: true
   command: "{{ bbb_letsencrypt_create_command }}"
   environment:
-     email: "{{ bbb_letsencrypt_email }}"
+    email: "{{ bbb_letsencrypt_email }}"
   register: result
   changed_when: "'new certificate deployed' in result.stdout"
-  failed_when: "result.rc not in [ 0, 2 ]"
+  failed_when: result.rc not in [ 0, 2 ]
   notify: reload nginx

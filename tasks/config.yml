@@ -1,128 +1,127 @@
 ---
-
-- name: register bbb secret
+- name: Register bbb secret
   become: true
   command: bbb-conf --secret
   changed_when: false
   check_mode: false
   register: result
 
-- name: parse bbb secret
+- name: Parse bbb secret
   set_fact:
-    current_bbb_secret: "{{ result.stdout | regex_search('Secret: ([a-zA-Z0-9]*)', multiline=True) |  regex_replace('Secret: ') }}"
+    current_bbb_secret: "{{ result.stdout | regex_search('Secret: ([a-zA-Z0-9]*)', multiline=True) | regex_replace('Secret: ') }}"
     cacheable: true
 
-- name: set BBB secret
+- name: Set BBB secret
   become: true
-  command: "bbb-conf --setsecret {{ bbb_secret }}"
+  command: bbb-conf --setsecret {{ bbb_secret }}
   when: bbb_secret is defined and bbb_secret != current_bbb_secret
   notify: restart bigbluebutton
   changed_when: "bbb_secret != current_bbb_secret"
 
-- name: set bbb secret variable
+- name: Set bbb secret variable
   set_fact:
     bbb_secret: "{{ current_bbb_secret }}"
     cacheable: true
   when: bbb_secret is not defined
 
-- name: don't leave BBB secrets readable for others
+- name: Don't leave BBB secrets readable for others
   become: true
   ansible.builtin.file:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     owner: bigbluebutton
     group: bigbluebutton
-    mode: '640'
+    mode: "640"
 
 - name: Update apps, fsesl and web override-configuration
   become: true
   ansible.builtin.template:
     src: "{{ item.src }}"
-    dest: "/etc/bigbluebutton/{{ item.dest }}"
+    dest: /etc/bigbluebutton/{{ item.dest }}
     owner: bigbluebutton
     group: root
-    mode: '0600'
+    mode: "0600"
   loop:
-    - { src: "bbb-config/bbb-apps/bbb-apps-akka.conf.j2", dest: "bbb-apps-akka.conf" }
-    - { src: "bbb-config/bbb-fsesl/bbb-fsesl-akka.conf.j2", dest: "bbb-fsesl-akka.conf" }
-    - { src: "bbb-web/bbb-web.properties.j2", dest: "bbb-web.properties" }
+    - { src: bbb-config/bbb-apps/bbb-apps-akka.conf.j2, dest: bbb-apps-akka.conf }
+    - { src: bbb-config/bbb-fsesl/bbb-fsesl-akka.conf.j2, dest: bbb-fsesl-akka.conf }
+    - { src: bbb-web/bbb-web.properties.j2, dest: bbb-web.properties }
   notify: restart bigbluebutton
 
 - name: Update apps and fsesl logback.xml
   become: true
   ansible.builtin.template:
-    src: "bbb-config/bbb-{{ item }}/logback.xml"
-    dest: "/etc/bbb-{{ item }}-akka/logback.xml"
-    mode: '0644'
+    src: bbb-config/bbb-{{ item }}/logback.xml
+    dest: /etc/bbb-{{ item }}-akka/logback.xml
+    mode: "0644"
   loop:
     - fsesl
     - apps
   notify: restart bigbluebutton
 
-- name: serve recordings via https
+- name: Serve recordings via https
   become: true
   lineinfile:
     path: /usr/local/bigbluebutton/core/scripts/bigbluebutton.yml
-    regexp: "playback_protocol"
+    regexp: playback_protocol
     line: "playback_protocol: https"
   notify: restart bigbluebutton
 
-- name: set note server to use HTTPS
+- name: Set note server to use HTTPS
   notify: restart bigbluebutton
   replace:
     path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
-    regexp: 'http://'
-    replace: 'https://'
+    regexp: http://
+    replace: https://
 
-- name: set kurento server to use HTTPS
+- name: Set kurento server to use HTTPS
   notify: restart bigbluebutton
   replace:
     path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
-    regexp: 'ws://'
-    replace: 'wss://'
+    regexp: ws://
+    replace: wss://
 
-- name: configure custom recording config
+- name: Configure custom recording config
+  when: bbb_recording_config | default({}) | length > 0
   block:
-    - name: read recording config
+    - name: Read recording config
       slurp:
         path: /usr/local/bigbluebutton/core/scripts/presentation.yml
       register: r_recording_config
 
-    - name: extract recording config
+    - name: Extract recording config
       set_fact:
         recording_config: "{{ r_recording_config['content'] | b64decode | from_yaml }}"
 
-    - name: combine recording config
+    - name: Combine recording config
       set_fact:
         recording_config: "{{ recording_config | combine(bbb_recording_config, recursive=true) }}"
 
-    - name: write back recording config
+    - name: Write back recording config
       copy:
-        content: '{{ recording_config | to_nice_yaml(indent=2) }}'
+        content: "{{ recording_config | to_nice_yaml(indent=2) }}"
         dest: /usr/local/bigbluebutton/core/scripts/presentation.yml
-        mode: '0644'
-  when: bbb_recording_config | default({}) | length > 0
+        mode: "0644"
 
-- name: set nodejs options for the html5-webclient
+- name: Set nodejs options for the html5-webclient
   replace:
     path: /usr/share/meteor/bundle/systemd_start.sh
-    regexp: '/usr/share/\$NODE_VERSION/bin/node.*main.js'
-    replace: '/usr/share/$NODE_VERSION/bin/node {{ bbb_html5_node_options }} main.js'
+    regexp: /usr/share/\$NODE_VERSION/bin/node.*main.js
+    replace: /usr/share/$NODE_VERSION/bin/node {{ bbb_html5_node_options }} main.js
   when: bbb_html5_node_options is defined
   notify: restart bigbluebutton
 
-- name: unset nodejs options for the html5-webclient
+- name: Unset nodejs options for the html5-webclient
   replace:
     path: /usr/share/meteor/bundle/systemd_start.sh
-    regexp:  'PORT=3000 /usr/share/\$NODE_VERSION/bin/node.*main.js'
-    replace: 'PORT=3000 /usr/share/$NODE_VERSION/bin/node main.js'
+    regexp: PORT=3000 /usr/share/\$NODE_VERSION/bin/node.*main.js
+    replace: PORT=3000 /usr/share/$NODE_VERSION/bin/node main.js
   when: not bbb_html5_node_options is defined
   notify: restart bigbluebutton
 
 - name: Create overrides directory for bbb-html5 template services
   file:
-    path: "/etc/systemd/system/{{ item }}.d"
+    path: /etc/systemd/system/{{ item }}.d
     state: directory
-    mode: '0644'
+    mode: "0644"
   loop:
     - bbb-html5-backend@.service
     - bbb-html5-frontend@.service
@@ -130,13 +129,13 @@
 
 - name: Save override file for bbb-html5 template services
   copy:
-    dest: "/etc/systemd/system/{{ item }}.d/override.conf"
+    dest: /etc/systemd/system/{{ item }}.d/override.conf
     content: |
       [Service]
       # Set no scheduling policy in LXC, see https://docs.bigbluebutton.org/2.2/troubleshooting.html#bbb-html5-fails-to-start-with-a-setscheduler-error
       CPUSchedulingPolicy=other
       Nice=-10
-    mode: '0644'
+    mode: "0644"
   loop:
     - bbb-html5-backend@.service
     - bbb-html5-frontend@.service
@@ -149,7 +148,7 @@
   file:
     path: /etc/systemd/system/bbb-html5.service.d/override.conf
     state: absent
-    mode: '0644'
+    mode: "0644"
   loop:
     - bbb-html5-backend@.service
     - bbb-html5-frontend@.service
@@ -158,20 +157,20 @@
     - reload systemd
     - restart bigbluebutton
 
-- name: set default presentation
+- name: Set default presentation
   become: true
   copy:
     src: "{{ bbb_custom_presentation }}"
     dest: "{{ bbb_nginx_root | regex_replace('\\/$', '') }}/{{ bbb_custom_presentation_name | default('default.pdf') }}"
-    mode: '0644'
+    mode: "0644"
   when: bbb_custom_presentation is defined
 
-- name: set custom logo
+- name: Set custom logo
   become: true
   copy:
     src: "{{ bbb_custom_logo }}"
     dest: "{{ bbb_nginx_root | regex_replace('\\/$', '') }}/images/{{ bbb_custom_logo_name | default('logo.png') }}"
-    mode: '0644'
+    mode: "0644"
   when: bbb_custom_logo is defined
 
 - name: Set cron.daily specifications
@@ -179,6 +178,6 @@
   template:
     src: bbb-config/cron.daily/bigbluebutton
     dest: /etc/cron.daily/bigbluebutton
-    mode: '0755'
+    mode: "0755"
     owner: root
     group: root

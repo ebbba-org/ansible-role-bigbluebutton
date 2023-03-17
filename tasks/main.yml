@@ -1,30 +1,31 @@
 ---
-
 - import_tasks: checkvars.yml
   tags:
     - checkvars
     - always
 
 # this is included as block to pass tags to included tasks
-- block:
-  - name: include bbb_secret
-    include_tasks: bbb_secret.yml
+- name: Set the bbb_secret
+  when: bbb_secret is not defined
   tags:
     - bbb_secret
     - always
-  ignore_errors: true
-  when: bbb_secret is not defined
+  failed_when: false
+  block:
+    - name: Include bbb_secret
+      include_tasks: bbb_secret.yml
 
 # this is included as block to pass tags to included tasks
-- block:
-  - name: include check-for-sessions
-    include_tasks: check-for-sessions.yml
+- name: Check for running Sessions
   when:
     - bbb_check_for_running_meetings
     - bbb_secret is defined
   tags:
     - check-for-sessions
     - always
+  block:
+    - name: Include check-for-sessions
+      include_tasks: check-for-sessions.yml
 
 - import_tasks: firewall/ufw_enable.yml
   when: bbb_firewall_ufw['enabled']

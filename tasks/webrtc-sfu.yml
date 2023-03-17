@@ -1,33 +1,33 @@
 ---
-- name: create webrtc-sfu service override directory
+- name: Create webrtc-sfu service override directory
   become: true
   file:
     state: directory
     path: /etc/systemd/system/bbb-webrtc-sfu.service.d/
-    mode: 0755
+    mode: "0755"
 
-- name: deploy webrtc-sfu service override configuration
+- name: Deploy webrtc-sfu service override configuration
   become: true
   template:
-    src: "bbb-webrtc-sfu/bbb-webrtc-sfu.override"
-    dest: "/etc/systemd/system/bbb-webrtc-sfu.service.d/override.conf"
-    mode: '0644'
+    src: bbb-webrtc-sfu/bbb-webrtc-sfu.override
+    dest: /etc/systemd/system/bbb-webrtc-sfu.service.d/override.conf
+    mode: "0644"
   notify:
     - reload systemd
     - restart bbb-webrtc-sfu
 
-- name: create /etc/bigbluebutton/bbb-webrtc-sfu
+- name: Create /etc/bigbluebutton/bbb-webrtc-sfu
   become: true
   file:
     state: directory
     path: /etc/bigbluebutton/bbb-webrtc-sfu
-    mode: 0755
+    mode: "0755"
 
-- name: write custom webrtc-sfu config
+- name: Write custom webrtc-sfu config
   become: true
   copy:
-    content: '{{ bbb_webrtc_sfu_multikurento | to_nice_yaml(indent=2) }}'
+    content: "{{ bbb_webrtc_sfu_multikurento | to_nice_yaml(indent=2) }}"
     dest: /etc/bigbluebutton/bbb-webrtc-sfu/production.yml
-    mode: '0644'
+    mode: "0644"
   notify:
     - restart bbb-webrtc-sfu

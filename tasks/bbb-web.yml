@@ -1,27 +1,26 @@
 ---
-
-- name: create bbb-web service override directory
+- name: Create bbb-web service override directory
   become: true
   file:
     state: directory
     path: /etc/systemd/system/bbb-web.service.d/
-    mode: 0755
+    mode: "0755"
 
-- name: deploy bbb-web service override configuration
+- name: Deploy bbb-web service override configuration
   become: true
   template:
     src: bbb-web/bbb-web.override
     dest: /etc/systemd/system/bbb-web.service.d/override.conf
-    mode: '0644'
+    mode: "0644"
   notify:
     - reload systemd
     - restart bbb-web
 
-- name: configure bbb-web application logback settings
+- name: Configure bbb-web application logback settings
   become: true
   template:
     src: bbb-web/logback.xml
     dest: /usr/share/bbb-web/WEB-INF/classes/logback.xml
-    mode: '0644'
+    mode: "0644"
   notify:
     - restart bbb-web

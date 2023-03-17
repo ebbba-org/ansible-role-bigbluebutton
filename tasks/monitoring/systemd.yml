@@ -21,7 +21,7 @@
     state: directory
     owner: bbb-exporter
     group: bbb-exporter
-    mode: '0755'
+    mode: "0755"
 
 - name: Ensure pip is installed
   apt:
@@ -42,7 +42,7 @@
     dest: /lib/systemd/system/
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
     remote_src: true
   notify:
     - reload systemd
@@ -50,19 +50,19 @@
 
 - name: Create /etc/bigbluebutton-exporter directory
   file:
-    path: "/etc/bigbluebutton-exporter"
+    path: /etc/bigbluebutton-exporter
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Template exporter configuration
   template:
-    src: "monitoring/bbb_exporter_secrets.env.j2"
-    dest: "/etc/bigbluebutton-exporter/settings.env"
-    mode: '0644'
+    src: monitoring/bbb_exporter_secrets.env.j2
+    dest: /etc/bigbluebutton-exporter/settings.env
+    mode: "0644"
   notify:
     - restart monitoring service
 
-- name: start monitoring
+- name: Start monitoring
   systemd:
     name: bigbluebutton-exporter
     state: started

@@ -1,55 +1,55 @@
 ---
-- name: add bigbluebutton.org repo key
+- name: Add bigbluebutton.org repo key
   become: true
   apt_key:
     url: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
-    id: '{{ bbb_apt_key }}'
+    id: "{{ bbb_apt_key }}"
     state: present
   register: apt_key_dl
   until: apt_key_dl is success
 
-- name: add mongodb repo key
+- name: Add mongodb repo key
   become: true
   apt_key:
-    url: "https://www.mongodb.org/static/pgp/server-{{ bbb_mongodb_version }}.asc"
+    url: https://www.mongodb.org/static/pgp/server-{{ bbb_mongodb_version }}.asc
 
-- name: add multiverse apt repositories
+- name: Add multiverse apt repositories
   become: true
   apt_repository:
     repo: "{{ item }}"
   with_items:
-    - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse"
-    - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse"
-    - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
-    - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
-    - "deb http://repo.mongodb.org/apt/ubuntu/ {{ ansible_distribution_release | lower }}/mongodb-org/{{ bbb_mongodb_version }} multiverse"
+    - deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse
+    - deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse
+    - deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse
+    - deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse
+    - deb http://repo.mongodb.org/apt/ubuntu/ {{ ansible_distribution_release | lower }}/mongodb-org/{{ bbb_mongodb_version }} multiverse
 
 # temporarily needed, remove in a future release.
-- name: remove deprecated bigbluebutton sources-list file
+- name: Remove deprecated bigbluebutton sources-list file
   become: true
   ansible.builtin.file:
-    path: '/etc/apt/sources.list.d/ubuntu_bigbluebutton_org_bionic_230.list'
+    path: /etc/apt/sources.list.d/ubuntu_bigbluebutton_org_bionic_230.list
     state: absent
 
-- name: add apt repository for bbb version {{ bbb_version }}
+- name: Add apt repository for bbb version {{ bbb_version }}
   copy:
-    content: "deb {{ bbb_apt_mirror }}/{{ bbb_version }} bigbluebutton-focal main"
-    dest: "/etc/apt/sources.list.d/ubuntu_bigbluebutton_org.list"
-    mode: '0644'
-- name: add apt repository for bbb-html5 {{ bbb_version }}
+    content: deb {{ bbb_apt_mirror }}/{{ bbb_version }} bigbluebutton-focal main
+    dest: /etc/apt/sources.list.d/ubuntu_bigbluebutton_org.list
+    mode: "0644"
+- name: Add apt repository for bbb-html5 {{ bbb_version }}
   copy:
-    content: "deb {{ bbb_apt_mirror }}/{{ bbb_version }} bigbluebutton-focal main"
-    dest: "/etc/apt/sources.list.d/ubuntu_bigbluebutton_org.list"
-    mode: '0644'
+    content: deb {{ bbb_apt_mirror }}/{{ bbb_version }} bigbluebutton-focal main
+    dest: /etc/apt/sources.list.d/ubuntu_bigbluebutton_org.list
+    mode: "0644"
 
-- name: remove bigbluebutton.org repo when using a mirror
+- name: Remove bigbluebutton.org repo when using a mirror
   become: true
   apt_repository:
-    repo: "deb https://ubuntu.bigbluebutton.org/bionic-230/ bigbluebutton-bionic main"
+    repo: deb https://ubuntu.bigbluebutton.org/bionic-230/ bigbluebutton-bionic main
     state: absent
   when: bbb_apt_mirror != 'https://ubuntu.bigbluebutton.org'
 
-- name: add focal dependency apt repositories
+- name: Add focal dependency apt repositories
   become: true
   apt_repository:
     repo: "{{ item }}"

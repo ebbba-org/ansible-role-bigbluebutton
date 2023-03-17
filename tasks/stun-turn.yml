@@ -6,5 +6,5 @@
     dest: /etc/bigbluebutton/turn-stun-servers.xml
     owner: bigbluebutton
     group: root
-    mode: '0600'
+    mode: "0600"
   notify: restart bigbluebutton

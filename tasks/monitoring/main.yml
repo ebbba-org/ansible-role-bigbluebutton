@@ -7,20 +7,20 @@
 
 - name: Copy monitoring nginx configuration file
   template:
-    src: "monitoring/monitoring.nginx.j2"
-    dest: "/etc/bigbluebutton/nginx/monitoring.nginx"
-    mode: '0644'
+    src: monitoring/monitoring.nginx.j2
+    dest: /etc/bigbluebutton/nginx/monitoring.nginx
+    mode: "0644"
   notify:
     - reload nginx
 
 - name: Generate htpasswd file for external access if enabled
-  htpasswd:
-    path: "/etc/bigbluebutton/nginx/.htpasswd"
+  community.general.htpasswd:
+    path: /etc/bigbluebutton/nginx/.htpasswd
     name: "{{ bbb_monitoring_htpasswd_user }}"
     password: "{{ bbb_monitoring_htpasswd }}"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   no_log: true
   when: bbb_monitoring_external | bool
   notify:

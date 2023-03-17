@@ -1,5 +1,4 @@
 ---
-
 - name: Ensure nginx is started and enabled to start at boot.
   become: true
   systemd:
@@ -7,30 +6,30 @@
     enabled: true
     state: started
 
-- name: create ssl folder for nginx
+- name: Create ssl folder for nginx
   become: true
   file:
     path: /etc/nginx/ssl
-    mode: 0755
+    mode: "0755"
     state: directory
 
-- name: copy predefined DH group ffdhe2048
+- name: Copy predefined DH group ffdhe2048
   become: true
   copy:
     src: ffdhe4096.pem
     dest: /etc/nginx/ssl/ffdhe4096.pem
-    mode: '0644'
+    mode: "0644"
   notify: reload nginx
 
-- name: copy bbb's nginx vhost
+- name: Copy bbb's nginx vhost
   become: true
   template:
     src: nginx/vhost.conf
     dest: /etc/nginx/sites-available/bigbluebutton
-    mode: '0644'
+    mode: "0644"
   notify: reload nginx
 
-- name: remove nginx default config
+- name: Remove nginx default config
   become: true
   file:
     path: /etc/nginx/sites-enabled/default
@@ -43,19 +42,19 @@
     path: /etc/bigbluebutton/nginx
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
     state: directory
 
-- name: copy HTML5-Client-Log location snippet
+- name: Copy HTML5-Client-Log location snippet
   become: true
   copy:
     src: html5-client-log.nginx
     dest: /etc/bigbluebutton/nginx/html5-client-log.nginx
-    mode: '0644'
+    mode: "0644"
   when: bbb_client_log_enable
   notify: reload nginx
 
-- name: remove HTML5-Client-Log location snippet
+- name: Remove HTML5-Client-Log location snippet
   become: true
   file:
     path: /etc/bigbluebutton/nginx/html5-client-log.nginx
@@ -63,16 +62,16 @@
   when: not bbb_client_log_enable
   notify: reload nginx
 
-- name: copy HTML5-Client-Log log-config snippet
+- name: Copy HTML5-Client-Log log-config snippet
   become: true
   copy:
     src: html5-client-log.conf
     dest: /etc/nginx/conf.d/html5-client-log.conf
-    mode: '0644'
+    mode: "0644"
   when: bbb_client_log_enable
   notify: reload nginx
 
-- name: remove HTML5-Client-Log location snippet
+- name: Remove HTML5-Client-Log location snippet
   become: true
   file:
     path: /etc/nginx/conf.d/html5-client-log.conf
@@ -80,14 +79,14 @@
   when: not bbb_client_log_enable
   notify: reload nginx
 
-- name: create HTML5-Client-Log log-file
+- name: Create HTML5-Client-Log log-file
   become: true
   file:
     state: touch
     access_time: preserve
     modification_time: preserve
     path: /var/log/nginx/html5-client.log
-    mode: '0640'
+    mode: "0640"
     owner: www-data
     group: adm
   when: bbb_client_log_enable
