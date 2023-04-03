@@ -37,4 +37,4 @@
   register: result
   changed_when: "'new certificate deployed' in result.stdout"
   failed_when: result.rc not in [ 0, 2 ]
-  notify: reload nginx
+  notify: Reload nginx
