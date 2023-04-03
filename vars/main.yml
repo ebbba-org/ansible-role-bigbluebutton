@@ -13,6 +13,8 @@ bbb_required_packages:
   - python3-passlib
   - python-passlib
   - net-tools
+  - apparmor
+  - apparmor-utils
 
 bbb_and_dependencies:
   - mongodb-org
