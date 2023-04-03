@@ -14,7 +14,7 @@
     - bbb_exporter_secrets.env
     - docker-compose.yaml
     - prometheus.yaml
-  notify: restart monitoring container
+  notify: Restart monitoring container
 
 - name: Start monitoring
   community.docker.docker_compose:
