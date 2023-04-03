@@ -13,8 +13,8 @@
     mode: "0600"
   when: not bbb_container_compat
   notify:
-    - reload apparmor
-    - restart freeswitch
+    - Reload apparmor
+    - Restart freeswitch
 
 - name: Fix freeswitch systemd service permissions
   become: true
@@ -29,7 +29,7 @@
   file:
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/logfile.conf.xml
     state: absent
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Add freeswitch module config
   become: true
@@ -39,7 +39,7 @@
     mode: "0644"
     owner: freeswitch
     group: daemon
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Add freeswitch syslog config
   become: true
@@ -49,7 +49,7 @@
     mode: "0644"
     owner: freeswitch
     group: daemon
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Deploy conference config
   become: true
@@ -59,7 +59,7 @@
     mode: "0644"
     owner: freeswitch
     group: daemon
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Set socket password
   become: true
@@ -69,7 +69,7 @@
     attribute: value
     value: "{{ bbb_freeswitch_socket_password }}"
   no_log: true
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Set switch.conf loglevel
   become: true
@@ -79,7 +79,7 @@
     attribute: value
     value: "{{ bbb_freeswitch_log_level }}"
   no_log: true
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Configure CPU and IO Scheduling in FreeSWITCH service
   lineinfile:
@@ -96,8 +96,8 @@
       regexp: ^#?IOSchedulingClass=
       state: '{{ "present" if not bbb_container_compat | bool else "absent" }}'
   notify:
-    - restart freeswitch
-    - reload systemd
+    - Restart freeswitch
+    - Reload systemd
 
 - name: Set the Freeswitch default password
   community.general.xml:
@@ -121,7 +121,7 @@
     path: /opt/freeswitch/etc/freeswitch/vars.xml
     regexp: <X-PRE-PROCESS cmd="set" data="local_ip_v4=.*"\/>
     replace: <X-PRE-PROCESS cmd="set" data="local_ip_v4={{ ansible_default_ipv4.address }}"/>
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Configure IPv6-Support in freeswitch
   block:
@@ -132,7 +132,7 @@
         xpath: /configuration/settings/param[@name="listen-ip"]
         attribute: value
         value: "{{ '::' if bbb_freeswitch_ipv6 | bool else '127.0.0.1' }}"
-      notify: restart freeswitch
+      notify: Restart freeswitch
 
     - name: Stat ipv6 sip_profiles
       ansible.builtin.stat:
@@ -155,35 +155,35 @@
       loop_control:
         loop_var: sip_profile
         label: "{{ sip_profile.item if bbb_freeswitch_ipv6 | bool else sip_profile.item + '.disabled' }}"
-      notify: restart freeswitch
+      notify: Restart freeswitch
 
 - name: FreeSWITCH dialplan quality
   replace:
     path: /opt/freeswitch/conf/dialplan/default/bbb_conference.xml
     regexp: <action application="conference" data="\$1@.*"\/>
     replace: <action application="conference" data="$1@{{ bbb_dialplan_quality }}"/>
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: FreeSWITCH dialplan quality (echo)
   replace:
     path: /opt/freeswitch/conf/dialplan/default/bbb_echo_to_conference.xml
     regexp: <action application="conference" data="\${vbridge}@.*"\/>
     replace: <action application="conference" data="${vbridge}@{{ bbb_dialplan_quality }}"/>
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: FreeSWITCH external ip (rtp)
   replace:
     path: /opt/freeswitch/etc/freeswitch/vars.xml
     regexp: <X-PRE-PROCESS cmd="set" data="external_rtp_ip=.*"\/>
     replace: <X-PRE-PROCESS cmd="set" data="external_rtp_ip={{ bbb_freeswitch_external_ip }}"/>
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: FreeSWITCH external ip (sip)
   replace:
     path: /opt/freeswitch/etc/freeswitch/vars.xml
     regexp: <X-PRE-PROCESS cmd="set" data="external_sip_ip=.*"\/>
     replace: <X-PRE-PROCESS cmd="set" data="external_sip_ip={{ bbb_freeswitch_external_ip }}"/>
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Fix fs_clibbb to accept additional parameters
   become: true
@@ -198,7 +198,7 @@
     path: /opt/freeswitch/conf/sip_profiles/external.xml
     regexp: <param name="wss-binding"
     line: '    <param name="wss-binding" value="{{ bbb_freeswitch_ip_address }}:7443"/>'
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 # See https://github.com/bigbluebutton/bigbluebutton/issues/7007#issuecomment-621414985
 - name: Revert upstream freeswitch jitterbuffer experiments
@@ -219,7 +219,7 @@
     path: /opt/freeswitch/etc/freeswitch/autoload_configs/switch.conf.xml
     regexp: ^(\s*)<param +name="core-db-name".*?/>
     line: \1<param name="core-db-dsn" value="sqlite://memory://file:core?mode=memory&amp;cache=shared"/>
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Flush Handler
   meta: flush_handlers

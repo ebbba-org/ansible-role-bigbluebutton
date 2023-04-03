@@ -7,7 +7,7 @@
     path: /usr/lib/systemd/system/kurento-media-server.target
     state: absent
   notify:
-    - reload systemd
+    - Reload systemd
 
 # End of transient tasks
 
@@ -32,7 +32,7 @@
     dest: /opt/freeswitch/etc/freeswitch/tls/dtls-srtp.pem
     group: daemon
     mode: "0640"
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Kurento only listen on specified interfaces
   replace:
@@ -60,8 +60,8 @@
     port: "{{ item }}"
   loop: ["8888", "8889", "8890"]
   notify:
-    - stop kurento
-    - reload systemd
+    - Stop kurento
+    - Reload systemd
 
 - name: Remove kurento-media-server.service
   become: true
@@ -89,7 +89,7 @@
     force: true
     mode: "0644"
   notify:
-    - reload systemd
+    - Reload systemd
 
 - name: Flush Handlers
   meta: flush_handlers
@@ -109,8 +109,8 @@
     enabled: true
   loop: ["8888", "8889", "8890"]
   notify:
-    - reload systemd
-    - restart bigbluebutton
+    - Reload systemd
+    - Restart bigbluebutton
 
 - name: Increase kernel max PID number
   become: true
@@ -120,4 +120,4 @@
     sysctl_file: /etc/sysctl.d/20-kurento.conf
   when: not bbb_container_compat
   notify:
-    - restart kurento
+    - Restart kurento

@@ -8,8 +8,8 @@
     backup: true
   when: bbb_mongodb_version|string == '4.4'
   notify:
-    - reload systemd
-    - restart mongo
+    - Reload systemd
+    - Restart mongo
 
 - name: Ensure mongodb4+ does not use nojournal - config
   become: true
@@ -19,7 +19,7 @@
     mode: "0644"
   when: bbb_mongodb_version|string == '4.4'
   notify:
-    - restart mongo
+    - Restart mongo
 
 - name: Set tmpfs size for mongodb
   become: true
@@ -28,8 +28,8 @@
     regexp: ^  mount -t tmpfs
     line: "  mount -t tmpfs -o size={{ bbb_mongodb_tmpfs_size }} tmpfs /mnt/mongo-ramdisk"
   notify:
-    - stop mongo
-    - restart mongo
+    - Stop mongo
+    - Restart mongo
 
 - name: Ensure mongod is started and enabled to start at boot.
   become: true

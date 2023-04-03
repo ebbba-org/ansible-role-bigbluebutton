@@ -33,7 +33,7 @@
   apt:
     name: "{{ bbb_and_dependencies }}"
     state: "{{ bbb_state }}"
-  notify: set bbb hostname
+  notify: Set bbb hostname
 
 - name: Install bbb-webhooks
   apt:
@@ -60,4 +60,4 @@
 - name: Upgrade packages
   apt:
     upgrade: "{{ bbb_upgrade_packages }}"
-  notify: set bbb hostname
+  notify: Set bbb hostname

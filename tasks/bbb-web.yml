@@ -13,8 +13,8 @@
     dest: /etc/systemd/system/bbb-web.service.d/override.conf
     mode: "0644"
   notify:
-    - reload systemd
-    - restart bbb-web
+    - Reload systemd
+    - Restart bbb-web
 
 - name: Configure bbb-web application logback settings
   become: true
@@ -23,4 +23,4 @@
     dest: /usr/share/bbb-web/WEB-INF/classes/logback.xml
     mode: "0644"
   notify:
-    - restart bbb-web
+    - Restart bbb-web

@@ -6,7 +6,7 @@
     owner: freeswitch
     group: daemon
     mode: "0644"
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Install custom dialplan
   template:
@@ -15,4 +15,4 @@
     owner: freeswitch
     group: daemon
     mode: "0644"
-  notify: restart freeswitch
+  notify: Restart freeswitch

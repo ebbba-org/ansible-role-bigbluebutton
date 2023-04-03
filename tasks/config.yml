@@ -141,8 +141,8 @@
     - bbb-html5-frontend@.service
   when: bbb_container_compat
   notify:
-    - reload systemd
-    - restart bigbluebutton
+    - Reload systemd
+    - Restart bigbluebutton
 
 - name: Remove override file for bbb-html5.service
   file:
@@ -154,8 +154,8 @@
     - bbb-html5-frontend@.service
   when: not bbb_container_compat
   notify:
-    - reload systemd
-    - restart bigbluebutton
+    - Reload systemd
+    - Restart bigbluebutton
 
 - name: Set default presentation
   become: true

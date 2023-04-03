@@ -6,7 +6,7 @@
     dest: /etc/bigbluebutton/bbb-html5.yml
     mode: "0644"
   notify:
-    - restart bbb-html5
+    - Restart bbb-html5
 
 - name: Enable sipjsHackViaWs
   replace:
@@ -31,7 +31,7 @@
     regexp: (--max-old-space-size)=(\d*)
     replace: \1={{ bbb_html5_frontend_max_old_space_size }}
   notify:
-    - restart bbb-html5
+    - Restart bbb-html5
 
 - name: Set amount of html5 back- and frontends
   become: true
@@ -40,7 +40,7 @@
     dest: /etc/bigbluebutton/bbb-html5-with-roles.conf
     mode: "0644"
   notify:
-    - restart bbb-web
+    - Restart bbb-web
 
 - name: Setup html5-frontend nginx connections
   template:

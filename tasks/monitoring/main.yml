@@ -11,7 +11,7 @@
     dest: /etc/bigbluebutton/nginx/monitoring.nginx
     mode: "0644"
   notify:
-    - reload nginx
+    - Reload nginx
 
 - name: Generate htpasswd file for external access if enabled
   community.general.htpasswd:
@@ -24,4 +24,4 @@
   no_log: true
   when: bbb_monitoring_external | bool
   notify:
-    - reload nginx
+    - Reload nginx

@@ -13,8 +13,8 @@
     dest: /etc/systemd/system/bbb-webrtc-sfu.service.d/override.conf
     mode: "0644"
   notify:
-    - reload systemd
-    - restart bbb-webrtc-sfu
+    - Reload systemd
+    - Restart bbb-webrtc-sfu
 
 - name: Create /etc/bigbluebutton/bbb-webrtc-sfu
   become: true
@@ -30,4 +30,4 @@
     dest: /etc/bigbluebutton/bbb-webrtc-sfu/production.yml
     mode: "0644"
   notify:
-    - restart bbb-webrtc-sfu
+    - Restart bbb-webrtc-sfu
