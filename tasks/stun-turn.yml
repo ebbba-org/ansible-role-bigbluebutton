@@ -7,4 +7,4 @@
     owner: bigbluebutton
     group: root
     mode: "0600"
-  notify: restart bigbluebutton
+  notify: Restart bigbluebutton

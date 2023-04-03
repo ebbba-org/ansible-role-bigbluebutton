@@ -40,7 +40,7 @@
     name: "{{ bbb_webhooks }}"
     state: "{{ bbb_state }}"
   when: bbb_webhooks_enable
-  notify: restart bigbluebutton
+  notify: Restart bigbluebutton
 
 - name: Install bbb api demos
   apt:
