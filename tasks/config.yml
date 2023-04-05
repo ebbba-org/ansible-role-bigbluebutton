@@ -125,7 +125,7 @@
   loop:
     - bbb-html5-backend@.service
     - bbb-html5-frontend@.service
-  when: bbb_container_compat
+  when: bbb_container_compat or bbb_proxy_host is defined
 
 - name: Save override file for bbb-html5 template services
   copy:
@@ -153,6 +153,22 @@
     - bbb-html5-backend@.service
     - bbb-html5-frontend@.service
   when: not bbb_container_compat
+  notify:
+    - Reload systemd
+    - Restart bigbluebutton
+
+- name: Override meteor ROOT_URL for the cluster proxy
+  ansible.builtin.copy:
+    dest: "{{ item }}"
+    content: |
+      [Service]
+      Environment=ROOT_URL=https://{{ bbb_proxy_host }}/{{ bbb_proxy_name }}/html5client
+      Environment=DDP_DEFAULT_CONNECTION_URL=https://{{ bbb_hostname }}/{{ bbb_proxy_name }}/html5client
+    mode: "0644"
+  loop:
+    - /etc/systemd/system/bbb-html5-frontend@.service.d/cluster.conf
+    - /etc/systemd/system/bbb-html5-backend@.service.d/cluster.conf
+  when: bbb_proxy_host is defined
   notify:
     - Reload systemd
     - Restart bigbluebutton

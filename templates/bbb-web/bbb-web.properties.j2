@@ -54,3 +54,11 @@ allowRevealOfBBBVersion={{ bbb_allow_reveal_of_bbb_version | ternary('true', 'fa
 # show a logo in top left corner
 useDefaultLogo={{ bbb_use_default_logo | ternary('true', 'false') }}
 defaultLogoURL={{ bbb_default_logo_url }}
+
+# cluster proxy settings
+{% if bbb_proxy_host is defined %}
+defaultHTML5ClientUrl=https://{{ bbb_proxy_host }}/{{ bbb_proxy_name }}/html5client/join
+defaultGuestWaitURL=https://{{ bbb_hostname }}/{{ bbb_proxy_name }}/html5client/guestWait
+presentationBaseURL=https://{{ bbb_hostname }}/bigbluebutton/presentation
+accessControlAllowOrigin=https://{{ bbb_proxy_host }}
+{% endif %}
