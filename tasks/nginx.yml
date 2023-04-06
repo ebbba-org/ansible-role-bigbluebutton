@@ -1,10 +1,4 @@
 ---
-- name: Ensure bbb_nginx_root exists
-  ansible.builtin.file:
-    path: "{{ bbb_nginx_root }}"
-    state: directory
-    mode: '0755'
-
 - name: Ensure nginx is started and enabled to start at boot.
   become: true
   systemd:
