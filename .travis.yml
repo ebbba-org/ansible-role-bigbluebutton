@@ -74,18 +74,18 @@ before_install:
   - echo "deb http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse" | sudo tee /etc/apt/sources.list.d/xenial-backports.list
   - sudo apt-get update -qq
   - sudo apt -t xenial-backports -y install lxd acl dnsmasq-base zfsutils-linux -q
-## change of group implies logout+login to apply... can't do with travis = run as root (sic)
-## https://github.com/travis-ci/travis-ci/issues/1839   or chain: sudo -E su $USER -c "..."
+  ## change of group implies logout+login to apply... can't do with travis = run as root (sic)
+  ## https://github.com/travis-ci/travis-ci/issues/1839   or chain: sudo -E su $USER -c "..."
   - sudo usermod -G lxd travis
   # Pull container
-#  - lxc remote add images images.linuxcontainers.org
+  #  - lxc remote add images images.linuxcontainers.org
   - sudo -E su $USER -c "lxc remote list"
   - sudo -E su $USER -c "lxc image list"
-## pre-download base images
+  ## pre-download base images
   - 'sudo -E su $USER -c "[ ${distribution} == ubuntu ] || lxc image copy images:${distribution}/${version}/amd64 local: --alias=${distribution}-${version}-nossh"'
   - 'sudo -E su $USER -c "[ ${distribution} == ubuntu ] && lxc image copy ubuntu:${version} local: --alias=${distribution}-${version}" || true'
   - sudo -E su $USER -c "lxc image list"
-## configure network
+  ## configure network
   - ifconfig -a
   - sudo lxc info
   - sudo lxc network list
@@ -98,15 +98,15 @@ before_install:
   - systemctl status -l --no-pager lxd || true
   - cat /etc/network/interfaces.d/50-cloud-init.cfg
   - sudo lxc network list
-# configure storage pool
+  # configure storage pool
   - sudo lxc storage list
   - sudo lxc storage create pool1 zfs
   - sudo lxc storage list
   - sudo zpool list
   - sudo lxc profile device add default root disk path=/ pool=pool1
   - sudo lxc profile show default
-# https://redis4you.com/articles.php?id=012&name=redis
-# https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux
+  # https://redis4you.com/articles.php?id=012&name=redis
+  # https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux
   - sudo sysctl -w net.ipv4.tcp_timestamps=1
 
   - sudo pip install ansible ansible-lint

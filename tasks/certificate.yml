@@ -1,5 +1,4 @@
 ---
-
 - name: Install ssl-cert package
   become: true
   apt:
@@ -24,6 +23,6 @@
   become: true
   file:
     path: "{{ bbb_ssl_key }}"
-    owner: "root"
-    group: "{{'ssl-cert' if ansible_os_family == 'Debian' else 'root' }}"
-    mode: '0440'
+    owner: root
+    group: "{{ 'ssl-cert' if ansible_os_family == 'Debian' else 'root' }}"
+    mode: "0440"

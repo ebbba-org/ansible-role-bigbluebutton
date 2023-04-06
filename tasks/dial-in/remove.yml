@@ -1,12 +1,12 @@
 ---
 - name: Remove custom provider profile
   file:
-    path: "/opt/freeswitch/conf/sip_profiles/external/dial-in.xml"
+    path: /opt/freeswitch/conf/sip_profiles/external/dial-in.xml
     state: absent
-  notify: restart freeswitch
+  notify: Restart freeswitch
 
 - name: Remove custom dialplan
   file:
-    path: "/opt/freeswitch/conf/dialplan/public/dial-in.xml"
+    path: /opt/freeswitch/conf/dialplan/public/dial-in.xml
     state: absent
-  notify: restart freeswitch
+  notify: Restart freeswitch

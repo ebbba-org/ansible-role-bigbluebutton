@@ -1,124 +1,123 @@
 ---
 ## Transient tasks, removing unused files
 # Remove after next release
-- name: remove kurento-media-server.target
+- name: Remove kurento-media-server.target
   become: true
   file:
     path: /usr/lib/systemd/system/kurento-media-server.target
     state: absent
   notify:
-    - reload systemd
+    - Reload systemd
 
 # End of transient tasks
 
-- name: generate DTLS-SRTP certificate for kurento
+- name: Generate DTLS-SRTP certificate for kurento
   become: true
   shell:
     cmd: 'umask 137 && openssl req -x509 -new -nodes -newkey rsa:4096 -sha256 -days 3650 -subj "/C=BR/ST=Ottawa/O=BigBlueButton Inc./OU=Live/CN={{ inventory_hostname }}" -keyout /tmp/dtls-srtp-key.pem -out /tmp/dtls-srtp-cert.pem && cat /tmp/dtls-srtp-key.pem /tmp/dtls-srtp-cert.pem > /etc/kurento/dtls-srtp.pem && chgrp kurento /etc/kurento/dtls-srtp.pem && rm /tmp/dtls-srtp-key.pem /tmp/dtls-srtp-cert.pem'
     creates: /etc/kurento/dtls-srtp.pem
 
-- name: use DTLS-SRTP for kurento
+- name: Use DTLS-SRTP for kurento
   become: true
   lineinfile:
     path: /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
-    regexp: 'pemCertificateRSA='
-    line: 'pemCertificateRSA=/etc/kurento/dtls-srtp.pem'
+    regexp: pemCertificateRSA=
+    line: pemCertificateRSA=/etc/kurento/dtls-srtp.pem
 
-- name: use DTLS-SRTP for freeswitch
+- name: Use DTLS-SRTP for freeswitch
   become: true
   copy:
     remote_src: true
     src: /etc/kurento/dtls-srtp.pem
     dest: /opt/freeswitch/etc/freeswitch/tls/dtls-srtp.pem
     group: daemon
-    mode: 0640
-  notify: restart freeswitch
+    mode: "0640"
+  notify: Restart freeswitch
 
-- name: kurento only listen on specified interfaces
+- name: Kurento only listen on specified interfaces
   replace:
     path: /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
-    regexp: '^;?networkInterfaces=.*$'
-    replace: 'networkInterfaces={{ bbb_kurento_interfaces | join(",") }}'
+    regexp: ^;?networkInterfaces=.*$
+    replace: networkInterfaces={{ bbb_kurento_interfaces | join(",") }}
   when: (bbb_kurento_interfaces | default([]) | length) > 0
-  notify: restart kurento
+  notify: Restart kurento
 
-- name: kurento listen on all interfaces
+- name: Kurento listen on all interfaces
   replace:
     path: /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
-    regexp: '^;?networkInterfaces=.*$'
-    replace: ';networkInterfaces='
+    regexp: ^;?networkInterfaces=.*$
+    replace: ;networkInterfaces=
   when: (bbb_kurento_interfaces | default([]) | length) == 0
-  notify: restart kurento
+  notify: Restart kurento
 
-- name: add kurento-media-server service-instances
+- name: Add kurento-media-server service-instances
   become: true
   template:
     src: kurento/kurento-media-server.service.tpl
-    dest: "/usr/lib/systemd/system/kurento-media-server-{{ item }}.service"
-    mode: '0644'
+    dest: /usr/lib/systemd/system/kurento-media-server-{{ item }}.service
+    mode: "0644"
   vars:
     port: "{{ item }}"
-  loop: [ '8888', '8889', '8890' ]
+  loop: ["8888", "8889", "8890"]
   notify:
-    - stop kurento
-    - reload systemd
+    - Stop kurento
+    - Reload systemd
 
-- name: remove kurento-media-server.service
+- name: Remove kurento-media-server.service
   become: true
   file:
-     path: /usr/lib/systemd/system/kurento-media-server.service
-     state: absent
+    path: /usr/lib/systemd/system/kurento-media-server.service
+    state: absent
 
-- name: prevent creation of transient systemd service for sysv service
+- name: Prevent creation of transient systemd service for sysv service
   become: true
   file:
-     path: /etc/init.d/kurento-media-server
-     state: absent
+    path: /etc/init.d/kurento-media-server
+    state: absent
 
-- name: remove kurento-media-server.service override
+- name: Remove kurento-media-server.service override
   become: true
   file:
-     path: /etc/systemd/system/kurento-media-server.service.d/override.conf
-     state: absent
+    path: /etc/systemd/system/kurento-media-server.service.d/override.conf
+    state: absent
 
-- name: deploy kurento service override configuration
+- name: Deploy kurento service override configuration
   become: true
   template:
     src: kurento/kurento-mk.override
     dest: /etc/systemd/system/kurento-media-server.service
     force: true
-    mode: '0644'
+    mode: "0644"
   notify:
-    - reload systemd
+    - Reload systemd
 
 - name: Flush Handlers
   meta: flush_handlers
 
-- name: template kurento-media-server instance configs
+- name: Template kurento-media-server instance configs
   become: true
   template:
     src: kurento/kurento.conf.json
-    dest: "/etc/kurento/kurento-{{ item }}.conf.json"
-    mode: '0644'
-  loop: [ '8888', '8889', '8890' ]
-
-- name: enable kurento-media-server instances
+    dest: /etc/kurento/kurento-{{ item }}.conf.json
+    mode: "0644"
+  loop: ["8888", "8889", "8890"]
+- name: Enable kurento-media-server instances
   become: true
   systemd:
-     name: "kurento-media-server-{{ item }}"
-     state: started
-     enabled: true
-  loop: [ '8888', '8889', '8890' ]
+    name: kurento-media-server-{{ item }}
+    state: started
+    enabled: true
+  loop: ["8888", "8889", "8890"]
   notify:
-    - reload systemd
-    - restart bigbluebutton
+    - Reload systemd
+    - Restart bigbluebutton
 
-- name: increase kernel max PID number
+- name: Increase kernel max PID number
   become: true
-  sysctl:
+  ansible.posix.sysctl:
     name: kernel.pid_max
-    value: '4194304'
+    value: "4194304"
     sysctl_file: /etc/sysctl.d/20-kurento.conf
   when: not bbb_container_compat
   notify:
-    - restart kurento
+    - Restart kurento
