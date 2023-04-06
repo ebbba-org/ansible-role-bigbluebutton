@@ -1,18 +1,18 @@
 ---
 - name: Install custom provider profile
   template:
-    src: "dial-in/provider.xml.j2"
-    dest: "/opt/freeswitch/conf/sip_profiles/external/dial-in.xml"
+    src: dial-in/provider.xml.j2
+    dest: /opt/freeswitch/conf/sip_profiles/external/dial-in.xml
     owner: freeswitch
     group: daemon
-    mode: '0644'
-  notify: restart freeswitch
+    mode: "0644"
+  notify: Restart freeswitch
 
 - name: Install custom dialplan
   template:
-    src: "dial-in/dialplan.xml.j2"
-    dest: "/opt/freeswitch/conf/dialplan/public/dial-in.xml"
+    src: dial-in/dialplan.xml.j2
+    dest: /opt/freeswitch/conf/dialplan/public/dial-in.xml
     owner: freeswitch
     group: daemon
-    mode: '0644'
-  notify: restart freeswitch
+    mode: "0644"
+  notify: Restart freeswitch

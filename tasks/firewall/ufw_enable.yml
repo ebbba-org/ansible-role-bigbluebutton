@@ -13,10 +13,10 @@
 
 - name: Set logging
   community.general.ufw:
-    logging: 'on'
+    logging: "on"
   when:
     - "'logging' in bbb_firewall_ufw"
-    - "bbb_firewall_ufw['logging']"
+    - bbb_firewall_ufw['logging']
 
 - name: Setup default rules
   community.general.ufw: "{{ item }}"
@@ -40,7 +40,7 @@
   community.general.ufw:
     rule: allow
     direction: out
-    src: '{{ item }}'
+    src: "{{ item }}"
   with_items: "{{ bbb_firewall_ufw['allow_networks'] }}"
   when:
     - "'allow_networks' in bbb_firewall_ufw"
@@ -49,7 +49,7 @@
   community.general.ufw:
     rule: reject
     direction: out
-    src: '{{ item }}'
+    src: "{{ item }}"
   with_items: "{{ bbb_firewall_ufw['reject_networks'] }}"
   when:
     - "'reject_networks' in bbb_firewall_ufw"
@@ -59,11 +59,11 @@
     rule: allow
     port: "{{ bbb_ssh_port }}"
 
-- name: allow sip-proxy connection
+- name: Allow sip-proxy connection
   community.general.ufw:
     rule: allow
-    from: '{{ bbb_dialin_provider_ip }}'
-    to_port: '5060'
+    from: "{{ bbb_dialin_provider_ip }}"
+    to_port: "5060"
   when: bbb_dialin_enabled | bool and bbb_dialin_provider_ip is defined and bbb_dialin_provider_ip | length > 0
 
 - name: Setup default policy

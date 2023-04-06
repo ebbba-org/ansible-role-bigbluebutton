@@ -1,3 +1,4 @@
+---
 # .ansible-lint
 # implicit unless exclude_paths is defined in config
 exclude_paths:
@@ -5,8 +6,14 @@ exclude_paths:
   - .github/
 warn_list:
   - package-latest
+  - jinja[invalid]
+  - name[casing]
+  - schema[tasks]
+  - template-instead-of-copy
+  - jinja[spacing]
+  - ignore-errors
 skip_list:
   - fqcn-builtins
   - internal-error
   - unnamed-task
-  - ignore-errors
+  - no-changed-when

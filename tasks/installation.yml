@@ -1,27 +1,26 @@
 ---
-
-- name: install dependencies
+- name: Install dependencies
   become: true
   apt:
     name: "{{ bbb_required_packages }}"
     update_cache: true
     cache_valid_time: 60
 
-- name: set version of java to use
+- name: Set version of java to use
   become: true
   file:
     src: /usr/lib/jvm/java-11-openjdk-amd64/bin/java
     dest: /etc/alternatives/java
     state: link
 
-- name: install nginx-full for client-logging
+- name: Install nginx-full for client-logging
   become: true
   apt:
     name: nginx-full
     state: "{{ bbb_state }}"
   when: bbb_client_log_enable
 
-- name: install nginx-core, no client-logging
+- name: Install nginx-core, no client-logging
   become: true
   apt:
     name: nginx-core
@@ -29,36 +28,36 @@
     autoremove: true
   when: not bbb_client_log_enable
 
-- name: install bbb and dependencies
+- name: Install bbb and dependencies
   become: true
   apt:
     name: "{{ bbb_and_dependencies }}"
     state: "{{ bbb_state }}"
-  notify: set bbb hostname
+  notify: Set bbb hostname
 
-- name: install bbb-webhooks
+- name: Install bbb-webhooks
   apt:
     name: "{{ bbb_webhooks }}"
     state: "{{ bbb_state }}"
   when: bbb_webhooks_enable
-  notify: restart bigbluebutton
+  notify: Restart bigbluebutton
 
-- name: install bbb api demos
+- name: Install bbb api demos
   apt:
     name: "{{ bbb_demos }}"
     state: "{{ bbb_state }}"
   when: bbb_api_demos_enable
 
-- name: remove bbb api demos
+- name: Remove bbb api demos
   apt:
     name: "{{ bbb_demos }}"
-    state: "absent"
+    state: absent
     # Using autoremove because otherwise tomcat8
     # would stay installed and keep running
     autoremove: true
   when: not bbb_api_demos_enable
 
-- name: upgrade packages
+- name: Upgrade packages
   apt:
     upgrade: "{{ bbb_upgrade_packages }}"
-  notify: set bbb hostname
+  notify: Set bbb hostname
