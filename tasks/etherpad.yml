@@ -6,9 +6,9 @@
     dest: /usr/share/etherpad-lite/ep_cursortrace.tgz
     owner: etherpad
     group: etherpad
-    mode: '644'
+    mode: "644"
     remove: true
-  notify: restart etherpad
+  notify: Restart etherpad
   when: bbb_etherpad_disable_cursortrace_plugin | bool
 
 - name: Enable etherpad ep_cursortrace plugin
@@ -20,7 +20,7 @@
     group: etherpad
     remote_src: true
     creates: /usr/share/etherpad-lite/node_modules/ep_cursortrace
-  notify: restart etherpad
+  notify: Restart etherpad
   when: not bbb_etherpad_disable_cursortrace_plugin | bool
 
 - name: Set loglevel
@@ -29,4 +29,4 @@
     path: /usr/share/etherpad-lite/settings.json
     regexp: '"loglevel":.*,'
     replace: '"loglevel": "{{ bbb_etherpad_log_level }}",'
-  notify: restart etherpad
+  notify: Restart etherpad

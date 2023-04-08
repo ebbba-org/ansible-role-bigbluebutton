@@ -6,9 +6,9 @@
 
 > Ansible role for a BigBlueButton installation
 
-This role is following the documentation on <https://docs.bigbluebutton.org/2.4/install.html>
+This role is following the documentation on <https://docs.bigbluebutton.org/2.5/install.html>
 
-Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#before-you-install) and [Minimum server requirements](https://docs.bigbluebutton.org/2.4/install.html#minimum-server-requirements) from the official documentation as they also apply here.
+Also check [Before you install](https://docs.bigbluebutton.org/2.5/install.html#before-you-install) and [Minimum server requirements](https://docs.bigbluebutton.org/2.5/install.html#minimum-server-requirements) from the official documentation as they also apply here.
 
 ---
 
@@ -60,9 +60,10 @@ Also check [Before you install](https://docs.bigbluebutton.org/2.4/install.html#
 | | `bbb_turn_enable` | enable the use uf TURN in general | `yes` | |
 | | `bbb_stun_servers` | a list of STUN-Server to use | `{{ bbb_hostname }}` | an array with key `server` - take a look in defaults/main.yml |
 | | `bbb_ice_servers` | a list of RemoteIceCandidate for STUN | `[]` | in array with key `server` |
+| | `bbb_ignore_running_meetings` | install even if meetings are running | `no` | current meetings will be terminated |
 | | `bbb_turn_servers` | a list of TURN-Server to use | `{}` | take a look in defaults/main.yml |
 | | `bbb_mongodb_version` | version of mongodb to be installed | `4.2` | |
-| | `bbb_mongodb_tmpfs_size' | tmpfs size for the mongodb | `512m` | |
+| | `bbb_mongodb_tmpfs_size` | tmpfs size for the mongodb | `512m` | |
 | | `bbb_disable_recordings` | Disable options in gui to have recordings | `no` | [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored |
 | | `bbb_api_demos_enable` | enable installation of the api demos | `no` | |
 | | `bbb_client_log_enable` | enable installation of the nginx-full and config for client logging according to [BBB Customization Docs](https://docs.bigbluebutton.org/admin/customize.html#collect-feedback-from-the-users). See "METEOR" Section below for needed `bbb_meteor` values. | `false` | |

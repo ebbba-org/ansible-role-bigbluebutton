@@ -7,11 +7,10 @@
 
 - name: Check if chrony is installed
   package_facts:
-    manager: "apt"
+    manager: apt
 
 - name: Get the list of services
   service_facts:
-
 - name: Disable/enable chrony service
   service:
     name: chrony
@@ -19,7 +18,7 @@
     state: "{{ bbb_ntp_cron | ternary('stopped', 'started') }}"
   when: "'chrony' in ansible_facts.packages"
 
-  # on Ubuntu 18.04 timedatectl set-ntp just controls systemd-timesynd, so this is an idempotent alternative
+# on Ubuntu 18.04 timedatectl set-ntp just controls systemd-timesynd, so this is an idempotent alternative
 - name: Disable/enable systemd-timesyncd
   ansible.builtin.systemd:
     name: systemd-timesyncd
@@ -29,8 +28,8 @@
 
 - name: Add/remove time syncronisation cronjob
   cron:
-    name: "sync system time"
-    job: "chronyd -q"
+    name: sync system time
+    job: chronyd -q
     state: "{{ bbb_ntp_cron | ternary('present', 'absent') }}"
     day: "{{ bbb_ntp_cron_day }}"
     hour: "{{ bbb_ntp_cron_hour }}"

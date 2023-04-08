@@ -4,22 +4,22 @@
   file:
     dest: "{{ bbb_ssl_cert | dirname }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Deploy custom TLS private key
   become: true
   copy:
-    src: '{{ bbb_own_key }}'
-    dest: '{{ bbb_ssl_key }}'
-    owner: "root"
-    group: "{{'ssl-cert' if ansible_os_family == 'Debian' else 'root' }}"
-    mode: '0440'
-  notify: reload nginx
+    src: "{{ bbb_own_key }}"
+    dest: "{{ bbb_ssl_key }}"
+    owner: root
+    group: "{{ 'ssl-cert' if ansible_os_family == 'Debian' else 'root' }}"
+    mode: "0440"
+  notify: Reload nginx
 
 - name: Deploy custom TLS certificate
   become: true
   copy:
-    src: '{{ bbb_own_cert }}'
-    dest: '{{ bbb_ssl_cert }}'
-    mode: '0644'
-  notify: reload nginx
+    src: "{{ bbb_own_cert }}"
+    dest: "{{ bbb_ssl_cert }}"
+    mode: "0644"
+  notify: Reload nginx

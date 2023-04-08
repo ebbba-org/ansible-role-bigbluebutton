@@ -1,51 +1,50 @@
 ---
-
-- name: write custom meteor config
+- name: Write custom meteor config
   become: true
   copy:
-    content: '{{ bbb_meteor | to_nice_yaml(indent=2) }}'
+    content: "{{ bbb_meteor | to_nice_yaml(indent=2) }}"
     dest: /etc/bigbluebutton/bbb-html5.yml
-    mode: '0644'
+    mode: "0644"
   notify:
-    - restart bbb-html5
+    - Restart bbb-html5
 
 - name: Enable sipjsHackViaWs
   replace:
     path: /usr/share/bigbluebutton/nginx/sip.nginx
-    regexp: 'proxy_pass .*'
-    replace: 'proxy_pass http://{{ bbb_freeswitch_ip_address }}:5066;'
+    regexp: proxy_pass .*
+    replace: proxy_pass http://{{ bbb_freeswitch_ip_address }}:5066;
   when: ((((bbb_meteor | default({})).public | default({})).media | default({})).sipjsHackViaWs  | default({})) | bool
-  notify: reload nginx
+  notify: Reload nginx
 
 - name: Disable sipjsHackViaWs
   replace:
     path: /usr/share/bigbluebutton/nginx/sip.nginx
-    regexp: 'proxy_pass .*'
-    replace: 'proxy_pass https://{{ bbb_freeswitch_ip_address }}:7443;'
+    regexp: proxy_pass .*
+    replace: proxy_pass https://{{ bbb_freeswitch_ip_address }}:7443;
   when: not ((((bbb_meteor | default({})).public | default({})).media | default({})).sipjsHackViaWs  | default({})) | bool
-  notify: reload nginx
+  notify: Reload nginx
 
-- name: increase max-old-space-size in frontends
+- name: Increase max-old-space-size in frontends
   become: true
   replace:
     path: /usr/share/meteor/bundle/systemd_start_frontend.sh
-    regexp: '(--max-old-space-size)=(\d*)'
-    replace: '\1={{ bbb_html5_frontend_max_old_space_size }}'
+    regexp: (--max-old-space-size)=(\d*)
+    replace: \1={{ bbb_html5_frontend_max_old_space_size }}
   notify:
-    - restart bbb-html5
+    - Restart bbb-html5
 
-- name: set amount of html5 back- and frontends
+- name: Set amount of html5 back- and frontends
   become: true
   template:
     src: bbb-html5/bbb-html5-with-roles.conf
     dest: /etc/bigbluebutton/bbb-html5-with-roles.conf
-    mode: '0644'
+    mode: "0644"
   notify:
-    - restart bbb-web
+    - Restart bbb-web
 
-- name: setup html5-frontend nginx connections
+- name: Setup html5-frontend nginx connections
   template:
     src: nginx/bbb-html5-loadbalancer.conf.j2
     dest: /etc/nginx/conf.d/bbb-html5-loadbalancer.conf
-    mode: '0644'
-  notify: reload nginx
+    mode: "0644"
+  notify: Reload nginx
