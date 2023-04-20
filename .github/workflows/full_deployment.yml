@@ -5,6 +5,10 @@ on:
   push:
       branches:    
         - 'bbb/2.5'
+        - 'bbb/2.6'
+        - 'master'
+        - 'main'
+        - 'develop'
       tags:
         - ".*"
   pull_request:
