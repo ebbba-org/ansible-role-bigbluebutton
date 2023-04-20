@@ -55,6 +55,11 @@
         msg: Please set a value for bbb_freeswitch_default_password variable.
       failed_when: bbb_freeswitch_default_password is not defined
       when: bbb_freeswitch_default_password is not defined
+    - name: Checking bbb_proxy_name
+      debug:
+        msg: Please set a value for the bbb_proxy_name variable.
+      failed_when: bbb_proxy_name is not defined
+      when: bbb_proxy_host is defined
   rescue:
     - name: CHECK YOUR VARIABLES!
       debug:

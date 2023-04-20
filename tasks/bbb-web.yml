@@ -24,3 +24,12 @@
     mode: "0644"
   notify:
     - Restart bbb-web
+
+- name: Fix /etc/default/bbb-web for cluster proxy
+  ansible.builtin.lineinfile:
+    path: /etc/default/bbb-web
+    regexp: '^JDK_JAVA_OPTIONS=.*'
+    line: 'JDK_JAVA_OPTIONS="-Dgrails.cors.enabled=true -Dgrails.cors.allowCredentials=true -Dgrails.cors.allowedOrigins=https://{{ bbb_hostname }},https://{{ bbb_proxy_host }}"'
+  when: bbb_proxy_host is defined
+  notify:
+    - Restart bbb-web

@@ -300,3 +300,22 @@ bbb_firewall_ufw:
 bbb_docker_compose_version: 1.29.2
 
 bbb_nodejs_version: 16.x
+
+# Cluster proxy variables
+# Define the following variables to set up the cluster proxy
+# bbb_proxy_host: bbb.example.com
+# bbb_proxy_name: "{{ inventory_hostname | split('.') | first }}"
+bbb_proxy_meteor:
+  public:
+    app:
+      basename: "/{{ bbb_proxy_name }}/html5client"
+      bbbWebBase: "https://{{ bbb_hostname }}/bigbluebutton"
+      learningDashboardBase: "https://{{ bbb_hostname }}/learning-dashboard"
+      userSettingsStorage: local
+    media:
+      stunTurnServersFetchAddress: "https://{{ bbb_hostname }}/bigbluebutton/api/stuns"
+      sip_ws_host: "{{ bbb_hostname }}"
+    presentation:
+      uploadEndpoint: "https://{{ bbb_hostname }}/bigbluebutton/presentation/upload"
+    pads:
+      url: "https://{{ bbb_hostname }}/pad"

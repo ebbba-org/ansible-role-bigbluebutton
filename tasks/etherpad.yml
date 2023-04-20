@@ -30,3 +30,11 @@
     regexp: '"loglevel":.*,'
     replace: '"loglevel": "{{ bbb_etherpad_log_level }}",'
   notify: Restart etherpad
+
+- name: Configure etherpad for the cluster proxy
+  ansible.builtin.copy:
+    dest: "/etc/bigbluebutton/etherpad.json"
+    content: '{"cluster_proxies": ["https://{{ bbb_proxy_host }}"]}'
+    mode: "0644"
+  when: bbb_proxy_host is defined
+  notify: Restart bigbluebutton

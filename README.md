@@ -273,6 +273,27 @@ bbb_meteor:
           viewer: 8
 ```
 
+### Cluster proxy
+
+This role is capable of configuring BigBlueButton for the (cluster proxy setup)[https://docs.bigbluebutton.org/administration/cluster-proxy/].
+To use this feature you need to define both `bbb_proxy_host` to the url of your cluster proxy and
+`bbb_proxy_name` to the name your BBB host should have in the proxy
+(you can set this e.g. to the subdomain of your BigBlueButton host, as shown in the defaults).
+This role should then take care of configuring your BigBlueButton host correctly.
+However, you still need to set up the cluster proxy itself, which this role will not do for you.
+If you set up a nginx proxy as described in the official docs,
+you can specify the locations using the variables used in this role in a jinja template like this:
+
+```jinja
+{% for host in groups['bigbluebutton'] %}
+{% if hostvars[host].get('bbb_proxy_host') %}
+location /{{ hostvars[host].bbb_proxy_name }}/html5client/ {
+    proxy_pass https://{{ host }};
+}
+{% endif %}
+{% endfor %}
+```
+
 ### User Feedback logging
 To enable client logging and/or userfeedback, you need to set `bbb_client_log_enable` to `true` add the following keys here:
 
