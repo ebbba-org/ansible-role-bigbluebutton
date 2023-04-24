@@ -1,8 +1,7 @@
 ---
 - name: Install custom provider profile, dialplan and xml_curl-module config
-  when:
-    - not item.callgw | default(false) or
-    - item.callgw | default(false) and bbb_dialin_callgw_enabled
+  when: not item.callgw | default(false) or
+        (item.callgw | default(false) and bbb_dialin_callgw_enabled)
   ansible.builtin.template: &dialin_template_module_params
     src: "{{ 'dial-in/' ~ item.src }}"
     dest: "{{ '/opt/freeswitch/' ~ item.dest }}"
@@ -13,14 +12,14 @@
   loop:
     - {src: provider.xml.j2, dest: conf/sip_profiles/external/dial-in.xml}
     - {src: dialplan.xml.j2, dest: conf/dialplan/public/dial-in.xml}
-    - {src: xml_curl.conf.xml.j2", dest: conf/autoload_configs/xml_curl.conf.xml, callgw: true}
+    - {src: xml_curl.conf.xml.j2, dest: conf/autoload_configs/xml_curl.conf.xml, callgw: true}
 
 - name: Copy freeswitch scalelite dialplan and activate module
   when: bbb_dialin_callgw_enabled
   block:
     - name: Copy freeswitch config files for scalelite
       ansible.builtin.copy: *dialin_template_module_params
-      loop: [{src: dialplan-scalelite.xml", dest: conf/dialplan/public/scalelite.xml}]
+      loop: [{src: dialplan-scalelite.xml, dest: conf/dialplan/public/scalelite.xml}]
       notify: Restart freeswitch
 
     - name: Activate freeswitch module mod_xml_curl
