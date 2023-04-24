@@ -1,0 +1,18 @@
+<configuration name="xml_curl.conf" description="cURL XML Gateway">
+    <bindings>
+        <binding name="dialplan">
+            <!-- Update the domain name in the gateway-url to the domain name of your Scalelite server -->
+            <param name="gateway-url" value="{{ 'https://' ~ bbb_dialin_callgw_url  ~ '/fsapi' }}" bindings="dialplan"/>
+            <!--
+                Update the password in the credentials based on your Scalelite configuration.
+                The username is always "fsapi". The default password is the same as the first
+                LOADBALANCER_SECRET configured in Scalelite. You can use a different password by
+                configuring FSAPI_PASSWORD.
+                If FSAPI_PASSWORD is set to the empty string, then authentication is disabled and
+                you should comment out both of the following lines.
+             -->
+            <param name="gateway-credentials" value="{{ 'fsapi:' ~ bbb_dialin_callgw_fsapi_password }}"/>
+            <param name="auth-scheme" value="basic"/>
+        </binding>
+    </bindings>
+</configuration>

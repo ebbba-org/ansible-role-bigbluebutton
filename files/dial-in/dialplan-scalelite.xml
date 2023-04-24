@@ -1,0 +1,8 @@
+<include>
+    <extension name="scalelite" continue="true">
+        <condition>
+            <action application="set" data="bbb_authorized=true"/>
+            <action application="transfer" data="${destination_number} XML default"/>
+        </condition>
+    </extension>
+</include>
