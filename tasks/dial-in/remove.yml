@@ -1,7 +1,7 @@
 ---
 - name: Remove dialplans, sip profile and freeswitch mod config
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: "{{ '/opt/freeswitch/conf/' ~ item }}"
     state: absent
   notify: Restart freeswitch
   loop:
