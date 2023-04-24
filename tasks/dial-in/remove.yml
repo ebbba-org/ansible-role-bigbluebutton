@@ -1,12 +1,11 @@
 ---
-- name: Remove custom provider profile
-  file:
-    path: /opt/freeswitch/conf/sip_profiles/external/dial-in.xml
+- name: Remove dialplans, sip profile and freeswitch mod config
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: absent
   notify: Restart freeswitch
-
-- name: Remove custom dialplan
-  file:
-    path: /opt/freeswitch/conf/dialplan/public/dial-in.xml
-    state: absent
-  notify: Restart freeswitch
+  loop:
+    - sip_profiles/external/dial-in.xml
+    - dialplan/public/dial-in.xml
+    - autoload_configs/xml_curl.conf.xml
+    - dialplan/public/scalelite.xml
