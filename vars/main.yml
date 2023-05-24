@@ -26,3 +26,21 @@ bbb_webhooks:
 
 bbb_demos:
   - bbb-demo
+
+bbb_allowed_disabled_features:
+  - chat
+  - sharedNotes
+  - polls
+  - screenshare
+  - externalVideos
+  - presentation
+  - downloadPresentationWithAnnotations
+  - learningDashboard
+  - layouts
+  - captions
+  - liveTranscription
+  - virtualBackgrounds
+  - customVirtualBackgrounds
+  - breakoutRooms
+  - importSharedNotesFromBreakoutRooms
+  - importPresentationWithAnnotationsFromBreakoutRooms

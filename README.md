@@ -146,7 +146,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/administration/in
 | | `bbb_office_to_pdf_max_concurrent_conversions` | Max concurrent of conversion script execution | `4` | |
 | | `bbb_freeswitch_muted_sound` | Enable muted sound (`you are now muted`) | `true` | |
 | | `bbb_freeswitch_unmuted_sound` | Enable unmuted sound (`you are now unmuted`) | `true` | |
-| | `bbb_breakout_rooms_enabled` | Enable or disable breakout rooms | `true` | |
+| Deprecated | `bbb_breakout_rooms_enabled` | Enable or disable breakout rooms | `true` | use `bbb_disabled_features` instead |
 | | `bbb_breakout_rooms_record` | Enable or disable recording in breakout rooms | `false` | |
 | | `bbb_breakout_rooms_privatechat_enabled` | Enable or disable private chat in breakout rooms | `true` | |
 | | `bbb_docker_compose_version` | Set [docker-compose python package version](https://pypi.org/project/docker/#history) | see `defaults/main.yml` | Sets the version of the docker-compose python package |
@@ -165,8 +165,9 @@ Also check [Before you install](https://docs.bigbluebutton.org/administration/in
 | | `bbb_end_when_delay_in_minutes` |  | `1` |  |
 | | `bbb_notify_recording_is_on` |  | `false` |  |
 | | `bbb_allow_reveal_of_bbb_version` |  | `false` |  |
-| | `bbb_learning_dashboard_enabled` | Enable `true` / Disable `false` the [Learning Dashboard](https://docs.bigbluebutton.org/2.4/new.html#learning-dashboard) | `true` | |
+| Deprecated | `bbb_learning_dashboard_enabled` | Enable `true` / Disable `false` the [Learning Dashboard](https://docs.bigbluebutton.org/2.4/new.html#learning-dashboard) | `true` | use `bbb_disabled_features` instead|
 | `bbb_default_meeting_layout` | Default Meeting Layout. Default Meeting Layout. Valid values are CUSTOM_LAYOUT, SMART_LAYOUT, PRESENTATION_FOCUS, VIDEO_FOCUS | `SMART_LAYOUT` | |
+| | `bbb_disabled_features` | List of features to disable | `[]` | See https://docs.bigbluebutton.org/development/api#create for options |
 
 ### METEOR
 
