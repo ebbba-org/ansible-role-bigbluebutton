@@ -57,7 +57,7 @@
     dest: /usr/lib/systemd/system/kurento-media-server-{{ item }}.service
     mode: "0644"
   vars:
-    port: "{{ item }}"
+    kms_port: "{{ item }}"
   loop: ["8888", "8889", "8890"]
   notify:
     - Stop kurento
