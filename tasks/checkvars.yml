@@ -60,6 +60,12 @@
         msg: Please set a value for the bbb_proxy_name variable.
       failed_when: bbb_proxy_name is not defined
       when: bbb_proxy_host is defined
+    - name: Checking bbb_disabled_features against allowed values
+      assert:
+        that: "{{ item in bbb_allowed_disabled_features }}"
+        fail_msg: "Value {{ item }} is not in list of allowed values."
+      loop: "{{ bbb_disabled_features }}"
+      when: bbb_disabled_features
   rescue:
     - name: CHECK YOUR VARIABLES!
       debug:

@@ -160,14 +160,14 @@ bbb_num_file_processor_threads: 2
 bbb_office_to_pdf_conversion_timeout: 60
 bbb_office_to_pdf_max_concurrent_conversions: 4
 
-bbb_breakout_rooms_enabled: true
+bbb_breakout_rooms_enabled: true  # deprecated as of 2.6
 bbb_breakout_rooms_record: false
 bbb_breakout_rooms_privatechat_enabled: true
 
 bbb_user_inactivity_inspect_timer: 0
 bbb_user_inactivity_threshold: 30
 bbb_user_activity_sign_response_delay: 5
-bbb_learning_dashboard_enabled: true
+bbb_learning_dashboard_enabled: true  # deprecated as of 2.6
 bbb_default_meeting_layout: SMART_LAYOUT
 bbb_webcams_only_for_moderator: false
 bbb_allow_mods_to_eject_cameras: false
@@ -178,6 +178,17 @@ bbb_end_when_no_moderator: false
 bbb_end_when_delay_in_minutes: 1
 bbb_notify_recording_is_on: false
 bbb_allow_reveal_of_bbb_version: false
+
+# List of features to disable
+# Available options:
+# chat, sharedNotes, polls, screenshare, externalVideos, presentation, downloadPresentationWithAnnotations
+# learningDashboard, layouts, captions, liveTranscription, virtualBackgrounds, customVirtualBackgrounds
+# breakoutRooms, importSharedNotesFromBreakoutRooms, importPresentationWithAnnotationsFromBreakoutRooms
+bbb_disabled_features: []
+
+# the following variables are to ensure backwards compatibility with the deprecated feature flags
+bbb_disabled_features_deprecated: "{{ (['learningDashboard'] if bbb_learning_dashboard_enabled else []) + (['breakoutRooms'] if bbb_breakout_rooms_enabled else []) }}"
+bbb_disabled_features_combined: "{{ bbb_disabled_features | union(bbb_disabled_features_deprecated) }}"
 
 bbb_use_default_logo: false
 bbb_default_logo_url: ${ bigbluebutton.web.serverURL }/images/{{ bbb_custom_logo_name | default('logo.png') }}
