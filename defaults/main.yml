@@ -187,7 +187,7 @@ bbb_allow_reveal_of_bbb_version: false
 bbb_disabled_features: []
 
 # the following variables are to ensure backwards compatibility with the deprecated feature flags
-bbb_disabled_features_deprecated: "{{ (['learningDashboard'] if bbb_learning_dashboard_enabled else []) + (['breakoutRooms'] if bbb_breakout_rooms_enabled else []) }}"
+bbb_disabled_features_deprecated: "{{ ([] if bbb_learning_dashboard_enabled else ['learningDashboard']) + ([] if bbb_breakout_rooms_enabled else ['breakoutRooms']) }}"
 bbb_disabled_features_combined: "{{ bbb_disabled_features | union(bbb_disabled_features_deprecated) }}"
 
 bbb_use_default_logo: false
