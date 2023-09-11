@@ -310,7 +310,7 @@ bbb_firewall_ufw:
 # https://pypi.org/project/docker-compose/#history
 bbb_docker_compose_version: 1.29.2
 
-bbb_nodejs_version: 16.x
+bbb_nodejs_version: 18.x
 
 # Cluster proxy variables
 # Define the following variables to set up the cluster proxy
