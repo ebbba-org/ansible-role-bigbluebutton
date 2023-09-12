@@ -9,7 +9,7 @@ bbb_required_packages:
   - python3-setuptools
   - python3-pip
   - python3-wheel
-  - openjdk-11-jdk
+  - openjdk-17-jdk
   - python3-passlib
   - python-passlib
   - net-tools

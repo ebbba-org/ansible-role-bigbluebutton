@@ -9,7 +9,7 @@
 - name: Set version of java to use
   become: true
   file:
-    src: /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+    src: /usr/lib/jvm/java-17-openjdk-amd64/bin/java
     dest: /etc/alternatives/java
     state: link
 
