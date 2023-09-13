@@ -1,7 +1,7 @@
 ---
 bbb_hostname: "{{ ansible_fqdn }}"
 bbb_state: present
-bbb_version: focal-260
+bbb_version: focal-270
 bbb_upgrade_packages: "{{ 'yes' if bbb_state == 'latest' else 'no' }}"
 bbb_check_for_running_meetings: true
 bbb_letsencrypt_enable: true
