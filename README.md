@@ -136,6 +136,7 @@ Also check [Before you install](https://docs.bigbluebutton.org/administration/in
 | | `bbb_ufw_reject_networks_custom` | List of additional networks to be rejected by UFW | Not defined | |
 | | `bbb_ssh_port` | Allow and limit the port used for SSH access | `22` | |
 | | `bbb_max_file_size_upload`| Maximum file size for an uploaded presentation (default 30MB - number must be in byte) | 30000000| |
+| | `bbb_http_session_timeout` | Timeout (seconds) to invalidate inactive HTTP sessions. | `14400` | 4 Hours |
 | | `bbb_default_max_users` | Default maximum number of users a meeting can have | `0` | Meeting doesn't have a user limit |
 | | `bbb_default_meeting_duration` | Default duration of the meeting in minutes | `0` | Meeting doesn't end |
 | | `bbb_max_num_pages` | Maximum number of pages allowed for an uploaded presentation | `200` | |

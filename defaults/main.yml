@@ -152,6 +152,7 @@ bbb_mute_on_start: false
 bbb_guestpolicy: ALWAYS_ACCEPT
 bbb_default_max_users: 0
 bbb_default_meeting_duration: 0
+bbb_http_session_timeout: 14400
 bbb_max_num_pages: 200
 bbb_max_file_size_upload: 30000000
 bbb_max_conversion_time: 5
