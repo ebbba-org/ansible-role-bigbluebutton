@@ -1,2 +1,6 @@
 [Unit]
 After=syslog.target network.target freeswitch.service kurento-media-server-8888.service kurento-media-server-8889.service kurento-media-server-8890.service redis-server.service
+{%if bbb_container_compat %}
+[Service]
+CPUSchedulingPolicy=
+{% endif %}
