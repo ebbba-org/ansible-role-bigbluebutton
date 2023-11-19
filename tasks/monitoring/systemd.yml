@@ -15,14 +15,6 @@
   notify:
     - Restart monitoring service
 
-- name: Change ownership directory
-  file:
-    path: "{{ bbb_monitoring_systemd_directory }}"
-    state: directory
-    owner: bbb-exporter
-    group: bbb-exporter
-    mode: "0755"
-
 - name: Ensure pip is installed
   apt:
     name:
