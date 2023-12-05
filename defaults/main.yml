@@ -119,6 +119,9 @@ bbb_monitoring_systemd_bind_ip: "0.0.0.0"
 bbb_monitoring_systemd_port: 9688
 
 bbb_dialin_enabled: false
+bbb_dialin_callgw_enabled: false
+bbb_dialin_callgw_url: ""
+bbb_dialin_callgw_fsapi_password: ""
 bbb_dialin_provider_proxy: sip.example.net
 bbb_dialin_provider_ip: ""
 bbb_dialin_provider_username: provider-account
