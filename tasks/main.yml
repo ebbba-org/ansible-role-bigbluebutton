@@ -48,6 +48,7 @@
   tags: mongodb
 
 - import_tasks: certificate.yml
+  when: bbb_nginx_listen_https | bool
   tags:
     - tls
     - certificates
