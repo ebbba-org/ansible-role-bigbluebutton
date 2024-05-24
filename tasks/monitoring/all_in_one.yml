@@ -17,7 +17,6 @@
   notify: Restart monitoring container
 
 - name: Start monitoring
-  community.docker.docker_compose:
-    pull: true
+  community.docker.docker_compose_v2:
     project_src: "{{ bbb_monitoring_all_in_one_directory }}"
   when: bbb_monitoring_all_in_one_enable | bool
