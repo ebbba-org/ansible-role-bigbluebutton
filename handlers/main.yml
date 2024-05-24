@@ -70,9 +70,8 @@
     state: reloaded
 
 - name: Restart monitoring container
-  community.docker.docker_compose:
-    pull: false
-    restarted: true
+  community.docker.docker_compose_v2:
+    state: "restarted"
     project_src: "{{ bbb_monitoring_all_in_one_directory }}"
 
 - name: Restart monitoring service
