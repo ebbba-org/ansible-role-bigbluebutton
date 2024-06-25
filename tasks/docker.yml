@@ -1,9 +1,10 @@
 ---
-- name: Ensure pip is installed
+- name: Ensure pip and docker-compose-plugin is installed
   apt:
     name:
       - python3-pip
       - python3-setuptools
+      - docker-compose-plugin
     state: "{{ bbb_state }}"
 
 - name: Install python docker packages
