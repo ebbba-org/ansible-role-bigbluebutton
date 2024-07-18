@@ -1,6 +1,5 @@
 ---
 galaxy_info:
-  standalone: true
   role_name: bigbluebutton
   company: eBBBa
   author: n0emis
