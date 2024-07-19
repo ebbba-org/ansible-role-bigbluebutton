@@ -12,17 +12,21 @@ Also check [Before you install](https://docs.bigbluebutton.org/administration/in
 
 ---
 
-- ℹ️ PR [#275](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/275) removed the option of installing Greenlight. Please checkout another project for Greenlight support
-- ℹ️ PR [#276](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/276) removed the option of installing coturn. Please checkout another project for coturn support
+> [!NOTE]
+> PR [#275](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/275) removed the option of installing Greenlight. Please checkout another project for Greenlight support
+
+> [!NOTE]
+> PR [#276](https://github.com/ebbba-org/ansible-role-bigbluebutton/pull/276) removed the option of installing coturn. Please checkout another project for coturn support
 
 ---
 
 
 ## Role Variables
 
-> ⚠️ **WATCH OUT FOR _REQUIRED_ VARIABLES!** ⚠️
-
-> ⚠️ **IF NOT SET THIS ROLE WILL FAIL!** ⚠️
+> [!WARNING]
+>  **WATCH OUT FOR _REQUIRED_ VARIABLES!**
+>
+> **IF NOT SET THIS ROLE WILL FAIL!**
 
 | Required | Variable Name | Function | Default value | Comment |
 | -------- | ------------- | -------- | ------------ | ------- |
