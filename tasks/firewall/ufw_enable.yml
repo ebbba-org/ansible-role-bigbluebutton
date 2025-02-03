@@ -1,17 +1,20 @@
 ---
 - name: Install ufw
-  apt:
-    pkg: ufw
+  become: true
+  ansible.builtin.package:
+    name: ufw
     state: present
 
 - name: Activate ufw
   # For the setup process we first allow everything by policy,
   # after allowing ssh the default policy will be set to deny.
+  become: true
   community.general.ufw:
     state: enabled
     policy: allow
 
 - name: Set logging
+  become: true
   community.general.ufw:
     logging: "on"
   when:
@@ -19,24 +22,28 @@
     - bbb_firewall_ufw['logging']
 
 - name: Setup default rules
+  become: true
   community.general.ufw: "{{ item }}"
   with_items: "{{ bbb_firewall_ufw['rules']['default'] }}"
   when:
     - "'rules' in bbb_firewall_ufw and 'default' in bbb_firewall_ufw['rules']"
 
 - name: Setup nginx rules
+  become: true
   community.general.ufw: "{{ item }}"
   with_items: "{{ bbb_firewall_ufw['rules']['nginx'] }}"
   when:
     - "'rules' in bbb_firewall_ufw and 'nginx' in bbb_firewall_ufw['rules']"
 
 - name: Setup bigbluebutton rules
+  become: true
   community.general.ufw: "{{ item }}"
   with_items: "{{ bbb_firewall_ufw['rules']['bigbluebutton'] }}"
   when:
     - "'rules' in bbb_firewall_ufw and 'bigbluebutton' in bbb_firewall_ufw['rules']"
 
 - name: Allow all outgoing traffic for allow_networks
+  become: true
   community.general.ufw:
     rule: allow
     direction: out
@@ -46,6 +53,7 @@
     - "'allow_networks' in bbb_firewall_ufw"
 
 - name: Reject all out going traffic for reject_networks
+  become: true
   community.general.ufw:
     rule: reject
     direction: out
@@ -55,11 +63,13 @@
     - "'reject_networks' in bbb_firewall_ufw"
 
 - name: Allow ssh connections
+  become: true
   community.general.ufw:
     rule: allow
     port: "{{ bbb_ssh_port }}"
 
 - name: Allow sip-proxy connection
+  become: true
   community.general.ufw:
     rule: allow
     from: "{{ bbb_dialin_provider_ip }}"
@@ -67,17 +77,20 @@
   when: bbb_dialin_enabled | bool and bbb_dialin_provider_ip is defined and bbb_dialin_provider_ip | length > 0
 
 - name: Setup default policy
+  become: true
   community.general.ufw:
     policy: deny
   when:
     - "'policy' not in bbb_firewall_ufw"
 
 - name: Setup custom default policy
+  become: true
   community.general.ufw:
     policy: "{{ bbb_firewall_ufw['policy'] }}"
   when:
     - "'policy' in bbb_firewall_ufw"
 
 - name: Reload bbb_firewall_ufw
+  become: true
   community.general.ufw:
     state: reloaded

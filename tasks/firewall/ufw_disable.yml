@@ -4,6 +4,7 @@
     manager: auto
 
 - name: Disable UFW
+  become: true
   community.general.ufw:
     state: disabled
   when: "'ufw' in packages"
