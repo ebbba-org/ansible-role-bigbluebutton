@@ -14,7 +14,17 @@
       - docker-compose=={{ bbb_docker_compose_version }}
     state: "{{ bbb_state }}"
 
+- name: Configure docker daemon
+  become: true
+  ansible.builtin.template:
+    src: "docker/daemon.json.j2"
+    dest: "/etc/docker/daemon.json"
+    mode: '0600'
+  when: "bbb_docker_config | default(False)"
+  notify: Reload docker
+
 - name: Log into DockerHub (avoid rate limits)
+  become: true
   community.docker.docker_login:
     username: "{{ bbb_docker_user }}"
     password: "{{ bbb_docker_passwd }}"

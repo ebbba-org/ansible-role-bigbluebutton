@@ -16,6 +16,12 @@
     name: nginx
     state: restarted
 
+- name: Reload docker
+  become: true
+  systemd:
+    name: docker
+    state: reloaded
+
 - name: Restart freeswitch
   become: true
   systemd:

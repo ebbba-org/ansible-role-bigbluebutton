@@ -35,6 +35,9 @@ bbb_apps_akka_log_level: ERROR
 bbb_freeswitch_log_level: warning
 bbb_etherpad_log_level: INFO
 
+bbb_docker_config:
+  log-driver: journald
+
 # freeswitch
 bbb_freeswitch_ipv6: true
 bbb_freeswitch_ip_address: "{{ ansible_default_ipv4.address }}"

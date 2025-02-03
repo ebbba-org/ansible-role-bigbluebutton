@@ -152,8 +152,9 @@ Also check [Before you install](https://docs.bigbluebutton.org/administration/in
 | Deprecated | `bbb_breakout_rooms_enabled` | Enable or disable breakout rooms | `true` | use `bbb_disabled_features` instead |
 | | `bbb_breakout_rooms_record` | Enable or disable recording in breakout rooms | `false` | |
 | | `bbb_breakout_rooms_privatechat_enabled` | Enable or disable private chat in breakout rooms | `true` | |
-| | `bbb_docker_passwd` | Password to Docker Hub login | Not defined (default: disabled) | Set a Docker Hub password. When defined is used to avoid rate limits |
+| | `bbb_docker_config` | Docker daemon config | `{"log-driver": "journald"}` | Set to `False` to keep original file |
 | | `bbb_docker_user` | Username to Docker Hub login | Not defined (default: disabled) | Set a Docker Hub user. When defined is used to avoid rate limits |
+| | `bbb_docker_passwd` | Password to Docker Hub login | Not defined (default: disabled) | Set a Docker Hub password. When defined is used to avoid rate limits |
 | | `bbb_etherpad_disable_cursortrace_plugin` | Disable or enable cursortrace plugin for etherpad | `false` | Set to `true` if you want to avoid displaying names at cursor position in shared notes |
 | | `bbb_user_inactivity_inspect_timer` | User inactivity audit timer interval in minutes | `0` | If `0` inactivity inspection is deactivated |
 | | `bbb_user_inactivity_threshold` | Number of minutes to consider a user inactive | `30` | A warning message is send to client to check if really inactive |
