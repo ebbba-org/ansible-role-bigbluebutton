@@ -1,4 +1,6 @@
 ---
+bbb_assume_dist: "{{bbb_version.split('-')[0]}}"
+
 bbb_required_packages:
   - language-pack-en
   - software-properties-common

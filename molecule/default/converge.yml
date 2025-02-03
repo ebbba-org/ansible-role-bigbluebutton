@@ -7,7 +7,7 @@
     no_proxy: "{{ lookup('env', 'no_proxy') }}"
   remote_user: root
   vars:
-    bbb_nodejs_version: 8.x
+    bbb_nodejs_version: 18.x
     bbb_letsencrypt_enable: false
     bbb_letsencrypt_email: mail@example.com
   tasks:
