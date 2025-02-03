@@ -22,18 +22,6 @@
     name: freeswitch
     state: restarted
 
-- name: Stop mongo
-  become: true
-  systemd:
-    name: mongod
-    state: stopped
-
-- name: Restart mongo
-  become: true
-  systemd:
-    name: mongod
-    state: restarted
-
 - name: Restart kurento
   become: true
   systemd:

@@ -1,10 +1,4 @@
 ---
-roles:
-  - src: geerlingguy.nodejs
-    version: 6.0.0
-  - src: geerlingguy.docker
-    version: 4.1.0
-
 collections:
   - name: community.general
   - name: community.docker

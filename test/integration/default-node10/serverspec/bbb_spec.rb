@@ -3,7 +3,7 @@ require 'serverspec'
 # Required by serverspec
 set :backend, :exec
 
-pkg_list = [ 'mongodb-org', 'bbb-check', 'bbb-html5', 'bigbluebutton' ]
+pkg_list = [ 'bbb-check', 'bbb-html5', 'bigbluebutton' ]
 
 for p in pkg_list do
   describe package("#{p}"), :if => os[:family] == 'ubuntu' || os[:family] == 'debian'  do

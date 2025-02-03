@@ -38,14 +38,13 @@
 - import_tasks: locale.yml
   tags: locale
 
-- import_tasks: repositories.yml
-  tags: repositories
+- import_tasks: install.yml
+  tags: install
 
-- import_tasks: installation.yml
-  tags: installation
-
-- import_tasks: mongodb.yml
-  tags: mongodb
+- import_tasks: docker.yml
+  tags:
+    - docker
+    - monitoring
 
 - import_tasks: certificate.yml
   when: bbb_nginx_listen_https | bool
@@ -64,12 +63,6 @@
 
 - import_tasks: dial-in/main.yml
   tags: dial-in
-
-- import_tasks: docker.yml
-  when: bbb_monitoring_all_in_one_enable | bool
-  tags:
-    - docker
-    - monitoring
 
 - import_tasks: monitoring/main.yml
   when: bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_systemd_enable | bool

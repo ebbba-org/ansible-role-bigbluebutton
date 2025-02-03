@@ -39,9 +39,4 @@ suites:
   - name: default-node12
     run_list:
     attributes:
-  - name: default-mongo36
-    run_list:
-    attributes:
-  - name: default-mongo4
-    run_list:
-    attributes:
+

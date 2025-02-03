@@ -1,8 +1,7 @@
 ---
 bbb_hostname: "{{ ansible_fqdn }}"
-bbb_state: present
+bbb_upgrade: false
 bbb_version: jammy-300
-bbb_upgrade_packages: "{{ 'yes' if bbb_state == 'latest' else 'no' }}"
 bbb_check_for_running_meetings: true
 bbb_letsencrypt_enable: true
 bbb_letsencrypt_api: https://acme-v02.api.letsencrypt.org/directory
@@ -47,8 +46,6 @@ bbb_freeswitch_unmuted_sound: true
 # bbb_freeswitch_default_password: "Needs_To_Be_Defined_By_The_User"
 
 bbb_system_locale: en_US.UTF-8
-bbb_mongodb_version: 4.4
-bbb_mongodb_tmpfs_size: 512m
 
 # Attention, needs to be encoded with "native2ascii -encoding UTF8"
 bbb_default_welcome_message: Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial
@@ -98,7 +95,7 @@ bbb_dialplan_energy_level: 100
 bbb_dialplan_comfort_noise: 1400
 
 bbb_apt_mirror: https://ubuntu.bigbluebutton.org
-bbb_apt_key: 770C4267C5E63474D171B60937B5DD5EFAB46452
+bbb_apt_key: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
 
 ansible_python_interpreter: /usr/bin/python3
 
@@ -307,8 +304,6 @@ bbb_firewall_ufw:
       - rule: allow
         port: "{{ bbb_ssh_port }}"
         proto: tcp
-
-bbb_nodejs_version: 18.x
 
 # Cluster proxy variables
 # Define the following variables to set up the cluster proxy

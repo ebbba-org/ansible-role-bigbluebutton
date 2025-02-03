@@ -1,0 +1,47 @@
+---
+
+- name: Install system dependencies
+  become: true
+  ansible.builtin.package:
+    name: "{{bbb_packages_system}}"
+    state: present
+
+- name: Set default java version
+  become: true
+  file:
+    src: /usr/lib/jvm/java-{{ bbb_java_version }}-openjdk-amd64/bin/java
+    dest: /etc/alternatives/java
+    state: link
+
+- name: Download PGP Keys
+  become: true
+  ansible.builtin.get_url:
+    url: "{{ item.key }}"
+    dest: "/etc/apt/keyrings/{{ item.name }}.asc"
+    mode: "0644"
+  loop: "{{bbb_package_repos}}"
+  when: "item.key | default(False)"
+
+- name: Configure Repositories
+  become: true
+  ansible.builtin.apt_repository:
+    filename: "{{ item.name }}"
+    repo: "{{ item.repo }}"
+    state: present
+  loop: "{{bbb_package_repos}}"
+  register: result
+
+- name: Install packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{bbb_packages}}"
+  notify: Set bbb hostname
+
+- name: Upgrade packages
+  become: true
+  ansible.builtin.apt:
+    upgrade: "yes"
+  when: "bbb_upgrade"
+  notify: Set bbb hostname

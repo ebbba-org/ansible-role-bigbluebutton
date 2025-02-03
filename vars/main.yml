@@ -1,33 +1,68 @@
 ---
-bbb_assume_dist: "{{bbb_version.split('-')[0]}}"
 
-bbb_required_packages:
+bbb_ubuntu_name: "jammy"
+bbb_node_version: "22"
+bbb_java_version: "17"
+
+bbb_package_repos:
+  - name: nodesource
+    key: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key
+    repo: >-
+      deb [signed-by=/etc/apt/keyrings/nodesource.asc]
+      https://deb.nodesource.com/node_{{ bbb_node_version }}.x
+      nodistro main
+  - name: bigbluebutton
+    key: "{{ bbb_apt_key }}"
+    repo: >-
+      deb [signed-by=/etc/apt/keyrings/bigbluebutton.asc]
+      {{ bbb_apt_mirror }}/{{ bbb_version }}
+      bigbluebutton-{{ ansible_distribution_release | lower }} main
+  - name: docker
+    key: "https://download.docker.com/linux/ubuntu/gpg"
+    repo: >-
+      deb [signed-by=/etc/apt/keyrings/docker.asc]
+      https://download.docker.com/linux/ubuntu
+      {{ ansible_distribution_release | lower }} stable
+
+  - name: bbb-support
+    repo: ppa:bigbluebutton/support
+  - name: yq
+    repo: ppa:rmescandon/yq
+
+# System packages that can/must be installed before other repositories are added
+bbb_packages_system:
+  # Required by ansible or early tasks
+  - ca-certificates
   - language-pack-en
   - software-properties-common
-  - haveged
-  - curl
+  - apt-transport-https
   - python3-apt
-  - python3-dev
-  - python3-setuptools
-  - python3-pip
-  - python3-wheel
-  - openjdk-17-jdk
   - python3-passlib
-  - python-passlib
+  - curl
+  - gpg
+  # Install and set the default java version early to avoid install issues later
+  - "openjdk-{{ bbb_java_version }}-jdk"
+  # Other dependencies that do not need extra repositories or PPAs
+  - haveged  # Faster entropy generation
   - net-tools
+  - wget
   - apparmor
   - apparmor-utils
+  - ruby
 
-bbb_and_dependencies:
-  - mongodb-org
-  - bbb-html5
-  - bigbluebutton
-
-bbb_webhooks:
-  - bbb-webhooks
-
-bbb_demos:
-  - bbb-demo
+bbb_packages:
+  # Core dependencies from external repositories
+  - name: ["yq"]
+  - name: ["docker-ce", "docker-ce-cli", "containerd.io", "docker-buildx-plugin", "docker-compose-plugin"]
+  # Core BBB packages
+  - name: ["bigbluebutton", "bbb-html5"]
+  # Optional dependencies and packages
+  - name: libnginx-mod-http-echo
+    state: "{{ 'present' if bbb_client_log_enable else 'absent' }}"
+  - name: bbb-webhooks
+    state: "{{ 'present' if bbb_webhooks_enable else 'absent' }}"
+  - name: bbb-demo
+    state: "{{ 'present' if bbb_api_demos_enable else 'absent' }}"
 
 bbb_allowed_disabled_features:
   - chat
