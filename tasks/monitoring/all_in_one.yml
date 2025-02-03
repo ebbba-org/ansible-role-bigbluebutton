@@ -18,5 +18,6 @@
 
 - name: Start monitoring
   community.docker.docker_compose_v2:
+    pull: true
     project_src: "{{ bbb_monitoring_all_in_one_directory }}"
   when: bbb_monitoring_all_in_one_enable | bool

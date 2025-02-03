@@ -154,7 +154,6 @@ Also check [Before you install](https://docs.bigbluebutton.org/administration/in
 | Deprecated | `bbb_breakout_rooms_enabled` | Enable or disable breakout rooms | `true` | use `bbb_disabled_features` instead |
 | | `bbb_breakout_rooms_record` | Enable or disable recording in breakout rooms | `false` | |
 | | `bbb_breakout_rooms_privatechat_enabled` | Enable or disable private chat in breakout rooms | `true` | |
-| | `bbb_docker_compose_version` | Set [docker-compose python package version](https://pypi.org/project/docker/#history) | see `defaults/main.yml` | Sets the version of the docker-compose python package |
 | | `bbb_docker_passwd` | Password to Docker Hub login | Not defined (default: disabled) | Set a Docker Hub password. When defined is used to avoid rate limits |
 | | `bbb_docker_user` | Username to Docker Hub login | Not defined (default: disabled) | Set a Docker Hub user. When defined is used to avoid rate limits |
 | | `bbb_etherpad_disable_cursortrace_plugin` | Disable or enable cursortrace plugin for etherpad | `false` | Set to `true` if you want to avoid displaying names at cursor position in shared notes |
@@ -347,11 +346,6 @@ bbb_dialin_default_number: '0133 713-337-4223'
 bbb_dialin_mask_caller: true
 bbb_dialin_overwrite_footer: true
 ```
-
-## Dependencies
-
-- [geerlingguy.nodejs](https://github.com/geerlingguy/ansible-role-nodejs)
-- [geerlingguy.docker](https://github.com/geerlingguy/ansible-role-docker)
 
 ## Example Playbook
 

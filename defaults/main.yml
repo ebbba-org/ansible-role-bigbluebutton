@@ -308,9 +308,6 @@ bbb_firewall_ufw:
         port: "{{ bbb_ssh_port }}"
         proto: tcp
 
-# https://pypi.org/project/docker-compose/#history
-bbb_docker_compose_version: 1.29.2
-
 bbb_nodejs_version: 18.x
 
 # Cluster proxy variables
