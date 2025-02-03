@@ -1,7 +1,0 @@
----
-
-- hosts: bigbluebutton
-  become: true
-
-  roles:
-    - role: ebbba.bigbluebutton
