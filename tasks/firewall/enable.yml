@@ -1,0 +1,52 @@
+---
+- name: Install ufw
+  become: true
+  ansible.builtin.package:
+    name: ufw
+    state: present
+
+- name: Set logging
+  become: true
+  community.general.ufw:
+    logging: "{{'on' if bbb_ufw_logging else 'off'}}"
+
+- name: Install rules
+  become: true
+  community.general.ufw:
+    rule: "{{ item.value.rule | default('allow')}}"
+    direction: "{{ item.value.direction | default('in')}}"
+    from: "{{ item.value.from | default('any')}}"
+    to: "{{ item.value.to | default('any')}}"
+    port: "{{ item.value.port | default(None) }}"
+  when: item.value
+  loop: "{{ bbb_ufw_rules_default | combine(bbb_ufw_rules) | dict2items}}"
+
+- name: Allow outgoing traffic to bbb_ufw_allow_networks(_default)
+  become: true
+  community.general.ufw:
+    rule: allow
+    direction: out
+    to: "{{ item }}"
+  loop: "{{ (bbb_ufw_allow_networks_default + bbb_ufw_allow_networks) | unique }}"
+
+- name: Reject outgoing traffic to bbb_ufw_reject_networks(_default)
+  become: true
+  community.general.ufw:
+    rule: reject
+    direction: out
+    to: "{{ item }}"
+  loop: "{{ (bbb_ufw_reject_networks_default + bbb_ufw_reject_networks) | unique }}"
+
+- name: Allow sip-proxy connection
+  become: true
+  community.general.ufw:
+    rule: allow
+    from: "{{ bbb_dialin_provider_ip }}"
+    port: "5060"
+  when: bbb_dialin_enable
+
+- name: Activate ufw and set default policy
+  become: true
+  community.general.ufw:
+    state: enabled
+    policy: "{{bbb_ufw_policy}}"

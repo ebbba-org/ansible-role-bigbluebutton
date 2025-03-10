@@ -1,0 +1,24 @@
+---
+
+- name: Install docker packages
+  become: true
+  ansible.builtin.package:
+    name: ["docker-ce", "docker-ce-cli", "containerd.io", "docker-buildx-plugin", "docker-compose-plugin"]
+    state: present
+
+- name: Configure docker daemon
+  become: true
+  ansible.builtin.template:
+    src: "docker/daemon.json.j2"
+    dest: "/etc/docker/daemon.json"
+    mode: '0600'
+  when: "bbb_docker_config | default(False)"
+  notify: Reload docker
+
+- name: Log into DockerHub to avoid rate limits
+  become: true
+  community.docker.docker_login:
+    username: "{{ bbb_docker_user }}"
+    password: "{{ bbb_docker_passwd }}"
+  no_log: true
+  when: bbb_docker_user|default(None) and bbb_docker_passwd|default(None)

@@ -23,7 +23,6 @@ bbb_package_repos:
       deb [signed-by=/etc/apt/keyrings/docker.asc]
       https://download.docker.com/linux/ubuntu
       {{ ansible_distribution_release | lower }} stable
-
   - name: bbb-support
     repo: ppa:bigbluebutton/support
   - name: yq
@@ -33,15 +32,16 @@ bbb_package_repos:
 bbb_packages_system:
   # Required by ansible or early tasks
   - ca-certificates
-  - language-pack-en
+  - ssl-cert
   - software-properties-common
   - apt-transport-https
   - python3-apt
   - python3-passlib
   - curl
   - gpg
-  # Install and set the default java version early to avoid install issues later
+  # Configured early to avoid install issues later
   - "openjdk-{{ bbb_java_version }}-jdk"
+  - language-pack-en
   # Other dependencies that do not need extra repositories or PPAs
   - haveged  # Faster entropy generation
   - net-tools
@@ -53,12 +53,9 @@ bbb_packages_system:
 bbb_packages:
   # Core dependencies from external repositories
   - name: ["yq"]
-  - name: ["docker-ce", "docker-ce-cli", "containerd.io", "docker-buildx-plugin", "docker-compose-plugin"]
   # Core BBB packages
   - name: ["bigbluebutton", "bbb-html5"]
   # Optional dependencies and packages
-  - name: libnginx-mod-http-echo
-    state: "{{ 'present' if bbb_client_log_enable else 'absent' }}"
   - name: bbb-webhooks
     state: "{{ 'present' if bbb_webhooks_enable else 'absent' }}"
   - name: bbb-demo
@@ -81,3 +78,60 @@ bbb_allowed_disabled_features:
   - breakoutRooms
   - importSharedNotesFromBreakoutRooms
   - importPresentationWithAnnotationsFromBreakoutRooms
+
+bbb_config_web_base:
+  bigbluebutton.web.serverURL: "https://{{ bbb_hostname }}"
+  securitySalt: "{{ bbb_secret }}"
+  autoStartRecording: false
+
+  disableRecordingDefault: "{{ bbb_disable_recordings }}"
+  allowStartStopRecording: "{{ not bbb_disable_recordings }}"
+  muteOnStart: "{{ bbb_mute_on_start }}"
+  appLogLevel: "{{ bbb_app_log_level }}"
+  defaultDialAccessNumber: "{{bbb_dialin_default_number | default('')}}"
+  defaultWelcomeMessageFooter: "{{ bbb_default_welcome_message_footer }}"
+  bigbluebutton.web.logoutURL: "{{ bbb_web_logouturl }}"
+  allowRequestsWithoutSession: "{{ bbb_allow_request_without_session }}"
+  maxNumPages: "{{ bbb_max_num_pages }}"
+  maxFileSizeUpload: "{{ bbb_max_file_size_upload }}"
+  defaultGuestPolicy: "{{ bbb_guestpolicy }}"
+  defaultHttpSessionTimeout: "{{ bbb_http_session_timeout }}"
+  defaultWelcomeMessage: "{{ bbb_default_welcome_message }}"
+  beans.presentationService.defaultUploadedPresentation: "{{ bbb_default_presentation }}"
+  defaultMaxUsers: "{{ bbb_default_max_users }}"
+  defaultMeetingDuration: "{{ bbb_default_meeting_duration }}"
+  defaultMeetingLayout: "{{ bbb_default_meeting_layout}}"
+  maxConversionTime: "{{ bbb_max_conversion_time }}"
+  numConversionThreads: "{{ bbb_num_conversion_threads }}"
+  numFileProcessorThreads: "{{ bbb_num_file_processor_threads }}"
+  officeToPdfConversionTimeout: "{{ bbb_office_to_pdf_conversion_timeout }}"
+  officeToPdfMaxConcurrentConversions: "{{ bbb_office_to_pdf_max_concurrent_conversions }}"
+  breakoutRoomsRecord: "{{ bbb_breakout_rooms_record }}"
+  breakoutRoomsPrivateChatEnabled: "{{ bbb_breakout_rooms_privatechat_enable }}"
+  userInactivityInspectTimerInMinutes: "{{ bbb_user_inactivity_inspect_timer }}"
+  userInactivityThresholdInMinutes: "{{ bbb_user_inactivity_threshold }}"
+  userActivitySignResponseDelayInMinutes: "{{ bbb_user_activity_sign_response_delay }}"
+  webcamsOnlyForModerator: "{{ bbb_webcams_only_for_moderator }}"
+  allowModsToEjectCameras: "{{ bbb_allow_mods_to_eject_cameras }}"
+  meetingCameraCap: "{{ bbb_meeting_camera_cap }}"
+  userCameraCap: "{{ bbb_user_camera_cap }}"
+  maxPinnedCameras: "{{ bbb_pinned_cameras }}"
+  endWhenNoModerator: "{{ bbb_end_when_no_moderator }}"
+  endWhenNoModeratorDelayInMinutes: "{{ bbb_end_when_delay_in_minutes }}"
+  notifyRecordingIsOn: "{{ bbb_notify_recording_is_on }}"
+  allowRevealOfBBBVersion: "{{ bbb_allow_reveal_of_bbb_version }}"
+  disabledFeatures: "{{ bbb_disabled_features }}"
+  useDefaultLogo: "{{ bbb_use_default_logo }}"
+  defaultLogoURL: "{{ bbb_default_logo_url }}"
+
+bbb_config_html5_base:
+  public:
+    kurento:
+      wsUrl: "wss://{{bbb_hostname}}/bbb-webrtc-sfu"
+    pads:
+      url: "hhttps://{{bbb_hostname}}/pad"
+
+bbb_config_etherpad_base: {}
+
+bbb_nginx_root: /var/www/bigbluebutton-default/assets
+bbb_host_seed: "{{(bbb_hostname + bbb_secret_seed) | hash('sha256')}}"

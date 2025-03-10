@@ -1,0 +1,3 @@
+--- 
+# {{ansible_managed}} 
+{{ {} | combine(bbb_config_html5_base, bbb_config_html5, recursive=True) | to_nice_yaml}}

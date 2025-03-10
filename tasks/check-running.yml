@@ -1,0 +1,33 @@
+- name: Check current bbb secret
+  become: true
+  ansible.builtin.command: bbb-conf --secret
+  changed_when: false
+  check_mode: false
+  failed_when: false
+  register: result
+
+- name: Extract current bbb secret
+  ansible.builtin.set_fact:
+    old_bbb_secret: "{{ (result.stdout | regex_search('Secret: (.+)', '\\1', multiline=True) or [None]) | first }}"
+    cacheable: true
+
+- name: Check for running meetings
+  when:
+    - bbb_check_for_running_meetings
+    - old_bbb_secret
+  ansible.builtin.uri:
+    url: https://{{ bbb_hostname }}/bigbluebutton/api/getMeetings?checksum={{ ('getMeetings' + old_bbb_secret) | hash('sha1') }}
+    return_content: true
+  register: meetings_result
+  failed_when: false
+  changed_when: false
+
+- name: Fail if there are running meetings
+  when:
+    - bbb_check_for_running_meetings
+    - old_bbb_secret
+    - not ansible_check_mode
+    - meetings_result.status | default(500) == 200
+    - "'<messageKey>noMeetings</messageKey>' not in meetings_result.content"
+  fail:
+    msg: "There are running meetings on {{ bbb_hostname }} :/"

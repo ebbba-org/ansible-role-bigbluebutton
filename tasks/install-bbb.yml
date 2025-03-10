@@ -1,0 +1,9 @@
+---
+
+- name: Install BBB packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{bbb_packages}}"
+

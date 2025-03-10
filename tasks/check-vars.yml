@@ -1,0 +1,30 @@
+---
+
+- name: Check required variables
+  ansible.builtin.assert:
+    that: >-
+      {% if item.when is defined -%}
+        not ({{item.when}}) or ({{item.check}})
+      {%- else -%}
+        {{item.check}}
+      {%- endif %}
+    quiet: true
+    fail_msg: "{{item.help | default('Check failed: ' + item.check)}}"
+  loop:
+    - check: bbb_hostname is defined and bbb_hostname | length > 3
+    - check: bbb_secret is defined and bbb_secret | length > 16
+    - check: bbb_freeswitch_socket_password is defined and bbb_freeswitch_socket_password | length > 16
+    - check: bbb_freeswitch_default_password is defined and bbb_freeswitch_default_password | length > 16
+    - when: bbb_acme_enable
+      check: bbb_acme_email is defined
+    - when: bbb_acme_enable
+      check: bbb_ssl_cert_file is not defined
+    - when: bbb_ssl_cert_file is defined
+      check: bbb_ssl_key_file is defined
+    - check: "ansible_distribution_release | lower == bbb_ubuntu_name"
+    - when: bbb_cluster_host is defined
+      check: bbb_cluster_node is defined
+    - when: bbb_disabled_features
+      check: bbb_disabled_features is subset(bbb_allowed_disabled_features)
+    - check: (bbb_hostname | lower) is regex("^([a-z0-9-]{1,}\.)+([a-z]{2,})$")
+      help: "bbb_hostname is not a valid hostname"

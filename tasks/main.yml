@@ -1,90 +1,53 @@
 ---
-- import_tasks: checkvars.yml
-  tags:
-    - checkvars
-    - always
+# Sanity and pre-run checks
+- import_tasks: check-vars.yml
+  tags: ["always", "checks"]
+- import_tasks: check-running.yml
+  tags: ["always", "checks"]
 
-# this is included as block to pass tags to included tasks
-- name: Set the bbb_secret
-  when: bbb_secret is not defined
-  tags:
-    - bbb_secret
-    - always
-  ignore_errors: false
-  block:
-    - name: Include bbb_secret
-      include_tasks: bbb_secret.yml
+# Configuration mixins
+- import_tasks: mixin-proxy.yml
+  when: "bbb_cluster_host is defined"
 
-# this is included as block to pass tags to included tasks
-- name: Check for running Sessions
-  when:
-    - bbb_check_for_running_meetings
-    - bbb_secret is defined
-  tags:
-    - check-for-sessions
-    - always
-  block:
-    - name: Include check-for-sessions
-      include_tasks: check-for-sessions.yml
+# Tighten Firewall before install
+- import_tasks: firewall/enable.yml
+  when: bbb_ufw_enabled
+  tags: ["firewall"]
+- import_tasks: firewall/disable.yml
+  when: not bbb_ufw_enabled
+  tags: ["firewall"]
 
-- import_tasks: firewall/ufw_enable.yml
-  when: bbb_firewall_ufw['enabled']
-  tags: ufw
+# Install packages
+- import_tasks: install-base.yml
+  tags: ["install"]
+- import_tasks: install-docker.yml
+  tags: ["install"]
+- import_tasks: install-bbb.yml
+  tags: ["install"]
+- import_tasks: install-scripts.yml
+  tags: ["install"]
 
-- import_tasks: firewall/ufw_disable.yml
-  when: not bbb_firewall_ufw['enabled']
-  tags: ufw
+# Certificates
+- import_tasks: certs.yml
+  tags: ["certs"]
 
-- import_tasks: locale.yml
-  tags: locale
+# Deploy configuration
+- import_tasks: configure-bbb.yml
+  tags: ["configure"]
+- import_tasks: configure-freeswitch.yml
+  tags: ["configure"]
+- import_tasks: configure-dialin.yml
+  tags: ["configure"]  
+- import_tasks: configure-nginx.yml
+  tags: ["configure"]
+- import_tasks: configure-misc.yml
+  tags: ["configure"]
 
-- import_tasks: install.yml
-  tags: install
+- name: Flush Handler
+  meta: flush_handlers
 
-- import_tasks: docker.yml
-  tags:
-    - docker
-    - monitoring
+# - import_tasks: monitoring/main.yml
+#   when: bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_systemd_enable | bool
+#   tags: monitoring
 
-- import_tasks: certificate.yml
-  when: bbb_nginx_listen_https | bool
-  tags:
-    - tls
-    - certificates
 
-- import_tasks: nginx.yml
-  tags: nginx
-
-- import_tasks: config.yml
-  tags: config
-
-- import_tasks: ntp.yml
-  tags: ntp
-
-- import_tasks: dial-in/main.yml
-  tags: dial-in
-
-- import_tasks: monitoring/main.yml
-  when: bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_systemd_enable | bool
-  tags: monitoring
-
-- import_tasks: webrtc-sfu.yml
-  tags: webrtc-sfu
-
-- import_tasks: bbb-web.yml
-  tags: bbb-web
-
-- import_tasks: bbb-html5.yml
-  tags: bbb-html5
-
-- import_tasks: freeswitch.yml
-  tags: freeswitch
-
-- import_tasks: stun-turn.yml
-  tags: stun-turn
-
-- import_tasks: kurento.yml
-  tags: kurento
-
-- import_tasks: etherpad.yml
-  tags: etherpad

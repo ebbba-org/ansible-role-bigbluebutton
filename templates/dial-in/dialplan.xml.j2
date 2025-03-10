@@ -1,22 +1,32 @@
 <extension name="from_my_provider">
  <condition field="destination_number" expression="^{{ bbb_dialin_provider_extension }}">
+   <action application="start_dtmf" />
    <action application="answer"/>
-   <action application="sleep" data="1000"/>
-   <action application="play_and_get_digits" data="{{ bbb_dialin_default_play_and_get_digits }}"/>
+   <action application="sleep" data="2000"/>
+   <action application="play_and_get_digits" data="{{ bbb_dialin_pin_minlen }} {{ bbb_dialin_pin_maxlen }} {{ bbb_dialin_pin_retries }} {{ bbb_dialin_pin_timeout }} # conference/conf-pin.wav ivr/ivr-that_was_an_invalid_entry.wav pin \d+ {{ bbb_dialin_pin_maxwait }}"/>
 
-   <!-- Uncomment the following block if you want to mask the phone number in the list of participants. -->
-   <!-- Instead of `01711233121` it will then show `xxx-xxx-3121`. -->
    {% if bbb_dialin_mask_caller %}
-   <action application="set_profile_var" data="caller_id_name=${regex(${caller_id_name}|^.*(.{4})$|xxx-xxx-%1)}"/>
+   <action application="set_profile_var" data="caller_id_name=${regex(${caller_id_name}|^.*(.{ {{-bbb_dialin_mask_digits-}} })$|{{bbb_dialin_mask_prefix}}%1)}"/>
+   <action application="set_profile_var" data="caller_id_number=${regex(${caller_id_number}|^.*(.{ {{-bbb_dialin_mask_digits-}} })$|{{bbb_dialin_mask_prefix}}%1)}"/>
    {% endif %}
 
    <action application="transfer" data="SEND_TO_CONFERENCE XML public"/>
  </condition>
 </extension>
+
 <extension name="check_if_conference_active">
- <condition field="${conference ${pin} list}" expression="/sofia/g" />
- <condition field="destination_number" expression="^SEND_TO_CONFERENCE$">
-   <action application="set" data="bbb_authorized=true"/>
-   <action application="transfer" data="${pin} XML default"/>
- </condition>
-</extension>
+  <condition field="${conference ${pin} list}" expression="/sofia/g" />
+  <condition field="destination_number" expression="^SEND_TO_CONFERENCE$">
+    <action application="set" data="bbb_authorized=true"/>
+    <action application="transfer" data="${pin} XML default"/>
+  </condition>
+ </extension>
+ 
+ <extension name="conf_bad_pin">
+  <condition field="${pin}" expression="^\d+$">
+    <action application="answer"/>
+    <action application="sleep" data="1000"/>
+    <action application="play_and_get_digits" data="{{ bbb_dialin_pin_minlen }} {{ bbb_dialin_pin_maxlen }} {{ bbb_dialin_pin_retries }} {{ bbb_dialin_pin_timeout }} # conference/conf-bad-pin.wav ivr/ivr-that_was_an_invalid_entry.wav pin \d+ {{ bbb_dialin_pin_maxwait }}"/>
+    <action application="transfer" data="SEND_TO_CONFERENCE XML public"/>
+  </condition>
+ </extension>

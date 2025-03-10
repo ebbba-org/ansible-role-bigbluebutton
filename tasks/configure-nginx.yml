@@ -1,0 +1,30 @@
+---
+
+- name: Deploy nginx config files
+  become: true
+  ansible.builtin.template:
+    src: "bbb-config/{{ item.src }}.j2"
+    dest: "{{ item.dest | default('/etc/' + item.src) }}"
+    owner: "{{item.owner | default('bigbluebutton')}}"
+    group: "{{item.group | default('root')}}"
+    mode: "{{item.mode | default('0600')}}"
+  loop:
+    - src: nginx/sites-available/bigbluebutton
+      mode: "0644"
+  notify:
+   - Reload nginx
+
+- name: Remove nginx default config
+  become: true
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Reload nginx
+
+# - name: Ensure nginx is started and enabled
+#   become: true
+#   systemd:
+#     name: nginx
+#     enabled: true
+#     state: started
+

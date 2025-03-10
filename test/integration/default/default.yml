@@ -7,11 +7,11 @@
     no_proxy: "{{ lookup('env', 'no_proxy') }}"
   remote_user: root
   vars:
-    bbb_letsencrypt_email: dev@bigbluebutton.dev
-    bbb_letsencrypt_api: "https://acme-staging-v02.api.letsencrypt.org/directory"
+    bbb_acme_email: dev@bigbluebutton.dev
+    bbb_acme_api: "https://acme-staging-v02.api.letsencrypt.org/directory"
     bbb_freeswitch_socket_password: ca5ee03d47e26f2f48a9c900d06bf95e
     bbb_freeswitch_default_password: f0fd0fa1f4123fde875d3ea3d3220a35
-    bbb_letsencrypt_enable: false
+    bbb_acme_enable: false
     bbb_own_cert: test/integration/example.crt
     bbb_own_key: test/integration/example.key
     bbb_secret: ecf63d36d27344eab229a5767180c973

@@ -1,0 +1,12 @@
+---
+
+# - name: Install BBB scripts and helpers
+#   become: true
+#   ansible.builtin.copy:
+#     src: "scripts/{{ item.name }}.j2"
+#     dest: "/usr/local/bin/{{ item.name }}"
+#     owner: "{{item.owner | default('bigbluebutton')}}"
+#     group: "{{item.group | default('root')}}"
+#     mode: "{{item.mode | default('0755')}}"
+#   loop:
+#     - name: bbb-cleanup
