@@ -24,7 +24,7 @@ bbb_ssl_key: /etc/bigbluebutton/ssl/private.key
 
 ### Firewall
 
-bbb_ufw_enabled: false
+bbb_ufw_enable: false
 bbb_ufw_policy: deny
 bbb_ufw_reject_networks: []
 bbb_ufw_reject_networks_default:

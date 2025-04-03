@@ -11,10 +11,10 @@
 
 # Tighten Firewall before install
 - import_tasks: firewall/enable.yml
-  when: bbb_ufw_enabled
+  when: bbb_ufw_enable
   tags: ["firewall"]
 - import_tasks: firewall/disable.yml
-  when: not bbb_ufw_enabled
+  when: not bbb_ufw_enable
   tags: ["firewall"]
 
 # Install packages
