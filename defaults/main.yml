@@ -14,8 +14,7 @@ bbb_apt_key: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
 bbb_acme_enable: true
 # bbb_acme_email
 bbb_acme_api: https://acme-v02.api.letsencrypt.org/directory
-bbb_acmesh_download: https://raw.githubusercontent.com/acmesh-official/acme.sh/{{bbb_acmesh_gitref}}/acme.sh
-bbb_acmesh_gitref: refs/heads/master
+bbb_acmesh_download: https://raw.githubusercontent.com/acmesh-official/acme.sh/refs/heads/master/acme.sh
 bbb_acmesh_update: false
 #bbb_ssl_cert_file:
 #bbb_ssl_key_file:

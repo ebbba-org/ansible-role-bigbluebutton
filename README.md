@@ -46,14 +46,11 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
 **`bbb_acme_api`** (default: `https://acme-v02.api.letsencrypt.org/directory`)\
   Change the ACME provider (example: `https://acme-staging-v02.api.letsencrypt.org/directory`)
 
-**`bbb_acmesh_download`** (default: `https://raw.githubusercontent.com/acmesh-official/acme.sh/{{bbb_acmesh_gitref}}/acme.sh`)\
+**`bbb_acmesh_download`** (default: `https://raw.githubusercontent.com/acmesh-official/acme.sh/refs/heads/master/acme.sh`)\
   Download URL for `acme.sh`.
 
-**`bbb_acmesh_gitref`** (default: `refs/heads/master`)\
-  Used in `bbb_acmesh_url` to define which acme.sh git ref (branch or tag) to use.
-
 **`bbb_acmesh_update`** (default: `false`)\
-  Keep acme.sh updated. This is not recommended, acme.sh is quite stable and usually does not need to be updated.
+  Download acme.sh every time the role is applied, instead of just once.
 
 **`bbb_ssl_cert_file`** (no default)\
   Custom ssl cert file to upload to `bbb_ssl_cert` instead of using ACME.
