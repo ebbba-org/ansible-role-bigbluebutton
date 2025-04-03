@@ -10,8 +10,8 @@ CPUSchedulingPolicy=
 CPUSchedulingPriority=
 {% endif %}
 
-{% if bbb_cluster_host is defined %}
-Environment="JDK_JAVA_OPTIONS=-Dgrails.cors.enabled=true -Dgrails.cors.allowCredentials=true -Dgrails.cors.allowedOrigins=https://{{bbb_cluster_host}},https://{{bbb_hostname}}"
+{% if bbb_cluster_proxy is defined %}
+Environment="JDK_JAVA_OPTIONS=-Dgrails.cors.enabled=true -Dgrails.cors.allowCredentials=true -Dgrails.cors.allowedOrigins=https://{{bbb_cluster_proxy}},https://{{bbb_hostname}}"
 {% endif %}
 
 # PrivateTmp=yes

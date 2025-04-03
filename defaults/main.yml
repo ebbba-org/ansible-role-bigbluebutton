@@ -77,7 +77,7 @@ bbb_turn_servers: [] # e.g. [{url: "turns:turn.example.com:443?transport=tcp", s
 
 ### Cluster mode
 
-# bbb_cluster_host: frontend.example.com
+# bbb_cluster_proxy: frontend.example.com
 bbb_cluster_node: "{{ bbb_hostname | split('.') | first }}"
 
 

@@ -7,7 +7,7 @@
 
 # Configuration mixins
 - import_tasks: mixin-proxy.yml
-  when: "bbb_cluster_host is defined"
+  when: "bbb_cluster_proxy is defined"
 
 # Tighten Firewall before install
 - import_tasks: firewall/enable.yml

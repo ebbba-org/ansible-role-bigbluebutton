@@ -1,4 +1,4 @@
-{% if bbb_cluster_host is defined %}
+{% if bbb_cluster_proxy is defined %}
 server:
-  authorized_cross_origin: {{bbb_cluster_host}}
+  authorized_cross_origin: {{bbb_cluster_proxy}}
 {% endif %}

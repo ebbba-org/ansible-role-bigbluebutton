@@ -3,9 +3,9 @@
   ansible.builtin.set_fact:
     bbb_config_web_base: |
       {{bbb_config_web_base | combine({
-        "defaultHTML5ClientUrl": "https://"+bbb_cluster_host+"/"+bbb_cluster_node+"/html5client",
+        "defaultHTML5ClientUrl": "https://"+bbb_cluster_proxy+"/"+bbb_cluster_node+"/html5client",
         "presentationBaseURL": "https://"+bbb_hostname+"/bigbluebutton/presentation",
-        "accessControlAllowOrigin": "https://"+bbb_cluster_host,
+        "accessControlAllowOrigin": "https://"+bbb_cluster_proxy,
         "graphqlWebsocketUrl": "wss://"+bbb_hostname+"/graphql",
         "graphqlApiUrl": "https://"+bbb_hostname+"/api/rest"
       })}}

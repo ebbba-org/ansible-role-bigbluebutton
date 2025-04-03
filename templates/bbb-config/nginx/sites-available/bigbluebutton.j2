@@ -39,7 +39,7 @@ server {
   # Include specific rules for record and playback
   include /etc/bigbluebutton/nginx/*.nginx;
 
-  {% if bbb_cluster_host is defined %}
+  {% if bbb_cluster_proxy is defined %}
     location /{{bbb_cluster_node}}/html5client {
         gzip_static on;
         alias /usr/share/bigbluebutton/html5-client/;

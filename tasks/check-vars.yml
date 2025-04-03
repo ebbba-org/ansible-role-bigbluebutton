@@ -22,7 +22,7 @@
     - when: bbb_ssl_cert_file is defined
       check: bbb_ssl_key_file is defined
     - check: "ansible_distribution_release | lower == bbb_ubuntu_name"
-    - when: bbb_cluster_host is defined
+    - when: bbb_cluster_proxy is defined
       check: bbb_cluster_node is defined
     - when: bbb_disabled_features
       check: bbb_disabled_features is subset(bbb_allowed_disabled_features)

@@ -55,7 +55,7 @@
     - src: bigbluebutton/bbb-html5.yml
     - src: bigbluebutton/bbb-graphql-server.env
     - src: bigbluebutton/bbb-graphql-middleware.yml
-      when: "{{bbb_cluster_host is defined}}"
+      when: "{{bbb_cluster_proxy is defined}}"
     - src: bigbluebutton/turn-stun-servers.xml
     - src: bigbluebutton/etherpad.json
       group: etherpad
