@@ -1,5 +1,4 @@
 ---
-
 - name: Delete freeswitch file logging config
   become: true
   file:
@@ -50,31 +49,31 @@
   become: true
   ansible.builtin.lineinfile:
     path: /opt/freeswitch/etc/freeswitch/vars.xml
-    regexp: "\\s+<X-PRE-PROCESS\\s+cmd=\"set\"\\s+data=\"{{item.name}}="
-    line: "    <X-PRE-PROCESS cmd=\"set\" data=\"{{item.name}}={{item.value}}\" />"
-    insertbefore: '</include>'
+    regexp: "\\s+<X-PRE-PROCESS\\s+cmd=\"set\"\\s+data=\"{{ item.name }}="
+    line: "    <X-PRE-PROCESS cmd=\"set\" data=\"{{ item.name }}={{ item.value }}\" />"
+    insertbefore: "</include>"
   loop:
-    - {name: external_rtp_ip,   value: "{{bbb_freeswitch_external_ip}}"}
-    - {name: external_sip_ip,   value: "{{bbb_freeswitch_external_ip}}"}
-    - {name: default_password,  value: "{{bbb_freeswitch_default_password}}"}
-    - {name: force_local_ip_v4, value: "{{bbb_freeswitch_local_ip}}"}
-    - {name: local_ip_v4,       value: "$${force_local_ip_v4}"}
+    - { name: external_rtp_ip, value: "{{ bbb_freeswitch_external_ip }}" }
+    - { name: external_sip_ip, value: "{{ bbb_freeswitch_external_ip }}" }
+    - { name: default_password, value: "{{ bbb_freeswitch_default_password }}" }
+    - { name: force_local_ip_v4, value: "{{ bbb_freeswitch_local_ip }}" }
+    - { name: local_ip_v4, value: "$${force_local_ip_v4}" }
   notify: Restart freeswitch
 
 - name: Set freeswitch external bind IP (v4)
   become: true
   community.general.xml:
     path: /opt/freeswitch/conf/sip_profiles/external.xml
-    xpath: /profile/settings/param[@name='{{item.name}}']
+    xpath: /profile/settings/param[@name='{{ item.name }}']
     attribute: value
-    value: "{{item.value}}"
+    value: "{{ item.value }}"
   loop:
-    - {name: ext-rtp-ip,  value: "$${external_rtp_ip}"}
-    - {name: ext-sip-ip,  value: "$${external_sip_ip}"}
-    - {name: sip-ip,      value: "$${external_sip_ip}"}
-    - {name: rtp-ip,      value: "$${external_sip_ip}"}
-    - {name: ws-binding,  value: "$${local_ip_v4}:5066"}
-    - {name: wss-binding, value: "$${local_ip_v4}:7443"}
+    - { name: ext-rtp-ip, value: "$${external_rtp_ip}" }
+    - { name: ext-sip-ip, value: "$${external_sip_ip}" }
+    - { name: sip-ip, value: "$${external_sip_ip}" }
+    - { name: rtp-ip, value: "$${external_sip_ip}" }
+    - { name: ws-binding, value: "$${local_ip_v4}:5066" }
+    - { name: wss-binding, value: "$${local_ip_v4}:7443" }
   notify: Restart freeswitch
 
 - name: Set restrictive permissions of freeswitch config files including passwords
@@ -144,7 +143,6 @@
     regexp: ^/opt/freeswitch/bin/fs_cli
     line: /opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name="password"]' -v @value /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml)
       "$@"
-
 
 - name: Configure different mute sound
   become: true

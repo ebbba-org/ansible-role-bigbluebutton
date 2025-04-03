@@ -1,9 +1,8 @@
 ---
-
 - name: Refresh apt caches
   become: true
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
   changed_when: false
 
 - name: Upgrade all packages
@@ -15,13 +14,13 @@
 - name: Install system dependencies
   become: true
   ansible.builtin.package:
-    name: "{{bbb_packages_system}}"
+    name: "{{ bbb_packages_system }}"
     state: present
 
 - name: Set local hostname to match bbb_hostname
   become: true
   hostname:
-    name: "{{bbb_hostname}}"
+    name: "{{ bbb_hostname }}"
     use: systemd
 
 - name: Generate locales
@@ -54,7 +53,7 @@
     url: "{{ item.key }}"
     dest: "/etc/apt/keyrings/{{ item.name }}.asc"
     mode: "0644"
-  loop: "{{bbb_package_repos}}"
+  loop: "{{ bbb_package_repos }}"
   when: "item.key | default(False)"
 
 - name: Configure extra repositories
@@ -63,7 +62,7 @@
     filename: "{{ item.name }}"
     repo: "{{ item.repo }}"
     state: present
-  loop: "{{bbb_package_repos}}"
+  loop: "{{ bbb_package_repos }}"
   register: result
 
 - name: Upgrade all packages

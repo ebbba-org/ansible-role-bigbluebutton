@@ -1,3 +1,4 @@
+---
 - name: Check current bbb secret
   become: true
   ansible.builtin.command: bbb-conf --secret

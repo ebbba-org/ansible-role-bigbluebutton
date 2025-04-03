@@ -1,5 +1,4 @@
 ---
-
 - name: Ensure ssl directories exist
   become: true
   file:
@@ -9,8 +8,8 @@
     owner: root
     group: root
   loop:
-    - path: "{{bbb_ssl_cert | dirname}}"
-    - path: "{{bbb_ssl_key | dirname}}"
+    - path: "{{ bbb_ssl_cert | dirname }}"
+    - path: "{{ bbb_ssl_key | dirname }}"
 
 - name: Ensure ACME is enabled
   when: bbb_acme_enable
@@ -25,7 +24,7 @@
 - name: Deploy custom ssl files
   when: bbb_ssl_key_file is defined
   become: true
-  no_log: True
+  no_log: true
   copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -33,12 +32,12 @@
     group: root
     mode: "{{ item.mode }}"
   loop:
-  - src: "{{bbb_ssl_cert_file}}"
-    dest: "{{bbb_ssl_cert}}"
-    mode: "0644"
-  - src: "{{bbb_ssl_key_file}}"
-    dest: "{{bbb_ssl_key}}"
-    mode: "0640"
+    - src: "{{ bbb_ssl_cert_file }}"
+      dest: "{{ bbb_ssl_cert }}"
+      mode: "0644"
+    - src: "{{ bbb_ssl_key_file }}"
+      dest: "{{ bbb_ssl_key }}"
+      mode: "0640"
   notify: Reload nginx
 
 - name: Ensure ssl files have proper permissions
@@ -49,10 +48,10 @@
     group: root
     mode: "{{ item.mode }}"
   loop:
-  - path: "{{bbb_ssl_cert}}"
-    mode: "0644"
-  - path: "{{bbb_ssl_key}}"
-    mode: "0640"
+    - path: "{{ bbb_ssl_cert }}"
+      mode: "0644"
+    - path: "{{ bbb_ssl_key }}"
+      mode: "0640"
 
 # TODO: wtf no!? Generate it on the server!
 - name: Copy predefined DH group ffdhe2048

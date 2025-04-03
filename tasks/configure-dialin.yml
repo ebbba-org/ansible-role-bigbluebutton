@@ -1,5 +1,4 @@
 ---
-
 - name: Deploy dial-in config files
   become: true
   when: bbb_dialin_enable
@@ -24,4 +23,3 @@
     state: absent
   loop: *configfiles
   notify: Restart freeswitch
-

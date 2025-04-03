@@ -43,7 +43,7 @@ bbb_packages_system:
   - "openjdk-{{ bbb_java_version }}-jdk"
   - language-pack-en
   # Other dependencies that do not need extra repositories or PPAs
-  - haveged  # Faster entropy generation
+  - haveged # Faster entropy generation
   - net-tools
   - wget
   - apparmor
@@ -88,7 +88,7 @@ bbb_config_web_base:
   allowStartStopRecording: "{{ not bbb_disable_recordings }}"
   muteOnStart: "{{ bbb_mute_on_start }}"
   appLogLevel: "{{ bbb_app_log_level }}"
-  defaultDialAccessNumber: "{{bbb_dialin_default_number | default('')}}"
+  defaultDialAccessNumber: "{{ bbb_dialin_default_number | default('') }}"
   defaultWelcomeMessageFooter: "{{ bbb_default_welcome_message_footer }}"
   bigbluebutton.web.logoutURL: "{{ bbb_web_logouturl }}"
   allowRequestsWithoutSession: "{{ bbb_allow_request_without_session }}"
@@ -100,7 +100,7 @@ bbb_config_web_base:
   beans.presentationService.defaultUploadedPresentation: "{{ bbb_default_presentation }}"
   defaultMaxUsers: "{{ bbb_default_max_users }}"
   defaultMeetingDuration: "{{ bbb_default_meeting_duration }}"
-  defaultMeetingLayout: "{{ bbb_default_meeting_layout}}"
+  defaultMeetingLayout: "{{ bbb_default_meeting_layout }}"
   maxConversionTime: "{{ bbb_max_conversion_time }}"
   numConversionThreads: "{{ bbb_num_conversion_threads }}"
   numFileProcessorThreads: "{{ bbb_num_file_processor_threads }}"
@@ -127,11 +127,10 @@ bbb_config_web_base:
 bbb_config_html5_base:
   public:
     kurento:
-      wsUrl: "wss://{{bbb_hostname}}/bbb-webrtc-sfu"
+      wsUrl: "wss://{{ bbb_hostname }}/bbb-webrtc-sfu"
     pads:
-      url: "hhttps://{{bbb_hostname}}/pad"
+      url: "https://{{ bbb_hostname }}/pad"
 
 bbb_config_etherpad_base: {}
-
 bbb_nginx_root: /var/www/bigbluebutton-default/assets
-bbb_host_seed: "{{(bbb_hostname + bbb_secret_seed) | hash('sha256')}}"
+bbb_host_seed: "{{ (bbb_hostname + bbb_secret_seed) | hash('sha256') }}"

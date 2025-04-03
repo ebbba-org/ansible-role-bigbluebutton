@@ -1,5 +1,4 @@
 ---
-
 - name: Install docker packages
   become: true
   ansible.builtin.package:
@@ -11,7 +10,7 @@
   ansible.builtin.template:
     src: "docker/daemon.json.j2"
     dest: "/etc/docker/daemon.json"
-    mode: '0600'
+    mode: "0600"
   when: "bbb_docker_config | default(False)"
   notify: Reload docker
 

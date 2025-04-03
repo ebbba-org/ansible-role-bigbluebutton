@@ -26,17 +26,9 @@ provisioner:
   ansible_connection: ssh
 
 platforms:
-  - name: ubuntu-18.04
-  - name: ubuntu-16.04
+  - name: ubuntu-22.04
 
 suites:
   - name: default
     run_list:
     attributes:
-  - name: default-node10
-    run_list:
-    attributes:
-  - name: default-node12
-    run_list:
-    attributes:
-

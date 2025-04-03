@@ -8,19 +8,19 @@
 - name: Set logging
   become: true
   community.general.ufw:
-    logging: "{{'on' if bbb_ufw_logging else 'off'}}"
+    logging: "{{ 'on' if bbb_ufw_logging else 'off' }}"
 
 - name: Install rules
   become: true
   community.general.ufw:
-    rule: "{{ item.value.rule | default('allow')}}"
-    direction: "{{ item.value.direction | default('in')}}"
-    from: "{{ item.value.from | default('any')}}"
-    to: "{{ item.value.to | default('any')}}"
+    rule: "{{ item.value.rule | default('allow') }}"
+    direction: "{{ item.value.direction | default('in') }}"
+    from: "{{ item.value.from | default('any') }}"
+    to: "{{ item.value.to | default('any') }}"
     port: "{{ item.value.port | default(None) }}"
     proto: "{{ item.value.proto | default('tcp') }}"
   when: item.value and (item.value.when | default(True))
-  loop: "{{ bbb_ufw_rules_default | combine(bbb_ufw_rules) | dict2items}}"
+  loop: "{{ bbb_ufw_rules_default | combine(bbb_ufw_rules) | dict2items }}"
 
 - name: Allow outgoing traffic to bbb_ufw_allow_networks(_default)
   become: true
@@ -42,4 +42,4 @@
   become: true
   community.general.ufw:
     state: enabled
-    policy: "{{bbb_ufw_policy}}"
+    policy: "{{ bbb_ufw_policy }}"

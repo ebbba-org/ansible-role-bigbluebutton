@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: bigbluebutton
   company: eBBBa
-  author: n0emis
+  author: ebbba
   description: >
     BigBlueButton installation (following the documentation on
     http://docs.bigbluebutton.org/install/install.html)

@@ -37,7 +37,7 @@
 - import_tasks: configure-freeswitch.yml
   tags: ["configure"]
 - import_tasks: configure-dialin.yml
-  tags: ["configure"]  
+  tags: ["configure"]
 - import_tasks: configure-nginx.yml
   tags: ["configure"]
 - import_tasks: configure-misc.yml
@@ -45,6 +45,3 @@
 
 - name: Flush Handler
   meta: flush_handlers
-
-
-

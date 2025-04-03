@@ -1,15 +1,14 @@
 ---
-
 - name: Check required variables
   ansible.builtin.assert:
     that: >-
       {% if item.when is defined -%}
-        not ({{item.when}}) or ({{item.check}})
+        not ({{ item.when }}) or ({{ item.check }})
       {%- else -%}
-        {{item.check}}
+        {{ item.check }}
       {%- endif %}
     quiet: true
-    fail_msg: "{{item.help | default('Check failed: ' + item.check)}}"
+    fail_msg: "{{ item.help | default('Check failed: ' + item.check) }}"
   loop:
     - check: bbb_hostname is defined and bbb_hostname | length > 3
     - check: bbb_secret is defined and bbb_secret | length > 16

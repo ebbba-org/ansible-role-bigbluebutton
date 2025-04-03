@@ -4,12 +4,11 @@ ansible_python_interpreter: /usr/bin/python3
 
 bbb_hostname: "{{ ansible_fqdn }}"
 # bbb_secret
-bbb_secret_seed: "{{bbb_secret}}"
+bbb_secret_seed: "{{ bbb_secret }}"
 bbb_version: jammy-300
 bbb_upgrade: false
 bbb_apt_mirror: https://ubuntu.bigbluebutton.org
 bbb_apt_key: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
-
 
 ### SSL/TLS
 
@@ -18,11 +17,10 @@ bbb_acme_enable: true
 bbb_acme_api: https://acme-v02.api.letsencrypt.org/directory
 bbb_acmesh_download: https://raw.githubusercontent.com/acmesh-official/acme.sh/refs/heads/master/acme.sh
 bbb_acmesh_update: false
-#bbb_ssl_cert_file:
-#bbb_ssl_key_file:
+# bbb_ssl_cert_file:
+# bbb_ssl_key_file:
 bbb_ssl_cert: /etc/bigbluebutton/ssl/fullchain.cer
 bbb_ssl_key: /etc/bigbluebutton/ssl/private.key
-
 
 ### Firewall
 
@@ -62,7 +60,7 @@ bbb_ufw_rules_default:
   dialin:
     from: "{{ bbb_dialin_provider_ip }}"
     port: "5060"
-    when: "{{bbb_dialin_enable}}"
+    when: "{{ bbb_dialin_enable }}"
 
 ### BBB customizations and config overrides
 
@@ -71,7 +69,6 @@ bbb_config_html5: {} # bbb-html5.yml
 bbb_config_etherpad: {} # etherpad.json
 bbb_config_presentation: {} # recording/presentation.yml
 
-
 ### STUN/TURN Servers
 
 bbb_coturn_enable: false
@@ -79,17 +76,15 @@ bbb_stun_servers: [] # e.g. ["stun:stun.freeswitch.org", ...]
 bbb_ice_servers: []
 bbb_turn_servers: [] # e.g. [{url: "turns:turn.example.com:443?transport=tcp", secret: "1234"}, ...]
 
-
 ### Cluster mode
 
 # bbb_cluster_proxy: frontend.example.com
 bbb_cluster_node: "{{ bbb_hostname | split('.') | first }}"
 
-
 ### Freeswitch config
 
-bbb_freeswitch_socket_password: "{{('fsp' + bbb_host_seed) | hash('sha256')}}"
-bbb_freeswitch_default_password: "{{('fdp' + bbb_host_seed) | hash('sha256')}}"
+bbb_freeswitch_socket_password: "{{ ('fsp' + bbb_host_seed) | hash('sha256') }}"
+bbb_freeswitch_default_password: "{{ ('fdp' + bbb_host_seed) | hash('sha256') }}"
 bbb_freeswitch_ipv6: true
 bbb_freeswitch_local_ip: "127.0.0.1"
 bbb_freeswitch_external_ip: "{{ ansible_default_ipv4.address }}"
@@ -99,15 +94,14 @@ bbb_dialplan_quality: cdquality
 bbb_dialplan_energy_level: 100
 bbb_dialplan_comfort_noise: 1400
 
-
-### SIP dial-in config 
+### SIP dial-in config
 
 bbb_dialin_enable: false
-#bbb_dialin_provider_proxy: sip.example.net
-#bbb_dialin_provider_ip: 1.2.3.4
-#bbb_dialin_provider_username: provider-account
-#bbb_dialin_provider_password: provider-password
-#bbb_dialin_provider_extension: "6135551234"
+# bbb_dialin_provider_proxy: sip.example.net
+# bbb_dialin_provider_ip: 1.2.3.4
+# bbb_dialin_provider_username: provider-account
+# bbb_dialin_provider_password: provider-password
+# bbb_dialin_provider_extension: "6135551234"
 # bbb_dialin_default_number: "613-555-1234"
 bbb_dialin_pin_minlen: 5
 bbb_dialin_pin_maxlen: 5
@@ -118,7 +112,6 @@ bbb_dialin_pin_retries: 3
 bbb_dialin_mask_caller: false
 bbb_dialin_mask_digits: 3
 bbb_dialin_mask_prefix: tel-
-
 
 ### Other customizations
 
@@ -166,31 +159,12 @@ bbb_allow_reveal_of_bbb_version: false
 # learningDashboard, layouts, captions, liveTranscription, virtualBackgrounds, customVirtualBackgrounds
 # breakoutRooms, importSharedNotesFromBreakoutRooms, importPresentationWithAnnotationsFromBreakoutRooms
 bbb_disabled_features: []
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 bbb_web_logouturl: default
 bbb_allow_request_without_session: false
 
 bbb_check_for_running_meetings: true
 
 bbb_nginx_privacy: false
-
 
 bbb_webhooks_enable: false
 bbb_api_demos_enable: false
@@ -203,20 +177,13 @@ bbb_etherpad_log_level: INFO
 bbb_docker_config:
   log-driver: journald
 
-
-
 bbb_system_locale: en_US.UTF-8
-
-
-
-
 
 bbb_html5_backend_processes: 2
 bbb_html5_frontend_processes: 2
 bbb_html5_frontend_max_old_space_size: "2048"
 
 bbb_disable_recordings: false
-
 
 bbb_cron_history: 5
 bbb_cron_unrecorded_days: 14

@@ -1,5 +1,4 @@
 ---
-
 - name: Create systemd override directories
   become: true
   file:
@@ -55,7 +54,7 @@
     - src: bigbluebutton/bbb-html5.yml
     - src: bigbluebutton/bbb-graphql-server.env
     - src: bigbluebutton/bbb-graphql-middleware.yml
-      when: "{{bbb_cluster_proxy is defined}}"
+      when: "{{ bbb_cluster_proxy is defined }}"
     - src: bigbluebutton/turn-stun-servers.xml
     - src: bigbluebutton/etherpad.json
       group: etherpad
@@ -64,13 +63,13 @@
     - src: bigbluebutton/bbb-webrtc-sfu/production.yml
     - src: bigbluebutton/bbb-webhooks/production.yml
       when: "{{ bbb_webhooks_enable }}"
-    - src: default/bigbluebutton-cron-config 
+    - src: default/bigbluebutton-cron-config
     - src: bbb-fsesl-akka/logback.xml
     - src: bbb-apps-akka/logback.xml
     - src: bbb-web/logback.xml
       dest: /usr/share/bbb-web/WEB-INF/classes/logback.xml
   notify:
-   - Restart bigbluebutton
+    - Restart bigbluebutton
 
 - name: Remove unused config files
   become: true
@@ -97,13 +96,13 @@
   loop:
     - path: /usr/local/bigbluebutton/bbb-webhooks/config/default.yml
       regexp: "^(\\s+)sharedSecret=.*?"
-      line: "\\g<1>sharedSecret={{bbb_secret}}"
+      line: "\\g<1>sharedSecret={{ bbb_secret }}"
     - path: /usr/local/bigbluebutton/bbb-webhooks/config/default.yml
       regexp: "^(\\s+)serverDomain=.*?"
-      line: "\\g<1>serverDomain={{bbb_hostname}}"
+      line: "\\g<1>serverDomain={{ bbb_hostname }}"
     - path: /usr/local/bigbluebutton/bbb-webhooks/extra/post_catcher.js
       regexp: "^(\\s+)var shared_secret\\s*=.*"
-      line: "\\g<1>var shared_secret = \"{{bbb_secret}}\""
+      line: "\\g<1>var shared_secret = \"{{ bbb_secret }}\""
   notify: Restart bigbluebutton
 
 - name: Set freeswitch socket password

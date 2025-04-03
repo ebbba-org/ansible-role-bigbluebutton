@@ -10,6 +10,6 @@
     bbb_acme_enable: false
     bbb_acme_email: mail@example.com
   tasks:
-    - name: "Include ebbba-org/ansible-role-bigbluebutton"
+    - name: "Include ebbba.bigbluebutton"
       include_role:
-        name: "ebbba-org/ansible-role-bigbluebutton"
+        name: "ebbba.bigbluebutton"
