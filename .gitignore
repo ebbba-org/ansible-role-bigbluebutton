@@ -1,7 +1,9 @@
 *~
 .vagrant
+Vagrantfile
 *.retry
 *.patch
 .idea/
 .cache/
+.vscode/
 devenv/
