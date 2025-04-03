@@ -306,60 +306,6 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
 **`bbb_check_for_running_meetings`** (default: `true`)\
   Check server and stop playbook in case of running meetings.   
 
-**`bbb_monitoring_all_in_one_enable`** (default: `no`)\
-  deploy [all in one monitoring stack](https://bigbluebutton-exporter.greenstatic.dev/installation/all_in_one_monitoring_stack/) (docker)   
-
-**`bbb_monitoring_all_in_one_version`** (no default)\
-  Deprecated, use `bbb_monitoring_exporter_version` instead   
-
-**`bbb_monitoring_all_in_one_directory`** (default: `/root/bbb-monitoring`)\
-  Directory for the docker compose files   
-
-**`bbb_monitoring_all_in_one_port`** (default: `3001`)\
-  Internal Port for the monitoring werbservice   
-
-**`bbb_monitoring_all_in_one_grafana`** (default: `true`)\
-  Enable(true)/Disable(false) the Grafana container   
-
-**`bbb_monitoring_all_in_one_prometheus`** (default: `true`)\
-  Enable(true)/Disable(false) the prometheus container   
-
-**`bbb_monitoring_all_in_one_external`** (no default)\
-  Deprecated, use `bbb_monitoring_external` instead  Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user` 
-
-**`bbb_monitoring_all_in_one_htpasswd_user`** (no default)\
-  Deprecated, use `bbb_monitoring_htpasswd_user` instead   
-
-**`bbb_monitoring_all_in_one_htpasswd`** (no default)\
-  Deprecated, use `bbb_monitoring_htpasswd` instead   
-
-**`bbb_monitoring_recordings_from_disk`** (default: `true`)\
-  Collect recordings metrics by querying the disk instead of the API. See [this](https://bigbluebutton-exporter.greenstatic.dev/exporter-user-guide/#optimizations) for details.   
-
-**`bbb_monitoring_external`** (default: `false`)\
-  Enable exposure to nginx  Can be reached under `/mon/bbb` and `/mon/node` - requires `htpasswd` and `htpasswd_user`. If `bbb_monitoring_systemd_enable` is enabled, no Node Exporter installation process is included 
-
-**`bbb_monitoring_htpasswd_user`** (required when using external monitoring `Undefined`)\
-  The user for the htpasswd   
-
-**`bbb_monitoring_htpasswd`** (required when using external monitoring `Undefined`)\
-  The password for the htpasswd   
-
-**`bbb_monitoring_exporter_version`** (default: `latest` if docker image is enabled or `HEAD` if systemd is enabled)\
-  Version of the BigBlueButton Exporter for docker and systemd  If `bbb_monitoring_all_in_one_enable` is enabled, the [Docker images tags](https://hub.docker.com/r/greenstatic/bigbluebutton-exporter/tags?page=1&ordering=last_updated) can be used. If `bbb_monitoring_systemd_enable` is enabled, the [Git release tags](https://github.com/greenstatic/bigbluebutton-exporter/releases) can be used. 
-
-**`bbb_monitoring_systemd_enable`** (default: `false`)\
-  Deploy monitoring as systemd service (not recommended)  Works only when `bbb_monitoring_all_in_one_enable` is `false` 
-
-**`bbb_monitoring_systemd_directory`** (default: `"/opt/bigbluebutton-exporter"`)\
-  Installation directory for git repository   
-
-**`bbb_monitoring_systemd_port`** (default: `9688`)\
-  Port of bbb-exporter  default port 9866 is defined by the exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/bbb-exporter/settings.py#L37) 
-
-**`bbb_monitoring_systemd_bind_ip`** (default: `0.0.0.0`)\
-  Port of bbb-exporter  default bind IP 0.0.0.0 is defined by the exporter [itself](https://github.com/greenstatic/bigbluebutton-exporter/blob/master/bbb-exporter/settings.py#L38) 
-
 **`bbb_guestpolicy`** (default: `ALWAYS_ACCEPT`)\
   How guest can access  acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR  |
 

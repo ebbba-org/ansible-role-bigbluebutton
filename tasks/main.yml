@@ -46,8 +46,5 @@
 - name: Flush Handler
   meta: flush_handlers
 
-# - import_tasks: monitoring/main.yml
-#   when: bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_systemd_enable | bool
-#   tags: monitoring
 
 
