@@ -2,3 +2,12 @@
 # {{ansible_managed}}
 playback_host: {{bbb_hostname}}
 playback_protocol: https
+
+steps:
+  archive: 'sanity'
+  sanity: 'captions'
+  captions: {{ ['process:'] | product(bbb_recording_formats) | map('join') | to_yaml | trim }}
+{% for format in bbb_recording_formats %}
+  'process:{{format}}': 'publish:{{format}}'
+{% endfor %}
+  

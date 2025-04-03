@@ -122,6 +122,8 @@ bbb_default_presentation: ${bigbluebutton.web.serverURL}/default.pdf
 bbb_use_default_logo: false
 bbb_default_logo_url: ${bigbluebutton.web.serverURL}/logo.png }}
 # bbb_custom_logo
+bbb_recording_formats:
+  - presennation
 
 ## TODO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 bbb_mute_on_start: false

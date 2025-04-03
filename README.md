@@ -235,6 +235,9 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
 **`bbb_custom_logo`** (no default)\
   Deploy a custom default logo. Example `path/to/logo.png` 
 
+**`bbb_recording_formats`** (default: `[presentation]`)
+  List of recording formats to render. This configures `process` and `publish` steps for each format and installs additional packages for the built-in formats: `presentation`, `video`, `screenshare` and `podcast`.
+
 
 ### Config overrides
 
