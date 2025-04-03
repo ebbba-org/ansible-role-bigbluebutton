@@ -3,13 +3,33 @@
 [![Ansible Deployment Test](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/full_deployment.yml/badge.svg)](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/full_deployment.yml)
 [![Ansible Lint](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/ansible-lint.yaml/badge.svg)](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/ansible-lint.yaml)
 [![Release and Changelog Builder](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/changelog_builder.yml/badge.svg)](https://github.com/ebbba-org/ansible-role-bigbluebutton/actions/workflows/changelog_builder.yml)
-This ansible role installs and configures [BigBlueButton](https://github.com/bigbluebutton/bigbluebutton) on a suitable Ubuntu server. 
 
-This role assumes to be applied on a fresh and unmodified Ubuntu 22.04 server (see [minimum requirements](https://docs.bigbluebutton.org/administration/install/#minimum-server-requirements)) and will perform all necessary steps to [install](https://docs.bigbluebutton.org/administration/install/) and configure BigBlueButton. Many [customizations](https://docs.bigbluebutton.org/administration/customize/) are covered by this role as well.
+This ansible role installs and configures [BigBlueButton](https://github.com/bigbluebutton/bigbluebutton) on a [suitable](https://docs.bigbluebutton.org/administration/install/#minimum-server-requirements) Ubuntu server. Many [customizations](https://docs.bigbluebutton.org/administration/customize/) are covered as well.
 
-You can re-apply the role to change configuration or upgrade to the next patch release of BBB. In-place upgrades to the next minor or major release are not supported, as those are hard to test properly and may break in subtile ways. Complex config changes may also leave artefact behind that cause issues. If in doubt or if you experience issues, start from scratch.
+Ansible deployments are best suited for large cluster deployments with may BBB nodes. If you just want to install BBB on a single server, we recommend to follow the [official install instructions](https://docs.bigbluebutton.org/administration/install/) instead.
 
-## Role configuration
+### Install, configure or upgrade BBB
+
+For a first-time install, this role assumes to be applied to a fresh and unmodified Ubuntu 22.04 Server that meets [minimum requirements](https://docs.bigbluebutton.org/administration/install/#minimum-server-requirements) and has no conflicting services (e.g. webservers) already installed. See below for a comprehensive list of available configuration options and customizations.
+
+You can re-apply this role on an empty server (with no running meetings) to deploy config changes or install patch-level upgrades.
+
+### Upgrading from previous releases
+
+**In-place upgrades from previous minor or major releases are not supported**. Those are hard to test properly and may break in subtile ways. Complex config changes may also leave artefact behind that cause issues. We **strongly** suggest to reset your operating system to a fresh and unmodified state before upgrading and start from scratch.
+
+**Configuration for this role is also not backwards compatible between releases**. Variable names and defaults may change, features may be added or removed. Please check and revise your role configuration and test your deployment thoroughly before upgrading your cluster to a new release.
+
+
+## Configuration
+
+All role variables are prefixed with `bbb_` and most of them are optional. See `defaults/main.yaml` for a full list.
+
+This role tries to focus on [customizations](https://docs.bigbluebutton.org/administration/customize/) that require changes in multiple places or additional steps to deploy. Most settings not explicitly covered by this role can be added to the *Config override* maps (`bbb_config_*`) described below. Do not edit config files directly, and do not rely on `apply-config.sh` for post-install modifications. This role will completely overwrite config files and does not use `bbb-conf`, so `apply-config.sh` won't be triggered.
+
+If there is a feature or customizations missing from this role that can not easily be archived with *Config override*, feel free to open an issue or pull request.
+
+### Basic configuration
 
 **`bbb_hostname`** (default: `ansible_fqdn`)\
 Public hostname for this BBB instance (e.g. `bbb.example.com`).
@@ -18,16 +38,16 @@ Public hostname for this BBB instance (e.g. `bbb.example.com`).
 The shared secret for API access. Should not contain any funny characters.
 
 **`bbb_secret_seed`** (default: `bbb_secret`)\
-A secret seed string used to generate other host-local secrets and passwords. Override this if you feel paranoid.
+A secret seed used to generate other host-local secrets and passwords. Override this if you feel paranoid.
 
 **`bbb_version`** (default: `jammy-300`) \
-  Install a specified BigBlueButton version (e.g. `jammy-300-3.0.1`). The version should of cause match a version supported by this role.
+  Install a specified BigBlueButton version (e.g. `jammy-300-3.0.1`). The version should of cause match whatever this role supports, or stuff may break.
 
 **`bbb_upgrade`** (default: `false`)\
   Upgrade all installed packages (including BBB packages) every time this role is applied.
 
 **`bbb_apt_mirror`** (default: `https://ubuntu.bigbluebutton.org`)\
-  BBB repository server. Usefull if you want to switch to a local mirror.
+  BBB repository server. Usefull if you want to switch to a local mirror (e.g. [this one](https://ftp.gwdg.de/pub/linux/misc/bigbluebutton/ubuntu/)). The *actual* repository is assumed to be located at `{{bbb_apt_mirror}}/{{bbb_version}}/`, so the mirror should follow upstream naming conventions.
 
 **`bbb_apt_key`** (default: `{{ bbb_apt_mirror }}/repo/bigbluebutton.asc`)\
   Download URL for the BBB repository signing key.
@@ -71,7 +91,7 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
   Enable firewall (ufw).
 
 **`bbb_ufw_policy`** (default: `deny`)\
-  Default firewall policy (allow/deny).
+  Default firewall input policy (allow/deny).
 
 **`bbb_ufw_logging`** (default: `false`)\
   Enable excessive firewall logging for debugging purposes.
@@ -81,16 +101,16 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
   To remove a named rule, set it to `false`. Just removing the named rule from config will not actually remove the rule in ufw.
 
 **`bbb_ufw_reject_networks`** (default: `[]`)\
-  Block outgoing traffic to these networks in addition to `bbb_ufw_reject_networks_default`, which contains all non-routeable (LAN) networks by default. This prevets a certain group of security issues where the BBB server is tricked into accessing services in private networks.
+  Block outgoing traffic to these networks in addition to `bbb_ufw_reject_networks_default`, which contains all non-routeable (LAN) networks by default. This prevets a certain group of security issues where the BBB server is tricked into accessing non-public services on the private LAN.
 
 **`bbb_ufw_allow_networks`** (default: `[]`)\
-  Allow outgoing traffic to these additional networks. `bbb_ufw_allow_networks_default` lists localhost and the internal docker entwork by default, because those are required for BBB to function.
+  Allow outgoing traffic to these networks in addition to `bbb_ufw_allow_networks_default`, which contains localhost and the internal docker nentwork by default, because those are required for BBB to function. Allowed networks will override rejected networks. 
 
 
-### STUN/TURN Servers
+### STUN/TURN Servers (NOT IMPLEMENTED YET)
 
 **`bbb_coturn_enable`** (default: `false`)\
-  Install a TURN server (coturn) alongside BBB. (NOT IMPLEMENTED YET)
+  Install a TURN server (coturn) alongside BBB.
 
 **`bbb_stun_servers`** (default: `[]`)\
   A list of STUN Server URLs. Example: `["stun:stun.freeswitch.org"]`
@@ -104,14 +124,13 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
 
 ### Cluster Proxy mode
 
-For large deployments, it is common to run multiple BBB servers behind a scaler (e.g. Scalelite). New meetings are distributed across BBB servers and users are redirected to the server that hosts the meeting they are tyring to join. However, this is not without its problems. Users have to grant microphone, webcam and screen sharing permissions for each server individually, which can be a real pain for large clusters. [Cluster Proxy mode](https://docs.bigbluebutton.org/administration/cluster-proxy/) allows you to serve the web client from a single domain and avoid most of those issues. This role coveres all configuration needed on the BBB node. See [Cluster Proxy Configuration](https://docs.bigbluebutton.org/administration/cluster-proxy/) on how to configure the front-end proxy.
+For large deployments, it is common to run multiple BBB servers behind a scaler (e.g. Scalelite). New meetings are distributed across BBB servers and users are redirected to the server that hosts the meeting they are tyring to join. However, this creates a new problem: Users have to grant microphone, webcam and screen sharing permissions for each server individually and user settings are also not shared, which can be a real pain for large clusters. [Cluster Proxy mode](https://docs.bigbluebutton.org/administration/cluster-proxy/) allows you to serve the web client from a single domain and avoid most of those issues. This role coveres all configuration needed on the BBB node. **Additional changes are required on the font-end server**. Those are not covered by this role. See [Cluster Proxy Configuration](https://docs.bigbluebutton.org/administration/cluster-proxy/) for details.
 
-**`bbb_cluster_host`** (no default)\
-  If set, enable [Cluster Proxy](https://docs.bigbluebutton.org/administration/cluster-proxy/) mode and use this host as the frontend.
-  Cluster proxy hostname  e.g. `frontend.example.com` 
+**`bbb_cluster_proxy`** (no default)\
+  If set, enable [Cluster Proxy](https://docs.bigbluebutton.org/administration/cluster-proxy/) mode and assume this host is configured as the front-end proxy (e.g `frontend.example.com`)
 
 **`bbb_cluster_node`** (default: `{{ bbb_hostname | split('.') | first }}`)\
-  Cluster node name  The frontend must redirect requests from `https://{{bbb_cluster_host}}/{{bbb_cluster_node}}/*` to `https://{{bbb_hostname}}/*` for every node in the cluster.
+  Name of this cluster node. The front-end proxy must listen to requests for `https://{{bbb_cluster_proxy}}/{{bbb_cluster_node}}/*` and forward those to the matching back-end node via `https://{{bbb_hostname}}/`.
 
 
 ### Freeswitch
@@ -125,8 +144,8 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
 **`bbb_freeswitch_ipv6`** (default: `true`)\
   Enable IPv6 support in FreeSWITCH. Disable to fix [FreeSWITCH IPv6 error][bbb_freeswitch_ipv6] 
 
-**`bbb_freeswitch_ip_address`** (default: `{{ bbb_freeswitch_external_ip }}`)\
-  Set local IP address for FreeSWITCH's wss-binding. Can be used when port 7443 is already in use on the external IP or when running IPv6-only setups.
+**`bbb_freeswitch_local_ip`** (default: `127.0.0.1`)\
+  Local IP address for FreeSWITCH websocket and other local bindings.
 
 **`bbb_freeswitch_external_ip`** (default: `{{ ansible_default_ipv4.address }}`)\
   Either the public IP of the server, or a `stun:` server URL (e.g. `stun:stun.freeswitch.org`)
@@ -135,31 +154,34 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
   Play `you are now muted` and `you are now unmuted` sounds.
 
 **`bbb_dialplan_quality`** (default: `cdquality`)\
-  Set quality of dailplan for FreeSWITCH   
+  Set the default dialplan for all conferences.
 
 **`bbb_dialplan_energy_level`** (default: `100`)\
-  Set energy level of dailplan for FreeSWITCH.
+  Set target energy level for the default dialplan.
 
 **`bbb_dialplan_comfort_noise`** (default: `1400`)\
-  Set comfort noise of dailplan for FreeSWITCH. Allowed values: (0-10000); 0 disables comfort-noise.
+  Set comfort noise for the default dialplan. Allowed values: (0-10000); 0 disables comfort-noise.
 
 
-### SIP dial-in
+### Dial-in via SIP
 
 **`bbb_dialin_enable`** (default: `false`)\
-  Enable phone dial-in.  
+  Enable dial-in via phone. You need an external SIP provider for this to work.
 
 **`bbb_dialin_provider_proxy`** (required if `bbb_dialin_enable` is true)\
-  IP or Domain of your SIP provider, also known as registrar   
+  IP of your external SIP provider, also known as registrar.
+
+**`bbb_dialin_provider_ip`** (required if `bbb_dialin_enable` and `bbb_firewall_enable` are true)\
+  IP or network of your SIP provider.
 
 **`bbb_dialin_provider_username`** (required if `bbb_dialin_enable` is true)\
-  Username for authentication on the SIP-server
+  SIP account username
 
 **`bbb_dialin_provider_password`** (required if `bbb_dialin_enable` is true)\
-  Password for authentication on the SIP-server
+  SIP account password
 
 **`bbb_dialin_provider_extension`** (required if `bbb_dialin_enable` is true)\
-  Extension (phone number) of your SIP account
+  Extension (external phone number) of your SIP account
 
 **`bbb_dialin_default_number`** (default: `bbb_dialin_provider_extension`)\
   Number to present to users for dial-in. Used to replace `%%DIALNUM%%` in welcome messages.
@@ -174,13 +196,14 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
   Timeout (ms) for entering the full pin number.
 
 **`bbb_dialin_pin_maxwait`** (default: `5000`)\
-  Maximum number of milliseconds to wait for the next digit. This is helpful if you have a variable length PINs and users forget to terminate a short pin.
+  Maximum number of milliseconds to wait for the next digit. This is helpful if you have variable length PINs and users forget to terminate a short pin with `#`.
 
 **`bbb_dialin_pin_retries`** (default: `3`)\
   Number of retries to enter a valid pin before freeswitch gives up and terminates the call.
 
 **`bbb_dialin_mask_caller`** (default: `false`)\
-  Dial-in users will show up with a username containing their full caller ID by default. Enable `bbb_dialin_mask_caller` to hide all but the last few digits and avoid privacy issues. Example: If enabled, dial-in user will show up as `tel-234` instead of `555-1234`.
+  Hide parts of the caller ID for dial-in users to avoid privacy issues. Only the last couple of digits will be shown.
+  Example: Masked users will show up as `tel-789` instead of their full caller ID.
 
 **`bbb_dialin_mask_digits`** (default: `3`)\
   Number of digits to show if `bbb_dialin_mask_caller` is true.
@@ -192,19 +215,19 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
 ### Common customizations
 
 **`bbb_default_welcome_message`** (default: `Welcome to <b>%%CONFNAME%%</b>!`)\
-  Default welcome message.
+  Default welcome message. May contain simple HTML tags and certain wildcards (e.g. `%%CONFNAME%%`).
 
 **`bbb_default_welcome_message_footer`** (default: `""`)\
-  Default welcome message footer.
+  Default welcome message footer. Will be added to the welcome message even if the front-end overrides it.
 
 **`bbb_default_presentation`** (default: `"${bigbluebutton.web.serverURL}/default.pdf"`)\
   Download link for the default presentation.
 
 **`bbb_custom_presentation`** (no default)\
-  Deploy a custom presentation to replace `default.pdf`. Example: `path/to/default.pdf` 
+  Deploy a custom presentation file to replace `default.pdf`. Example: `path/to/default.pdf` 
 
 **`bbb_use_default_logo`** (default: `false`)\
-  Show the default-logo in the top left corner even if the frontend did not request it.
+  Show a default-logo in the top left corner.
 
 **`bbb_default_logo_url`** (default: `${bigbluebutton.web.serverURL}/logo.png`)\
   URL for the default logo.  
@@ -215,7 +238,7 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
 
 ### Config overrides
 
-This role generates configuration with sensible defaults out of the box and covers lots of features that would otherwise be hard to configure manually. There are still lots of settings and possible customizations that are not covered by this role and may require some custom tweaking from your side. The following variables allow you to *override* or *extend* parts of the generated configuration. They are (deep-)merged into the role-managed config objects, just before they are written to disk. Bur be careful, there are no sanity or consistency checks. Test your deployment if you use those overrides.
+This role generates configuration with sensible defaults out of the box and covers lots of features that would otherwise be hard to configure manually. There are still lots of settings and possible customizations that are not covered by this role and may require some custom tweaking from your side. The following variables allow you to *override* or *extend* parts of the generated configuration. They are (deep-)merged into the role-managed config objects, just before they are written to disk. But be careful, there are no sanity or consistency checks. Test your deployment if you use those overrides.
 
 **`bbb_config_web`** (default: `{}`)\
   Custom overrides for `/etc/bigbluebutton/bbb-web.properties`. This will be merged into the role-managed configuration. Example: `{muteOnStart: true, defaultMeetingLayout: SMART_LAYOUT}`
@@ -232,7 +255,8 @@ This role generates configuration with sensible defaults out of the box and cove
 
 ### Other stuff not full migrated to BBB 3.0 yet.
 
-Those config options may work, but some are also broken, have no effect, or will be removed soon. Use 
+> [!warning]
+This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They may work, but some are also broken, have no effect, or will be removed soon. Do not rely on these!!!
 
 **`bbb_nginx_privacy`** (default: `false`)\
   Reduce nginx logging to just error logs.
