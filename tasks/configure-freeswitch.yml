@@ -44,16 +44,38 @@
     xpath: /configuration/settings/param[@name='loglevel']
     attribute: value
     value: "{{ bbb_freeswitch_log_level }}"
-  no_log: true
   notify: Restart freeswitch
 
-- name: Set the Freeswitch default password
+- name: Set freeswitch variables in vars.xml
+  become: true
+  ansible.builtin.lineinfile:
+    path: /opt/freeswitch/etc/freeswitch/vars.xml
+    regexp: "\\s+<X-PRE-PROCESS\\s+cmd=\"set\"\\s+data=\"{{item.name}}="
+    line: "    <X-PRE-PROCESS cmd=\"set\" data=\"{{item.name}}={{item.value}}\" />"
+    insertbefore: '</include>'
+  loop:
+    - {name: external_rtp_ip,   value: "{{bbb_freeswitch_external_ip}}"}
+    - {name: external_sip_ip,   value: "{{bbb_freeswitch_external_ip}}"}
+    - {name: default_password,  value: "{{bbb_freeswitch_default_password}}"}
+    - {name: force_local_ip_v4, value: "{{bbb_freeswitch_local_ip}}"}
+    - {name: local_ip_v4,       value: "$${force_local_ip_v4}"}
+  notify: Restart freeswitch
+
+- name: Set freeswitch external bind IP (v4)
   become: true
   community.general.xml:
-    path: /opt/freeswitch/etc/freeswitch/vars.xml
-    xpath: /include/X-PRE-PROCESS[contains(@data, "default_password")]
-    attribute: data
-    value: default_password={{ bbb_freeswitch_default_password }}
+    path: /opt/freeswitch/conf/sip_profiles/external.xml
+    xpath: /profile/settings/param[@name='{{item.name}}']
+    attribute: value
+    value: "{{item.value}}"
+  loop:
+    - {name: ext-rtp-ip,  value: "$${external_rtp_ip}"}
+    - {name: ext-sip-ip,  value: "$${external_sip_ip}"}
+    - {name: sip-ip,      value: "$${external_sip_ip}"}
+    - {name: rtp-ip,      value: "$${external_sip_ip}"}
+    - {name: ws-binding,  value: "$${local_ip_v4}:5066"}
+    - {name: wss-binding, value: "$${local_ip_v4}:7443"}
+  notify: Restart freeswitch
 
 - name: Set restrictive permissions of freeswitch config files including passwords
   become: true
@@ -65,14 +87,6 @@
   with_items:
     - /opt/freeswitch/etc/freeswitch/vars.xml
     - /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
-
-- name: Set FreeSWITCH local IPv4
-  become: true
-  replace:
-    path: /opt/freeswitch/etc/freeswitch/vars.xml
-    regexp: <X-PRE-PROCESS cmd="set" data="local_ip_v4=.*"\/>
-    replace: <X-PRE-PROCESS cmd="set" data="local_ip_v4={{ ansible_default_ipv4.address }}"/>
-  notify: Restart freeswitch
 
 - name: Configure IPv6-Support in freeswitch
   become: true
@@ -123,22 +137,6 @@
     replace: <action application="conference" data="${vbridge}@{{ bbb_dialplan_quality }}"/>
   notify: Restart freeswitch
 
-- name: FreeSWITCH external ip (rtp)
-  become: true
-  replace:
-    path: /opt/freeswitch/etc/freeswitch/vars.xml
-    regexp: <X-PRE-PROCESS cmd="set" data="external_rtp_ip=.*"\/>
-    replace: <X-PRE-PROCESS cmd="set" data="external_rtp_ip={{ bbb_freeswitch_external_ip }}"/>
-  notify: Restart freeswitch
-
-- name: FreeSWITCH external ip (sip)
-  become: true
-  replace:
-    path: /opt/freeswitch/etc/freeswitch/vars.xml
-    regexp: <X-PRE-PROCESS cmd="set" data="external_sip_ip=.*"\/>
-    replace: <X-PRE-PROCESS cmd="set" data="external_sip_ip={{ bbb_freeswitch_external_ip }}"/>
-  notify: Restart freeswitch
-
 - name: Fix fs_clibbb to accept additional parameters
   become: true
   lineinfile:
@@ -147,38 +145,6 @@
     line: /opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name="password"]' -v @value /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml)
       "$@"
 
-- name: Configure IP for wss-binding of FreeSWITCH - {{ bbb_freeswitch_ip_address }}
-  become: true
-  lineinfile:
-    path: /opt/freeswitch/conf/sip_profiles/external.xml
-    regexp: <param name="wss-binding"
-    line: '    <param name="wss-binding" value="{{ bbb_freeswitch_ip_address }}:7443"/>'
-  notify: Restart freeswitch
-
-# # Fixed upstream
-# # See https://github.com/bigbluebutton/bigbluebutton/issues/7007#issuecomment-621414985
-# - name: Revert upstream freeswitch jitterbuffer experiments
-#   become: true
-#   ansible.builtin.replace:
-#     path: "{{ item }}"
-#     regexp: (\s+)<action application="jitterbuffer" data="120"/>(\s+)
-#     replace: \1<action application="jitterbuffer" data="60:120"/>\2
-#   loop:
-#     - /opt/freeswitch/etc/freeswitch/dialplan/default/bbb_conference.xml
-#     - /opt/freeswitch/etc/freeswitch/dialplan/default/bbb_echo_to_conference.xml
-
-# # Fixed upstream
-# # Freeswitch sometimes spontaneously corrupts /dev/shm/core.db and produces GBs
-# # of fatal error logs until manually restarted. This tries to fix that issue.
-# - name: Use in-memory sqlite instead of /dev/shm/core.db
-#   become: true
-#   ansible.builtin.lineinfile:
-#     state: present
-#     backrefs: true
-#     path: /opt/freeswitch/etc/freeswitch/autoload_configs/switch.conf.xml
-#     regexp: ^(\s*)<param +name="core-db-name".*?/>
-#     line: \1<param name="core-db-dsn" value="sqlite://memory://file:core?mode=memory&amp;cache=shared"/>
-#   notify: Restart freeswitch
 
 - name: Configure different mute sound
   become: true

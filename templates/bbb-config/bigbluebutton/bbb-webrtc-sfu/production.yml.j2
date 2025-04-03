@@ -1,5 +1,6 @@
 ---
 # {{ansible_managed}}
 freeswitch:
-  sip_ip: "{{bbb_freeswitch_ip_address}}"
+  ip: "{{bbb_freeswitch_local_ip}}"
+  sip_ip: "{{bbb_freeswitch_external_ip}}"
   esl_password: "{{bbb_freeswitch_socket_password}}"

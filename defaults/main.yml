@@ -57,7 +57,10 @@ bbb_ufw_rules_default:
     proto: udp
   ssh:
     port: "22"
-
+  dialin:
+    from: "{{ bbb_dialin_provider_ip }}"
+    port: "5060"
+    when: "{{bbb_dialin_enable}}"
 
 ### BBB customizations and config overrides
 
@@ -86,7 +89,7 @@ bbb_cluster_node: "{{ bbb_hostname | split('.') | first }}"
 bbb_freeswitch_socket_password: "{{('fsp' + bbb_host_seed) | hash('sha256')}}"
 bbb_freeswitch_default_password: "{{('fdp' + bbb_host_seed) | hash('sha256')}}"
 bbb_freeswitch_ipv6: true
-bbb_freeswitch_ip_address: "{{ bbb_freeswitch_external_ip }}"
+bbb_freeswitch_local_ip: "127.0.0.1"
 bbb_freeswitch_external_ip: "{{ ansible_default_ipv4.address }}"
 bbb_freeswitch_muted_sound: true
 
@@ -99,7 +102,7 @@ bbb_dialplan_comfort_noise: 1400
 
 bbb_dialin_enable: false
 #bbb_dialin_provider_proxy: sip.example.net
-#bbb_dialin_provider_ip: ""
+#bbb_dialin_provider_ip: 1.2.3.4
 #bbb_dialin_provider_username: provider-account
 #bbb_dialin_provider_password: provider-password
 #bbb_dialin_provider_extension: "6135551234"
