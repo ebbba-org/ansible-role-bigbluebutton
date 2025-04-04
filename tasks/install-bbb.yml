@@ -1,4 +1,23 @@
 ---
+
+- name: Ensure bigbluebutton group has fixed gid
+  become: true
+  ansible.builtin.group:
+    name: bigbluebutton
+    system: true
+    gid: "{{bbb_group_gid}}"
+
+- name: Ensure bigbluebutton user has fixed uid
+  become: true
+  ansible.builtin.user:
+    name: bigbluebutton
+    system: true
+    uid: "{{bbb_user_uid}}"
+    group: bigbluebutton
+    shell: /bin/false
+    home: /home/bigbluebutton
+    append: true
+
 - name: Install BBB packages
   become: true
   ansible.builtin.package:
