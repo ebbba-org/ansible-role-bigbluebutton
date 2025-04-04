@@ -5,10 +5,6 @@
 - import_tasks: check-running.yml
   tags: ["always", "checks"]
 
-# Configuration mixins
-- import_tasks: mixin-proxy.yml
-  when: "bbb_cluster_proxy is defined"
-
 # Tighten Firewall before install
 - import_tasks: firewall/enable.yml
   when: bbb_ufw_enable
@@ -17,7 +13,7 @@
   when: not bbb_ufw_enable
   tags: ["firewall"]
 
-# Install packages
+# Install or upgrade packages
 - import_tasks: install-base.yml
   tags: ["install"]
 - import_tasks: install-docker.yml
@@ -30,6 +26,11 @@
 # Certificates
 - import_tasks: certs.yml
   tags: ["certs"]
+
+# Configuration mixins and features
+- import_tasks: mixin-proxy.yml
+  when: "bbb_cluster_proxy is defined"
+- import_tasks: mixin-backgrounds.yml
 
 # Deploy configuration
 - import_tasks: configure-bbb.yml

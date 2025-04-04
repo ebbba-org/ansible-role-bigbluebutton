@@ -1,0 +1,47 @@
+---
+
+- name: Upload custom backgrounds
+  become: true
+  copy:
+    src: "{{item}}"
+    dest: '/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/'
+    mode: "0644"
+  when: "'/' in item"
+  loop: "{{ bbb_virtual_backgrounds }}"
+
+- name: Generate missing or outdated thumbnails
+  become: true
+  ansible.builtin.shell:
+    chdir: '/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/'
+    cmd: |
+      for IMG in *.jpg *.jpeg *.png; do
+        test -f "$IMG" || continue
+        THUMB="./thumbnails/${IMG}"
+        if [ ! -f "$THUMB" ] || [ "$IMG" -nt "$THUMB" ]; then
+            echo "Converting $IMG"
+            convert "$IMG" -resize 50x50^ -gravity Center -extent 50x50 "$THUMB" || exit 1
+        fi
+      done
+  register: result
+  changed_when: "'Converting' in result.stdout"
+
+- name: Fix background image permissions
+  become: true
+  file:
+    path: '/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/'
+    state: directory
+    owner: bigbluebutton
+    group: bigbluebutton
+    mode: "u=rwX,g=rX,o=rX"
+    recurse: True
+
+- name: Configure background images
+  set_fact:
+    bbb_config_html5_base: |
+      {{bbb_config_html5_base | combine({
+         'public': {
+            'virtualBackgrounds': {
+               'fileNames': bbb_virtual_backgrounds | map('basename')
+            }
+          }
+        }, recursive=True)}}

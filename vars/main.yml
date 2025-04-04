@@ -39,6 +39,7 @@ bbb_packages_system:
   - python3-passlib
   - curl
   - gpg
+  - imagemagick # For background image thumbnails
   # Configured early to avoid install issues later
   - "openjdk-{{ bbb_java_version }}-jdk"
   - language-pack-en

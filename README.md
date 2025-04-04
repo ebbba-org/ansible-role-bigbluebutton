@@ -238,6 +238,15 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
 **`bbb_recording_formats`** (default: `[presentation]`)
   List of recording formats to render. This configures `process` and `publish` steps for each format and installs additional packages for the built-in formats: `presentation`, `video`, `screenshare` and `podcast`.
 
+**`bbb_virtual_backgrounds`** (default: `[home.jpg, coffeeshop.jpg, board.jpg]`)
+  List of virtual webcam background images. Provide just a filename for files that already exist on the server, or a local path for a file to upload. The filenames must be unique and must not contain any special characters.
+
+
+### Optional components
+
+**`bbb_webhooks_enable`** (default: `false`)\
+  Install bbb-webhooks. This is required by some frontends and recommended.
+
 
 ### Config overrides
 
@@ -302,9 +311,6 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
 
 **`bbb_config_presentation`** (default: `{}`)\
   overwrite recording settings  See [Enable playback of recordings on iOS](https://docs.bigbluebutton.org/admin/customize.html#enable-playback-of-recordings-on-ios). 
-
-**`bbb_webhooks_enable`** (default: `no`)\
-  install bbb-webhooks   
 
 **`bbb_check_for_running_meetings`** (default: `true`)\
   Check server and stop playbook in case of running meetings.   
