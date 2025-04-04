@@ -56,8 +56,15 @@
     filename: "{{ item.name }}"
     repo: "{{ item.repo }}"
     state: present
+    update_cache: false
   loop: "{{ bbb_package_repos }}"
   register: result
+
+- name: Refresh apt caches (again)
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+  when: result.changed
 
 - name: Upgrade all packages
   become: true
