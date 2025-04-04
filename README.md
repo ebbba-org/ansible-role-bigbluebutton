@@ -343,7 +343,7 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
   max-old-space-size in frontends   
 
 **`bbb_container_compat`** (default: `false`)\
-  Compatibility with unprivileged containers  Enabling this option allows to deploy BBB into a unprivileged container 
+  Compatibility with unprivileged containers. Enabling this option allows to deploy BBB into a unprivileged container.
 
 **`bbb_max_file_size_upload`** (default: 30000000)\
   Maximum file size for an uploaded presentation (default 30MB - number must be in byte)   
@@ -429,11 +429,6 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
   List of features to disable. See https://docs.bigbluebutton.org/development/api#create for options 
 
 
-### LXD/LXC compatibility
-
-To run BigBlueButton in unprivileged LXD/LXC containers, you have to set `bbb_container_compat` to `true`.
-
-
 ## Example Playbook
 
 This is an example of how to use this role. *Warning:* the values of the variables should be changed!
@@ -459,31 +454,19 @@ Assuming the following directory structure:
 You can follow these steps inside your ansible directory to clone the repository and use the example playbook and variable configuration files:
 
 1. Clone the repository in your roles directory. (`git clone https://github.com/ebbba-org/ansible-role-bigbluebutton.git roles/ebbba.bigbluebutton`)
-
 2. Copy the sample inventory hosts file or append its containt to your already existing hosts file(`cp roles/ebbba.bigbluebutton/examples/hosts inventory/hosts`).
-
 3. Edit the inventory hosts file (`inventory/hosts`) to include all the hosts you want in the `bigbluebutton` group.
-
 4. Create a directory with the name of the group inside group_vars (`mkdir inventory/group_vars/bigbluebutton`).
-
 5. Copy the group_vars sample configuration file to the directory you created (`cp roles/ebbba.bigbluebutton/examples/bbb.yml inventory/group_vars/bigbluebutton/bbb.yml`).
-
 6. Edit the group configuration file (`inventory/group_vars/bigbluebutton/bbb.yml`) to your liking. You should put here all the options that are common among all your bbb servers.
-
 7. Create a directory for each of your servers to hold its configuration (`mkdir inventory/host_vars/<your-domain>`).
-
 8. Copy the sample configuration file to each of the servers configuration directory (`cp roles/ebbba.bigbluebutton/examples/vars.yml inventory/host_vars/<your-domain>/vars.yml`).
-
 9. Edit the host configuration file (`inventory/host_vars/<your-domain>/vars.yml`) to your liking. You should put here all the host specific options. Setting a variable here will override its value set in `inventory/group_vars/bigbluebutton/bbb.yml`.
-
 10. Copy the sample playbook (`cp roles/ebbba.bigbluebutton/examples/playbook/bigbluebutton.yml playbooks`).
-
 11. Run the playbook using `ansible-playbook -i inventory/hosts playbooks/bigbluebutton.yml`.
-
-## Event though all the variables are explained above, you may also take a look at `roles/ebbba.bigbluebutton/defaults/main.yml` and see if there's something you'd like to copy over and override in your `vars.yml` and `bbb.yml` configuration files.
 
 ## License
 
-MIT
+MIT (see `LICENSE` file)
 
 [bbb_freeswitch_ipv6]: https://docs.bigbluebutton.org/support/troubleshooting.html#freeswitch-fails-to-bind-to-port-8021
