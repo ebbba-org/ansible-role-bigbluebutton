@@ -43,7 +43,7 @@ A secret seed used to generate other host-local secrets and passwords. Override 
 **`bbb_version`** (default: `jammy-300`) \
   Install a specified BigBlueButton version (e.g. `jammy-300-3.0.1`). The version should of cause match whatever this role supports, or stuff may break.
 
-**`bbb_upgrade`** (default: `false`)\
+**`bbb_upgrade`** (default: `true`)\
   Upgrade all installed packages (including BBB packages) every time this role is applied.
 
 **`bbb_apt_mirror`** (default: `https://ubuntu.bigbluebutton.org`)\

@@ -6,7 +6,7 @@ bbb_hostname: "{{ ansible_fqdn }}"
 # bbb_secret
 bbb_secret_seed: "{{ bbb_secret }}"
 bbb_version: jammy-300
-bbb_upgrade: false
+bbb_upgrade: true
 bbb_apt_mirror: https://ubuntu.bigbluebutton.org
 bbb_apt_key: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
 
