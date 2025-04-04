@@ -3,7 +3,7 @@
 - name: Upload custom backgrounds
   become: true
   copy:
-    src: "{{item}}"
+    src: "{{ item }}"
     dest: '/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/'
     mode: "0644"
   when: "'/' in item"
@@ -33,15 +33,15 @@
     owner: bigbluebutton
     group: bigbluebutton
     mode: "u=rwX,g=rX,o=rX"
-    recurse: True
+    recurse: true
 
 - name: Configure background images
   set_fact:
     bbb_config_html5_base: |
-      {{bbb_config_html5_base | combine({
+      {{ bbb_config_html5_base | combine({
          'public': {
             'virtualBackgrounds': {
                'fileNames': bbb_virtual_backgrounds | map('basename')
             }
           }
-        }, recursive=True)}}
+        }, recursive=True) }}

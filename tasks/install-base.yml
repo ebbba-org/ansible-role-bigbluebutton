@@ -60,7 +60,7 @@
   loop: "{{ bbb_package_repos }}"
   register: result
 
-- name: Refresh apt caches (again)
+- name: Refresh apt caches (again) # noqa: no-handler
   become: true
   ansible.builtin.apt:
     update_cache: true
