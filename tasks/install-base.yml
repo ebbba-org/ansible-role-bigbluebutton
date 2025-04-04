@@ -5,12 +5,6 @@
     update_cache: true
   changed_when: false
 
-- name: Upgrade all packages
-  become: true
-  ansible.builtin.apt:
-    upgrade: "yes"
-  when: bbb_upgrade
-
 - name: Install system dependencies
   become: true
   ansible.builtin.package:
@@ -34,7 +28,7 @@
   changed_when: false
   register: locale_status
 
-- name: Ensure locale is set
+- name: Ensure locale is set correctly
   become: true
   ansible.builtin.command:
     cmd: "localectl set-locale LANG={{ bbb_system_locale }}"
@@ -69,4 +63,5 @@
   become: true
   ansible.builtin.apt:
     upgrade: "yes"
+  when: bbb_upgrade
   notify: Restart bigbluebutton
