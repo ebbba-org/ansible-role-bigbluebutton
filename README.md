@@ -52,6 +52,9 @@ A secret seed used to generate other host-local secrets and passwords. Override 
 **`bbb_apt_key`** (default: `{{ bbb_apt_mirror }}/repo/bigbluebutton.asc`)\
   Download URL for the BBB repository signing key.
 
+**`bbb_check_running`** (default: `true`)\
+  Fail if there are active meetings on the server. Set this to false on test servers where you do not care about forcefully ending meetings.
+
 
 ### SSL/TLS
 
@@ -311,9 +314,7 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
 
 **`bbb_config_presentation`** (default: `{}`)\
   overwrite recording settings  See [Enable playback of recordings on iOS](https://docs.bigbluebutton.org/admin/customize.html#enable-playback-of-recordings-on-ios). 
-
-**`bbb_check_for_running_meetings`** (default: `true`)\
-  Check server and stop playbook in case of running meetings.   
+ 
 
 **`bbb_guestpolicy`** (default: `ALWAYS_ACCEPT`)\
   How guest can access  acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR  |

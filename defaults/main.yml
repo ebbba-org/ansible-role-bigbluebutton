@@ -171,7 +171,7 @@ bbb_disabled_features: []
 bbb_web_logouturl: default
 bbb_allow_request_without_session: false
 
-bbb_check_for_running_meetings: true
+bbb_check_running: true
 
 bbb_nginx_privacy: false
 
