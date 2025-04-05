@@ -1,5 +1,4 @@
 ---
-
 - name: Read old bbb-web.properties
   become: true
   ansible.builtin.slurp:
@@ -10,9 +9,7 @@
 
 - name: Extract old BBB secret
   ansible.builtin.set_fact:
-    bbb_old_secret: "{{ (result.content | default('') | b64decode
-          | regex_search('securitySalt\\s*=\\s*(.+)', '\\1') or [''])
-          | first | trim }}"
+    bbb_old_secret: "{{ (result.content | default('') | b64decode | regex_search('securitySalt\\s*=\\s*(.+)', '\\1') or ['']) | first | trim }}"
 
 - name: Check for running meetings
   when:

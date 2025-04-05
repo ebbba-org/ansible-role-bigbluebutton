@@ -1,10 +1,9 @@
 ---
-
 - name: Upload custom backgrounds
   become: true
   copy:
     src: "{{ item }}"
-    dest: '/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/'
+    dest: "/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/"
     mode: "0644"
   when: "'/' in item"
   loop: "{{ bbb_virtual_backgrounds }}"
@@ -12,7 +11,7 @@
 - name: Generate missing or outdated thumbnails
   become: true
   ansible.builtin.shell:
-    chdir: '/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/'
+    chdir: "/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/"
     cmd: |
       for IMG in *.jpg *.jpeg *.png; do
         test -f "$IMG" || continue
@@ -28,7 +27,7 @@
 - name: Fix background image permissions
   become: true
   file:
-    path: '/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/'
+    path: "/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/"
     state: directory
     owner: bigbluebutton
     group: bigbluebutton

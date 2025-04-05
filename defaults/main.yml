@@ -126,7 +126,6 @@ bbb_use_default_logo: false
 bbb_default_logo_url: ${bigbluebutton.web.serverURL}/logo.png }}
 # bbb_custom_logo
 bbb_virtual_backgrounds: [home.jpg, coffeeshop.jpg, board.jpg]
-
 bbb_recording_enable: true
 bbb_recording_formats: [presentation]
 bbb_recording_mp4: false

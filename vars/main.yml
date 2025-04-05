@@ -58,18 +58,16 @@ bbb_packages:
   - name: ["bigbluebutton", "bbb-html5"]
   # Optional dependencies and packages
   - name: bbb-webhooks
-    state: "{{ 'present' if bbb_webhooks_enable else 'absent' }}"
+    when: "{{ bbb_webhooks_enable }}"
   - name: bbb-demo
-    state: "{{ 'present' if bbb_api_demos_enable else 'absent' }}"
-  # BUG: bbb-playback-presentation cannot be absent because bigbluebutton depends on it
-  # - name: bbb-playback-presentation
-  #   state: "{{ 'present' if 'presentation' in bbb_recording_formats else 'absent' }}"
+    when: "{{ bbb_api_demos_enable }}"
+  # BUG: bbb-playback-presentation is always installed because "bigbluebutton" depends on it
   - name: bbb-playback-video
-    state: "{{ 'present' if bbb_recording_enable and 'video' in bbb_recording_formats else 'absent' }}"
+    when: "{{ bbb_recording_enable and 'video' in bbb_recording_formats }}"
   - name: bbb-playback-podcast
-    state: "{{ 'present' if bbb_recording_enable and 'podcast' in bbb_recording_formats else 'absent' }}"
+    when: "{{ bbb_recording_enable and 'podcast' in bbb_recording_formats }}"
   - name: bbb-playback-screenshare
-    state: "{{ 'present' if bbb_recording_enable and 'screenshare' in bbb_recording_formats else 'absent' }}"
+    when: "{{ bbb_recording_enable and 'screenshare' in bbb_recording_formats }}"
 
 bbb_allowed_disabled_features:
   - breakoutRooms
