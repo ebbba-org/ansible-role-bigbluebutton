@@ -83,27 +83,8 @@
 # Simulate bbb-conf --setsecret and --setip for files not already covered by
 # templates. We cannot actually call those commands because they break some
 # scenarios (e.g. cluster mode) and would cause the role to always trigger
-# changes and restarts. See /usr/bin/bbb-conf
+# changes and restarts. They are also incomplete and buggy...
 # TODO: /usr/local/bigbluebutton/bbb-transcription-controller/config/default.yml
-
-- name: Fix webhook config
-  become: true
-  when: bbb_webhooks_enable
-  ansible.builtin.lineinfile:
-    path: /usr/local/bigbluebutton/bbb-webhooks/config/default.yml
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  loop:
-    - path: /usr/local/bigbluebutton/bbb-webhooks/config/default.yml
-      regexp: "^(\\s+)sharedSecret=.*?"
-      line: "\\g<1>sharedSecret={{ bbb_secret }}"
-    - path: /usr/local/bigbluebutton/bbb-webhooks/config/default.yml
-      regexp: "^(\\s+)serverDomain=.*?"
-      line: "\\g<1>serverDomain={{ bbb_hostname }}"
-    - path: /usr/local/bigbluebutton/bbb-webhooks/extra/post_catcher.js
-      regexp: "^(\\s+)var shared_secret\\s*=.*"
-      line: "\\g<1>var shared_secret = \"{{ bbb_secret }}\""
-  notify: Restart bigbluebutton
 
 - name: Set freeswitch socket password
   become: true
