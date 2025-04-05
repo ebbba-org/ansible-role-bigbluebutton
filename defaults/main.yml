@@ -125,12 +125,15 @@ bbb_default_presentation: ${bigbluebutton.web.serverURL}/default.pdf
 bbb_use_default_logo: false
 bbb_default_logo_url: ${bigbluebutton.web.serverURL}/logo.png }}
 # bbb_custom_logo
-bbb_recording_formats:
-  - presennation
-bbb_virtual_backgrounds:
-  - home.jpg
-  - coffeeshop.jpg
-  - board.jpg
+bbb_virtual_backgrounds: [home.jpg, coffeeshop.jpg, board.jpg]
+
+bbb_recording_enable: true
+bbb_recording_formats: [presentation]
+bbb_recording_mp4: false
+bbb_cron_history: 5
+bbb_cron_unrecorded_days: 14
+bbb_cron_published_days: 14
+bbb_cron_log_history: 28
 
 ## TODO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 bbb_mute_on_start: false
@@ -191,13 +194,6 @@ bbb_system_locale: en_US.UTF-8
 bbb_html5_backend_processes: 2
 bbb_html5_frontend_processes: 2
 bbb_html5_frontend_max_old_space_size: "2048"
-
-bbb_disable_recordings: false
-
-bbb_cron_history: 5
-bbb_cron_unrecorded_days: 14
-bbb_cron_published_days: 14
-bbb_cron_log_history: 28
 
 # additional bbb-web.properties
 

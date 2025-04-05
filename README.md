@@ -238,11 +238,32 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
 **`bbb_custom_logo`** (no default)\
   Deploy a custom default logo. Example `path/to/logo.png` 
 
+**`bbb_virtual_backgrounds`** (default: `[home.jpg, coffeeshop.jpg, board.jpg]`)
+  List of virtual webcam background images. Provide just a filename for files that already exist on the server, or a local path for a file to upload. The filenames must be unique and must not contain any special characters.
+
+
+### Recordings
+
+**`bbb_recording_enable`** (default: `true`)\
+  Enable recordings. This will allow users to start recordings in meetings started with `record=true`.
+
 **`bbb_recording_formats`** (default: `[presentation]`)
   List of recording formats to render. This configures `process` and `publish` steps for each format and installs additional packages for the built-in formats: `presentation`, `video`, `screenshare` and `podcast`.
 
-**`bbb_virtual_backgrounds`** (default: `[home.jpg, coffeeshop.jpg, board.jpg]`)
-  List of virtual webcam background images. Provide just a filename for files that already exist on the server, or a local path for a file to upload. The filenames must be unique and must not contain any special characters.
+**`bbb_recording_mp4`** (default: `False`)
+  Generate additional mp4-encoded videos for supported recording formats as a fallback for older iOS devices.
+
+**`bbb_cron_history`** (default: `5`)\
+  Days to keep raw presentation files, caches and media streams.
+
+**`bbb_cron_unrecorded_days`** (default: `14`)\
+  Days to keep raw recording data for meetings without recording markers.
+
+**`bbb_cron_published_days`** (default: `14`)\
+  Days to keep raw recording data for published recordings.
+
+**`bbb_cron_log_history`** (default: `28`)\
+  Days to keep logfiles.
 
 
 ### Optional components
@@ -282,9 +303,6 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
 **`bbb_allow_request_without_session`** (default: `false`)\
   Enable or disable allow request without session  Allow requests without JSESSIONID to be handled 
 
-**`bbb_disable_recordings`** (default: `no`)\
-  Disable options in gui to have recordings  [Recordings are running constantly in background](https://github.com/bigbluebutton/bigbluebutton/issues/9202) which is relevant as privacy relevant user data is stored 
-
 **`bbb_api_demos_enable`** (default: `no`)\
   enable installation of the api demos   
 
@@ -312,24 +330,8 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
 **`bbb_system_locale`** (default: `en_US.UTF-8`)\
   the system locale to use   
 
-**`bbb_config_presentation`** (default: `{}`)\
-  overwrite recording settings  See [Enable playback of recordings on iOS](https://docs.bigbluebutton.org/admin/customize.html#enable-playback-of-recordings-on-ios). 
- 
-
 **`bbb_guestpolicy`** (default: `ALWAYS_ACCEPT`)\
   How guest can access  acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR  |
-
-**`bbb_cron_history`** (default: `5`)\
-  Retention period for presentations, kurento, and freeswitch caches   
-
-**`bbb_cron_unrecorded_days`** (default: `14`)\
-  Retention period of recordings for meetings with no recording markers   
-
-**`bbb_cron_published_days`** (default: `14`)\
-  Retention period of recordings’ raw data   
-
-**`bbb_cron_log_history`** (default: `28`)\
-  Set the retention period of old log files   
 
 **`bbb_html5_node_options`** (default: unset)\
   Allow to set extra options for node for the html5-webclient  Could be used for example with <https://github.com/bigbluebutton/bigbluebutton/issues/11183> ; `--max-old-space-size=4096 --max_semi_space_size=128` 

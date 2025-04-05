@@ -65,37 +65,45 @@ bbb_packages:
   # - name: bbb-playback-presentation
   #   state: "{{ 'present' if 'presentation' in bbb_recording_formats else 'absent' }}"
   - name: bbb-playback-video
-    state: "{{ 'present' if 'video' in bbb_recording_formats else 'absent' }}"
+    state: "{{ 'present' if bbb_recording_enable and 'video' in bbb_recording_formats else 'absent' }}"
   - name: bbb-playback-podcast
-    state: "{{ 'present' if 'podcast' in bbb_recording_formats else 'absent' }}"
+    state: "{{ 'present' if bbb_recording_enable and 'podcast' in bbb_recording_formats else 'absent' }}"
   - name: bbb-playback-screenshare
-    state: "{{ 'present' if 'screenshare' in bbb_recording_formats else 'absent' }}"
+    state: "{{ 'present' if bbb_recording_enable and 'screenshare' in bbb_recording_formats else 'absent' }}"
 
 bbb_allowed_disabled_features:
-  - chat
-  - sharedNotes
-  - polls
-  - screenshare
-  - externalVideos
-  - presentation
-  - downloadPresentationWithAnnotations
-  - learningDashboard
-  - layouts
-  - captions
-  - liveTranscription
-  - virtualBackgrounds
-  - customVirtualBackgrounds
   - breakoutRooms
-  - importSharedNotesFromBreakoutRooms
+  - captions
+  - chat
+  - chatMessageReactions
+  - customVirtualBackgrounds
+  - deleteChatMessage
+  - downloadPresentationConvertedToPdf
+  - downloadPresentationOriginalFile
+  - downloadPresentationWithAnnotations
+  - editChatMessage
+  - externalVideos
   - importPresentationWithAnnotationsFromBreakoutRooms
+  - importSharedNotesFromBreakoutRooms
+  - layouts
+  - learningDashboard
+  - learningDashboardDownloadSessionData
+  - liveTranscription
+  - polls
+  - presentation
+  - privateChat
+  - replyChatMessage
+  - screenshare
+  - sharedNotes
+  - virtualBackgrounds
 
 bbb_config_web_base:
   bigbluebutton.web.serverURL: "https://{{ bbb_hostname }}"
   securitySalt: "{{ bbb_secret }}"
   autoStartRecording: false
+  disableRecordingDefault: "{{ not bbb_recording_enable }}"
+  allowStartStopRecording: "{{ bbb_recording_enable }}"
 
-  disableRecordingDefault: "{{ bbb_disable_recordings }}"
-  allowStartStopRecording: "{{ not bbb_disable_recordings }}"
   muteOnStart: "{{ bbb_mute_on_start }}"
   appLogLevel: "{{ bbb_app_log_level }}"
   defaultDialAccessNumber: "{{ bbb_dialin_default_number | default('') }}"
