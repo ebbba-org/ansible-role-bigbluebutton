@@ -57,6 +57,8 @@
     repo: "{{ item.repo }}"
     state: present
     update_cache: false
+  retries: 10
+  delay: 5
   loop: "{{ bbb_package_repos }}"
   register: result
 
