@@ -11,10 +11,10 @@
   ansible.builtin.user:
     name: bigbluebutton
     system: true
-    uid: "{{ bbb_user_uid }}"
-    group: bigbluebutton
     shell: /bin/false
     home: /home/bigbluebutton
+    uid: "{{ bbb_user_uid }}"
+    groups: [bigbluebutton]
     append: true
 
 - name: Install BBB packages
