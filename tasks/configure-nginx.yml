@@ -20,9 +20,10 @@
     state: absent
   notify: Reload nginx
 
-# - name: Ensure nginx is started and enabled
-#   become: true
-#   systemd:
-#     name: nginx
-#     enabled: true
-#     state: started
+- name: Configure sip.nginx for sipjsHackViaWs
+  become: true
+  replace:
+    path: /usr/share/bigbluebutton/nginx/sip.nginx
+    regexp: "\\s*proxy_pass .*"
+    replace: "proxy_pass http://{{ bbb_local_ip }}:5066;"
+  notify: Reload nginx

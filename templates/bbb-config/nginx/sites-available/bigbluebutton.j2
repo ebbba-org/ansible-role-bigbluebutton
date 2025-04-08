@@ -32,9 +32,8 @@ server {
     expires 1m;
   }
 
-  # This variable is used instead of $scheme by bigbluebutton nginx include
-  # files, so $scheme can be overridden in reverse-proxy configurations.
-  set $real_scheme $scheme;
+  # Used by BBB includes instead of $scheme
+  set $real_scheme "https";
 
   # Include specific rules for record and playback
   include /etc/bigbluebutton/nginx/*.nginx;

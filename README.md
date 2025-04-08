@@ -56,6 +56,28 @@ A secret seed used to generate other host-local secrets and passwords. Override 
   Fail if there are active meetings on the server. Set this to false on test servers where you do not care about forcefully ending meetings.
 
 
+## Networking
+
+**`bbb_local_ip`** (default: `127.0.0.1`)\
+  IP of your loopback device.
+
+**`bbb_bind_ip4`** (default: `{{ ansible_default_ipv4.address }}`)\
+  IP (v4) address public services should bind to. This may be a LAN IP if your
+  server is behind a NAT router and does not know its own public IP. Do not forget to
+  set `bbb_public_ip4` in that case!
+
+**`bbb_bind_ip6`** (default: `{{ ansible_default_ipv6.address | default(None) }}`)\
+  Same as `bbb_bind_ip4` but for IPv6. Optional, and not fully implemented yet. Needs testing.
+
+**`bbb_public_ip4`** (default: `{{ ansible_default_ipv4.address }}`)\
+  Public IPv4 address. Required if ansible cannot detect your public IP automatically.
+  This may happen if you are behind NAT and your public IP is not assigned at all,
+  or if your primary interface has multiple IPs assigned.
+
+**`bbb_public_ip6`** (default: `{{ ansible_default_ipv6.address | default(None) }}`)\
+  Same as `bbb_public_ip4` but for IPv6. Optional, and not fully implemented yet. Needs testing.
+
+
 ### SSL/TLS
 
 You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or copy existing files to the host, or tell the role to do nothing and just assume the certificate files are already in the right place. 
@@ -143,15 +165,6 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
 
 **`bbb_freeswitch_default_password`** (default: auto-generated)\
   Freeswitch default password.
-
-**`bbb_freeswitch_ipv6`** (default: `true`)\
-  Enable IPv6 support in FreeSWITCH. Disable to fix [FreeSWITCH IPv6 error][bbb_freeswitch_ipv6] 
-
-**`bbb_freeswitch_local_ip`** (default: `127.0.0.1`)\
-  Local IP address for FreeSWITCH websocket and other local bindings.
-
-**`bbb_freeswitch_external_ip`** (default: `{{ ansible_default_ipv4.address }}`)\
-  Either the public IP of the server, or a `stun:` server URL (e.g. `stun:stun.freeswitch.org`)
 
 **`bbb_freeswitch_muted_sound`** (default: `true`)\
   Play `you are now muted` and `you are now unmuted` sounds.

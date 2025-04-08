@@ -86,12 +86,4 @@
 # changes and restarts. They are also incomplete and buggy...
 # TODO: /usr/local/bigbluebutton/bbb-transcription-controller/config/default.yml
 
-- name: Set freeswitch socket password
-  become: true
-  community.general.xml:
-    path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
-    xpath: /configuration/settings/param[@name='password']
-    attribute: value
-    value: "{{ bbb_freeswitch_socket_password }}"
-  no_log: true
-  notify: Restart freeswitch
+

@@ -25,7 +25,15 @@ bbb_acmesh_update: false
 bbb_ssl_cert: /etc/bigbluebutton/ssl/fullchain.cer
 bbb_ssl_key: /etc/bigbluebutton/ssl/private.key
 
-### Firewall
+### Networking
+
+bbb_local_ip: "127.0.0.1"
+bbb_bind_ip4: "{{ ansible_default_ipv4.address }}"
+bbb_bind_ip6: "{{ ansible_default_ipv6.address | default(None) }}"
+bbb_public_ip4: "{{ ansible_default_ipv4.address }}"
+bbb_public_ip6: "{{ ansible_default_ipv6.address | default(None) }}"
+
+# Firewall
 
 bbb_ufw_enable: false
 bbb_ufw_policy: deny
@@ -85,12 +93,9 @@ bbb_turn_servers: [] # e.g. [{url: "turns:turn.example.com:443?transport=tcp", s
 bbb_cluster_node: "{{ bbb_hostname | split('.') | first }}"
 
 ### Freeswitch config
-
 bbb_freeswitch_socket_password: "{{ ('fsp' + bbb_host_seed) | hash('sha256') }}"
 bbb_freeswitch_default_password: "{{ ('fdp' + bbb_host_seed) | hash('sha256') }}"
 bbb_freeswitch_ipv6: true
-bbb_freeswitch_local_ip: "127.0.0.1"
-bbb_freeswitch_external_ip: "{{ ansible_default_ipv4.address }}"
 bbb_freeswitch_muted_sound: true
 
 bbb_dialplan_quality: cdquality

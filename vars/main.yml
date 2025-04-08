@@ -142,6 +142,8 @@ bbb_config_web_base:
 
 bbb_config_html5_base:
   public:
+    media: 
+      sipjsHackViaWs: true
     kurento:
       wsUrl: "wss://{{ bbb_hostname }}/bbb-webrtc-sfu"
     pads:

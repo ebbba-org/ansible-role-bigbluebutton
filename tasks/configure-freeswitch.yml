@@ -36,6 +36,15 @@
   no_log: true
   notify: Restart freeswitch
 
+- name: Configure listen-ip in event_socket.conf.xml
+  become: true
+  community.general.xml:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
+    xpath: /configuration/settings/param[@name="listen-ip"]
+    attribute: value
+    value: "127.0.0.1"
+  notify: Restart freeswitch
+
 - name: Set switch.conf loglevel
   become: true
   community.general.xml:
@@ -50,14 +59,14 @@
   ansible.builtin.lineinfile:
     path: /opt/freeswitch/etc/freeswitch/vars.xml
     regexp: "\\s+<X-PRE-PROCESS\\s+cmd=\"set\"\\s+data=\"{{ item.name }}="
-    line: "    <X-PRE-PROCESS cmd=\"set\" data=\"{{ item.name }}={{ item.value }}\" />"
+    line: "  <X-PRE-PROCESS cmd=\"set\" data=\"{{ item.name }}={{ item.value }}\" />"
     insertbefore: "</include>"
   loop:
-    - { name: external_rtp_ip, value: "{{ bbb_freeswitch_external_ip }}" }
-    - { name: external_sip_ip, value: "{{ bbb_freeswitch_external_ip }}" }
+    - { name: external_rtp_ip, value: "{{ bbb_public_ip4 }}" }
+    - { name: external_sip_ip, value: "{{ bbb_public_ip4 }}" }
     - { name: default_password, value: "{{ bbb_freeswitch_default_password }}" }
-    - { name: force_local_ip_v4, value: "{{ bbb_freeswitch_local_ip }}" }
-    - { name: local_ip_v4, value: "$${force_local_ip_v4}" }
+    - { name: local_ip_v4, value: "{{ bbb_bind_ip4 }}" }
+    - { name: local_ip_v6, value: "{{ bbb_bind_ip6 }}" }
   notify: Restart freeswitch
 
 - name: Set freeswitch external bind IP (v4)
@@ -70,10 +79,10 @@
   loop:
     - { name: ext-rtp-ip, value: "$${external_rtp_ip}" }
     - { name: ext-sip-ip, value: "$${external_sip_ip}" }
-    - { name: sip-ip, value: "$${external_sip_ip}" }
-    - { name: rtp-ip, value: "$${external_sip_ip}" }
-    - { name: ws-binding, value: "$${local_ip_v4}:5066" }
-    - { name: wss-binding, value: "$${local_ip_v4}:7443" }
+    - { name: sip-ip, value: "$${local_ip_v4}" }
+    - { name: rtp-ip, value: "$${local_ip_v4}" }
+    - { name: ws-binding, value: "{{bbb_local_ip}}:5066" }
+    - { name: wss-binding, value: "{{bbb_local_ip}}:7443" }
   notify: Restart freeswitch
 
 - name: Set restrictive permissions of freeswitch config files including passwords
@@ -87,38 +96,19 @@
     - /opt/freeswitch/etc/freeswitch/vars.xml
     - /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
 
-- name: Configure IPv6-Support in freeswitch
+- name: Configure Freeswitch IPv6 support
   become: true
-  block:
-    - name: Configure listen-ip in event_socket.conf.xml
-      community.general.xml:
-        path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
-        xpath: /configuration/settings/param[@name="listen-ip"]
-        attribute: value
-        value: "{{ '::' if bbb_freeswitch_ipv6 | bool else '127.0.0.1' }}"
-      notify: Restart freeswitch
-
-    - name: Stat ipv6 sip_profiles
-      ansible.builtin.stat:
-        path: "{{ item + '.disabled' if bbb_freeswitch_ipv6 | bool else item }}"
-      register: ipv6_sip_profiles
-      loop:
-        - /opt/freeswitch/etc/freeswitch/sip_profiles/external-ipv6.xml
-        - /opt/freeswitch/etc/freeswitch/sip_profiles/internal-ipv6.xml
-      loop_control:
-        label: "{{ item if bbb_freeswitch_ipv6 | bool else item + '.disabled' }}"
-
-    - name: Manage ipv6 sip_profiles
-      command: >
-        mv
-          "{{ sip_profile.item + '.disabled' if bbb_freeswitch_ipv6 | bool else sip_profile.item }}"
-          "{{ sip_profile.item if bbb_freeswitch_ipv6 | bool else sip_profile.item + '.disabled' }}"
-      when: sip_profile.stat.exists
-      loop: "{{ ipv6_sip_profiles.results }}"
-      loop_control:
-        loop_var: sip_profile
-        label: "{{ sip_profile.item if bbb_freeswitch_ipv6 | bool else sip_profile.item + '.disabled' }}"
-      notify: Restart freeswitch
+  ansible.builtin.shell:
+    cmd: |
+      OLD="{{ item }}{{ '.disabled' if bbb_freeswitch_ipv6 else '' }}"
+      NEW="{{ item }}{{ '' if bbb_freeswitch_ipv6 else '.disabled' }}"
+      mv "$OLD" "$NEW"
+    creates: "{{ item }}{{ '' if bbb_freeswitch_ipv6 else '.disabled' }}"
+  loop:
+    - /opt/freeswitch/etc/freeswitch/sip_profiles/external-ipv6.xml
+    - /opt/freeswitch/etc/freeswitch/sip_profiles/internal-ipv6.xml
+  loop_control:
+    label: "{{ item | basename }}"
 
 - name: FreeSWITCH dialplan quality
   become: true
