@@ -82,7 +82,8 @@ bbb_config_presentation: {} # recording/presentation.yml
 
 ### STUN/TURN Servers
 
-bbb_coturn_enable: false
+bbb_coturn_enable: "{{ bbb_turn_servers | length == 0 }}"
+bbb_coturn_secret: "{{ ('coturn' + bbb_host_seed) | hash('sha256') }}"
 bbb_stun_servers: [] # e.g. ["stun:stun.freeswitch.org", ...]
 bbb_ice_servers: []
 bbb_turn_servers: [] # e.g. [{url: "turns:turn.example.com:443?transport=tcp", secret: "1234"}, ...]

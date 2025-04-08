@@ -1,0 +1,38 @@
+verbose
+
+tcp-proxy-port=3478
+listening-ip=127.0.0.1
+relay-ip={{ bbb_bind_ip4 }}
+external-ip={{ bbb_public_ip4 }}
+
+no-udp
+no-tls
+
+min-port=32769
+max-port=65535
+
+fingerprint
+lt-cred-mech
+use-auth-secret
+static-auth-secret={{ bbb_coturn_secret }}
+realm={{ bbb_hostname }}
+
+# Why!?
+# keep-address-family
+
+no-cli
+no-tlsv1
+no-tlsv1_1
+no-tcp-relay
+
+# Block connections to IP ranges which shouldn't be reachable
+no-loopback-peers
+no-multicast-peers
+
+# Only allow the BBB node itself as a peer for TURN tunnel connections
+denied-peer-ip=0.0.0.0-255.255.255.255
+denied-peer-ip=::-ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff
+allowed-peer-ip={{ bbb_public_ip4 }}
+{% if bbb_bind_ip4 != bbb_public_ip4 %}
+allowed-peer-ip={{ bbb_bind_ip4 }}
+{% endif %}

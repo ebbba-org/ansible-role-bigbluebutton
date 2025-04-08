@@ -44,5 +44,7 @@
 - import_tasks: configure-misc.yml
   tags: ["configure"]
 
+- import_tasks: services.yml
+
 - name: Flush Handler
   meta: flush_handlers

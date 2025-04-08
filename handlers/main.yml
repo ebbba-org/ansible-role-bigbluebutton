@@ -16,6 +16,20 @@
     name: nginx
     state: restarted
 
+- name: Restart coturn
+  become: true
+  when: bbb_coturn_enable
+  systemd:
+    name: coturn
+    state: restarted
+
+- name: Restart haproxy
+  become: true
+  when: bbb_coturn_enable
+  systemd:
+    name: haproxy
+    state: restarted
+
 - name: Reload docker
   become: true
   systemd:

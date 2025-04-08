@@ -1,0 +1,15 @@
+---
+- name: Ensure nginx is started and enabled
+  become: true
+  systemd:
+    name: nginx
+    enabled: true
+    state: started
+
+- name: Ensure haproxy is started and enabled
+  become: true
+  when: bbb_coturn_enable
+  systemd:
+    name: haproxy
+    enabled: true
+    state: started

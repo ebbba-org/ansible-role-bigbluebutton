@@ -132,19 +132,21 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
   Allow outgoing traffic to these networks in addition to `bbb_ufw_allow_networks_default`, which contains localhost and the internal docker nentwork by default, because those are required for BBB to function. Allowed networks will override rejected networks. 
 
 
-### STUN/TURN Servers (NOT IMPLEMENTED YET)
+### STUN/TURN Servers
 
-**`bbb_coturn_enable`** (default: `false`)\
-  Install a TURN server (coturn) alongside BBB.
+**`bbb_coturn_enable`** (default: True if `bbb_turn_servers` is empty)\
+  Install a TURN server (coturn) alongside BBB, which helps clients behind restrictive firewalls to connect. You usually
+  want TURN to listen on port 443 (HTTPS) for best compatibility. To avoid the need of a dedicated public IP just for TURN,
+  this role installs `haproxy` to redirect traffic to either coturn or nginx based on the type of traffic.
 
 **`bbb_stun_servers`** (default: `[]`)\
-  A list of STUN Server URLs. Example: `["stun:stun.freeswitch.org"]`
+  A list of STUN Server URLs. You do not need those if you have a TURN server. Example: `["stun:stun.freeswitch.org"]`
 
 **`bbb_ice_servers`** (default: `[]`)\
-  A list of RemoteIceCandidate for STUN. Example: Not provided because I have no idea.
+  A list of RemoteIceCandidate for STUN. If you do not know what this does, ignore it.
 
 **`bbb_turn_servers`** (default: `[]`)\
-  A list of TURN Server URLs and secrets. Example: `[{url: "turns:turn.example.com:443?transport=tcp", secret: "1234"}]`
+  A list of *external* TURN Server URLs and secrets. You do not need those if you run an embedded TURN server via `bbb_coturn_enable`. Example: `[{url: "turns:turn.example.com:443?transport=tcp", secret: "1234"}]`
 
 
 ### Cluster Proxy mode

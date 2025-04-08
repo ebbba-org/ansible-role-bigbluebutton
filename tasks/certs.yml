@@ -62,3 +62,11 @@
     dest: /etc/ssl/ffdhe4096.pem
     mode: "0644"
   notify: Reload nginx
+
+- name: Manage cert key symlink for haproxy
+  become: true
+  ansible.builtin.file:
+    src: "{{ bbb_ssl_key }}"
+    dest: "{{ bbb_ssl_cert }}.key"
+    state: "link"
+  when: "bbb_coturn_enable and bbb_ssl_key != bbb_ssl_cert + '.key'"

@@ -5,6 +5,7 @@
     path: "/etc/systemd/system/{{ item }}.service.d"
     state: directory
     mode: "0755"
+  when: item
   loop: &systemd_overrides
     - bbb-html5-frontend@
     - bbb-html5-backend@
@@ -13,6 +14,7 @@
     - bbb-web
     - bbb-webrtc-sfu
     - freeswitch
+    - "{{ 'coturn' if bbb_coturn_enable else None }}"
 
 - name: Deploy systemd override files
   become: true
@@ -20,6 +22,7 @@
     src: "systemd-overrides/{{ item }}.j2"
     dest: "/etc/systemd/system/{{ item }}.service.d/override.conf"
     mode: "0644"
+  when: item
   loop: *systemd_overrides
   notify:
     - Reload systemd
@@ -68,8 +71,19 @@
     - src: bbb-apps-akka/logback.xml
     - src: bbb-web/logback.xml
       dest: /usr/share/bbb-web/WEB-INF/classes/logback.xml
+    - src: turnserver.conf
+      group: turnserver
+      when: "{{ bbb_coturn_enable }}"
+    - src: haproxy/haproxy.cfg
+      group: haproxy
+      when: "{{ bbb_coturn_enable }}"
+    - src: haproxy/protocolmap
+      group: haproxy
+      when: "{{ bbb_coturn_enable }}"
   notify:
     - Restart bigbluebutton
+    - Restart coturn
+    - Restart haproxy
 
 - name: Remove unused config files
   become: true
@@ -85,5 +99,3 @@
 # scenarios (e.g. cluster mode) and would cause the role to always trigger
 # changes and restarts. They are also incomplete and buggy...
 # TODO: /usr/local/bigbluebutton/bbb-transcription-controller/config/default.yml
-
-
