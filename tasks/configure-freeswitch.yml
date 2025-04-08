@@ -81,8 +81,8 @@
     - { name: ext-sip-ip, value: "$${external_sip_ip}" }
     - { name: sip-ip, value: "$${local_ip_v4}" }
     - { name: rtp-ip, value: "$${local_ip_v4}" }
-    - { name: ws-binding, value: "{{bbb_local_ip}}:5066" }
-    - { name: wss-binding, value: "{{bbb_local_ip}}:7443" }
+    - { name: ws-binding, value: "{{ bbb_local_ip }}:5066" }
+    - { name: wss-binding, value: "{{ bbb_local_ip }}:7443" }
   notify: Restart freeswitch
 
 - name: Set restrictive permissions of freeswitch config files including passwords

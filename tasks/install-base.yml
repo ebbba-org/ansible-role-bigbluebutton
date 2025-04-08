@@ -47,6 +47,8 @@
     url: "{{ item.key }}"
     dest: "/etc/apt/keyrings/{{ item.name }}.asc"
     mode: "0644"
+  retries: 10
+  delay: 5
   loop: "{{ bbb_package_repos }}"
   when: "item.key | default(False)"
 
@@ -60,6 +62,8 @@
   retries: 10
   delay: 5
   loop: "{{ bbb_package_repos }}"
+  loop_control:
+    label: "{{ item.name }}"
   register: result
 
 - name: Refresh apt caches (again) # noqa: no-handler

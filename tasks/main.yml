@@ -23,7 +23,7 @@
 - import_tasks: install-scripts.yml
   tags: ["install"]
 
-# Certificates
+# Deploy certificates
 - import_tasks: certs.yml
   tags: ["certs"]
 
