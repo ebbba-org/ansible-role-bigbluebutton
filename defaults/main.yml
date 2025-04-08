@@ -32,6 +32,7 @@ bbb_bind_ip4: "{{ ansible_default_ipv4.address }}"
 bbb_bind_ip6: "{{ ansible_default_ipv6.address | default(None) }}"
 bbb_public_ip4: "{{ ansible_default_ipv4.address }}"
 bbb_public_ip6: "{{ ansible_default_ipv6.address | default(None) }}"
+bbb_net_mtu: "{{ ansible_default_ipv4.mtu | default(1500) }}"
 
 # Firewall
 
@@ -193,6 +194,7 @@ bbb_etherpad_log_level: INFO
 
 bbb_docker_config:
   log-driver: journald
+  mtu: "{{ bbb_net_mtu | default(1500) }}"
 
 bbb_system_locale: en_US.UTF-8
 

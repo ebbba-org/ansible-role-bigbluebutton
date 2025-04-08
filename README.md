@@ -77,6 +77,10 @@ A secret seed used to generate other host-local secrets and passwords. Override 
 **`bbb_public_ip6`** (default: `{{ ansible_default_ipv6.address | default(None) }}`)\
   Same as `bbb_public_ip4` but for IPv6. Optional, and not fully implemented yet. Needs testing.
 
+**`bbb_net_mtu`** (default: `{{ ansible_default_ipv4.mtu | default(1500) }}`)\
+  MTU (maximum transfer unit) on the default route interface. Required in some cloud environments for puppet
+  containers to be able to access the internet.
+
 
 ### SSL/TLS
 
@@ -286,6 +290,17 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
 **`bbb_webhooks_enable`** (default: `false`)\
   Install bbb-webhooks. This is required by some frontends and recommended.
 
+### Docker
+
+**`bbb_docker_config`** (default: `{"log-driver": "journald", "mtu": bbb_net_mtu}`)\
+  Docker daemon config. Set to `False` to keep original file 
+
+**`bbb_docker_user`** (no default)\
+  DockerHub account username. Useful to avoid rate limits.
+
+**`bbb_docker_passwd`** (required if `bbb_docker_user` is defined)\
+  DockerHub account password.
+
 
 ### Config overrides
 
@@ -398,15 +413,6 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
 
 **`bbb_breakout_rooms_privatechat_enable`** (default: `true`)\
   Enable or disable private chat in breakout rooms   
-
-**`bbb_docker_config`** (default: `{"log-driver": "journald"}`)\
-  Docker daemon config  Set to `False` to keep original file 
-
-**`bbb_docker_user`** (default: Not defined (default: disabled))\
-  Username to Docker Hub login  Set a Docker Hub user. When defined is used to avoid rate limits 
-
-**`bbb_docker_passwd`** (default: Not defined (default: disabled))\
-  Password to Docker Hub login  Set a Docker Hub password. When defined is used to avoid rate limits 
 
 **`bbb_user_inactivity_inspect_timer`** (default: `0`)\
   User inactivity audit timer interval in minutes  If `0` inactivity inspection is deactivated 

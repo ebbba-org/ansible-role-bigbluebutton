@@ -5,6 +5,12 @@
     name: ["docker-ce", "docker-ce-cli", "containerd.io", "docker-buildx-plugin", "docker-compose-plugin"]
     state: present
 
+# Templated variables are always strings in ansible :/
+- name: Ensure bbb_docker_config.mtu is an integer
+  ansible.builtin.set_fact:
+    bbb_docker_config: "{{ bbb_docker_config | combine({'mtu': bbb_net_mtu | int}) }}"
+  when: "bbb_docker_config.mtu is defined and not bbb_docker_config.mtu is integer"
+
 - name: Configure docker daemon
   become: true
   ansible.builtin.template:
@@ -20,4 +26,4 @@
     username: "{{ bbb_docker_user }}"
     password: "{{ bbb_docker_passwd }}"
   no_log: true
-  when: bbb_docker_user|default(None) and bbb_docker_passwd|default(None)
+  when: bbb_docker_user is defined
