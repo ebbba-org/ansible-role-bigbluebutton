@@ -23,3 +23,5 @@
     name: "{{ item.name }}"
     state: "{{ 'present' if item.when | default(True) else 'absent' }}"
   loop: "{{ bbb_packages }}"
+  loop_control:
+    label: "{{ item.name | join(',') }}"

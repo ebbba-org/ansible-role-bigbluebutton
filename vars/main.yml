@@ -53,21 +53,23 @@ bbb_packages_system:
 
 bbb_packages:
   # Core dependencies from external repositories
-  - name: ["yq"]
+  - name: [yq]
   # Core BBB packages
-  - name: ["bigbluebutton", "bbb-html5"]
+  - name: [bigbluebutton, bbb-html5]
   # Optional dependencies and packages
-  - name: bbb-webhooks
+  - name: [bbb-webhooks]
     when: "{{ bbb_webhooks_enable }}"
-  - name: bbb-demo
+  - name: [bbb-demo]
     when: "{{ bbb_api_demos_enable }}"
   # BUG: bbb-playback-presentation is always installed because "bigbluebutton" depends on it
-  - name: bbb-playback-video
+  - name: [bbb-playback-video]
     when: "{{ bbb_recording_enable and 'video' in bbb_recording_formats }}"
-  - name: bbb-playback-podcast
+  - name: [bbb-playback-podcast]
     when: "{{ bbb_recording_enable and 'podcast' in bbb_recording_formats }}"
-  - name: bbb-playback-screenshare
+  - name: [bbb-playback-screenshare]
     when: "{{ bbb_recording_enable and 'screenshare' in bbb_recording_formats }}"
+  - name: [haproxy, coturn]
+    when: "{{ bbb_coturn_enable }}"
 
 bbb_allowed_disabled_features:
   - breakoutRooms
@@ -142,7 +144,7 @@ bbb_config_web_base:
 
 bbb_config_html5_base:
   public:
-    media: 
+    media:
       sipjsHackViaWs: true
     kurento:
       wsUrl: "wss://{{ bbb_hostname }}/bbb-webrtc-sfu"
