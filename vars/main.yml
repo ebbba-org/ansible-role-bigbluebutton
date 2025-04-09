@@ -103,6 +103,11 @@ bbb_config_web_base:
   autoStartRecording: false
   disableRecordingDefault: "{{ not bbb_recording_enable }}"
   allowStartStopRecording: "{{ bbb_recording_enable }}"
+  useDefaultLogo: "{{ bbb_default_logo_enable }}"
+  useDefaultDarkLogo: "{{ bbb_default_logo_enable }}"
+  defaultLogoURL: "{{ bbb_default_logo }}"
+  defaultDarkLogoURL: "{{ bbb_default_darklogo }}"
+  beans.presentationService.defaultUploadedPresentation: "{{ bbb_default_presentation }}"
 
   muteOnStart: "{{ bbb_mute_on_start }}"
   appLogLevel: "{{ bbb_app_log_level }}"
@@ -115,7 +120,6 @@ bbb_config_web_base:
   defaultGuestPolicy: "{{ bbb_guestpolicy }}"
   defaultHttpSessionTimeout: "{{ bbb_http_session_timeout }}"
   defaultWelcomeMessage: "{{ bbb_default_welcome_message }}"
-  beans.presentationService.defaultUploadedPresentation: "{{ bbb_default_presentation }}"
   defaultMaxUsers: "{{ bbb_default_max_users }}"
   defaultMeetingDuration: "{{ bbb_default_meeting_duration }}"
   defaultMeetingLayout: "{{ bbb_default_meeting_layout }}"
@@ -139,8 +143,6 @@ bbb_config_web_base:
   notifyRecordingIsOn: "{{ bbb_notify_recording_is_on }}"
   allowRevealOfBBBVersion: "{{ bbb_allow_reveal_of_bbb_version }}"
   disabledFeatures: "{{ bbb_disabled_features }}"
-  useDefaultLogo: "{{ bbb_use_default_logo }}"
-  defaultLogoURL: "{{ bbb_default_logo_url }}"
 
 bbb_config_html5_base:
   public:

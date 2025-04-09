@@ -56,7 +56,7 @@ A secret seed used to generate other host-local secrets and passwords. Override 
   Fail if there are active meetings on the server. Set this to false on test servers where you do not care about forcefully ending meetings.
 
 
-## Networking
+### Networking
 
 **`bbb_local_ip`** (default: `127.0.0.1`)\
   IP of your loopback device.
@@ -250,22 +250,28 @@ rest, you are on your own. Good luck!
   Default welcome message footer. Will be added to the welcome message even if the front-end overrides it.
 
 **`bbb_default_presentation`** (default: `"${bigbluebutton.web.serverURL}/default.pdf"`)\
-  Download link for the default presentation.
+  Download link for the default presentation. This can be any URL, but is usually a `default.pdf` hosted on the BBB server itself.
 
-**`bbb_custom_presentation`** (no default)\
-  Deploy a custom presentation file to replace `default.pdf`. Example: `path/to/default.pdf` 
+**`bbb_default_presentation_file`** (no default)\
+  Replace `default.pdf` with a custom presentation file. Example: `path/to/default.pdf` 
 
-**`bbb_use_default_logo`** (default: `false`)\
-  Show a default-logo in the top left corner.
+**`bbb_default_logo_enable`** (default: `false`)\
+  Show a default logo in the top left corner, even if the frontend did not provide one. Usually no logo is shown unless the frontend asks for it.
 
-**`bbb_default_logo_url`** (default: `${bigbluebutton.web.serverURL}/logo.png`)\
-  URL for the default logo.  
+**`bbb_default_logo`** (default: `${bigbluebutton.web.serverURL}/images/logo.png`)\
+  URL for the default logo. Frontends can override this.
 
-**`bbb_custom_logo`** (no default)\
-  Deploy a custom default logo. Example `path/to/logo.png` 
+**`bbb_default_logo_file`** (no default)\
+  Replace the default `logo.png` with a custom file. Example `path/to/logo.png` 
+
+**`bbb_default_darklogo`** (default: `${bigbluebutton.web.serverURL}/images/darklogo.png`)\
+  URL for the default logo in dark mode. Frontends can override this.
+
+**`bbb_default_darklogo_file`** (no default)\
+  Replace the default `darklogo.png` with a custom file. Example `path/to/darklogo.png` 
 
 **`bbb_virtual_backgrounds`** (default: `[home.jpg, coffeeshop.jpg, board.jpg]`)
-  List of virtual webcam background images. Provide just a filename for files that already exist on the server, or a local path for a file to upload. The filenames must be unique and must not contain any special characters.
+  List of virtual webcam background images. Provide just a filename for files that already exist on the server, or a local path for a file to upload. The filenames must be unique and must not contain any funny characters.
 
 
 ### Recordings

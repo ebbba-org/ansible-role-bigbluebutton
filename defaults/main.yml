@@ -128,10 +128,13 @@ bbb_dialin_mask_prefix: tel-
 bbb_default_welcome_message: Welcome to <b>%%CONFNAME%%</b>!
 bbb_default_welcome_message_footer: ""
 bbb_default_presentation: ${bigbluebutton.web.serverURL}/default.pdf
-# bbb_custom_presentation
-bbb_use_default_logo: false
-bbb_default_logo_url: ${bigbluebutton.web.serverURL}/logo.png }}
-# bbb_custom_logo
+# bbb_default_presentation_file
+bbb_default_logo_enable: false
+bbb_default_logo: ${bigbluebutton.web.serverURL}/images/logo.png
+# bbb_default_logo_file
+bbb_default_darklogo: ${bigbluebutton.web.serverURL}/images/darklogo.png
+# bbb_default_darklogo_file
+
 bbb_virtual_backgrounds: [home.jpg, coffeeshop.jpg, board.jpg]
 bbb_recording_enable: true
 bbb_recording_formats: [presentation]

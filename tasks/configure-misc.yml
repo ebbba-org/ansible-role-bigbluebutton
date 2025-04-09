@@ -1,16 +1,17 @@
 ---
-- name: Upload default presentation
+- name: Upload custom presentations and logos
   become: true
   copy:
-    src: "{{ bbb_custom_presentation }}"
-    dest: "{{ bbb_nginx_root }}/default.pdf"
+    src: "{{ item.src }}"
+    dest: "{{ bbb_nginx_root }}/{{ item.dest }}"
     mode: "0644"
-  when: bbb_custom_presentation is defined
-
-- name: Upload custom logo
-  become: true
-  copy:
-    src: "{{ bbb_custom_logo }}"
-    dest: "{{ bbb_nginx_root }}/logo.png }}"
-    mode: "0644"
-  when: bbb_custom_logo is defined
+  when: item.src
+  loop_control:
+    label: "{{ item.dest }}"
+  loop:
+    - dest: "default.pdf"
+      src: "{{ bbb_default_presentation_file | default(None) }}"
+    - dest: "images/logo.png"
+      src: "{{ bbb_default_logo_file | default(None) }}"
+    - dest: "images/darklogo.png"
+      src: "{{ bbb_default_darklogo_file | default(None) }}"
