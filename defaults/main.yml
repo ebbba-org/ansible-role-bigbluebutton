@@ -107,7 +107,7 @@ bbb_dialplan_comfort_noise: 1400
 ### SIP dial-in config
 
 bbb_dialin_enable: false
-# bbb_dialin_provider_proxy: sip.example.net
+# bbb_dialin_provider: sip.example.net
 # bbb_dialin_provider_ip: 1.2.3.4
 # bbb_dialin_provider_username: provider-account
 # bbb_dialin_provider_password: provider-password

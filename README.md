@@ -187,23 +187,30 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
 
 ### Dial-in via SIP
 
+When operating a cluster, you usually have a dedicated phone number per BBB
+server, or you run your own SIP gateway (e.g. freeswitch) that routes calls from
+your actual external SIP provider to the correct BBB server based on a phone
+number extension or PIN. Such a setup can quickly become complicated and this
+role can only help you with the configuration on the BBB node itself. For the
+rest, you are on your own. Good luck!
+
 **`bbb_dialin_enable`** (default: `false`)\
   Enable dial-in via phone. You need an external SIP provider for this to work.
 
-**`bbb_dialin_provider_proxy`** (required if `bbb_dialin_enable` is true)\
-  IP of your external SIP provider, also known as registrar.
+**`bbb_dialin_provider`** (required if `bbb_dialin_enable` is true)\
+  Domain or IP of your SIP provider, also known as registrar. Example: `sip.example.com`
 
 **`bbb_dialin_provider_ip`** (required if `bbb_dialin_enable` and `bbb_firewall_enable` are true)\
-  IP or network of your SIP provider.
+  IP or network of your SIP provider. Example: `1.2.3.4` or ``
 
 **`bbb_dialin_provider_username`** (required if `bbb_dialin_enable` is true)\
-  SIP account username
+  SIP account username.
 
 **`bbb_dialin_provider_password`** (required if `bbb_dialin_enable` is true)\
-  SIP account password
+  SIP account password.
 
 **`bbb_dialin_provider_extension`** (required if `bbb_dialin_enable` is true)\
-  Extension (external phone number) of your SIP account
+  Extension (external phone number) of your SIP account.
 
 **`bbb_dialin_default_number`** (default: `bbb_dialin_provider_extension`)\
   Number to present to users for dial-in. Used to replace `%%DIALNUM%%` in welcome messages.
