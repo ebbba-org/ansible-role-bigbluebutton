@@ -109,7 +109,7 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
   Download URL for `acme.sh`.
 
 * **`bbb_acmesh_update`** (default: `false`)\
-  Download acme.sh every time the role is applied, instead of just once.
+  Download `acme.sh` every time the role is applied, instead of just once.
 
 * **`bbb_ssl_cert_file`** (no default)\
   Custom ssl cert file to upload to `bbb_ssl_cert` instead of using ACME.
@@ -154,16 +154,16 @@ BigBlueButton stores state and recordings in `/var/bigbluebutton` and most of it
 > This role won't move or remove existing data, which means you cannot change `bbb_nfs_share` or `bbb_symlink_*` once BBB is installed. Migrating data between storage locations at a later point is possible, but requires manual steps and is out of scope for this role.
 
 * **`bbb_nfs_share`** (no default)\
-  If defined, the role will install `nfs-common`, mount the specified NFS share to `/mnt/bigbluebutton`, create `var` and `log` subdirectories and define `bbb_symlink_var` and `bbb_symlink_log` to point to those directories. Make sure that each BBB node has its own directory on the NFS server. Example: `nfs.example.com:/exports/bbb/{{ bbb_hostname }}/`
+  If defined, the role will install `nfs-common`, mount the specified NFS share to `bbb_nfs_mount`, create `var` and `log` subdirectories and set `bbb_symlink_var` and `bbb_symlink_log` to point to those directories. **Make sure that each BBB server has a dedicated directory on your NFS server**, and that the remove directory exists and can be mounted. It will not be created by this role. Example: `nfs.example.com:/exports/bbb/{{ bbb_hostname }}/`
 
 * **`bbb_nfs_opts`** (default: `defaults,tcp,nofail,lookupcache=positive,_netdev`)\
   Mount options for `bbb_nfs_share`.
 
 * **`bbb_nfs_mount`** (default: `/mnt/bigbluebutton`)\
-  Target directory (mount point) for `bbb_nfs_share`. No not mount directly to `/var/bigbluebutton`!
+  Target directory (mount point) for `bbb_nfs_share`.
 
 * **`bbb_symlink_var`** (no default, conflicts with `bbb_nfs_share`)\
-  If defined, create a symlink from `/var/bigbluebutton` to the specified directory before installing BBB. This is useful if you want to store BBB state and recordings on a separate device or NFS share (see  `bbb_nfs_share`). The role will fail if the target directory does not exist, or if `/var/bigbluebutton` is a non-empty directory. It won't move or remove any existing data.
+  If defined, create a symlink from `/var/bigbluebutton` to the specified directory before installing BBB. This is useful if you want to store BBB state and recordings in a different location. The role will fail if the target directory does not exist, or if `/var/bigbluebutton` is a non-empty directory. It won't move or remove any existing data.
 
 * **`bbb_symlink_log`** (no default, conflicts with `bbb_nfs_share`)\
   Same as `bbb_symlink_var` but for `/var/log/bigbluebutton`.
