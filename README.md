@@ -326,6 +326,7 @@ rest, you are on your own. Good luck!
 **`bbb_webhooks_enable`** (default: `false`)\
   Install bbb-webhooks. This is required by some frontends and recommended.
 
+
 ### Docker
 
 **`bbb_docker_config`** (default: `{"log-driver": "journald", "mtu": bbb_net_mtu}`)\
@@ -390,26 +391,11 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
 **`bbb_apps_akka_log_level`** (default: `ERROR`)\
   set the loglevel for bbb-apps-akka   
 
-**`bbb_kurento_interfaces`** (default: `{{ [ansible_default_ipv4.interface, 'lo'] }}`)\
-  Specify the listening interfaces for kurento   
-
 **`bbb_system_locale`** (default: `en_US.UTF-8`)\
   the system locale to use   
 
 **`bbb_guestpolicy`** (default: `ALWAYS_ACCEPT`)\
   How guest can access  acceptable options: ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR  |
-
-**`bbb_html5_node_options`** (default: unset)\
-  Allow to set extra options for node for the html5-webclient  Could be used for example with <https://github.com/bigbluebutton/bigbluebutton/issues/11183> ; `--max-old-space-size=4096 --max_semi_space_size=128` 
-
-**`bbb_html5_backend_processes`** (default: 1)\
-  amount of html5 backend processes  min = 1; max = 4 
-
-**`bbb_html5_frontend_processes`** (default: 1)\
-  amount of html5 frontend processes  min = 1; max = 4; or 0 to let the same process do front- and backend (2.2 behavior) 
-
-**`bbb_html5_frontend_max_old_space_size`** (default: `2048`)\
-  max-old-space-size in frontends   
 
 **`bbb_container_compat`** (default: `false`)\
   Compatibility with unprivileged containers. Enabling this option allows to deploy BBB into a unprivileged container.

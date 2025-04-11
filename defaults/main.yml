@@ -9,6 +9,7 @@ bbb_version: jammy-300
 bbb_upgrade: true
 bbb_apt_mirror: https://ubuntu.bigbluebutton.org
 bbb_apt_key: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
+bbb_check_running: true
 
 bbb_user_uid: 3000
 bbb_group_gid: 3000
@@ -151,6 +152,12 @@ bbb_cron_unrecorded_days: 14
 bbb_cron_published_days: 14
 bbb_cron_log_history: 28
 
+bbb_docker_config:
+  log-driver: journald
+  mtu: "{{ bbb_net_mtu | default(1500) }}"
+
+bbb_webhooks_enable: false
+
 ## TODO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 bbb_mute_on_start: false
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
@@ -190,11 +197,9 @@ bbb_disabled_features: []
 bbb_web_logouturl: default
 bbb_allow_request_without_session: false
 
-bbb_check_running: true
 
 bbb_nginx_privacy: false
 
-bbb_webhooks_enable: false
 bbb_api_demos_enable: false
 bbb_app_log_level: DEBUG
 bbb_fsels_akka_log_level: ERROR
@@ -202,21 +207,7 @@ bbb_apps_akka_log_level: ERROR
 bbb_freeswitch_log_level: warning
 bbb_etherpad_log_level: INFO
 
-bbb_docker_config:
-  log-driver: journald
-  mtu: "{{ bbb_net_mtu | default(1500) }}"
-
 bbb_system_locale: en_US.UTF-8
-
-bbb_html5_backend_processes: 2
-bbb_html5_frontend_processes: 2
-bbb_html5_frontend_max_old_space_size: "2048"
-
-# additional bbb-web.properties
-
-bbb_kurento_interfaces:
-  - "{{ ansible_default_ipv4.interface }}"
-  - lo
 
 # Skip all tasks that are incompatible with (unprivileged) containers
 bbb_container_compat: false
