@@ -24,4 +24,4 @@
     state: "{{ 'present' if item.when | default(True) else 'absent' }}"
   loop: "{{ bbb_packages }}"
   loop_control:
-    label: "{{ item.name | join(',') }}"
+    label: "{{ 'install' if item.when | default(True) else 'remove ' }} {{ item.name | join(',') }}"

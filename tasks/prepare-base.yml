@@ -72,7 +72,7 @@
     update_cache: true
   when: result.changed
 
-- name: Upgrade all packages
+- name: Upgrade all installed packages
   become: true
   ansible.builtin.apt:
     upgrade: "yes"

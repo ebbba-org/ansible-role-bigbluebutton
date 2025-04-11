@@ -136,6 +136,29 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
   Allow outgoing traffic to these networks in addition to `bbb_ufw_allow_networks_default`, which contains localhost and the internal docker nentwork by default, because those are required for BBB to function. Allowed networks will override rejected networks. 
 
 
+### Storage
+
+BigBlueButton stores state and recordings in `/var/bigbluebutton` and most of its logs in `/var/log/bigbluebutton`. If you have a large cluster you can reduce storage costs by moving those directories to an NFS server and deploy your BBB nodes with smaller root disks instead. `bbb_nfs_share` helps you with that. If you want to deploy other solutions (ceph, samba, extra block devices) then the `bbb_symlink_*` may still be helpful.
+
+> [!note]
+> This role won't move or remove existing data, which means you cannot change `bbb_nfs_share` or `bbb_symlink_*` once BBB is installed. Migrating data between storage locations at a later point is possible, but requires manual steps and is out of scope for this role.
+
+* **`bbb_nfs_share`** (no default)\
+  If defined, the role will install `nfs-common`, mount the specified NFS share to `/mnt/bigbluebutton`, create `var` and `log` subdirectories and define `bbb_symlink_var` and `bbb_symlink_log` to point to those directories. Make sure that each BBB node has its own directory on the NFS server. Example: `nfs.example.com:/exports/bbb/{{ bbb_hostname }}/`
+
+* **`bbb_nfs_opts`** (default: `defaults,tcp,nofail,lookupcache=positive,_netdev`)\
+  Mount options for `bbb_nfs_share`.
+
+* **`bbb_nfs_mount`** (default: `/mnt/bigbluebutton`)\
+  Target directory (mount point) for `bbb_nfs_share`. No not mount directly to `/var/bigbluebutton`!
+
+* **`bbb_symlink_var`** (no default, conflicts with `bbb_nfs_share`)\
+  If defined, create a symlink from `/var/bigbluebutton` to the specified directory before installing BBB. This is useful if you want to store BBB state and recordings on a separate device or NFS share (see  `bbb_nfs_share`). The role will fail if the target directory does not exist, or if `/var/bigbluebutton` is a non-empty directory. It won't move or remove any existing data.
+
+* **`bbb_symlink_log`** (no default, conflicts with `bbb_nfs_share`)\
+  Same as `bbb_symlink_var` but for `/var/log/bigbluebutton`.
+
+
 ### STUN/TURN Servers
 
 **`bbb_coturn_enable`** (default: True if `bbb_turn_servers` is empty)\

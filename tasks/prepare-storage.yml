@@ -1,0 +1,102 @@
+---
+- name: Unmount NFS share
+  become: true
+  when: bbb_nfs_share is undefined and bbb_nfs_mount
+  ansible.posix.mount:
+    path: "{{ bbb_nfs_mount }}"
+    state: absent
+
+- name: Mount NFS share
+  when: bbb_nfs_share is defined
+  block:
+    - name: Sanity checks
+      ansible.builtin.assert:
+        that:
+          - "bbb_symlink_var is undefined or bbb_symlink_var == [bbb_nfs_mount, 'var'] | path_join"
+          - "bbb_symlink_log is undefined or bbb_symlink_log == [bbb_nfs_mount, 'log'] | path_join"
+        fail_msg: "The 'bbb_nfs_share' feature conflicts with 'bbb_symlink_var' and 'bbb_symlink_log'"
+
+    - name: More sanity checks
+      ansible.builtin.assert:
+        that: "bbb_nfs_mount.startswith('/') and not bbb_nfs_mount.startswith('/var/')"
+        fail_msg: "bbb_nfs_mount must be absolute but not start with '/var/'"
+
+    - name: Install nfs-common
+      become: true
+      ansible.builtin.apt:
+        name: nfs-common
+
+    - name: Mount NFS share to {{ bbb_nfs_mount }}
+      become: true
+      ansible.posix.mount:
+        path: "{{ bbb_nfs_mount }}"
+        src: "{{ bbb_nfs_share }}"
+        fstype: nfs
+        opts: "{{ bbb_nfs_opts }}"
+        state: mounted
+      register: mounted
+
+    - name: Create NFS share subdirectories
+      become: true
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ bbb_user_uid }}"
+        group: "{{ bbb_group_gid }}"
+        mode: "u=Xrw,g=Xrw,o=Xr"
+      loop:
+        - "{{ [bbb_nfs_mount, 'var'] | path_join }}"
+        - "{{ [bbb_nfs_mount, 'log'] | path_join }}"
+
+    - name: Mark NFS share as ansible-managed
+      become: true
+      ansible.builtin.copy:
+        dest: "{{ bbb_nfs_mount }}/.ansible-managed"
+        content: "Ansible was here :)"
+        mode: "u=rw,g=rw,o="
+
+    - name: Define bbb_symlink_* point to NFS share
+      ansible.builtin.set_fact:
+        bbb_symlink_var: "{{ [bbb_nfs_mount, 'var'] | path_join }}"
+        bbb_symlink_log: "{{ [bbb_nfs_mount, 'log'] | path_join }}"
+
+- name: Ensure that bbb_symlink_* targets exist
+  become: true
+  ansible.builtin.stat:
+    path: "{{ item.link_target }}"
+  register: result
+  failed_when: "not (result.stat.exists and result.stat.isdir)"
+  when: "item.link_target"
+  loop: &symlinks
+    - path: "/var/bigbluebutton"
+      link_target: "{{ bbb_symlink_var | default(False) }}"
+    - path: "/var/log/bigbluebutton"
+      link_target: "{{ bbb_symlink_log | default(False) }}"
+  loop_control:
+    label: "{{ item.link_target or item.path }}"
+
+- name: Create symlinks for var and log directories
+  become: true
+  ansible.builtin.file:
+    src: "{{ item.link_target }}"
+    path: "{{ item.path }}"
+    state: link #  This will fail if item.path is a non-empty directory
+    follow: true
+    owner: "{{ bbb_user_uid }}"
+    group: "{{ bbb_group_gid }}"
+    mode: "u=Xrw,g=Xrw,o=Xr"
+  when: "item.link_target"
+  loop: *symlinks
+  loop_control:
+    label: "{{ item.path }} -> {{ item.link_target or '(skipped)' }}"
+
+- name: Check for broken symlinks
+  become: true
+  ansible.builtin.stat:
+    path: "{{ item.path }}"
+    follow: true
+  register: result
+  failed_when: not result.stat.exists
+  loop: *symlinks
+  loop_control:
+    label: "{{ item.path }}"

@@ -13,9 +13,13 @@
   when: not bbb_ufw_enable
   tags: ["firewall"]
 
-# Install or upgrade packages
-- import_tasks: install-base.yml
-  tags: ["install"]
+# Prepare base system before installing or upgrading BBB
+- import_tasks: prepare-base.yml
+  tags: ["prepare"]
+- import_tasks: prepare-storage.yml
+  tags: ["prepare"]
+
+# Install or upgrade BBB and dependencies
 - import_tasks: install-docker.yml
   tags: ["install"]
 - import_tasks: install-bbb.yml

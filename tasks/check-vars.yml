@@ -27,3 +27,6 @@
       check: bbb_disabled_features is subset(bbb_allowed_disabled_features)
     - check: (bbb_hostname | lower) is regex("^([a-z0-9-]{1,}\.)+([a-z]{2,})$")
       help: "bbb_hostname is not a valid hostname"
+    - check: "bbb_symlink_var is undefined and bbb_symlink_log is undefined"
+      when: bbb_nfs_share is defined
+      help: "bbb_nfs_share conflicts with bbb_symlink_var and bbb_symlink_log"

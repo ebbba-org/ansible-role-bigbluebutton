@@ -13,6 +13,13 @@ bbb_apt_key: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
 bbb_user_uid: 3000
 bbb_group_gid: 3000
 
+### Storage
+# bbb_nfs_share: nfs.exmaple.com:/exports/{{bbb_hostname}}
+bbb_nfs_mount: /mnt/bigbluebutton
+bbb_nfs_opts: "defaults,tcp,nofail,lookupcache=positive,_netdev"
+# bbb_symlink_var: /mnt/bigbluebutton/var
+# bbb_symlink_log: /mnt/bigbluebutton/log
+
 ### SSL/TLS
 
 bbb_acme_enable: true
