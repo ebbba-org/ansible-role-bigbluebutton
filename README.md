@@ -303,8 +303,17 @@ rest, you are on your own. Good luck!
 * **`bbb_default_darklogo_file`** (no default)\
   Replace the default `darklogo.png` with a custom file. Example `path/to/darklogo.png` 
 
-* **`bbb_virtual_backgrounds`** (default: `[home.jpg, coffeeshop.jpg, board.jpg]`)
+* **`bbb_virtual_backgrounds`** (default: `[home.jpg, coffeeshop.jpg, board.jpg]`)\
   List of virtual webcam background images. Provide just a filename for files that already exist on the server, or a local path for a file to upload. The filenames must be unique and must not contain any funny characters.
+
+* **`bbb_html5_style`** (no default)\
+  Change default colors or other visual aspects of the client with custom styles.
+  If the variable is defined and contains `;` then its content is written
+  directly to a `custom.css` on the server, otherwise it is assumed to be a local
+  file with CSS code you want to upload. Frontends can override styles.
+  It is currently not documented which CSS variables and colors are used by the
+  client, but see [palette.js](https://github.com/bigbluebutton/bigbluebutton/blob/v3.0.x-release/bigbluebutton-html5/imports/ui/stylesheets/styled-components/palette.js).
+  Example: `path/to/custom.css` or `:root { --color-primary: green; }`.
 
 
 ### Recordings

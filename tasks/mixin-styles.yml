@@ -1,0 +1,27 @@
+---
+
+- name: Read custom.css from file
+  ansible.builtin.set_facts:
+    bbb_html5_style: "{{ lookup('ansible.builtin.file', bbb_html5_style) }}"
+  when: "bbb_html5_style is defined and ';' not in bbb_html5_style"
+
+- name: "Create {{ bbb_nginx_root }}/custom.css"
+  become: true
+  copy:
+    dest: "{{ bbb_nginx_root }}/custom.css"
+    src: "{{ bbb_html5_style }}"
+    mode: "0644"
+    owner: bigbluebutton
+    group: bigbluebutton
+  when: "bbb_html5_style is defined"
+
+- name: Configure html5 client to use custom.css by default
+  set_fact:
+    bbb_config_html5_base: |
+      {{ bbb_config_html5_base | combine({
+         'public': {
+            'app': {
+               'customStyleUrl': "https://{{bbb_hostname}}/custom.css"
+            }
+          }
+        }, recursive=True) }}

@@ -35,6 +35,7 @@
 - import_tasks: mixin-proxy.yml
   when: "bbb_cluster_proxy is defined"
 - import_tasks: mixin-backgrounds.yml
+- import_tasks: mixin-styles.yml
 
 # Deploy configuration
 - import_tasks: configure-bbb.yml

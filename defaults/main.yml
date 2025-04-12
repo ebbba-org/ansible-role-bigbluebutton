@@ -142,6 +142,7 @@ bbb_default_logo: ${bigbluebutton.web.serverURL}/images/logo.png
 # bbb_default_logo_file
 bbb_default_darklogo: ${bigbluebutton.web.serverURL}/images/darklogo.png
 # bbb_default_darklogo_file
+# bbb_html5_style
 
 bbb_virtual_backgrounds: [home.jpg, coffeeshop.jpg, board.jpg]
 bbb_recording_enable: true
