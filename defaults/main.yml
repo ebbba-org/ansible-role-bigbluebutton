@@ -157,7 +157,9 @@ bbb_docker_config:
   log-driver: journald
   mtu: "{{ bbb_net_mtu | default(1500) }}"
 
+bbb_venv: /opt/venv
 bbb_webhooks_enable: false
+bbb_bbbctl_enable: true
 
 ## TODO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 bbb_mute_on_start: false

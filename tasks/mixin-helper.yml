@@ -1,0 +1,19 @@
+---
+
+- name: Install bbbctl
+  when: bbb_bbbctl_enable
+  become: true
+  ansible.builtin.pip:
+    name: "bbbctl"
+    virtualenv: "{{ bbb_venv }}"
+    state: "{{ 'latest' if bbb_upgrade else 'present' }}"
+    virtualenv_command: "python3 -m venv"
+
+- name: Link bbbctl command to /usr/local/bin
+  when: bbb_bbbctl_enable
+  become: true
+  ansible.builtin.file:
+    src: "{{ bbb_venv }}/bin/bbbctl"
+    path: "/usr/local/bin/bbbctl"
+    state: link
+    mode: "0755"

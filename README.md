@@ -345,6 +345,12 @@ rest, you are on your own. Good luck!
 * **`bbb_webhooks_enable`** (default: `false`)\
   Install bbb-webhooks. This is required by some frontends and recommended.
 
+* **`bbb_venv`** (default: `/opt/venv`)\
+  Install path for Python tools or helpers fetched from [pypi.org](https://pypi.org/)
+
+* **`bbb_bbbctl_enable`** (default: `true`)\
+  If true, install [bbbctl](https://pypi.org/project/bbbctl/)
+
 
 ### Docker
 

@@ -37,6 +37,7 @@ bbb_packages_system:
   - apt-transport-https
   - python3-apt
   - python3-passlib
+  - python3-venv
   - curl
   - gpg
   - imagemagick # For background image thumbnails
