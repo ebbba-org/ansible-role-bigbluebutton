@@ -1,5 +1,4 @@
 ---
-
 # NOTE: Included by prepare-ssl.yml
 
 - name: Disable ACME
@@ -12,87 +11,86 @@
 - name: Enable ACME
   when: bbb_acme_enable
   block:
+    - name: Ensure nginx is installed
+      become: true
+      ansible.builtin.package:
+        name: nginx
+        state: present
 
-  - name: Ensure nginx is installed
-    become: true
-    ansible.builtin.package:
-      name: nginx
-      state: present
+    - name: Ensure nginx is running
+      become: true
+      ansible.builtin.systemd:
+        name: nginx
+        state: started
 
-  - name: Ensure nginx is running
-    become: true
-    ansible.builtin.systemd:
-      name: nginx
-      state: started
+    - name: Wait for port 80 to be reachable
+      ansible.builtin.wait_for:
+        host: "{{ bbb_hostname }}"
+        port: 80
+        timeout: 30
+        msg: "Nginx failed to start up or is not configured to listen to port 80"
 
-  - name: Wait for port 80 to be reachable
-    ansible.builtin.wait_for:
-      host: "{{ bbb_hostname }}"
-      port: 80
-      timeout: 30
-      msg: "Nginx failed to start up or is not configured to listen to port 80"
+    - name: Ensure acme.sh directories exist
+      become: true
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - /etc/bigbluebutton/acme
+        - /etc/bigbluebutton/acme/.download
 
-  - name: Ensure acme.sh directories exist
-    become: true
-    file:
-      path: "{{ item }}"
-      state: directory
-      mode: "0755"
-    loop:
-      - /etc/bigbluebutton/acme
-      - /etc/bigbluebutton/acme/.download
+    - name: Check if we need to download acme.sh
+      become: true
+      stat:
+        path: /etc/bigbluebutton/acme/.download/acme.sh
+      register: stat_result
+      when: not bbb_acmesh_update
 
-  - name: Check if we need to download acme.sh
-    become: true
-    stat:
-      path: /etc/bigbluebutton/acme/.download/acme.sh
-    register: stat_result
-    when: not bbb_acmesh_update
+    - name: Download or update acme.sh
+      become: true
+      ansible.builtin.get_url:
+        url: "{{ bbb_acmesh_download }}"
+        dest: /etc/bigbluebutton/acme/.download/acme.sh
+        mode: "0755"
+      when: bbb_acmesh_update or not (stat_result.stat.exists | default(False))
 
-  - name: Download or update acme.sh
-    become: true
-    ansible.builtin.get_url:
-      url: "{{ bbb_acmesh_download }}"
-      dest: /etc/bigbluebutton/acme/.download/acme.sh
-      mode: "0755"
-    when: bbb_acmesh_update or not (stat_result.stat.exists | default(False))
+    - name: Install acme.sh and register an account
+      become: true
+      ansible.builtin.command:
+        chdir: /etc/bigbluebutton/acme/.download
+        cmd: >-
+          ./acme.sh --install
+          --home /etc/bigbluebutton/acme/
+          --accountemail {{ bbb_acme_email }}
+          --server {{ bbb_acme_api }}
+          --no-cron
+          --no-profile
+      register: acme_install_result
+      changed_when: "'ok' in acme_install_result.stdout"
 
-  - name: Install acme.sh and register an account
-    become: true
-    ansible.builtin.command:
-      chdir: /etc/bigbluebutton/acme/.download
-      cmd: >-
-        ./acme.sh --install
-        --home /etc/bigbluebutton/acme/
-        --accountemail {{ bbb_acme_email }}
-        --server {{ bbb_acme_api }}
-        --no-cron
-        --no-profile
-    register: acme_install_result
-    changed_when: "'ok' in acme_install_result.stdout"
+    - name: Issue certificate with acme.sh
+      become: true
+      ansible.builtin.command:
+        chdir: /etc/bigbluebutton/acme
+        cmd: >-
+          ./acme.sh --issue
+          --home /etc/bigbluebutton/acme/
+          --server {{ bbb_acme_api }}
+          --domain {{ bbb_hostname }}
+          --webroot /var/www/html/
+          --renew-hook "systemctl reload nginx.service haproxy.service || true"
+          --key-file {{ bbb_ssl_key }}
+          --fullchain-file {{ bbb_ssl_cert }}
+          --keylength ec-256
+      register: result
+      changed_when: "'new certificate deployed' in result.stdout"
+      failed_when: result.rc not in [ 0, 2 ]
 
-  - name: Issue certificate with acme.sh
-    become: true
-    ansible.builtin.command:
-      chdir: /etc/bigbluebutton/acme
-      cmd: >-
-        ./acme.sh --issue
-        --home /etc/bigbluebutton/acme/
-        --server {{ bbb_acme_api }}
-        --domain {{ bbb_hostname }}
-        --webroot /var/www/html/
-        --renew-hook "systemctl reload nginx.service haproxy.service || true"
-        --key-file {{ bbb_ssl_key }}
-        --fullchain-file {{ bbb_ssl_cert }}
-        --keylength ec-256
-    register: result
-    changed_when: "'new certificate deployed' in result.stdout"
-    failed_when: result.rc not in [ 0, 2 ]
-
-  - name: Install ACME cron
-    become: true
-    ansible.builtin.cron:
-      name: "ACME cron"
-      hour: "4"
-      minute: "13"
-      job: "/etc/bigbluebutton/acme/acme.sh --cron --home /etc/bigbluebutton/acme"
+    - name: Install ACME cron
+      become: true
+      ansible.builtin.cron:
+        name: "ACME cron"
+        hour: "4"
+        minute: "13"
+        job: "/etc/bigbluebutton/acme/acme.sh --cron --home /etc/bigbluebutton/acme"

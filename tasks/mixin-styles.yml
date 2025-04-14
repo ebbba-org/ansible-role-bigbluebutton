@@ -1,8 +1,7 @@
 ---
+# TODO: Cache buster? really necessary?
 
-# TODO: Cache buster? really necessary? 
-
-- name: "Create {{ bbb_nginx_root }}/custom.css"
+- name: Deploy custom.css
   become: true
   copy:
     dest: "{{ bbb_nginx_root }}/custom.css"
@@ -18,7 +17,7 @@
       {{ bbb_config_html5_base | combine({
          'public': {
             'app': {
-               'customStyleUrl': "https://{{bbb_hostname}}/custom.css"
+               'customStyleUrl': 'https://'+bbb_hostname+'/custom.css'
             }
           }
         }, recursive=True) }}

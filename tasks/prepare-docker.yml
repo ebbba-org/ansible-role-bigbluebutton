@@ -21,8 +21,8 @@
   register: result
 
 # Ansible lacks the ability to flush specific handlers, so reload docker manually
-- name: Reload docker daemon  # noqa: no-handler
-  when: result.changed 
+- name: Reload docker daemon # noqa: no-handler
+  when: result.changed
   become: true
   systemd:
     name: docker

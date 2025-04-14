@@ -1,5 +1,4 @@
 ---
-
 # Check phase: Fail if there are running meetings, obvious configuration errors
 # or if the target does not meet requirements.
 
@@ -11,7 +10,7 @@
 - import_tasks: prepare-os.yml
 - import_tasks: prepare-firewall.yml
 - import_tasks: prepare-storage.yml
-- import_tasks: prepare-ssl.yml  # Includes prepare-ssl-acme.yml
+- import_tasks: prepare-ssl.yml # Includes prepare-ssl-acme.yml
 - import_tasks: prepare-docker.yml
 
 # Install phase: Install or update BBB and related packages.
@@ -20,7 +19,7 @@
 
 # Mixin phase: Tasks that require BBB to be installed. This is also the best
 # phase to manipulate `bbb_config_*` or other settings before they are written
-# to config files in the next phase. 
+# to config files in the next phase.
 
 - import_tasks: mixin-helper.yml
 - import_tasks: mixin-proxy.yml
@@ -34,13 +33,12 @@
 
 - import_tasks: configure-bbb.yml
 - import_tasks: configure-nginx.yml
-- import_tasks: configure-haproxy.yml  # Depends on configure-nginx.yml
+- import_tasks: configure-haproxy.yml # Depends on configure-nginx.yml
 - import_tasks: configure-freeswitch.yml
 - import_tasks: configure-coturn.yml
 
 # Finalizing phase: Tasks that require a fully configured and running BBB server.
-# Handlers are flushed before entering this phase.  
+# Handlers are flushed before entering this phase.
 
 - meta: flush_handlers
 # - import_tasks: finalize-checks.yml
-

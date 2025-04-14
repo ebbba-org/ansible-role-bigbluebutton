@@ -200,7 +200,6 @@ bbb_disabled_features: []
 bbb_web_logouturl: default
 bbb_allow_request_without_session: false
 
-
 bbb_nginx_privacy: false
 
 bbb_api_demos_enable: false

@@ -29,4 +29,3 @@
     regexp: "\\s*proxy_pass .*"
     replace: "proxy_pass http://{{ bbb_local_ip }}:5066;"
   notify: Reload nginx
-

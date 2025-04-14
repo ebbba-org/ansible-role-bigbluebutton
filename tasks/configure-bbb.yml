@@ -29,7 +29,7 @@
   register: result
 
 # Ansible lacks the ability to flush specific handlers, so reload systemd manually
-- name: Reload systemd  # noqa: no-handler
+- name: Reload systemd # noqa: no-handler
   become: true
   systemd:
     daemon_reload: true

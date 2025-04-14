@@ -1,5 +1,4 @@
 ---
-
 - name: Remove turnserver.conf
   when: not bbb_coturn_enable
   become: true

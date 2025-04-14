@@ -1,5 +1,4 @@
 ---
-
 - name: Install BBB packages
   become: true
   ansible.builtin.package:

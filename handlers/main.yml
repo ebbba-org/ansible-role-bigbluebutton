@@ -1,5 +1,4 @@
 ---
-
 - name: Restart bigbluebutton
   become: true
   command: bbb-conf --restart
@@ -10,7 +9,7 @@
     name: nginx
     state: reloaded
   listen:
-  - "Reload HTTPS"  # SSL cert changed
+    - "Reload HTTPS" # SSL cert changed
 
 - name: Reload haproxy
   become: true
@@ -19,8 +18,8 @@
     state: reloaded
   when: bbb_coturn_enable
   listen:
-  - "Reload HTTPS"  # SSL cert changed
-  - "Restart bigbluebutton"  # Not restarted by bbb-conf --restart
+    - "Reload HTTPS" # SSL cert changed
+    - "Restart bigbluebutton" # Not restarted by bbb-conf --restart
 
 - name: Restart coturn
   become: true
@@ -29,8 +28,8 @@
     name: coturn
     state: restarted
   listen:
-    - "Reload HTTPS"  # SSL cert changed
-    - "Restart bigbluebutton"  # Not restarted by bbb-conf --restart
+    - "Reload HTTPS" # SSL cert changed
+    - "Restart bigbluebutton" # Not restarted by bbb-conf --restart
 
 - name: Restart freeswitch
   become: true
