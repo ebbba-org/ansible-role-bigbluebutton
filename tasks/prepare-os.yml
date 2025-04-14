@@ -56,6 +56,8 @@
   retries: 10
   delay: 5
   loop: "{{ bbb_package_repos }}"
+  loop_control:
+    label: "{{ item.key | default(item.repo)}}"
   when: "item.key | default(False)"
 
 - name: Configure extra repositories
