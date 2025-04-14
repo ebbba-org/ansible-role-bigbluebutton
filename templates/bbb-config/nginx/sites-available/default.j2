@@ -10,5 +10,7 @@ server {
         alias /var/www/html/.well-known/;
     }
 
-    return 301 https://$host$request_uri;
+    location / {
+        return 301 https://$host$request_uri;
+    }
 }

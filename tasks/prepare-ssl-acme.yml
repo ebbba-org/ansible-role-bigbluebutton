@@ -19,12 +19,11 @@
       name: nginx
       state: present
 
-  - name: Ensure nginx is enabled and running
+  - name: Ensure nginx is running
     become: true
     ansible.builtin.systemd:
       name: nginx
-      state: running
-      enabled: true
+      state: started
 
   - name: Wait for port 80 to be reachable
     ansible.builtin.wait_for:
