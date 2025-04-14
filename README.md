@@ -94,7 +94,7 @@ A secret seed used to generate other host-local secrets and passwords. Override 
 
 ### SSL/TLS
 
-You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or copy existing files to the host, or tell the role to do nothing and just assume the certificate files are already in the right place. 
+You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or copy existing files to the host, or tell the role to do nothing and just assume the certificate files are already in the correct place.
 
 * **`bbb_acme_enable`** (default: `true`)\
   If true, automatically generate TLS certificates via ACME (e.g. letsencrypt). If you have a lot of servers you may need to throttle your deployments or switch to an ACME provider with higher rate limits.

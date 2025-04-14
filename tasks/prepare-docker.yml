@@ -9,7 +9,7 @@
 - name: Ensure bbb_docker_config.mtu is an integer
   ansible.builtin.set_fact:
     bbb_docker_config: "{{ bbb_docker_config | combine({'mtu': bbb_net_mtu | int}) }}"
-  when: "bbb_docker_config.mtu is defined and not bbb_docker_config.mtu is integer"
+  when: "bbb_docker_config.mtu is defined and bbb_docker_config.mtu is not integer"
 
 - name: Configure docker daemon
   become: true
@@ -18,7 +18,15 @@
     dest: "/etc/docker/daemon.json"
     mode: "0600"
   when: "bbb_docker_config | default(False)"
-  notify: Reload docker
+  register: result
+
+# Ansible lacks the ability to flush specific handlers, so reload docker manually
+- name: Reload docker daemon  # noqa: no-handler
+  when: result.changed 
+  become: true
+  systemd:
+    name: docker
+    state: reloaded
 
 - name: Log into DockerHub to avoid rate limits
   become: true

@@ -25,8 +25,15 @@
   when: item
   loop: *systemd_overrides
   notify:
-    - Reload systemd
     - Restart bigbluebutton
+  register: result
+
+# Ansible lacks the ability to flush specific handlers, so reload systemd manually
+- name: Reload systemd  # noqa: no-handler
+  become: true
+  systemd:
+    daemon_reload: true
+  when: result.changed
 
 - name: Ensure config directories exist
   become: true
@@ -71,19 +78,7 @@
     - src: bbb-apps-akka/logback.xml
     - src: bbb-web/logback.xml
       dest: /usr/share/bbb-web/WEB-INF/classes/logback.xml
-    - src: turnserver.conf
-      group: turnserver
-      when: "{{ bbb_coturn_enable }}"
-    - src: haproxy/haproxy.cfg
-      group: haproxy
-      when: "{{ bbb_coturn_enable }}"
-    - src: haproxy/protocolmap
-      group: haproxy
-      when: "{{ bbb_coturn_enable }}"
-  notify:
-    - Restart bigbluebutton
-    - Restart coturn
-    - Restart haproxy
+  notify: Restart bigbluebutton
 
 - name: Remove unused config files
   become: true
@@ -92,7 +87,6 @@
     state: absent
   when: not (item.when | default(true))
   loop: *configfiles
-
 
 # Simulate bbb-conf --setsecret and --setip for files not already covered by
 # templates. We cannot actually call those commands because they break some

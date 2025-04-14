@@ -1,29 +1,32 @@
 ---
-- name: Deploy nginx config files
+- name: Deploy nginx site configs
   become: true
   ansible.builtin.template:
-    src: "bbb-config/{{ item.src }}.j2"
-    dest: "{{ item.dest | default('/etc/' + item.src) }}"
-    owner: "{{ item.owner | default('bigbluebutton') }}"
-    group: "{{ item.group | default('root') }}"
-    mode: "{{ item.mode | default('0600') }}"
+    src: "bbb-config/nginx/sites-available/{{ item }}.j2"
+    dest: "/etc/nginx/sites-available/{{ item }}"
+    mode: "644"
   loop:
-    - src: nginx/sites-available/bigbluebutton
-      mode: "0644"
-  notify:
-    - Reload nginx
-
-- name: Remove nginx default config
-  become: true
-  file:
-    path: /etc/nginx/sites-enabled/default
-    state: absent
+    - default
+    - bigbluebutton
   notify: Reload nginx
 
-- name: Configure sip.nginx for sipjsHackViaWs
+- name: Enable nginx sites
   become: true
-  replace:
+  ansible.builtin.file:
+    src: "../sites-available/{{ item }}"
+    dest: "/etc/nginx/sites-enabled/{{ item }}"
+    state: link
+    mode: "644"
+  loop:
+    - default
+    - bigbluebutton
+  notify: Reload nginx
+
+- name: Update sip.nginx for sipjsHackViaWs
+  become: true
+  ansible.builtin.replace:
     path: /usr/share/bigbluebutton/nginx/sip.nginx
     regexp: "\\s*proxy_pass .*"
     replace: "proxy_pass http://{{ bbb_local_ip }}:5066;"
   notify: Reload nginx
+

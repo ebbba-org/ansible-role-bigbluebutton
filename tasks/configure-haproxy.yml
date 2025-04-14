@@ -1,0 +1,38 @@
+---
+
+# NOTE: Must run after nginx was configured to not listen to port 443 anymore
+# NOTE: If bbb_coturn_enable is false, haproxy is uninstalled and does not need
+#       to be stopped/disabled.
+
+- when: bbb_coturn_enable
+  block:
+
+  # Handlers did not run yet and nginx may still listen to port 443
+  - name: Ensure nginx picked up current config
+    become: true
+    ansible.builtin.systemd:
+      name: nginx
+      state: reloaded
+    changed_when: false
+
+  - name: Deploy haproxy config files
+    become: true
+    ansible.builtin.template:
+      src: "bbb-config/haproxy/{{ item }}.j2"
+      dest: "/etc/haproxy/{{ item }}"
+      owner: "root"
+      group: "haproxy"
+      mode: "0644"
+    loop:
+      - haproxy.cfg
+      - protocolmap
+    notify: Reload haproxy
+    register: result
+
+  - name: Ensure haproxy is enabled and started/reloaded
+    become: true
+    ansible.builtin.systemd:
+      name: haproxy
+      enabled: true
+      state: "{{ 'reloaded' if result.changed else 'started' }}"
+

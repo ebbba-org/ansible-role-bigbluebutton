@@ -1,15 +1,12 @@
 ---
 
-- name: Read custom.css from file
-  ansible.builtin.set_facts:
-    bbb_html5_style: "{{ lookup('ansible.builtin.file', bbb_html5_style) }}"
-  when: "bbb_html5_style is defined and ';' not in bbb_html5_style"
+# TODO: Cache buster? really necessary? 
 
 - name: "Create {{ bbb_nginx_root }}/custom.css"
   become: true
   copy:
     dest: "{{ bbb_nginx_root }}/custom.css"
-    src: "{{ bbb_html5_style }}"
+    content: "{{ bbb_html5_style if ';' in bbb_html5_style else lookup('ansible.builtin.file', bbb_html5_style) }}"
     mode: "0644"
     owner: bigbluebutton
     group: bigbluebutton
@@ -25,3 +22,4 @@
             }
           }
         }, recursive=True) }}
+  when: "bbb_html5_style is defined"

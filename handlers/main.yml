@@ -1,20 +1,26 @@
 ---
-- name: Reload systemd
+
+- name: Restart bigbluebutton
   become: true
-  systemd:
-    daemon_reload: true
+  command: bbb-conf --restart
 
 - name: Reload nginx
   become: true
   systemd:
     name: nginx
     state: reloaded
+  listen:
+  - "Reload HTTPS"  # SSL cert changed
 
-- name: Restart nginx
+- name: Reload haproxy
   become: true
   systemd:
     name: nginx
-    state: restarted
+    state: reloaded
+  when: bbb_coturn_enable
+  listen:
+  - "Reload HTTPS"  # SSL cert changed
+  - "Restart bigbluebutton"  # Not restarted by bbb-conf --restart
 
 - name: Restart coturn
   become: true
@@ -22,26 +28,12 @@
   systemd:
     name: coturn
     state: restarted
-
-- name: Restart haproxy
-  become: true
-  when: bbb_coturn_enable
-  systemd:
-    name: haproxy
-    state: restarted
-
-- name: Reload docker
-  become: true
-  systemd:
-    name: docker
-    state: reloaded
+  listen:
+    - "Reload HTTPS"  # SSL cert changed
+    - "Restart bigbluebutton"  # Not restarted by bbb-conf --restart
 
 - name: Restart freeswitch
   become: true
   systemd:
     name: freeswitch
     state: restarted
-
-- name: Restart bigbluebutton
-  become: true
-  command: bbb-conf --restart

@@ -1,0 +1,61 @@
+---
+- name: Disable UFW
+  when: not bbb_ufw_enable
+  block:
+    - name: Gather package facts
+      package_facts:
+        manager: auto
+    - name: Disable UFW
+      become: true
+      community.general.ufw:
+        state: disabled
+      when: "'ufw' in packages"
+
+- name: Enable UFW
+  when: bbb_ufw_enable
+  block:
+  
+  - name: Install ufw
+    become: true
+    ansible.builtin.package:
+      name: ufw
+      state: present
+
+  - name: Set logging
+    become: true
+    community.general.ufw:
+      logging: "{{ 'on' if bbb_ufw_logging else 'off' }}"
+
+  - name: Install rules
+    become: true
+    community.general.ufw:
+      rule: "{{ item.value.rule | default('allow') }}"
+      direction: "{{ item.value.direction | default('in') }}"
+      from: "{{ item.value.from | default('any') }}"
+      to: "{{ item.value.to | default('any') }}"
+      port: "{{ item.value.port | default(None) }}"
+      proto: "{{ item.value.proto | default('tcp') }}"
+    when: item.value and (item.value.when | default(True))
+    loop: "{{ bbb_ufw_rules_default | combine(bbb_ufw_rules) | dict2items }}"
+
+  - name: Allow outgoing traffic to bbb_ufw_allow_networks(_default)
+    become: true
+    community.general.ufw:
+      rule: allow
+      direction: out
+      to: "{{ item }}"
+    loop: "{{ (bbb_ufw_allow_networks_default + bbb_ufw_allow_networks) | unique }}"
+
+  - name: Reject outgoing traffic to bbb_ufw_reject_networks(_default)
+    become: true
+    community.general.ufw:
+      rule: reject
+      direction: out
+      to: "{{ item }}"
+    loop: "{{ (bbb_ufw_reject_networks_default + bbb_ufw_reject_networks) | unique }}"
+
+  - name: Activate ufw and set default policy
+    become: true
+    community.general.ufw:
+      state: enabled
+      policy: "{{ bbb_ufw_policy }}"

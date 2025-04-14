@@ -1,55 +1,45 @@
 ---
-# Sanity and pre-run checks
+
+# Check phase: Fail if there are running meetings, obvious configuration errors
+# or if the target does not meet requirements.
+
 - import_tasks: check-vars.yml
-  tags: ["always", "checks"]
 - import_tasks: check-running.yml
-  tags: ["always", "checks"]
 
-# Tighten Firewall before install
-- import_tasks: firewall/enable.yml
-  when: bbb_ufw_enable
-  tags: ["firewall"]
-- import_tasks: firewall/disable.yml
-  when: not bbb_ufw_enable
-  tags: ["firewall"]
+# Prepare phase: Tasks that should run before BBB ist first installed.
 
-# Prepare base system before installing or upgrading BBB
-- import_tasks: prepare-base.yml
-  tags: ["prepare"]
+- import_tasks: prepare-os.yml
+- import_tasks: prepare-firewall.yml
 - import_tasks: prepare-storage.yml
-  tags: ["prepare"]
+- import_tasks: prepare-ssl.yml  # Includes prepare-ssl-acme.yml
+- import_tasks: prepare-docker.yml
 
-# Install or upgrade BBB and dependencies
-- import_tasks: install-docker.yml
-  tags: ["install"]
+# Install phase: Install or update BBB and related packages.
+
 - import_tasks: install-bbb.yml
-  tags: ["install"]
-- import_tasks: install-scripts.yml
-  tags: ["install"]
 
-# Deploy certificates
-- import_tasks: certs.yml
-  tags: ["certs"]
+# Mixin phase: Tasks that require BBB to be installed. This is also the best
+# phase to manipulate `bbb_config_*` or other settings before they are written
+# to config files in the next phase. 
 
-# Configuration mixins and features
 - import_tasks: mixin-proxy.yml
   when: "bbb_cluster_proxy is defined"
 - import_tasks: mixin-backgrounds.yml
+- import_tasks: mixin-assets.yml
 - import_tasks: mixin-styles.yml
 
-# Deploy configuration
+# Configuration phase: Write or patch configuration files and notify handlers
+# if necessary.
+
 - import_tasks: configure-bbb.yml
-  tags: ["configure"]
-- import_tasks: configure-freeswitch.yml
-  tags: ["configure"]
-- import_tasks: configure-dialin.yml
-  tags: ["configure"]
 - import_tasks: configure-nginx.yml
-  tags: ["configure"]
-- import_tasks: configure-misc.yml
-  tags: ["configure"]
+- import_tasks: configure-haproxy.yml  # Depends on configure-nginx.yml
+- import_tasks: configure-freeswitch.yml
+- import_tasks: configure-coturn.yml
 
-- import_tasks: services.yml
+# Finalizing phase: Tasks that require a fully configured and running BBB server.
+# Handlers are flushed before entering this phase.  
 
-- name: Flush Handler
-  meta: flush_handlers
+- meta: flush_handlers
+# - import_tasks: finalize-checks.yml
+

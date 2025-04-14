@@ -1,5 +1,5 @@
 ---
-- name: Upload custom presentations and logos
+- name: Upload custom presentation or logo
   become: true
   copy:
     src: "{{ item.src }}"

@@ -1,21 +1,4 @@
 ---
-- name: Ensure bigbluebutton group has fixed gid
-  become: true
-  ansible.builtin.group:
-    name: bigbluebutton
-    system: true
-    gid: "{{ bbb_group_gid }}"
-
-- name: Ensure bigbluebutton user has fixed uid
-  become: true
-  ansible.builtin.user:
-    name: bigbluebutton
-    system: true
-    shell: /bin/false
-    home: /home/bigbluebutton
-    uid: "{{ bbb_user_uid }}"
-    groups: [bigbluebutton]
-    append: true
 
 - name: Install BBB packages
   become: true
@@ -25,3 +8,4 @@
   loop: "{{ bbb_packages }}"
   loop_control:
     label: "{{ 'install' if item.when | default(True) else 'remove ' }} {{ item.name | join(',') }}"
+  notify: Restart bigbluebutton

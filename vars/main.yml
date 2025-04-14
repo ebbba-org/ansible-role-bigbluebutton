@@ -42,7 +42,6 @@ bbb_packages_system:
   - imagemagick # For background image thumbnails
   # Configured early to avoid install issues later
   - "openjdk-{{ bbb_java_version }}-jdk"
-  - language-pack-en
   # Other dependencies that do not need extra repositories or PPAs
   - haveged # Faster entropy generation
   - net-tools

@@ -11,16 +11,7 @@
     - path: "{{ bbb_ssl_cert | dirname }}"
     - path: "{{ bbb_ssl_key | dirname }}"
 
-- name: Ensure ACME is enabled
-  when: bbb_acme_enable
-  import_tasks: certs-acme.yml
-
-- name: Ensure ACME disabled
-  when: not bbb_acme_enable
-  become: true
-  ansible.builtin.cron:
-    name: "ACME cron"
-    state: absent
+- import_tasks: prepare-ssl-acme.yml
 
 - name: Deploy custom ssl files
   when: bbb_ssl_key_file is defined
@@ -39,7 +30,7 @@
     - src: "{{ bbb_ssl_key_file }}"
       dest: "{{ bbb_ssl_key }}"
       mode: "0640"
-  notify: Reload nginx
+  notify: Reload HTTPS
 
 - name: Ensure ssl files have proper permissions
   become: true
@@ -61,7 +52,7 @@
     src: ffdhe4096.pem
     dest: /etc/ssl/ffdhe4096.pem
     mode: "0644"
-  notify: Reload nginx
+  notify: Reload HTTPS
 
 - name: Manage cert key symlink for haproxy
   become: true
@@ -70,3 +61,4 @@
     dest: "{{ bbb_ssl_cert }}.key"
     state: "link"
   when: "bbb_coturn_enable and bbb_ssl_key != bbb_ssl_cert + '.key'"
+  notify: Reload HTTPS

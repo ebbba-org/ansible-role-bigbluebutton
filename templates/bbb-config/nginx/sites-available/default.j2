@@ -1,0 +1,14 @@
+# {{ ansible_managed }}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name {{ bbb_hostname }};
+    server_tokens off;
+
+    location /.well-known/ {
+        alias /var/www/html/.well-known/;
+    }
+
+    return 301 https://$host$request_uri;
+}
