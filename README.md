@@ -11,16 +11,17 @@ Installation requires a fresh and unmodified Ubuntu 22.04 Server that meets [min
 > [!note]
 Ansible deployments are best suited for large cluster deployments with may BBB nodes or complex configurations. If you just want to install vanilla BBB on a single server, we recommend to follow the [official install instructions](https://docs.bigbluebutton.org/administration/install/) instead.
 
+
 ### Role compatibility with BigBlueButton releases
 
-For this role we try our best to support the most recent patch-level of each BigBlueButton releases currently supported by upstream. Here is a quick overview:
+For this role we try our best to support the most recent patch-level of each BigBlueButton release currently supported by upstream. Here is a quick overview:
 
 * The `main` branch usually targets the *next* BigBlueButton release. Use this for testing new release candidates or working on future versions of this role.
 * The `bbb/X.Y` branches target a specific BigBlueButton release (e.g. `3.0`) and will install the latest patch release by default. Use these to keep up with new patches, features and workarounds. 
-* Tags like `vX.Y.Z`  mark a version of this role that was tested against a specific BigBlueButton patch-release and published to ansible galaxy. We only do this if we had enough time to test and the role actually changed since the last published release, so releases may be skipped and delayed. We currently recommend to watch the branches instead.
+* Tags like `vX.Y.Z`  mark a version of this role that was tested against a specific BigBlueButton patch-release and published to ansible galaxy. We only do this if we had enough time to test and the role actually changed since the last published release, so releases may be skipped and delayed. We currently recommend watching the branches instead.
 
 > [!warning]
-BigBlueButton does not follow [SemVer](https://semver.org/) and sometimes intoduces breaking changes in minor releases or even patch releases. The only way to be sure everything still works is to actually test it, especially if you run configurations that are not really tested by upstream. Be prepared, run your own test environment and test each release (including patch releases) before upgrading your production environment. Downgrading to a previous release is usually not possible without extra steps.
+BigBlueButton does not follow [SemVer](https://semver.org/) and sometimes intoduces breaking changes in minor releases or even patch releases. The only way to be sure everything still works is to actually test it, especially if you run configurations that are not properly tested by upstream. Be prepared, run your own test environment and test each release (including patch releases) before upgrading your production environment. Downgrading to a previous release is usually not possible without extra steps.
 
 
 ### Upgrading from previous releases
@@ -34,9 +35,9 @@ BigBlueButton does not follow [SemVer](https://semver.org/) and sometimes intodu
 
 All role variables are prefixed with `bbb_` and most of them are optional. See `defaults/main.yaml` for a full list.
 
-This role tries to focus on [settings and features](https://docs.bigbluebutton.org/administration/customize/) that are more involved and require multiple changes in different places or additional steps to apply. If something is not explicitly covered by this role, you can usually still reach your goal via *Config overrides* (see `bbb_config_*`). Those are merged into the role-generated configuration just before any config files are written to disk and allow you to control almost all aspects of BBBs. If you miss something that cannot easily be archived with Config overrides, feel free to open an issue or pull request.
+This role tries to focus on more complex [settings and features](https://docs.bigbluebutton.org/administration/customize/) that are difficult to apply or require additional steps to work properly. Everything else should be covered by *Config overrides* (see `bbb_config_*`). If you find a useful feature or setting not covered by this role and not suitable for config overrides, feel free to open a feature or pull request.
 
-Not that this role will not patch, but completely overwrite most config files. It also does not use `bbb-conf` and won't trigger `apply-config.sh`.
+Note that this role does not use `bbb-install.sh` or `bbb-conf` and won't trigger `apply-config.sh` hooks.
 
 
 ### Basic configuration
@@ -324,7 +325,7 @@ rest, you are on your own. Good luck!
 * **`bbb_recording_formats`** (default: `[presentation]`)
   List of recording formats to render. This configures `process` and `publish` steps for each format and installs additional packages for the built-in formats: `presentation`, `video`, `screenshare` and `podcast`.
 
-* **`bbb_recording_mp4`** (default: `False`)
+* **`bbb_recording_mp4`** (default: `False`)\
   Generate additional mp4-encoded videos for supported recording formats as a fallback for older iOS devices.
 
 * **`bbb_cron_history`** (default: `5`)\
@@ -342,14 +343,14 @@ rest, you are on your own. Good luck!
 
 ### Optional components
 
-* **`bbb_webhooks_enable`** (default: `false`)\
-  Install bbb-webhooks. This is required by some frontends and recommended.
-
 * **`bbb_venv`** (default: `/opt/venv`)\
   Install path for Python tools or helpers fetched from [pypi.org](https://pypi.org/)
 
 * **`bbb_bbbctl_enable`** (default: `true`)\
-  If true, install [bbbctl](https://pypi.org/project/bbbctl/)
+  Install [bbbctl](https://pypi.org/project/bbbctl/).
+
+* **`bbb_webhooks_enable`** (default: `false`)\
+  Install bbb-webhooks. This is required by some frontends and recommended.
 
 
 ### Docker
@@ -366,7 +367,7 @@ rest, you are on your own. Good luck!
 
 ### Config overrides
 
-This role generates configuration with sensible defaults out of the box and covers lots of features that would otherwise be hard to configure manually. There are still lots of settings and possible customizations that are not covered by this role and may require some custom tweaking from your side. The following variables allow you to *override* or *extend* parts of the generated configuration. They are (deep-)merged into the role-managed config objects, just before they are written to disk. But be careful, there are no sanity or consistency checks. Test your deployment if you use those overrides.
+This role generates configuration with sensible defaults out of the box and covers lots of features that would otherwise be hard to configure manually. There are still some settings and possible customizations that are not covered by this role and may require some custom tweaking from your side. The following variables allow you to *override* or *extend* parts of the generated configuration. They are (deep-)merged into the role-managed configuration objects, just before they are written to disk. But be careful, there are no sanity or consistency checks. Test your deployment if you use those overrides.
 
 * **`bbb_config_web`** (default: `{}`)\
   Custom overrides for `/etc/bigbluebutton/bbb-web.properties`. This will be merged into the role-managed configuration. Example: `{muteOnStart: true, defaultMeetingLayout: SMART_LAYOUT}`
