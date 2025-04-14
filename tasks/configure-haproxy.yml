@@ -15,6 +15,14 @@
       state: reloaded
     changed_when: false
 
+  - name: Create symlink where haproxy expects the SSH key to be
+    become: true
+    ansible.builtin.file:
+      src: "{{ bbb_ssl_key }}"
+      dest: "{{ bbb_ssl_cert }}.key"
+      state: "link"
+    when: "bbb_ssl_key != bbb_ssl_cert + '.key'"
+
   - name: Deploy haproxy config files
     become: true
     ansible.builtin.template:
