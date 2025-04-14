@@ -39,16 +39,14 @@
     - name: Create NFS share subdirectories
       become: true
       ansible.builtin.file:
-        path: "{{ item.path }}"
+        path: "{{ item }}"
         state: directory
         owner: "{{ bbb_user_uid }}"
         group: "{{ bbb_group_gid }}"
-        mode: "{{ item.mode }}"
+        mode: "u=Xrw,g=Xr,o=Xr"
       loop:
-        - path: "{{ [bbb_nfs_mount, 'var'] | path_join }}"
-          mode: "u=Xrw,g=Xr,o=Xr"
-        - path: "{{ [bbb_nfs_mount, 'log'] | path_join }}"
-          mode: "u=Xrw,g=Xwr,o=Xr"
+        - "{{ [bbb_nfs_mount, 'var'] | path_join }}"
+        - "{{ [bbb_nfs_mount, 'log'] | path_join }}"
 
     - name: Mark NFS share as ansible-managed
       become: true
@@ -72,10 +70,8 @@
   loop: &symlinks
     - path: "/var/bigbluebutton"
       link_target: "{{ bbb_symlink_var | default(False) }}"
-      mode: "u=Xrw,g=Xr,o=Xr"
     - path: "/var/log/bigbluebutton"
       link_target: "{{ bbb_symlink_log | default(False) }}"
-      mode: "u=Xrw,g=Xrw,o=Xr"
   loop_control:
     label: "{{ item.link_target or item.path }}"
 
@@ -88,7 +84,7 @@
     follow: true
     owner: "{{ bbb_user_uid }}"
     group: "{{ bbb_group_gid }}"
-    mode: "{{ item.mode }}"
+    mode: "u=Xrw,g=Xr,o=Xr"
   when: "item.link_target"
   loop: *symlinks
   loop_control:
