@@ -9,18 +9,6 @@
 - name: Mount NFS share
   when: bbb_nfs_share is defined
   block:
-    - name: Sanity checks
-      ansible.builtin.assert:
-        that:
-          - "bbb_symlink_var is undefined or bbb_symlink_var == [bbb_nfs_mount, 'var'] | path_join"
-          - "bbb_symlink_log is undefined or bbb_symlink_log == [bbb_nfs_mount, 'log'] | path_join"
-        fail_msg: "The 'bbb_nfs_share' feature conflicts with 'bbb_symlink_var' and 'bbb_symlink_log'"
-
-    - name: More sanity checks
-      ansible.builtin.assert:
-        that: "bbb_nfs_mount.startswith('/') and not bbb_nfs_mount.startswith('/var/')"
-        fail_msg: "bbb_nfs_mount must be absolute but not start with '/var/'"
-
     - name: Install nfs-common
       become: true
       ansible.builtin.apt:

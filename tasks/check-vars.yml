@@ -1,32 +1,112 @@
 ---
-- name: Check required variables
+- name: Check minimum requirements
   ansible.builtin.assert:
-    that: >-
-      {% if item.when is defined -%}
-        not ({{ item.when }}) or ({{ item.check }})
-      {%- else -%}
-        {{ item.check }}
-      {%- endif %}
     quiet: true
-    fail_msg: "{{ item.help | default('Check failed: ' + item.check) }}"
+    that: "{{ item }}"
   loop:
-    - check: bbb_hostname is defined and bbb_hostname | length > 3
-    - check: bbb_secret is defined and bbb_secret | length > 16
-    - check: bbb_freeswitch_socket_password is defined and bbb_freeswitch_socket_password | length > 16
-    - check: bbb_freeswitch_default_password is defined and bbb_freeswitch_default_password | length > 16
-    - when: bbb_acme_enable
-      check: bbb_acme_email is defined
-    - when: bbb_acme_enable
-      check: bbb_ssl_cert_file is not defined
-    - when: bbb_ssl_cert_file is defined
-      check: bbb_ssl_key_file is defined
-    - check: "ansible_distribution_release | lower == bbb_ubuntu_name"
-    - when: bbb_cluster_proxy is defined
-      check: bbb_cluster_node is defined
-    - when: bbb_disabled_features
-      check: bbb_disabled_features is subset(bbb_allowed_disabled_features)
-    - check: (bbb_hostname | lower) is regex("^([a-z0-9-]{1,}\.)+([a-z]{2,})$")
-      help: "bbb_hostname is not a valid hostname"
-    - check: "bbb_symlink_var is undefined and bbb_symlink_log is undefined"
-      when: bbb_nfs_share is defined
-      help: "bbb_nfs_share conflicts with bbb_symlink_var and bbb_symlink_log"
+    - ansible_distribution_release | lower == bbb_ubuntu_name
+    - bbb_version.startswith(bbb_ubuntu_name)
+
+- name: Check core variables
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_hostname is fqdn
+    - bbb_secret | length > 12
+    - bbb_apt_mirror is url
+    - bbb_apt_key is url
+    - bbb_freeswitch_socket_password | length > 16
+    - bbb_freeswitch_default_password | length > 16
+    - bbb_disabled_features is subset(bbb_allowed_disabled_features)
+
+- name: Check IPv4 variables
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_local_ip is ip(loopback=True)
+    - bbb_bind_ip4 in ['0.0.0.0', bbb_public_ip4] or bbb_public_ip4 is ip(v=4, private=True)
+    - bbb_public_ip4 is ip(v=4, public=True)
+
+- name: Check IPv6 variables
+  when: bbb_bind_ip6 or bbb_public_ip6
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_bind_ip6 in ['::', bbb_public_ip6] or bbb_public_ip6 is ip(v=6, private=True)
+    - bbb_public_ip6 is ip(v=6, public=True)
+
+- name: Check SSL variables
+  when: bbb_ssl_cert_file is defined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - not bbb_acme_enable
+    - bbb_ssl_cert_file is file
+    - bbb_ssl_key_file is file
+
+- name: Check ACME variables
+  when: bbb_acme_enable
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - "'@' in bbb_acme_email"
+    - bbb_acme_api is url
+    - bbb_ssl_cert_file is undefined
+    - bbb_ssl_key_file is undefined
+
+- name: Check firewall variables
+  when: bbb_ufw_enable
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_ufw_policy in ['deny', 'allow']
+
+- name: Check NFS storage variables
+  when: bbb_nfs_share is defined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_nfs_mount is abs
+    - not bbb_nfs_mount.startswith('/var/')
+    - bbb_symlink_var is undefined
+    - bbb_symlink_log is undefined
+
+- name: Check symlink variables
+  when: bbb_symlink_var is defined or bbb_symlink_log is defined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_nfs_mount is undefined
+    - bbb_symlink_var is abs
+    - not bbb_symlink_var.startswith('/var/bigbluebutton')
+    - bbb_symlink_log is abs
+    - not bbb_symlink_log.startswith('/var/log/bigbluebutton')
+
+- name: Check cluster mode variables
+  when: bbb_cluster_proxy is defined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_cluster_node | length > 0
+    - bbb_cluster_node is match('^[a-zA-Z0-9-_]+$')
+
+- name: Check dial-in variables
+  when: bbb_dialin_enable
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_dialin_provider is ip or bbb_dialin_provider is fqdn
+    - bbb_dialin_provider_ip is ip or bbb_dialin_provider_ip is netmask
+    - bbb_dialin_provider_username is present
+    - bbb_dialin_provider_password is present
+    - bbb_dialin_provider_extension is present

@@ -98,7 +98,7 @@ A secret seed used to generate other host-local secrets and passwords. Override 
 You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or copy existing files to the host, or tell the role to do nothing and just assume the certificate files are already in the correct place.
 
 * **`bbb_acme_enable`** (default: `true`)\
-  If true, automatically generate TLS certificates via ACME (e.g. letsencrypt). If you have a lot of servers you may need to throttle your deployments or switch to an ACME provider with higher rate limits.
+  Automatically generate TLS certificates via ACME (e.g. letsencrypt). If you have a lot of servers you may need to throttle your deployments or switch to an ACME provider with higher rate limits.
 
 * **`bbb_acme_email`** (required if `bbb_acme_enable` is true)\
   E-mail address to use when registering an account with the ACME provider.
@@ -144,7 +144,7 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
   Block outgoing traffic to these networks in addition to `bbb_ufw_reject_networks_default`, which contains all non-routeable (LAN) networks by default. This prevets a certain group of security issues where the BBB server is tricked into accessing non-public services on the private LAN.
 
 * **`bbb_ufw_allow_networks`** (default: `[]`)\
-  Allow outgoing traffic to these networks in addition to `bbb_ufw_allow_networks_default`, which contains localhost and the internal docker nentwork by default, because those are required for BBB to function. Allowed networks will override rejected networks. 
+  Allow outgoing traffic to these networks in addition to `bbb_ufw_allow_networks_default`, which contains localhost and the internal docker network by default, because those are required for BBB to function. Allowed networks will override rejected networks. 
 
 
 ### Storage
@@ -192,7 +192,7 @@ BigBlueButton stores state and recordings in `/var/bigbluebutton` and most of it
 For large deployments, it is common to run multiple BBB servers behind a scaler (e.g. Scalelite). New meetings are distributed across BBB servers and users are redirected to the server that hosts the meeting they are tyring to join. However, this creates a new problem: Users have to grant microphone, webcam and screen sharing permissions for each server individually and user settings are also not shared, which can be a real pain for large clusters. [Cluster Proxy mode](https://docs.bigbluebutton.org/administration/cluster-proxy/) allows you to serve the web client from a single domain and avoid most of those issues. This role coveres all configuration needed on the BBB node. **Additional changes are required on the font-end server**. Those are not covered by this role. See [Cluster Proxy Configuration](https://docs.bigbluebutton.org/administration/cluster-proxy/) for details.
 
 * **`bbb_cluster_proxy`** (no default)\
-  If set, enable [Cluster Proxy](https://docs.bigbluebutton.org/administration/cluster-proxy/) mode and assume this host is configured as the front-end proxy (e.g `frontend.example.com`)
+  If defined, enable [Cluster Proxy](https://docs.bigbluebutton.org/administration/cluster-proxy/) mode and assume this host is configured as the front-end proxy (e.g `frontend.example.com`)
 
 * **`bbb_cluster_node`** (default: `{{ bbb_hostname | split('.') | first }}`)\
   Name of this cluster node. The front-end proxy must listen to requests for `https://{{bbb_cluster_proxy}}/{{bbb_cluster_node}}/*` and forward those to the matching back-end node via `https://{{bbb_hostname}}/`.
