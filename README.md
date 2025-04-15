@@ -31,6 +31,11 @@ BigBlueButton does not follow [SemVer](https://semver.org/) and sometimes intodu
 **Configuration for this role is also not strictly backwards compatible across releases**. Variable names and defaults may change, features may be added or removed. Please check and test your role configuration thoroughly before upgrading your production environment to a new release. 
 
 
+### Getting Started
+
+Check out the [examples](https://github.com/ebbba-org/ansible-role-bigbluebutton/tree/master/examples) and start from there, or install this role into your existing environment directly from git via `ansible-galaxy role install git+https://github.com/ebbba-org/ansible-role-bigbluebutton.git,bbb/3.0`. Older releases are also published to [ansible galaxy](https://galaxy.ansible.com/ui/standalone/roles/ebbba/bigbluebutton/).
+
+
 ## Configuration
 
 All role variables are prefixed with `bbb_` and most of them are optional. See `defaults/main.yaml` for a full list.
@@ -512,42 +517,6 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
 * **`bbb_disabled_features`** (default: `[]`)\
   List of features to disable. See https://docs.bigbluebutton.org/development/api#create for options 
 
-
-## Example Playbook
-
-This is an example of how to use this role. *Warning:* the values of the variables should be changed!
-
-Assuming the following directory structure:
-
-```tree
-├── ansible
-    ├── roles
-    │   └── ebbba.bigbluebutton
-    ├── playbooks
-    │   └── bigbluebutton.yml
-    └── inventory
-        ├── hosts
-        ├── group_vars
-        │   └── bigbluebutton
-        │       └── bbb.yml
-        └── host_vars
-            └── your-domain.example.com
-                └── vars.yml
-```
-
-You can follow these steps inside your ansible directory to clone the repository and use the example playbook and variable configuration files:
-
-1. Clone the repository in your roles directory. (`git clone https://github.com/ebbba-org/ansible-role-bigbluebutton.git roles/ebbba.bigbluebutton`)
-2. Copy the sample inventory hosts file or append its containt to your already existing hosts file(`cp roles/ebbba.bigbluebutton/examples/hosts inventory/hosts`).
-3. Edit the inventory hosts file (`inventory/hosts`) to include all the hosts you want in the `bigbluebutton` group.
-4. Create a directory with the name of the group inside group_vars (`mkdir inventory/group_vars/bigbluebutton`).
-5. Copy the group_vars sample configuration file to the directory you created (`cp roles/ebbba.bigbluebutton/examples/bbb.yml inventory/group_vars/bigbluebutton/bbb.yml`).
-6. Edit the group configuration file (`inventory/group_vars/bigbluebutton/bbb.yml`) to your liking. You should put here all the options that are common among all your bbb servers.
-7. Create a directory for each of your servers to hold its configuration (`mkdir inventory/host_vars/<your-domain>`).
-8. Copy the sample configuration file to each of the servers configuration directory (`cp roles/ebbba.bigbluebutton/examples/vars.yml inventory/host_vars/<your-domain>/vars.yml`).
-9. Edit the host configuration file (`inventory/host_vars/<your-domain>/vars.yml`) to your liking. You should put here all the host specific options. Setting a variable here will override its value set in `inventory/group_vars/bigbluebutton/bbb.yml`.
-10. Copy the sample playbook (`cp roles/ebbba.bigbluebutton/examples/playbook/bigbluebutton.yml playbooks`).
-11. Run the playbook using `ansible-playbook -i inventory/hosts playbooks/bigbluebutton.yml`.
 
 ## License
 
