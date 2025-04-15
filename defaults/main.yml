@@ -161,6 +161,8 @@ bbb_venv: /opt/venv
 bbb_webhooks_enable: false
 bbb_bbbctl_enable: true
 
+bbb_fonts: "{{ bbb_fonts_base + bbb_fonts_extra }}"
+bbb_fonts_extra: []
 ## TODO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 bbb_mute_on_start: false
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR

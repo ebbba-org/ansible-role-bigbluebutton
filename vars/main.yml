@@ -97,6 +97,21 @@ bbb_allowed_disabled_features:
   - sharedNotes
   - virtualBackgrounds
 
+bbb_fonts_base:
+  - arkpandora
+  - croscore
+  - crosextra-carlito # Replaces Calibri
+  - crosextra-caladea # Replaces Cambria
+  - dejavu
+  - indic
+  - liberation # Replaces Times, Arial, Courier
+  - liberation2 # Also replaces Times, Arial, Courier
+  - noto # "No Tofu" font families with large Unicode coverage
+  - noto-cjk
+  - opensymbol
+  - texgyre
+  - ubuntu
+
 bbb_config_web_base:
   bigbluebutton.web.serverURL: "https://{{ bbb_hostname }}"
   securitySalt: "{{ bbb_secret }}"

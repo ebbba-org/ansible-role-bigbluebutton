@@ -6,4 +6,8 @@ Vagrantfile
 .idea/
 .cache/
 .vscode/
+.ansible/
 devenv/
+
+__pycache__
+*.pyc

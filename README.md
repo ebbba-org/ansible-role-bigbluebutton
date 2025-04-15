@@ -316,6 +316,18 @@ rest, you are on your own. Good luck!
   client, but see [palette.js](https://github.com/bigbluebutton/bigbluebutton/blob/v3.0.x-release/bigbluebutton-html5/imports/ui/stylesheets/styled-components/palette.js).
   Example: `path/to/custom.css` or `:root { --color-primary: green; }`.
 
+* **`bbb_fonts`** (default: `{{ bbb_fonts_base + bbb_fonts_extra }}`)\
+  A list of font packages (without `fonts-` prefix) to install.
+  The defaults in `bbb_fonts_base` should cover most languages and offer
+  suitable replacements for common proprietary windows or mac fonts. Add your
+  own fonts to `bbb_fonts_extra`. You only need to override this variable if you
+  do not want to install fonts from the `bbb_fonts_base` list (see `vars/main.yml`).
+  Note that the role won't uninstall any fonts.
+
+* **`bbb_fonts_extra`** (default: `[]`)\
+  Additional font packages (without `fonts-` prefix) to install. Add your own
+  fonts here. See `bbb_fonts`.
+
 
 ### Recordings
 

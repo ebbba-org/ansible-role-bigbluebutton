@@ -1,0 +1,22 @@
+---
+- name: Install additional fonts
+  become: true
+  ansible.builtin.package:
+    name: "{{ bbb_fonts | map('strformat', 'fonts-%s') }}"
+    state: "present"
+
+# https://github.com/bigbluebutton/bigbluebutton/issues/13388
+- name: Fix libreoffice container config to get access to fontconfig
+  become: true
+  replace:
+    path: "{{ item }}"
+    regexp: " -v /usr/share/fonts/(\\\\?):/usr/share/fonts/\\\\?:ro.*? --rm"
+    replace: >-
+      -v /usr/share/fonts/\1:/usr/share/fonts/\1:ro
+      -v /etc/fonts/\1:/etc/fonts/\1:ro
+      -v /usr/share/fontconfig/\1:/usr/share/fontconfig/\1:ro
+      -v /var/cache/fontconfig/\1:/var/cache/fontconfig/\1:ro
+      --rm
+  loop:
+    - /usr/share/bbb-libreoffice-conversion/convert-local.sh
+    - /etc/sudoers.d/zzz-bbb-docker-libreoffice
