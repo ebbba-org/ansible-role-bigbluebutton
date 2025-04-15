@@ -1,10 +1,6 @@
 ---
-- name: Unmount NFS share
-  become: true
-  when: bbb_nfs_share is undefined and bbb_nfs_mount
-  ansible.posix.mount:
-    path: "{{ bbb_nfs_mount }}"
-    state: absent
+# NOTE: We do not support disabling bbb_nfs_share after first install, so we
+#   also not not bother cleaning up the mountpoint or symlinks.
 
 - name: Mount NFS share
   when: bbb_nfs_share is defined
@@ -85,6 +81,7 @@
     follow: true
   register: result
   failed_when: not result.stat.exists
+  when: "item.link_target"
   loop: *symlinks
   loop_control:
     label: "{{ item.path }}"
