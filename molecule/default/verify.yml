@@ -54,10 +54,10 @@
         - bbb-rap-caption-inbox.service
         - bbb-rap-resque-worker.service
         - bbb-rap-starter.service
-        - bbb_record_core.slice
         - bbb-webrtc-recorder.service
         - bbb-webrtc-sfu.service
-        -  bbb-web.service
+        - bbb-web.service
+        - nginx.service
       failed_when: false
       when: >
         not (ansible_virtualization_type is defined and

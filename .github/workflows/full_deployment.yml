@@ -122,16 +122,6 @@ jobs:
           which pip3
           pip3 freeze
 
-      - name: After script - sfiles
-        if: ${{ always() }}
-        continue-on-error: true
-        run: |
-          echo "*** mongo"
-          cat /etc/mongod.conf
-          sudo cat /var/log/mongodb/mongod.log || true
-          echo "*** etc"
-          find /etc/red5 /etc/bigbluebutton/ -type f -ls
-
       - name: After script - curl
         if: ${{ always() }}
         continue-on-error: true
