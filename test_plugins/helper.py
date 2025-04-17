@@ -45,7 +45,7 @@ def is_netmask(value, v=None, private=None, public=None, loopback=None, local=No
     if local is not None    and net.is_link_local is not local: return False
     return True
 
-_RE_FQDN_PART = re.compile("(?!-)[a-z\\d-]{1,63}(?<!-)$")
+_RE_FQDN_PART = re.compile("^((?!-)[a-z0-9-]{1,63}(?<!-)\.)+([a-z]{2,63})$")
 
 def is_hostname(value):
     if not isinstance(value, str): return False
