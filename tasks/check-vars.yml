@@ -8,6 +8,8 @@
     - bbb_version.startswith(bbb_ubuntu_name)
 
 - name: Check core variables
+  when:
+    - bbb_github_ci is undefined
   ansible.builtin.assert:
     quiet: true
     that: "{{ item }}"
@@ -21,21 +23,26 @@
     - bbb_disabled_features is subset(bbb_allowed_disabled_features)
 
 - name: Check IPv4 variables
+  when:
+    - bbb_bind_ip4 or bbb_public_ip4
+    - bbb_github_ci is undefined
   ansible.builtin.assert:
     quiet: true
     that: "{{ item }}"
   loop:
     - bbb_local_ip is ip(loopback=True)
-    - bbb_bind_ip4 in ['0.0.0.0', bbb_public_ip4] or bbb_public_ip4 is ip(v=4, private=True)
+    - bbb_bind_ip4 == bbb_public_ip4 or bbb_bind_ip4 is ip(v=4, private=True)
     - bbb_public_ip4 is ip(v=4, public=True)
 
 - name: Check IPv6 variables
-  when: bbb_bind_ip6 or bbb_public_ip6
+  when:
+    - bbb_bind_ip6 or bbb_public_ip6
+    - bbb_github_ci is undefined
   ansible.builtin.assert:
     quiet: true
     that: "{{ item }}"
   loop:
-    - bbb_bind_ip6 in ['::', bbb_public_ip6] or bbb_public_ip6 is ip(v=6, private=True)
+    - bbb_bind_ip6 in == bbb_public_ip6 or bbb_bind_ip6 is ip(v=6, private=True)
     - bbb_public_ip6 is ip(v=6, public=True)
 
 - name: Check SSL variables

@@ -45,15 +45,19 @@
           - ansible_facts.services[item]['status'] == 'enabled'
       with_items:
         - bbb-apps-akka.service
-        - bbb-html5-frontend@1.service
-        - bbb-html5-frontend@2.service
-        - bbb-html5-backend@1.service
-        - bbb-html5-backend@2.service
-        - bbb-html5.service
+        - bbb-export-annotations.service
+        - bbb-fsesl-akka.service
+        - bbb-graphql-actions.service
+        - bbb-graphql-middleware.service
+        - bbb-graphql-server.service
+        - bbb-pads.service
         - bbb-rap-caption-inbox.service
-        - bbb-web.service
+        - bbb-rap-resque-worker.service
+        - bbb-rap-starter.service
+        - bbb_record_core.slice
+        - bbb-webrtc-recorder.service
         - bbb-webrtc-sfu.service
-        - nginx.service
+        -  bbb-web.service
       failed_when: false
       when: >
         not (ansible_virtualization_type is defined and
