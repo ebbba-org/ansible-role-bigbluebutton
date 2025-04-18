@@ -28,7 +28,7 @@ def is_ip(value, v=None, private=None, public=None, loopback=None, local=None, n
     if loopback is not None and ip.is_loopback   is not loopback: return False
     if local is not None    and ip.is_link_local is not local: return False
     if net:
-        if not is_net(net): return False
+        if not is_netmask(net): return False
         if ip not in ipaddress.ip_network(net): return False
     return True
 
@@ -45,15 +45,20 @@ def is_netmask(value, v=None, private=None, public=None, loopback=None, local=No
     if local is not None    and net.is_link_local is not local: return False
     return True
 
-_RE_FQDN_PART = re.compile("^((?!-)[a-z0-9-]{1,63}(?<!-)\.)+([a-z]{2,63})$")
+_RE_HOSTNAME = re.compile("^(?!-)[a-z0-9-]{1,63}(?<!-)$")
+_RE_FQDN     = re.compile("^((?!-)[a-z0-9-]{1,63}(?<!-)\.)+([a-z]{2,63})$")
 
 def is_hostname(value):
+    """ Check if value is a valid hostname (letters, digits, dashes, no dots). """
     if not isinstance(value, str): return False
     if 1 > len(value) > 255: return False
-    return all(map(_RE_FQDN_PART.match, value.split(".")))
+    return _RE_HOSTNAME.match(value) is not None
 
 def is_fqdn(value):
-    return is_hostname(value) and '.' in value
+    """ Check if value is a fully qualified domain name. """
+    if not isinstance(value, str): return False
+    if 1 > len(value) > 255: return False
+    return _RE_FQDN.match(value) is not None
 
 class TestModule:
     def tests(self):
