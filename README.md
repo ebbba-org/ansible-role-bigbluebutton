@@ -79,23 +79,26 @@ A secret seed used to generate other host-local secrets and passwords. Override 
 
 * **`bbb_bind_ip4`** (default: `{{ ansible_default_ipv4.address }}`)\
   IP (v4) address public services should bind to. This may be a LAN IP if your
-  server is behind a NAT router and does not know its own public IP. Do not forget to
-  set `bbb_public_ip4` in that case!
-
-* **`bbb_bind_ip6`** (default: `{{ ansible_default_ipv6.address | default(None) }}`)\
-  Same as `bbb_bind_ip4` but for IPv6. Optional, and not fully implemented yet. Needs testing.
+  server is behind a NAT router and does not know its own public IP. Do not
+  forget to set `bbb_public_ip4` in this case!
 
 * **`bbb_public_ip4`** (default: `{{ ansible_default_ipv4.address }}`)\
-  Public IPv4 address. Required if ansible cannot detect your public IP automatically.
-  This may happen if you are behind NAT and your public IP is not assigned at all,
-  or if your primary interface has multiple IPs assigned.
+  Public IPv4 address of your server. Required if ansible cannot detect your
+  public IP automatically. This may happen if your server is behind a NAT router
+  and your public IP is not assigned to the primary interface, or if your primary
+  interface has multiple IPs assigned and the first one is not your public IP.
+
+* **`bbb_bind_ip6`** (default: `{{ ansible_default_ipv6.address | default(None) }}`)\
+  Same as `bbb_bind_ip4` but for IPv6. Set this to `None` to disable IPv6 even
+  if your server technically supports it.
 
 * **`bbb_public_ip6`** (default: `{{ ansible_default_ipv6.address | default(None) }}`)\
-  Same as `bbb_public_ip4` but for IPv6. Optional, and not fully implemented yet. Needs testing.
+  Same as `bbb_public_ip4` but for IPv6. Set this to `None` to disable IPv6 even
+  if your server technically supports it.
 
 * **`bbb_net_mtu`** (default: `{{ ansible_default_ipv4.mtu | default(1500) }}`)\
-  MTU (maximum transfer unit) on the default route interface. Required in some cloud environments for puppet
-  containers to be able to access the internet.
+  MTU (maximum transfer unit) for outgoing packets. Some cloud environments
+  use a smaller MTU and docker needs extra configuration in that case.
 
 
 ### SSL/TLS
@@ -133,7 +136,7 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
 ### Firewall
 
 * **`bbb_ufw_enable`** (default: `false`)\
-  Enable firewall (ufw).
+  Enable firewall (ufw). This is required if you use `bbb_coturn_enable` and `bbb_public_ip4` differs from `bbb_bind_ip4` (NAT).
 
 * **`bbb_ufw_policy`** (default: `deny`)\
   Default firewall input policy (allow/deny).

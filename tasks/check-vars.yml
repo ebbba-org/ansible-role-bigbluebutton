@@ -1,4 +1,19 @@
 ---
+- name: Print network configuration
+  debug:
+    msg: |
+      bbb_hostname:      {{bbb_hostname}}
+      bbb_local_ip:      {{bbb_local_ip}}
+      bbb_bind_ip4:      {{bbb_bind_ip4}}
+      bbb_public_ip4:    {{bbb_public_ip4}}
+      bbb_bind_ip6:      {{bbb_bind_ip6 or 'disabled'}}
+      bbb_public_ip6:    {{bbb_public_ip6 or 'disabled'}}
+      bbb_net_mtu:       {{bbb_net_mtu}}
+      bbb_ufw_enable:    {{bbb_ufw_enable}}
+      {% if bbb_ufw_enable %}
+      bbb_ufw_rules.ssh: {{(bbb_ufw_rules_default | combine(bbb_ufw_rules)).ssh | to_yaml | trim}}
+      {% endif %}
+
 - name: Check minimum requirements
   ansible.builtin.assert:
     quiet: true
@@ -14,13 +29,18 @@
     quiet: true
     that: "{{ item }}"
   loop:
+    - bbb_secret is defined
     - bbb_hostname is fqdn
-    - bbb_secret | length > 12
     - bbb_apt_mirror is url
     - bbb_apt_key is url
+    - bbb_disabled_features is subset(bbb_allowed_disabled_features)
+    # Security
+    - bbb_secret | length > 16
+    - bbb_secret_seed | length > 16
+    - bbb_host_seed | length > 16
     - bbb_freeswitch_socket_password | length > 16
     - bbb_freeswitch_default_password | length > 16
-    - bbb_disabled_features is subset(bbb_allowed_disabled_features)
+    - bbb_coturn_secret | length > 16
 
 - name: Check IPv4 variables
   when:
@@ -44,6 +64,14 @@
   loop:
     - bbb_bind_ip6 in == bbb_public_ip6 or bbb_bind_ip6 is ip(v=6, private=True)
     - bbb_public_ip6 is ip(v=6, public=True)
+
+- name: Check ufw is enabled with coturn behind NAT
+  when: bbb_coturn_enable and bbb_bind_ip4 is ip(v=4, private=True)
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_ufw_enable
 
 - name: Check SSL variables
   when: bbb_ssl_cert_file is defined
@@ -103,8 +131,7 @@
     quiet: true
     that: "{{ item }}"
   loop:
-    - bbb_cluster_node | length > 0
-    - bbb_cluster_node is match('^[a-zA-Z0-9-_]+$')
+    - bbb_cluster_node | lower is hostname
 
 - name: Check dial-in variables
   when: bbb_dialin_enable

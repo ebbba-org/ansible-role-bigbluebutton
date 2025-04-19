@@ -1,35 +1,50 @@
-verbose
+# Coturn STUN/TURN server configuration file
+# {{ ansible_managed }}
 
+# Server config
+realm={{ bbb_hostname }}
 tcp-proxy-port=3478
 listening-ip=127.0.0.1
 relay-ip={{ bbb_bind_ip4 }}
-external-ip={{ bbb_public_ip4 }}
-
-no-udp
-no-tls
-
 min-port=32769
 max-port=65535
+# Do not ask me why, but this breaks (some?) NAT setups
+#external-ip={{ bbb_public_ip4 }}
+# TLS is handled by haproxy
+no-tls
+# Clients that can connect directly via UDP do not need TURN
+no-udp
 
+# Logging
+verbose
+log-file=stdout
+
+# Auth
 fingerprint
 lt-cred-mech
 use-auth-secret
 static-auth-secret={{ bbb_coturn_secret }}
-realm={{ bbb_hostname }}
 
-# Why!?
-# keep-address-family
+# Tuning
+# Give up quicker (default 60)
+max-allocate-timeout=20
 
+# Disable unused features
 no-cli
-no-tlsv1
-no-tlsv1_1
-no-tcp-relay
 
-# Block connections to IP ranges which shouldn't be reachable
+# Security
+# Do not tell attackers which bugs they can use
+no-software-attribute
+# Decrease gain factor in STUN based DDoS attacks
+no-rfc5780
+no-stun-backward-compatibility
+response-origin-only-with-rfc5780
+# Block clients from reaching TCP targets (WebRTC is UDP only)
+no-tcp-relay
+# Block clients from reaching private or sensitive IP ranges
 no-loopback-peers
 no-multicast-peers
-
-# Only allow the BBB node itself as a peer for TURN tunnel connections
+# Block clients from reaching anything but the BBB server itself
 denied-peer-ip=0.0.0.0-255.255.255.255
 denied-peer-ip=::-ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff
 allowed-peer-ip={{ bbb_public_ip4 }}
