@@ -78,7 +78,7 @@ bbb_ufw_rules_default:
   ssh:
     port: "22"
   dialin:
-    from: "{{ bbb_dialin_provider_ip }}"
+    from: "{{ bbb_dialin_provider_ip | default('undefined') }}"
     port: "5060"
     when: "{{ bbb_dialin_enable }}"
 
