@@ -2,16 +2,16 @@
 - name: Print network configuration
   debug:
     msg: |
-      bbb_hostname:      {{bbb_hostname}}
-      bbb_local_ip:      {{bbb_local_ip}}
-      bbb_bind_ip4:      {{bbb_bind_ip4}}
-      bbb_public_ip4:    {{bbb_public_ip4}}
-      bbb_bind_ip6:      {{bbb_bind_ip6 or 'disabled'}}
-      bbb_public_ip6:    {{bbb_public_ip6 or 'disabled'}}
-      bbb_net_mtu:       {{bbb_net_mtu}}
-      bbb_ufw_enable:    {{bbb_ufw_enable}}
+      bbb_hostname:      {{ bbb_hostname }}
+      bbb_local_ip:      {{ bbb_local_ip }}
+      bbb_bind_ip4:      {{ bbb_bind_ip4 }}
+      bbb_public_ip4:    {{ bbb_public_ip4 }}
+      bbb_bind_ip6:      {{ bbb_bind_ip6 or 'disabled' }}
+      bbb_public_ip6:    {{ bbb_public_ip6 or 'disabled' }}
+      bbb_net_mtu:       {{ bbb_net_mtu }}
+      bbb_ufw_enable:    {{ bbb_ufw_enable }}
       {% if bbb_ufw_enable %}
-      bbb_ufw_rules.ssh: {{(bbb_ufw_rules_default | combine(bbb_ufw_rules)).ssh | to_yaml | trim}}
+      bbb_ufw_rules.ssh: {{ (bbb_ufw_rules_default | combine(bbb_ufw_rules)).ssh | to_yaml | trim }}
       {% endif %}
 
 - name: Check minimum requirements
