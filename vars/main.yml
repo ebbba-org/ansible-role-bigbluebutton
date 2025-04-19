@@ -27,6 +27,8 @@ bbb_package_repos:
     repo: ppa:bigbluebutton/support
   - name: yq
     repo: ppa:rmescandon/yq
+  - name: coturn
+    repo: ppa:martin-uni-mainz/coturn
 
 # System packages that can/must be installed before other repositories are added
 bbb_packages_system:
