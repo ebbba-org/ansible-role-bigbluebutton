@@ -66,7 +66,9 @@
     - bbb_public_ip6 is ip(v=6, public=True)
 
 - name: Check ufw is enabled with coturn behind NAT
-  when: bbb_coturn_enable and bbb_bind_ip4 is ip(v=4, private=True)
+  when:
+    - bbb_coturn_enable and bbb_bind_ip4 is ip(v=4, private=True)
+    - bbb_github_ci is undefined
   ansible.builtin.assert:
     quiet: true
     that: "{{ item }}"

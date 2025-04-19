@@ -8,6 +8,7 @@ on:
         - 'master'
         - 'main'
         - 'develop'
+        - 'fix-*'
       tags:
         - ".*"
   pull_request:
