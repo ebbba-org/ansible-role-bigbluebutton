@@ -13,7 +13,7 @@
 - name: Enable nginx sites
   become: true
   ansible.builtin.file:
-    src: "../sites-available/{{ item }}"
+    src: "/etc/nginx/sites-available/{{ item }}"
     dest: "/etc/nginx/sites-enabled/{{ item }}"
     state: link
     mode: "644"
