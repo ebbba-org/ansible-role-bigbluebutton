@@ -62,7 +62,7 @@
     quiet: true
     that: "{{ item }}"
   loop:
-    - bbb_bind_ip6 in == bbb_public_ip6 or bbb_bind_ip6 is ip(v=6, private=True)
+    - bbb_bind_ip6 == bbb_public_ip6 or bbb_bind_ip6 is ip(v=6, private=True)
     - bbb_public_ip6 is ip(v=6, public=True)
 
 - name: Check ufw is enabled with coturn behind NAT
