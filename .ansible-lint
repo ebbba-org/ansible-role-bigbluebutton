@@ -4,6 +4,9 @@
 exclude_paths:
   - .cache/
   - .github/
+  - .vscode/
+  - .ansible/
+  - devenv/
 warn_list:
   - package-latest
   - jinja[invalid]

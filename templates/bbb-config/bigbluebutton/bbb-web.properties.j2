@@ -1,0 +1,16 @@
+#
+# {{ansible_managed}}
+# Overrides for default entries in /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+#
+
+{% for key, value in ({} | combine(bbb_config_web_base, bbb_config_web)).items() | sort %}
+{% if value is boolean %}
+  {{- key | trim }}={{ 'true' if value else 'false' }}
+{% elif value is number %}
+  {{- key | trim }}={{ value }}
+{% elif value is string and value | trim | length > 0 %}
+  {{- key | trim }}={{ value | trim }}
+{% elif value is sequence and value | length > 0 %}
+  {{- key | trim }}={{ value | join(',') }}
+{% endif %}
+{% endfor %}

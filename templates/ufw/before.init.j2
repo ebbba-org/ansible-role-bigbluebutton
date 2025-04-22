@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# before.init: if executable, called by ufw-init. See 'man ufw-framework' for
+#              details. Note that output from these scripts is not seen via the
+#              the ufw command, but instead via ufw-init.
+#
+# {{ ansible_managed }}
+set -e
+
+case "$1" in
+start)
+    iptables -t nat -N ansible-nat-output || true
+    iptables -t nat -A OUTPUT -j ansible-nat-output 
+;;
+stop)
+    iptables -t nat -D OUTPUT -j ansible-nat-output || true
+    iptables -t nat -F ansible-nat-output || true
+    iptables -t nat -X ansible-nat-output || true
+    ;;
+status)
+    # optional
+    ;;
+flush-all)
+    # optional
+    ;;
+*)
+    echo "'$1' not supported"
+    echo "Usage: before.init {start|stop|flush-all|status}"
+    ;;
+esac

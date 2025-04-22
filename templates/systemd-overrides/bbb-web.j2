@@ -1,0 +1,18 @@
+[Service]
+{% if ansible_processor_vcpus >= 8 %}
+LimitNOFILE=8192
+{% endif %}
+
+{% if bbb_container_compat %}
+IOSchedulingClass=
+IOSchedulingPriority=
+CPUSchedulingPolicy=
+CPUSchedulingPriority=
+{% endif %}
+
+{% if bbb_cluster_proxy is defined %}
+Environment="JDK_JAVA_OPTIONS=-Dgrails.cors.enabled=true -Dgrails.cors.allowCredentials=true -Dgrails.cors.allowedOrigins=https://{{bbb_cluster_proxy}},https://{{bbb_hostname}}"
+{% endif %}
+
+# PrivateTmp=yes
+# ProtectDevices=yes

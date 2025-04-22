@@ -1,0 +1,7 @@
+---
+- name: Enable mp4 fallback for presentations
+  when: bbb_recording_mp4
+  set_fact:
+    bbb_config_presentation: "{{ bbb_config_presentation | combine({'video_formats': ['webm', 'mp4']}, recursive=True) }}"
+
+# TODO: Resolution, bitrates, anon chat, ...

@@ -1,0 +1,148 @@
+---
+- name: Print network configuration
+  debug:
+    msg: |
+      bbb_hostname:      {{ bbb_hostname }}
+      bbb_local_ip:      {{ bbb_local_ip }}
+      bbb_bind_ip4:      {{ bbb_bind_ip4 }}
+      bbb_public_ip4:    {{ bbb_public_ip4 }}
+      bbb_bind_ip6:      {{ bbb_bind_ip6 or 'disabled' }}
+      bbb_public_ip6:    {{ bbb_public_ip6 or 'disabled' }}
+      bbb_net_mtu:       {{ bbb_net_mtu }}
+      bbb_ufw_enable:    {{ bbb_ufw_enable }}
+      {% if bbb_ufw_enable %}
+      bbb_ufw_rules.ssh: {{ (bbb_ufw_rules_default | combine(bbb_ufw_rules)).ssh | to_yaml | trim }}
+      {% endif %}
+
+- name: Check minimum requirements
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - ansible_distribution_release | lower == bbb_ubuntu_name
+    - bbb_version.startswith(bbb_ubuntu_name)
+
+- name: Check core variables
+  when:
+    - bbb_github_ci is undefined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_secret is defined
+    - bbb_hostname is fqdn
+    - bbb_apt_mirror is url
+    - bbb_apt_key is url
+    - bbb_disabled_features is subset(bbb_allowed_disabled_features)
+    # Security
+    - bbb_secret | length > 16
+    - bbb_secret_seed | length > 16
+    - bbb_host_seed | length > 16
+    - bbb_freeswitch_socket_password | length > 16
+    - bbb_freeswitch_default_password | length > 16
+    - bbb_coturn_secret | length > 16
+
+- name: Check IPv4 variables
+  when:
+    - bbb_bind_ip4 or bbb_public_ip4
+    - bbb_github_ci is undefined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_local_ip is ip(loopback=True)
+    - bbb_bind_ip4 == bbb_public_ip4 or bbb_bind_ip4 is ip(v=4, private=True)
+    - bbb_public_ip4 is ip(v=4, public=True)
+
+- name: Check IPv6 variables
+  when:
+    - bbb_bind_ip6 or bbb_public_ip6
+    - bbb_github_ci is undefined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_bind_ip6 == bbb_public_ip6 or bbb_bind_ip6 is ip(v=6, private=True)
+    - bbb_public_ip6 is ip(v=6, public=True)
+
+- name: Check ufw is enabled with coturn behind NAT
+  when:
+    - bbb_coturn_enable and bbb_bind_ip4 is ip(v=4, private=True)
+    - bbb_github_ci is undefined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_ufw_enable
+
+- name: Check SSL variables
+  when: bbb_ssl_cert_file is defined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - not bbb_acme_enable
+    - bbb_ssl_cert_file is file
+    - bbb_ssl_key_file is file
+
+- name: Check ACME variables
+  when: bbb_acme_enable
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - "'@' in bbb_acme_email"
+    - bbb_acme_api is url
+    - bbb_ssl_cert_file is undefined
+    - bbb_ssl_key_file is undefined
+
+- name: Check firewall variables
+  when: bbb_ufw_enable
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_ufw_policy in ['deny', 'allow']
+
+- name: Check NFS storage variables
+  when: bbb_nfs_share is defined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_nfs_mount is abs
+    - not bbb_nfs_mount.startswith('/var/')
+    - bbb_symlink_var is undefined
+    - bbb_symlink_log is undefined
+
+- name: Check symlink variables
+  when: bbb_symlink_var is defined or bbb_symlink_log is defined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_nfs_mount is undefined
+    - bbb_symlink_var is abs
+    - not bbb_symlink_var.startswith('/var/bigbluebutton')
+    - bbb_symlink_log is abs
+    - not bbb_symlink_log.startswith('/var/log/bigbluebutton')
+
+- name: Check cluster mode variables
+  when: bbb_cluster_proxy is defined
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_cluster_node | lower is hostname
+
+- name: Check dial-in variables
+  when: bbb_dialin_enable
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_dialin_provider is ip or bbb_dialin_provider is fqdn
+    - bbb_dialin_provider_ip is ip or bbb_dialin_provider_ip is netmask
+    - bbb_dialin_provider_username is present
+    - bbb_dialin_provider_password is present
+    - bbb_dialin_provider_extension is present

@@ -1,0 +1,5 @@
+---
+roles:
+  - name: ebbba.bigbluebutton
+    src: https://github.com/ebbba-org/ansible-role-bigbluebutton.git
+    version: bbb/3.0

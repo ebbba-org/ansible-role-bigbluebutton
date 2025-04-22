@@ -1,0 +1,18 @@
+---
+- name: Remove turnserver.conf
+  when: not bbb_coturn_enable
+  become: true
+  ansible.builtin.file:
+    path: "/etc/turnserver.conf"
+    state: absent
+
+- name: Deploy turnserver.conf
+  when: bbb_coturn_enable
+  become: true
+  ansible.builtin.template:
+    src: "bbb-config/turnserver.conf.j2"
+    dest: "/etc/turnserver.conf"
+    owner: "root"
+    group: "turnserver"
+    mode: "0640"
+  notify: Restart coturn

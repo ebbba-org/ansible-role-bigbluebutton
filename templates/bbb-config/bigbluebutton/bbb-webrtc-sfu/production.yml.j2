@@ -1,0 +1,16 @@
+---
+# {{ansible_managed}}
+freeswitch:
+  ip: "{{ bbb_public_ip4 }}"
+  sip_ip: "127.0.0.1"
+  esl_ip: "127.0.0.1"
+  esl_password: "{{ bbb_freeswitch_socket_password }}"
+mediasoup:
+  webrtc:
+    listenIps:
+      - ip: "{{ bbb_bind_ip4 }}"
+        announcedIp: "{{ bbb_public_ip4 }}"
+  plainRtp:
+    listenIp:
+      ip: "{{ bbb_bind_ip4 }}"
+      announcedIp: "{{ bbb_public_ip4 }}"

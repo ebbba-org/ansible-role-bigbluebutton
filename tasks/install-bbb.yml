@@ -1,0 +1,10 @@
+---
+- name: Install BBB packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ item.name }}"
+    state: "{{ 'present' if item.when | default(True) else 'absent' }}"
+  loop: "{{ bbb_packages }}"
+  loop_control:
+    label: "{{ 'install' if item.when | default(True) else 'remove ' }} {{ item.name | join(',') }}"
+  notify: Restart bigbluebutton

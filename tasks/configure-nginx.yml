@@ -1,0 +1,31 @@
+---
+- name: Deploy nginx site configs
+  become: true
+  ansible.builtin.template:
+    src: "bbb-config/nginx/sites-available/{{ item }}.j2"
+    dest: "/etc/nginx/sites-available/{{ item }}"
+    mode: "644"
+  loop:
+    - default
+    - bigbluebutton
+  notify: Reload nginx
+
+- name: Enable nginx sites
+  become: true
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ item }}"
+    dest: "/etc/nginx/sites-enabled/{{ item }}"
+    state: link
+    mode: "644"
+  loop:
+    - default
+    - bigbluebutton
+  notify: Reload nginx
+
+- name: Update sip.nginx for sipjsHackViaWs
+  become: true
+  ansible.builtin.replace:
+    path: /usr/share/bigbluebutton/nginx/sip.nginx
+    regexp: "\\s*proxy_pass .*"
+    replace: "proxy_pass http://{{ bbb_local_ip }}:5066;"
+  notify: Reload nginx

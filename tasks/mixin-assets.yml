@@ -1,0 +1,17 @@
+---
+- name: Upload custom presentation or logo
+  become: true
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ bbb_nginx_root }}/{{ item.dest }}"
+    mode: "0644"
+  when: item.src
+  loop_control:
+    label: "{{ item.dest }}"
+  loop:
+    - dest: "default.pdf"
+      src: "{{ bbb_default_presentation_file | default(None) }}"
+    - dest: "images/logo.png"
+      src: "{{ bbb_default_logo_file | default(None) }}"
+    - dest: "images/darklogo.png"
+      src: "{{ bbb_default_darklogo_file | default(None) }}"

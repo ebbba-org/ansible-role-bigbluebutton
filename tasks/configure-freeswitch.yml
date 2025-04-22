@@ -1,0 +1,192 @@
+---
+- name: Delete freeswitch file logging config
+  become: true
+  file:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/logfile.conf.xml
+    state: absent
+  notify: Restart freeswitch
+
+- name: Add freeswitch syslog config
+  become: true
+  template:
+    src: freeswitch/syslog.conf.xml
+    dest: /opt/freeswitch/etc/freeswitch/autoload_configs/syslog.conf.xml
+    mode: "0644"
+    owner: freeswitch
+    group: daemon
+  notify: Restart freeswitch
+
+- name: Deploy conference config
+  become: true
+  template:
+    src: freeswitch/conference.conf.xml
+    dest: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
+    mode: "0644"
+    owner: freeswitch
+    group: daemon
+  notify: Restart freeswitch
+
+- name: Set socket password
+  become: true
+  community.general.xml:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
+    xpath: /configuration/settings/param[@name='password']
+    attribute: value
+    value: "{{ bbb_freeswitch_socket_password }}"
+  no_log: true
+  notify: Restart freeswitch
+
+- name: Configure listen-ip in event_socket.conf.xml
+  become: true
+  community.general.xml:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
+    xpath: /configuration/settings/param[@name="listen-ip"]
+    attribute: value
+    value: "127.0.0.1"
+  notify: Restart freeswitch
+
+- name: Set switch.conf loglevel
+  become: true
+  community.general.xml:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/switch.conf.xml
+    xpath: /configuration/settings/param[@name='loglevel']
+    attribute: value
+    value: "{{ bbb_freeswitch_log_level }}"
+  notify: Restart freeswitch
+
+- name: Set freeswitch variables in vars.xml
+  become: true
+  ansible.builtin.lineinfile:
+    path: /opt/freeswitch/etc/freeswitch/vars.xml
+    regexp: "\\s+<X-PRE-PROCESS\\s+cmd=\"set\"\\s+data=\"{{ item.name }}="
+    line: "  <X-PRE-PROCESS cmd=\"set\" data=\"{{ item.name }}={{ item.value }}\" />"
+    insertbefore: "</include>"
+  loop:
+    - { name: external_rtp_ip, value: "{{ bbb_public_ip4 }}" }
+    - { name: external_sip_ip, value: "{{ bbb_public_ip4 }}" }
+    - { name: default_password, value: "{{ bbb_freeswitch_default_password }}" }
+    - { name: local_ip_v4, value: "{{ bbb_bind_ip4 }}" }
+    - { name: local_ip_v6, value: "{{ bbb_bind_ip6 }}" }
+  notify: Restart freeswitch
+
+- name: Set freeswitch external bind IP (v4)
+  become: true
+  community.general.xml:
+    path: /opt/freeswitch/conf/sip_profiles/external.xml
+    xpath: /profile/settings/param[@name='{{ item.name }}']
+    attribute: value
+    value: "{{ item.value }}"
+  loop:
+    - { name: ext-rtp-ip, value: "$${external_rtp_ip}" }
+    - { name: ext-sip-ip, value: "$${external_sip_ip}" }
+    - { name: sip-ip, value: "$${local_ip_v4}" }
+    - { name: rtp-ip, value: "$${local_ip_v4}" }
+    - { name: ws-binding, value: "{{ bbb_local_ip }}:5066" }
+    - { name: wss-binding, value: "{{ bbb_local_ip }}:7443" }
+  notify: Restart freeswitch
+
+- name: Set restrictive permissions of freeswitch config files including passwords
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: freeswitch
+    group: daemon
+    mode: "0600"
+  with_items:
+    - /opt/freeswitch/etc/freeswitch/vars.xml
+    - /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
+
+- name: Configure Freeswitch IPv6 support
+  become: true
+  ansible.builtin.shell:
+    cmd: |
+      OLD="{{ item }}{{ '.disabled' if bbb_freeswitch_ipv6 else '' }}"
+      NEW="{{ item }}{{ '' if bbb_freeswitch_ipv6 else '.disabled' }}"
+      mv "$OLD" "$NEW"
+    creates: "{{ item }}{{ '' if bbb_freeswitch_ipv6 else '.disabled' }}"
+  loop:
+    - /opt/freeswitch/etc/freeswitch/sip_profiles/external-ipv6.xml
+    - /opt/freeswitch/etc/freeswitch/sip_profiles/internal-ipv6.xml
+  loop_control:
+    label: "{{ item | basename }}"
+
+- name: FreeSWITCH dialplan quality
+  become: true
+  replace:
+    path: /opt/freeswitch/conf/dialplan/default/bbb_conference.xml
+    regexp: <action application="conference" data="\$1@.*"\/>
+    replace: <action application="conference" data="$1@{{ bbb_dialplan_quality }}"/>
+  notify: Restart freeswitch
+
+- name: FreeSWITCH dialplan quality (echo)
+  become: true
+  replace:
+    path: /opt/freeswitch/conf/dialplan/default/bbb_echo_to_conference.xml
+    regexp: <action application="conference" data="\${vbridge}@.*"\/>
+    replace: <action application="conference" data="${vbridge}@{{ bbb_dialplan_quality }}"/>
+  notify: Restart freeswitch
+
+- name: Fix fs_clibbb to accept additional parameters
+  become: true
+  lineinfile:
+    path: /usr/local/bin/fs_clibbb
+    regexp: ^/opt/freeswitch/bin/fs_cli
+    line: /opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name="password"]' -v @value /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml)
+      "$@"
+
+- name: Configure different mute sound
+  become: true
+  copy:
+    src: sounds/{{ item }}/conf-muted.wav
+    dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
+    mode: "0644"
+    owner: freeswitch
+    group: daemon
+  with_items:
+    - 48000
+    - 32000
+    - 16000
+    - 8000
+  when: bbb_freeswitch_muted_sound | bool
+
+- name: Configure different unmute sound
+  become: true
+  copy:
+    src: sounds/{{ item }}/conf-unmuted.wav
+    dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
+    mode: "0644"
+    owner: freeswitch
+    group: daemon
+  with_items:
+    - 48000
+    - 32000
+    - 16000
+    - 8000
+  when: bbb_freeswitch_muted_sound | bool
+
+# Dial-in
+
+- name: Deploy dial-in config files
+  become: true
+  when: bbb_dialin_enable
+  ansible.builtin.template:
+    src: "dial-in/{{ item.src }}.j2"
+    dest: "/opt/freeswitch/conf/{{ item.dest }}"
+    owner: freeswitch
+    group: daemon
+    mode: "0644"
+  loop: &configfiles
+    - src: provider.xml
+      dest: sip_profiles/external/dial-in.xml
+    - src: dialplan.xml
+      dest: dialplan/public/dial-in.xml
+  notify: Restart freeswitch
+
+- name: Remove unused dial-in config files
+  become: true
+  when: not bbb_dialin_enable
+  ansible.builtin.file:
+    path: "/opt/freeswitch/conf/{{ item.dest }}"
+    state: absent
+  loop: *configfiles
+  notify: Restart freeswitch

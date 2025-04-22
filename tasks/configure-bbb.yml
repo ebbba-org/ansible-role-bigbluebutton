@@ -1,0 +1,95 @@
+---
+- name: Create systemd override directories
+  become: true
+  file:
+    path: "/etc/systemd/system/{{ item }}.service.d"
+    state: directory
+    mode: "0755"
+  when: item
+  loop: &systemd_overrides
+    - bbb-html5-frontend@
+    - bbb-html5-backend@
+    - bbb-apps-akka
+    - bbb-fsesl-akka
+    - bbb-web
+    - bbb-webrtc-sfu
+    - freeswitch
+    - "{{ 'coturn' if bbb_coturn_enable else None }}"
+
+- name: Deploy systemd override files
+  become: true
+  ansible.builtin.template:
+    src: "systemd-overrides/{{ item }}.j2"
+    dest: "/etc/systemd/system/{{ item }}.service.d/override.conf"
+    mode: "0644"
+  when: item
+  loop: *systemd_overrides
+  notify:
+    - Restart bigbluebutton
+  register: result
+
+# Ansible lacks the ability to flush specific handlers, so reload systemd manually
+- name: Reload systemd # noqa: no-handler
+  become: true
+  systemd:
+    daemon_reload: true
+  when: result.changed
+
+- name: Ensure config directories exist
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  when: item
+  loop:
+    - /etc/bigbluebutton/
+    - /etc/bigbluebutton/recording
+    - /etc/bigbluebutton/bbb-webrtc-sfu
+    - "{{ '/etc/bigbluebutton/bbb-webhooks' if bbb_webhooks_enable else False }}"
+
+- name: Deploy bbb config files
+  become: true
+  ansible.builtin.template:
+    src: "bbb-config/{{ item.src }}.j2"
+    dest: "{{ item.dest | default('/etc/' + item.src) }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('bigbluebutton') }}"
+    mode: "{{ item.mode | default('0640') }}"
+  when: item.when | default(true)
+  loop: &configfiles
+    - src: bigbluebutton/bbb-apps-akka.conf
+    - src: bigbluebutton/bbb-fsesl-akka.conf
+    - src: bigbluebutton/bbb-web.properties
+    - src: bigbluebutton/bbb-html5.yml
+    - src: bigbluebutton/bbb-graphql-server.env
+    - src: bigbluebutton/bbb-graphql-middleware.yml
+      when: "{{ bbb_cluster_proxy is defined }}"
+    - src: bigbluebutton/turn-stun-servers.xml
+    - src: bigbluebutton/etherpad.json
+      group: etherpad
+    - src: bigbluebutton/recording/recording.yml
+    - src: bigbluebutton/recording/presentation.yml
+    - src: bigbluebutton/bbb-webrtc-sfu/production.yml
+    - src: bigbluebutton/bbb-webhooks/production.yml
+      when: "{{ bbb_webhooks_enable }}"
+    - src: default/bigbluebutton-cron-config
+    - src: bbb-fsesl-akka/logback.xml
+    - src: bbb-apps-akka/logback.xml
+    - src: bbb-web/logback.xml
+      dest: /usr/share/bbb-web/WEB-INF/classes/logback.xml
+  notify: Restart bigbluebutton
+
+- name: Remove unused config files
+  become: true
+  ansible.builtin.file:
+    path: "{{ item.dest | default('/etc/' + item.src) }}"
+    state: absent
+  when: not (item.when | default(true))
+  loop: *configfiles
+
+# Simulate bbb-conf --setsecret and --setip for files not already covered by
+# templates. We cannot actually call those commands because they break some
+# scenarios (e.g. cluster mode) and would cause the role to always trigger
+# changes and restarts. They are also incomplete and buggy...
+# TODO: /usr/local/bigbluebutton/bbb-transcription-controller/config/default.yml

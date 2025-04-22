@@ -1,6 +1,13 @@
 *~
 .vagrant
+Vagrantfile
 *.retry
 *.patch
 .idea/
 .cache/
+.vscode/
+.ansible/
+devenv/
+
+__pycache__
+*.pyc

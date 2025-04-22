@@ -1,97 +1,45 @@
 ---
-- import_tasks: checkvars.yml
-  tags:
-    - checkvars
-    - always
+# Check phase: Fail if there are running meetings, obvious configuration errors
+# or if the target does not meet requirements.
 
-# this is included as block to pass tags to included tasks
-- name: Set the bbb_secret
-  when: bbb_secret is not defined
-  tags:
-    - bbb_secret
-    - always
-  ignore_errors: false
-  block:
-    - name: Include bbb_secret
-      include_tasks: bbb_secret.yml
+- import_tasks: check-vars.yml
+- import_tasks: check-running.yml
 
-# this is included as block to pass tags to included tasks
-- name: Check for running Sessions
-  when:
-    - bbb_check_for_running_meetings
-    - bbb_secret is defined
-  tags:
-    - check-for-sessions
-    - always
-  block:
-    - name: Include check-for-sessions
-      include_tasks: check-for-sessions.yml
+# Prepare phase: Tasks that should run before BBB ist first installed.
 
-- import_tasks: firewall/ufw_enable.yml
-  when: bbb_firewall_ufw['enabled']
-  tags: ufw
+- import_tasks: prepare-os.yml
+- import_tasks: prepare-firewall.yml
+- import_tasks: prepare-storage.yml
+- import_tasks: prepare-ssl.yml # Includes prepare-ssl-acme.yml
+- import_tasks: prepare-docker.yml
 
-- import_tasks: firewall/ufw_disable.yml
-  when: not bbb_firewall_ufw['enabled']
-  tags: ufw
+# Install phase: Install or update BBB and related packages.
 
-- import_tasks: locale.yml
-  tags: locale
+- import_tasks: install-bbb.yml
 
-- import_tasks: repositories.yml
-  tags: repositories
+# Mixin phase: Tasks that require BBB to be installed. This is also the best
+# phase to manipulate `bbb_config_*` or other settings before they are written
+# to config files in the next phase.
 
-- import_tasks: installation.yml
-  tags: installation
+- import_tasks: mixin-helper.yml
+- import_tasks: mixin-proxy.yml
+  when: "bbb_cluster_proxy is defined"
+- import_tasks: mixin-backgrounds.yml
+- import_tasks: mixin-assets.yml
+- import_tasks: mixin-styles.yml
+- import_tasks: mixin-fonts.yml
 
-- import_tasks: mongodb.yml
-  tags: mongodb
+# Configuration phase: Write or patch configuration files and notify handlers
+# if necessary.
 
-- import_tasks: certificate.yml
-  when: bbb_nginx_listen_https | bool
-  tags:
-    - tls
-    - certificates
+- import_tasks: configure-bbb.yml
+- import_tasks: configure-nginx.yml
+- import_tasks: configure-haproxy.yml # Depends on configure-nginx.yml
+- import_tasks: configure-freeswitch.yml
+- import_tasks: configure-coturn.yml
 
-- import_tasks: nginx.yml
-  tags: nginx
+# Finalizing phase: Tasks that require a fully configured and running BBB server.
+# Handlers are flushed before entering this phase.
 
-- import_tasks: config.yml
-  tags: config
-
-- import_tasks: ntp.yml
-  tags: ntp
-
-- import_tasks: dial-in/main.yml
-  tags: dial-in
-
-- import_tasks: docker.yml
-  when: bbb_monitoring_all_in_one_enable | bool
-  tags:
-    - docker
-    - monitoring
-
-- import_tasks: monitoring/main.yml
-  when: bbb_monitoring_all_in_one_enable | bool or bbb_monitoring_systemd_enable | bool
-  tags: monitoring
-
-- import_tasks: webrtc-sfu.yml
-  tags: webrtc-sfu
-
-- import_tasks: bbb-web.yml
-  tags: bbb-web
-
-- import_tasks: bbb-html5.yml
-  tags: bbb-html5
-
-- import_tasks: freeswitch.yml
-  tags: freeswitch
-
-- import_tasks: stun-turn.yml
-  tags: stun-turn
-
-- import_tasks: kurento.yml
-  tags: kurento
-
-- import_tasks: etherpad.yml
-  tags: etherpad
+- meta: flush_handlers
+# - import_tasks: finalize-checks.yml

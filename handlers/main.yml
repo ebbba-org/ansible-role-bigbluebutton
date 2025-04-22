@@ -1,96 +1,38 @@
 ---
-- name: Reload systemd
+- name: Restart bigbluebutton
   become: true
-  systemd:
-    daemon_reload: true
+  command: bbb-conf --restart
 
 - name: Reload nginx
   become: true
   systemd:
     name: nginx
     state: reloaded
+  listen:
+    - "Reload HTTPS" # SSL cert changed
 
-- name: Restart nginx
+- name: Reload haproxy
   become: true
   systemd:
     name: nginx
+    state: reloaded
+  when: bbb_coturn_enable
+  listen:
+    - "Reload HTTPS" # SSL cert changed
+    - "Restart bigbluebutton" # Not restarted by bbb-conf --restart
+
+- name: Restart coturn
+  become: true
+  when: bbb_coturn_enable
+  systemd:
+    name: coturn
     state: restarted
+  listen:
+    - "Reload HTTPS" # SSL cert changed
+    - "Restart bigbluebutton" # Not restarted by bbb-conf --restart
 
 - name: Restart freeswitch
   become: true
   systemd:
     name: freeswitch
     state: restarted
-
-- name: Stop mongo
-  become: true
-  systemd:
-    name: mongod
-    state: stopped
-
-- name: Restart mongo
-  become: true
-  systemd:
-    name: mongod
-    state: restarted
-
-- name: Restart kurento
-  become: true
-  systemd:
-    name: kurento-media-server
-    state: restarted
-
-- name: Stop kurento
-  become: true
-  systemd:
-    name: kurento-media-server
-    state: stopped
-
-- name: Restart bbb-html5
-  become: true
-  systemd:
-    name: bbb-html5
-    state: restarted
-
-- name: Restart bbb-web
-  become: true
-  systemd:
-    name: bbb-web
-
-- name: Restart bbb-webrtc-sfu
-  become: true
-  systemd:
-    name: bbb-webrtc-sfu
-    state: restarted
-
-- name: Reload apparmor
-  become: true
-  systemd:
-    name: apparmor
-    state: reloaded
-
-- name: Restart monitoring container
-  community.docker.docker_compose_v2:
-    state: "restarted"
-    project_src: "{{ bbb_monitoring_all_in_one_directory }}"
-
-- name: Restart monitoring service
-  become: true
-  systemd:
-    name: bigbluebutton-exporter
-    state: restarted
-
-- name: Restart etherpad
-  ansible.builtin.systemd:
-    name: etherpad.service
-    enabled: true
-    state: restarted
-
-- name: Set bbb hostname
-  become: true
-  command: bbb-conf --setip {{ bbb_hostname }}
-
-# This should be the last handler. In case it is necessary that bbb is restarted all togehter.
-- name: Restart bigbluebutton
-  become: true
-  command: bbb-conf --restart

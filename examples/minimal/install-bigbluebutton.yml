@@ -1,0 +1,5 @@
+---
+- name: Deploy BigBlueButton nodes
+  hosts: bbb
+  roles:
+    - ebbba.bigbluebutton

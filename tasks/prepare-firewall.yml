@@ -1,0 +1,96 @@
+---
+- name: Disable UFW
+  when: not bbb_ufw_enable
+  block:
+    - name: Gather package facts
+      package_facts:
+        manager: auto
+    - name: Disable UFW
+      become: true
+      community.general.ufw:
+        state: disabled
+      when: "'ufw' in packages"
+
+- name: Enable UFW
+  when: bbb_ufw_enable
+  block:
+    - name: Install ufw
+      become: true
+      ansible.builtin.package:
+        name: ufw
+        state: present
+
+    - name: Set logging
+      become: true
+      community.general.ufw:
+        logging: "{{ 'on' if bbb_ufw_logging else 'off' }}"
+
+    - name: Install rules
+      become: true
+      community.general.ufw:
+        rule: "{{ item.value.rule | default('allow') }}"
+        direction: "{{ item.value.direction | default('in') }}"
+        from: "{{ item.value.from | default('any') }}"
+        to: "{{ item.value.to | default('any') }}"
+        port: "{{ item.value.port | default(None) }}"
+        proto: "{{ item.value.proto | default('tcp') }}"
+      when: item.value and (item.value.when | default(True))
+      loop: "{{ bbb_ufw_rules_default | combine(bbb_ufw_rules) | dict2items }}"
+
+    - name: Allow outgoing traffic to bbb_ufw_allow_networks(_default)
+      become: true
+      community.general.ufw:
+        rule: allow
+        direction: out
+        to: "{{ item }}"
+      loop: "{{ (bbb_ufw_allow_networks_default + bbb_ufw_allow_networks) | unique }}"
+
+    - name: Reject outgoing traffic to bbb_ufw_reject_networks(_default)
+      become: true
+      community.general.ufw:
+        rule: reject
+        direction: out
+        to: "{{ item }}"
+      loop: "{{ (bbb_ufw_reject_networks_default + bbb_ufw_reject_networks) | unique }}"
+      when: "not (item in bbb_ufw_allow_networks_default or item in bbb_ufw_allow_networks)"
+
+    # Note: Coturn needs an iptables DNAT rule when running behind NAT, so we
+    # depend on ufw and write an extra *nat block to '/etc/ufw/before.rules'.
+    # There is a problem though: iptables-restore (used by ufw) only creates or
+    # flushes user-defined chains. Built-in chains are not flushed. This works
+    # fine for our custom 'ansible-nat-output' chain, but the jump to that chain
+    # in 'OUTPUT' would be added again and again each time the firewall is
+    # reloaded. To fix that, we manage those rules in `/etc/ufw/before.init`
+    # via scripted iptables commands instead.
+
+    - name: Install custom ufw before.init script
+      become: true
+      ansible.builtin.template:
+        src: ufw/before.init.j2
+        dest: /etc/ufw/before.init
+        mode: "0755"
+        owner: root
+        group: root
+
+    - name: Manage DNAT rules for coturn
+      become: true
+      ansible.builtin.blockinfile:
+        path: /etc/ufw/before.rules
+        block: |
+          *nat
+          :ansible-nat-output - [0:0]
+          {% if bbb_coturn_enable and bbb_bind_ip4 is ip(private=True) %}
+          # Allow coturn to connect to {{ bbb_bind_ip4 }} via {{ bbb_public_ip4 }} without leaving the interface.
+          -A ansible-nat-output -s {{ bbb_bind_ip4 }} -d {{ bbb_public_ip4 }} -p udp -j DNAT --to-destination {{ bbb_bind_ip4 }}
+          {% endif %}
+          COMMIT
+        insertafter: EOF
+        marker: "# {mark} NAT RULES BY ANSIBLE"
+        validate: iptables-restore --test %s
+      register: result
+
+    - name: Activate ufw and set default policy
+      become: true
+      community.general.ufw:
+        state: "{{ result.changed | ternary('enabled', 'reloaded') }}"
+        policy: "{{ bbb_ufw_policy }}"

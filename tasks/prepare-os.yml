@@ -1,0 +1,106 @@
+---
+- name: Refresh apt caches
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+  changed_when: false
+
+- name: Install system packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ bbb_packages_system }}"
+    state: present
+
+- name: Set local hostname to match bbb_hostname
+  become: true
+  hostname:
+    name: "{{ bbb_hostname }}"
+    use: systemd
+
+- name: Install missing locales
+  become: true
+  ansible.builtin.package:
+    name: "language-pack-{{ bbb_system_locale[:2] }}"
+    state: present
+
+- name: Generate missing locales
+  become: true
+  community.general.locale_gen:
+    name: "{{ bbb_system_locale }}"
+    state: present
+
+- name: Detect current system locale
+  command: localectl status
+  changed_when: false
+  register: locale_status
+
+- name: Configure system locale
+  become: true
+  ansible.builtin.command:
+    cmd: "localectl set-locale LANG={{ bbb_system_locale }}"
+  when: "('System Locale: LANG=' + bbb_system_locale) not in locale_status.stdout"
+
+- name: Set default java version
+  become: true
+  ansible.builtin.file:
+    src: /usr/lib/jvm/java-{{ bbb_java_version }}-openjdk-amd64/bin/java
+    dest: /etc/alternatives/java
+    state: link
+
+- name: Download PGP Keys for extra repositories
+  become: true
+  ansible.builtin.get_url:
+    url: "{{ item.key }}"
+    dest: "/etc/apt/keyrings/{{ item.name }}.asc"
+    mode: "0644"
+  retries: 10
+  delay: 5
+  loop: "{{ bbb_package_repos }}"
+  loop_control:
+    label: "{{ item.key | default(item.repo) }}"
+  when: "item.key | default(False)"
+
+- name: Configure extra repositories
+  become: true
+  ansible.builtin.apt_repository:
+    filename: "{{ item.name }}"
+    repo: "{{ item.repo }}"
+    state: present
+    update_cache: false
+  retries: 10
+  delay: 5
+  loop: "{{ bbb_package_repos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  register: result
+
+- name: Refresh apt caches (again) # noqa: no-handler
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+  when: result.changed
+
+- name: Upgrade all installed packages
+  become: true
+  ansible.builtin.apt:
+    upgrade: "yes"
+  when: bbb_upgrade
+  notify: Restart bigbluebutton
+
+- name: Ensure bigbluebutton group has fixed gid
+  become: true
+  ansible.builtin.group:
+    name: bigbluebutton
+    system: true
+    gid: "{{ bbb_group_gid }}"
+
+- name: Ensure bigbluebutton user has fixed uid
+  become: true
+  ansible.builtin.user:
+    name: bigbluebutton
+    system: true
+    shell: /bin/false
+    home: /home/bigbluebutton
+    uid: "{{ bbb_user_uid }}"
+    groups: [bigbluebutton]
+    append: true

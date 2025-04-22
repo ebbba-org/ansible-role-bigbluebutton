@@ -7,10 +7,9 @@
     no_proxy: "{{ lookup('env', 'no_proxy') }}"
   remote_user: root
   vars:
-    bbb_nodejs_version: 8.x
-    bbb_letsencrypt_enable: false
-    bbb_letsencrypt_email: mail@example.com
+    bbb_acme_enable: false
+    bbb_acme_email: mail@example.com
   tasks:
-    - name: "Include ebbba-org/ansible-role-bigbluebutton"
+    - name: "Include ebbba.bigbluebutton"
       include_role:
-        name: "ebbba-org/ansible-role-bigbluebutton"
+        name: "ebbba.bigbluebutton"

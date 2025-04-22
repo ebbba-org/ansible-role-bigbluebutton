@@ -1,0 +1,55 @@
+---
+- name: Ensure ssl directories exist
+  become: true
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: "0750"
+    owner: root
+    group: root
+  loop:
+    - path: "{{ bbb_ssl_cert | dirname }}"
+    - path: "{{ bbb_ssl_key | dirname }}"
+
+- import_tasks: prepare-ssl-acme.yml
+
+- name: Deploy custom ssl files
+  when: bbb_ssl_key_file is defined
+  become: true
+  no_log: true
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  loop:
+    - src: "{{ bbb_ssl_cert_file }}"
+      dest: "{{ bbb_ssl_cert }}"
+      mode: "0644"
+    - src: "{{ bbb_ssl_key_file }}"
+      dest: "{{ bbb_ssl_key }}"
+      mode: "0640"
+  notify: Reload HTTPS
+
+- name: Ensure ssl files have proper permissions
+  become: true
+  file:
+    path: "{{ item.path }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  loop:
+    - path: "{{ bbb_ssl_cert }}"
+      mode: "0644"
+    - path: "{{ bbb_ssl_key }}"
+      mode: "0640"
+
+# TODO: wtf no!? Generate it on the server!
+- name: Copy predefined DH group ffdhe2048
+  become: true
+  copy:
+    src: ffdhe4096.pem
+    dest: /etc/ssl/ffdhe4096.pem
+    mode: "0644"
+  notify: Reload HTTPS

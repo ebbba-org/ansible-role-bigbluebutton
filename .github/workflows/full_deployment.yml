@@ -4,11 +4,11 @@ name: 'Ansible Deployment Test'
 on:
   push:
       branches:    
-        - 'bbb/2.5'
-        - 'bbb/2.6'
+        - 'bbb/3.*'
         - 'master'
         - 'main'
         - 'develop'
+        - 'fix-*'
       tags:
         - ".*"
   pull_request:
@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - distribution: 'ubuntu-20.04'
+          - distribution: 'ubuntu-22.04'
             experimental: false
     env:
       ANSIBLE_CALLBACK_ENABLED: profile_tasks
@@ -123,16 +123,6 @@ jobs:
           which pip3
           pip3 freeze
 
-      - name: After script - sfiles
-        if: ${{ always() }}
-        continue-on-error: true
-        run: |
-          echo "*** mongo"
-          cat /etc/mongod.conf
-          sudo cat /var/log/mongodb/mongod.log || true
-          echo "*** etc"
-          find /etc/red5 /etc/bigbluebutton/ -type f -ls
-
       - name: After script - curl
         if: ${{ always() }}
         continue-on-error: true
@@ -157,7 +147,7 @@ jobs:
         if: ${{ always() }}
         continue-on-error: true
         run: |
-          sudo netstat --tcp --udp --all --numeric --processes
+          sudo netstat --tcp --udp --all --numeric --programs
           sudo ss --numeric --listening --processes
           systemctl --full --no-pager status nginx
           systemctl --full --no-pager status mongod

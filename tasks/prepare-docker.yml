@@ -1,0 +1,37 @@
+---
+- name: Install docker packages
+  become: true
+  ansible.builtin.package:
+    name: ["docker-ce", "docker-ce-cli", "containerd.io", "docker-buildx-plugin", "docker-compose-plugin"]
+    state: present
+
+# Templated variables are always strings in ansible :/
+- name: Ensure bbb_docker_config.mtu is an integer
+  ansible.builtin.set_fact:
+    bbb_docker_config: "{{ bbb_docker_config | combine({'mtu': bbb_net_mtu | int}) }}"
+  when: "bbb_docker_config.mtu is defined and bbb_docker_config.mtu is not integer"
+
+- name: Configure docker daemon
+  become: true
+  ansible.builtin.template:
+    src: "docker/daemon.json.j2"
+    dest: "/etc/docker/daemon.json"
+    mode: "0600"
+  when: "bbb_docker_config | default(False)"
+  register: result
+
+# Ansible lacks the ability to flush specific handlers, so reload docker manually
+- name: Reload docker daemon # noqa: no-handler
+  when: result.changed
+  become: true
+  systemd:
+    name: docker
+    state: reloaded
+
+- name: Log into DockerHub to avoid rate limits
+  become: true
+  community.docker.docker_login:
+    username: "{{ bbb_docker_user }}"
+    password: "{{ bbb_docker_passwd }}"
+  no_log: true
+  when: bbb_docker_user is defined

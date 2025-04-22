@@ -4,88 +4,75 @@
 - name: Verify
   hosts: bbb
   tasks:
-  - name: Check if needed packages are installed
-    command: "dpkg-query -l {{ item }}"
-    changed_when: false
-    with_items:
-      - language-pack-en
-      - python3-pip
-      - mongodb-org
-      - bbb-html5
-      - bigbluebutton
-  - name: Ensure bigbluebutton.properties file is present
-    stat:
-      path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    register: cfg
-  - name: Validate config present
-    assert:
-      that: cfg.stat.exists and cfg.stat.size != 0
-  - name: Ensure red5 config file is present
-    stat:
-      path: /etc/red5/red5.xml
-    register: cfg2
-  - name: Validate config present
-    assert:
-      that: cfg2.stat.exists and cfg2.stat.size != 0
-    failed_when: false
-  - name: Ensure bbb nginx config is enabled
-    stat:
-      path: /etc/nginx/sites-enabled/bigbluebutton
-    register: cfg3
-  - name: Validate config present
-    assert:
-      that: cfg3.stat.exists and cfg3.stat.size != 0
+    - name: Check if needed packages are installed
+      command: "dpkg-query -l {{ item }}"
+      changed_when: false
+      with_items:
+        - language-pack-en
+        - python3-pip
+        - bbb-html5
+        - bigbluebutton
+    - name: Ensure bigbluebutton.properties file is present
+      stat:
+        path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+      register: cfg
+    - name: Validate config present
+      assert:
+        that: cfg.stat.exists and cfg.stat.size != 0
+    - name: Ensure red5 config file is present
+      stat:
+        path: /etc/red5/red5.xml
+      register: cfg2
+    - name: Validate config present
+      assert:
+        that: cfg2.stat.exists and cfg2.stat.size != 0
+      failed_when: false
+    - name: Ensure bbb nginx config is enabled
+      stat:
+        path: /etc/nginx/sites-enabled/bigbluebutton
+      register: cfg3
+    - name: Validate config present
+      assert:
+        that: cfg3.stat.exists and cfg3.stat.size != 0
 
-  - name: Ensure mongodb process is running
-    command: pgrep -u mongodb mongod
-    register: ps2
-    changed_when: false
-    failed_when: false
-  - name: Validate mongodb ps output
-    assert:
-      that: ps2.stdout
-  - name: Ensure mongod port is listening
-    wait_for:
-      host: 127.0.1.1
-      port: 27017
-      timeout: 5
+    - name: Populate service facts
+      ansible.builtin.service_facts:
 
-  - name: Populate service facts
-    ansible.builtin.service_facts:
+    - name: Validate services started
+      assert:
+        that:
+          - ansible_facts.services[item]['state'] == 'running'
+          - ansible_facts.services[item]['status'] == 'enabled'
+      with_items:
+        - bbb-apps-akka.service
+        - bbb-export-annotations.service
+        - bbb-fsesl-akka.service
+        - bbb-graphql-actions.service
+        - bbb-graphql-middleware.service
+        - bbb-graphql-server.service
+        - bbb-pads.service
+        - bbb-rap-caption-inbox.service
+        - bbb-rap-resque-worker.service
+        - bbb-rap-starter.service
+        - bbb-webrtc-recorder.service
+        - bbb-webrtc-sfu.service
+        - bbb-web.service
+        - nginx.service
+      failed_when: false
+      when: >
+        not (ansible_virtualization_type is defined and
+              (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+            )
 
-  - name: Validate services started
-    assert:
-      that:
-        - ansible_facts.services[item]['state'] == 'running'
-        - ansible_facts.services[item]['status'] == 'enabled'
-    with_items:
-      - bbb-apps-akka.service
-      - bbb-html5-frontend@1.service
-      - bbb-html5-frontend@2.service
-      - bbb-html5-backend@1.service
-      - bbb-html5-backend@2.service
-      - bbb-html5.service
-      - bbb-rap-caption-inbox.service
-      - bbb-web.service
-      - bbb-webrtc-sfu.service
-      - kurento-media-server.service
-      - mongod.service
-      - nginx.service
-    failed_when: false
-    when: >
-      not (ansible_virtualization_type is defined and
-            (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
-          )
-
-  - name: check if bbb status
-    command: bbb-conf --status
-    register: bbbconf
-    changed_when: false
-  - name: Validate bbb-conf output
-    assert:
-      that: >
-        "'Failed to connect to bus: No such file or directory' not in bbbconf.stderr or 'failed' not in bbbconf.stdout"
-    when: >
-      not (ansible_virtualization_type is defined and
-            (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
-          )
+    - name: Check if bbb status
+      command: bbb-conf --status
+      register: bbbconf
+      changed_when: false
+    - name: Validate bbb-conf output
+      assert:
+        that: >
+          "'Failed to connect to bus: No such file or directory' not in bbbconf.stderr or 'failed' not in bbbconf.stdout"
+      when: >
+        not (ansible_virtualization_type is defined and
+              (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+            )

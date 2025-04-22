@@ -1,152 +1,169 @@
 ---
+
+ansible_python_interpreter: /usr/bin/python3
+
 bbb_hostname: "{{ ansible_fqdn }}"
-bbb_state: present
-bbb_version: focal-270
-bbb_upgrade_packages: "{{ 'yes' if bbb_state == 'latest' else 'no' }}"
-bbb_check_for_running_meetings: true
-bbb_letsencrypt_enable: true
-bbb_letsencrypt_api: https://acme-v02.api.letsencrypt.org/directory
-bbb_nginx_privacy: true
-bbb_nginx_listen_https: true
-bbb_nginx_root: /var/www/bigbluebutton-default/assets
-bbb_client_log_enable: false
-bbb_ignore_running_meetings: false
+# bbb_secret
+bbb_secret_seed: "{{ bbb_secret }}"
+bbb_version: jammy-300
+bbb_upgrade: true
+bbb_apt_mirror: https://ubuntu.bigbluebutton.org
+bbb_apt_key: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
+bbb_check_running: true
 
-bbb_turn_enable: true
-bbb_stun_servers:
-  - server: example.domain.tld
+bbb_user_uid: 3000
+bbb_group_gid: 3000
+
+### Storage
+# bbb_nfs_share: nfs.exmaple.com:/exports/{{bbb_hostname}}
+bbb_nfs_mount: /mnt/bigbluebutton
+bbb_nfs_opts: "defaults,tcp,nofail,lookupcache=positive,_netdev"
+# bbb_symlink_var: /mnt/bigbluebutton/var
+# bbb_symlink_log: /mnt/bigbluebutton/log
+
+### SSL/TLS
+
+bbb_acme_enable: true
+# bbb_acme_email
+bbb_acme_api: https://acme-v02.api.letsencrypt.org/directory
+bbb_acmesh_download: https://raw.githubusercontent.com/acmesh-official/acme.sh/refs/heads/master/acme.sh
+bbb_acmesh_update: false
+# bbb_ssl_cert_file:
+# bbb_ssl_key_file:
+bbb_ssl_cert: /etc/bigbluebutton/ssl/fullchain.cer
+bbb_ssl_key: /etc/bigbluebutton/ssl/private.key
+
+### Networking
+
+bbb_local_ip: "127.0.0.1"
+bbb_bind_ip4: "{{ ansible_default_ipv4.address }}"
+bbb_bind_ip6: "{{ ansible_default_ipv6.address | default(None) }}"
+bbb_public_ip4: "{{ ansible_default_ipv4.address }}"
+bbb_public_ip6: "{{ ansible_default_ipv6.address | default(None) }}"
+bbb_net_mtu: "{{ ansible_default_ipv4.mtu | default(1500) }}"
+
+# Firewall
+
+bbb_ufw_enable: false
+bbb_ufw_policy: deny
+bbb_ufw_reject_networks: []
+bbb_ufw_reject_networks_default:
+  - "0.0.0.0/8"
+  - 10.0.0.0/8
+  - 100.64.0.0/10
+  - 169.0.2.0/16
+  - 192.0.2.0/24
+  - 192.88.99.0/24
+  - 192.168.0.0/16
+  - 198.18.0.0/15
+  - 198.51.100.0/24
+  - 203.0.113.0/24
+  - 224.0.0.0/4
+  - 240.0.0.0/4
+bbb_ufw_allow_networks: []
+bbb_ufw_allow_networks_default:
+  - 172.17.0.0/16
+  - 127.0.0.1/23
+bbb_ufw_logging: false
+bbb_ufw_rules: {}
+bbb_ufw_rules_default:
+  nginx_https:
+    port: "443"
+    proto: any
+  nginx_http:
+    port: "80"
+  bbb_udp:
+    port: "16384:32768"
+    proto: udp
+  ssh:
+    port: "22"
+  dialin:
+    from: "{{ bbb_dialin_provider_ip | default('undefined') }}"
+    port: "5060"
+    when: "{{ bbb_dialin_enable }}"
+
+### BBB customizations and config overrides
+
+bbb_config_web: {} # bbb-web.properties
+bbb_config_html5: {} # bbb-html5.yml
+bbb_config_etherpad: {} # etherpad.json
+bbb_config_presentation: {} # recording/presentation.yml
+
+### STUN/TURN Servers
+
+bbb_coturn_enable: "{{ bbb_turn_servers | length == 0 }}"
+bbb_coturn_secret: "{{ ('coturn' + bbb_host_seed) | hash('sha256') }}"
+bbb_stun_servers: [] # e.g. ["stun:stun.freeswitch.org", ...]
 bbb_ice_servers: []
-bbb_turn_servers:
-  - server: example.domain.tld
-    port: example_port
-    transport: tcp
-    secret: example_secret
-    tls: false
-  - server: example.domain.tld
-    port: example_port
-    transport: tcp
-    secret: example_secret
-    tls: true
+bbb_turn_servers: [] # e.g. [{url: "turns:turn.example.com:443?transport=tcp", secret: "1234"}, ...]
 
-bbb_webhooks_enable: false
-bbb_api_demos_enable: false
-bbb_app_log_level: DEBUG
-bbb_fsels_akka_log_level: ERROR
-bbb_apps_akka_log_level: ERROR
-bbb_freeswitch_log_level: warning
-bbb_etherpad_log_level: INFO
+### Cluster mode
 
-# freeswitch
+# bbb_cluster_proxy: frontend.example.com
+bbb_cluster_node: "{{ bbb_hostname | split('.') | first }}"
+
+### Freeswitch config
+bbb_freeswitch_socket_password: "{{ ('fsp' + bbb_host_seed) | hash('sha256') }}"
+bbb_freeswitch_default_password: "{{ ('fdp' + bbb_host_seed) | hash('sha256') }}"
 bbb_freeswitch_ipv6: true
-bbb_freeswitch_ip_address: "{{ ansible_default_ipv4.address }}"
-bbb_freeswitch_external_ip: stun:{{ (bbb_stun_servers | first).server }}
 bbb_freeswitch_muted_sound: true
-bbb_freeswitch_unmuted_sound: true
-# bbb_freeswitch_socket_password needs to be defined by the User
-# bbb_freeswitch_socket_password: "SuperSecurePassword-123456789"
-# bbb_freeswitch_default_password: "Needs_To_Be_Defined_By_The_User"
 
-bbb_system_locale: en_US.UTF-8
-bbb_mongodb_version: 4.4
-bbb_mongodb_tmpfs_size: 512m
-
-# Attention, needs to be encoded with "native2ascii -encoding UTF8"
-bbb_default_welcome_message: Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href="https://www.bigbluebutton.org/html5"><u>tutorial
-  videos</u></a>.<br><br>To join the audio bridge click the phone button.  Use a headset to avoid causing background noise for others.
-bbb_default_welcome_message_footer: This server is running <a href="https://docs.bigbluebutton.org/" target="_blank"><u>BigBlueButton</u></a>.
-bbb_web_logouturl: default
-bbb_allow_request_without_session: false
-bbb_ssl_cert: /root/.acme.sh/{{ bbb_hostname }}_ecc/fullchain.cer
-bbb_ssl_key: /root/.acme.sh/{{ bbb_hostname }}_ecc/{{ bbb_hostname }}.key
-bbb_letsencrypt_repo: https://github.com/acmesh-official/acme.sh.git
-bbb_letsencrypt_dir: /opt/acme
-bbb_letsencrypt_version: master
-bbb_letsencrypt_keep_updated: true
-# https://github.com/acmesh-official/acme.sh/wiki/How-to-issue-a-cert
-bbb_letsencrypt_install_command: >-
-  {{ bbb_letsencrypt_script }} --install
-  --home /root/.acme.sh
-  --config-home /root/.acme.sh
-  --certhome /root/.acme.sh
-  --days 30
-  --accountemail {{ bbb_letsencrypt_email }}
-  --accountkey /root/.acme.sh/account.key
-
-bbb_letsencrypt_create_command: >-
-  {{ bbb_letsencrypt_script }} --issue --domain {{ bbb_hostname }}
-  --standalone
-  --server letsencrypt
-  --keylength ec-256
-  --pre-hook "systemctl stop nginx.service"
-  --post-hook "systemctl start nginx.service"
-  --server {{ bbb_letsencrypt_api }}
-
-# Set `bbb_letsencrypt_enable: false` to deploy custom certificate and private
-# key files.
-# bbb_own_cert:
-# bbb_own_key:
-
-bbb_meteor: {}
-bbb_html5_backend_processes: 2
-bbb_html5_frontend_processes: 2
-bbb_html5_frontend_max_old_space_size: "2048"
-
-bbb_disable_recordings: false
-bbb_recording_config: {}
 bbb_dialplan_quality: cdquality
 bbb_dialplan_energy_level: 100
 bbb_dialplan_comfort_noise: 1400
 
-bbb_apt_mirror: https://ubuntu.bigbluebutton.org
-bbb_apt_key: 770C4267C5E63474D171B60937B5DD5EFAB46452
+### SIP dial-in config
 
-ansible_python_interpreter: /usr/bin/python3
+bbb_dialin_enable: false
+# bbb_dialin_provider: sip.example.net
+# bbb_dialin_provider_ip: 1.2.3.4
+# bbb_dialin_provider_username: provider-account
+# bbb_dialin_provider_password: provider-password
+# bbb_dialin_provider_extension: "6135551234"
+# bbb_dialin_default_number: "613-555-1234"
+bbb_dialin_pin_minlen: 5
+bbb_dialin_pin_maxlen: 5
+bbb_dialin_pin_timeout: 10000
+bbb_dialin_pin_maxwait: 5000
+bbb_dialin_pin_retries: 3
 
-bbb_monitoring_all_in_one_enable: false
-bbb_monitoring_all_in_one_directory: /root/bbb-monitoring
-bbb_monitoring_all_in_one_port: 3001
-bbb_monitoring_recordings_from_disk: true
-bbb_monitoring_all_in_one_grafana: true
-bbb_monitoring_all_in_one_prometheus: true
-# bbb_monitoring_htpasswd_user:
-# bbb_monitoring_htpasswd:
-bbb_monitoring_external: false
-bbb_monitoring_exporter_version: "{{ 'latest' if bbb_monitoring_all_in_one_enable | bool else 'HEAD' }}"
-
-bbb_monitoring_systemd_enable: false
-bbb_monitoring_systemd_directory: /opt/bigbluebutton-exporter
-bbb_monitoring_systemd_bind_ip: "0.0.0.0"
-bbb_monitoring_systemd_port: 9688
-
-bbb_dialin_enabled: false
-bbb_dialin_provider_proxy: sip.example.net
-bbb_dialin_provider_ip: ""
-bbb_dialin_provider_username: provider-account
-bbb_dialin_provider_password: provider-password
-bbb_dialin_provider_extension: "6135551234"
-bbb_dialin_default_number: 613-555-1234
-bbb_dialin_default_play_and_get_digits: "5 7 3 10000 # conference/conf-pin.wav ivr/ivr-that_was_an_invalid_entry.wav pin \\d+ 5000"
 bbb_dialin_mask_caller: false
-bbb_dialin_overwrite_footer: false
-bbb_dialin_footer: <br><br>To join this meeting by phone, dial:<br>  %%DIALNUM%%<br>Then enter %%CONFNUM%% as the conference PIN number.
+bbb_dialin_mask_digits: 3
+bbb_dialin_mask_prefix: tel-
 
-bbb_ntp_cron: false
-bbb_ntp_cron_day: "*"
-bbb_ntp_cron_hour: "5"
-bbb_ntp_cron_minute: "0"
+### Other customizations
 
+bbb_default_welcome_message: Welcome to <b>%%CONFNAME%%</b>!
+bbb_default_welcome_message_footer: ""
+bbb_default_presentation: ${bigbluebutton.web.serverURL}/default.pdf
+# bbb_default_presentation_file
+bbb_default_logo_enable: false
+bbb_default_logo: ${bigbluebutton.web.serverURL}/images/logo.png
+# bbb_default_logo_file
+bbb_default_darklogo: ${bigbluebutton.web.serverURL}/images/darklogo.png
+# bbb_default_darklogo_file
+# bbb_html5_style
+
+bbb_virtual_backgrounds: [home.jpg, coffeeshop.jpg, board.jpg]
+bbb_recording_enable: true
+bbb_recording_formats: [presentation]
+bbb_recording_mp4: false
 bbb_cron_history: 5
 bbb_cron_unrecorded_days: 14
 bbb_cron_published_days: 14
 bbb_cron_log_history: 28
 
-# additional bbb-web.properties
-bbb_default_presentation: ${bigbluebutton.web.serverURL}/{{ bbb_custom_presentation_name | default('default.pdf') }}
-# bbb_custom_presentation: "default.pdf"
-# set this to the name the default presentation on the host should have.
-# if its not default.pdf moderators are able to delete the default presentation. Thats sometimes helpful and works fine.
-# bbb_custom_presentation_name: "default.pdf"
+bbb_docker_config:
+  log-driver: journald
+  mtu: "{{ bbb_net_mtu | default(1500) }}"
 
+bbb_venv: /opt/venv
+bbb_webhooks_enable: false
+bbb_bbbctl_enable: true
+
+bbb_fonts: "{{ bbb_fonts_base + bbb_fonts_extra }}"
+bbb_fonts_extra: []
+## TODO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 bbb_mute_on_start: false
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR
 bbb_guestpolicy: ALWAYS_ACCEPT
@@ -160,15 +177,11 @@ bbb_num_conversion_threads: 5
 bbb_num_file_processor_threads: 2
 bbb_office_to_pdf_conversion_timeout: 60
 bbb_office_to_pdf_max_concurrent_conversions: 4
-
-bbb_breakout_rooms_enabled: true  # deprecated as of 2.6
 bbb_breakout_rooms_record: false
-bbb_breakout_rooms_privatechat_enabled: true
-
+bbb_breakout_rooms_privatechat_enable: true
 bbb_user_inactivity_inspect_timer: 0
 bbb_user_inactivity_threshold: 30
 bbb_user_activity_sign_response_delay: 5
-bbb_learning_dashboard_enabled: true  # deprecated as of 2.6
 bbb_default_meeting_layout: SMART_LAYOUT
 bbb_webcams_only_for_moderator: false
 bbb_allow_mods_to_eject_cameras: false
@@ -186,148 +199,19 @@ bbb_allow_reveal_of_bbb_version: false
 # learningDashboard, layouts, captions, liveTranscription, virtualBackgrounds, customVirtualBackgrounds
 # breakoutRooms, importSharedNotesFromBreakoutRooms, importPresentationWithAnnotationsFromBreakoutRooms
 bbb_disabled_features: []
+bbb_web_logouturl: default
+bbb_allow_request_without_session: false
 
-# the following variables are to ensure backwards compatibility with the deprecated feature flags
-bbb_disabled_features_deprecated: "{{ ([] if bbb_learning_dashboard_enabled else ['learningDashboard']) + ([] if bbb_breakout_rooms_enabled else ['breakoutRooms']) }}"
-bbb_disabled_features_combined: "{{ bbb_disabled_features | union(bbb_disabled_features_deprecated) }}"
+bbb_nginx_privacy: false
 
-bbb_use_default_logo: false
-bbb_default_logo_url: ${bigbluebutton.web.serverURL}/images/{{ bbb_custom_logo_name | default('logo.png') }}
-# bbb_custom_logo: "logo.png"
-# set this to the name the default logo on the host should have.
-# bbb_custom_logo_name: "logo.png"
+bbb_api_demos_enable: false
+bbb_app_log_level: DEBUG
+bbb_fsels_akka_log_level: ERROR
+bbb_apps_akka_log_level: ERROR
+bbb_freeswitch_log_level: warning
+bbb_etherpad_log_level: INFO
 
-bbb_etherpad_disable_cursortrace_plugin: false
-
-bbb_kurento_interfaces:
-  - "{{ ansible_default_ipv4.interface }}"
-  - lo
-
-# Define a seperate default-variable, as to allow using combine() on this.
-# That way we can add to the default values while redefining 'bbb_webrtc_sfu_multikurento'.
-bbb_webrtc_sfu_multikurento_default:
-  balancing-strategy: MEDIA_TYPE
-  kurento:
-    - ip: "{{ ansible_default_ipv4.address }}"
-      url: ws://127.0.0.1:8888/kurento
-      mediaType: main
-      ipClassMappings:
-        local: ""
-        private: ""
-        public: ""
-      options:
-        failAfter: 5
-        request_timeout: 30000
-        response_timeout: 30000
-    - ip: "{{ ansible_default_ipv4.address }}"
-      url: ws://127.0.0.1:8889/kurento
-      mediaType: audio
-      ipClassMappings:
-        local: ""
-        private: ""
-        public: ""
-      options:
-        failAfter: 5
-        request_timeout: 30000
-        response_timeout: 30000
-    - ip: "{{ ansible_default_ipv4.address }}"
-      url: ws://127.0.0.1:8890/kurento
-      mediaType: content
-      ipClassMappings:
-        local: ""
-        private: ""
-        public: ""
-      options:
-        failAfter: 5
-        request_timeout: 30000
-        response_timeout: 30000
-  freeswitch:
-    sip_ip: "{{ ansible_default_ipv4.address }}"
-    ip: "{{ ansible_default_ipv4.address }}"
-    esl_password: "{{ bbb_freeswitch_socket_password }}"
-  log:
-    level: warn
-    filename:
-# Assign default values to actual variable.
-bbb_webrtc_sfu_multikurento: "{{ bbb_webrtc_sfu_multikurento_default }}"
+bbb_system_locale: en_US.UTF-8
 
 # Skip all tasks that are incompatible with (unprivileged) containers
 bbb_container_compat: false
-
-bbb_ssh_port: "22"
-bbb_ufw_reject_networks_default:
-  - "0.0.0.0/8"
-  - 10.0.0.0/8
-  - 100.64.0.0/10
-  - 169.0.2.0/16
-  - 192.0.2.0/24
-  - 192.88.99.0/24
-  - 192.168.0.0/16
-  - 198.18.0.0/15
-  - 198.51.100.0/24
-  - 203.0.113.0/24
-  - 224.0.0.0/4
-  - 240.0.0.0/4
-bbb_ufw_allow_networks_default:
-  - 172.17.0.0/16
-  - 127.0.0.1/23
-bbb_ufw_allow_networks: "{{ bbb_ufw_allow_networks_custom | default([]) + bbb_ufw_allow_networks_default }}"
-bbb_ufw_reject_networks: "{{ bbb_ufw_reject_networks_custom | default([]) + bbb_ufw_reject_networks_default }}"
-bbb_firewall_ufw:
-  # enable/disable the ufw
-  enabled: true
-  # enbale/disable ufw logging
-  logging: true
-  # The default policy
-  policy: deny
-  # A list of reject_networks that will be reject - https://github.com/ebbba-org/ansible-role-bigbluebutton/issues/31
-  # Default reject BOGON https://bgpfilterguide.nlnog.net/guides/bogon_prefixes/#bird
-  reject_networks:
-    - "{{ bbb_ufw_reject_networks }}"
-  # A list of allow_networks - for docker and localhost
-  allow_networks:
-    - "{{ bbb_ufw_allow_networks }}"
-  rules:
-    # SSH is allowed by default and limited
-    nginx:
-      # Allow port 443 - Used by NGINX
-      - rule: allow
-        port: "443"
-        proto: any
-      # Allow port 80 - Used by NGINX
-      - rule: allow
-        port: "80"
-        proto: any
-    bigbluebutton:
-      # Allow BigBlueButton 16384-32768 FreeSWITCH/HTML5 client RTP
-      - rule: allow
-        port: 16384:32768
-        proto: udp
-    default:
-      - rule: allow
-        port: "{{ bbb_ssh_port }}"
-        proto: tcp
-
-# https://pypi.org/project/docker-compose/#history
-bbb_docker_compose_version: 1.29.2
-
-bbb_nodejs_version: 18.x
-
-# Cluster proxy variables
-# Define the following variables to set up the cluster proxy
-# bbb_proxy_host: bbb.example.com
-# bbb_proxy_name: "{{ inventory_hostname | split('.') | first }}"
-bbb_proxy_meteor:
-  public:
-    app:
-      basename: "/{{ bbb_proxy_name }}/html5client"
-      bbbWebBase: "https://{{ bbb_hostname }}/bigbluebutton"
-      learningDashboardBase: "https://{{ bbb_hostname }}/learning-dashboard"
-      userSettingsStorage: local
-    media:
-      stunTurnServersFetchAddress: "https://{{ bbb_hostname }}/bigbluebutton/api/stuns"
-      sip_ws_host: "{{ bbb_hostname }}"
-    presentation:
-      uploadEndpoint: "https://{{ bbb_hostname }}/bigbluebutton/presentation/upload"
-    pads:
-      url: "https://{{ bbb_hostname }}/pad"

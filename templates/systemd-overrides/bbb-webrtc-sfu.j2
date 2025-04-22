@@ -1,0 +1,10 @@
+[Service]
+
+LimitNOFILE={{ [2**32, ansible_processor_vcpus * 2048] | min}}
+
+{% if bbb_container_compat %}
+IOSchedulingClass=
+IOSchedulingPriority=
+CPUSchedulingPolicy=
+CPUSchedulingPriority=
+{% endif %}

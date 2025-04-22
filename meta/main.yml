@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: bigbluebutton
   company: eBBBa
-  author: n0emis
+  author: ebbba
   description: >
     BigBlueButton installation (following the documentation on
     http://docs.bigbluebutton.org/install/install.html)
@@ -14,18 +14,6 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - focal
+        - jammy
 
   galaxy_tags: []
-dependencies:
-  - role: geerlingguy.nodejs
-    vars:
-      nodejs_version: "{{ bbb_nodejs_version }}"
-    tags:
-      - geerlingguy
-      - geerlingguy_nodejs
-
-  - role: geerlingguy.docker
-    tags:
-      - geerlingguy
-      - geerlingguy_docker
