@@ -10,7 +10,7 @@
   become: true
   replace:
     path: "{{ item }}"
-    regexp: " -v /usr/share/fonts/(\\\\?):/usr/share/fonts/\\\\?:ro.*? --rm"
+    regexp: "(?<=\\s)-v /usr/share/fonts/(\\\\?):/usr/share/fonts/\\\\?:ro.*? --rm"
     replace: >-
       -v /usr/share/fonts/\1:/usr/share/fonts/\1:ro
       -v /etc/fonts/\1:/etc/fonts/\1:ro
