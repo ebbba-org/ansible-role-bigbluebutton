@@ -74,6 +74,10 @@ A secret seed used to generate other host-local secrets and passwords. Override 
 
 ### Networking
 
+* **`bbb_set_hostname`** (default: `{{ bbb_hostname }}`)\
+  Set the local system hostname to match `bbb_hostname` by default. `False` will
+  skip this step and not change the current local hostname.
+
 * **`bbb_local_ip`** (default: `127.0.0.1`)\
   IP of your loopback device.
 
