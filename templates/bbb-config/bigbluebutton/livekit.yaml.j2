@@ -1,0 +1,16 @@
+--- 
+# {{ ansible_managed }}
+keys:
+  {{ bbb_livekit_api_key }}: {{ bbb_livekit_api_secret }}
+logging:
+  level: debug
+{% if bbb_livekit_network_interfaces is defined %}
+rtc:
+  interfaces:
+    includes:
+{% for interface in bbb_livekit_network_interfaces %}
+      - {{ interface }}
+{% endfor %}
+{% endif %}
+webhook:
+  api_key: {{ bbb_livekit_api_key }}
