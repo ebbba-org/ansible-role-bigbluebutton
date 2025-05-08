@@ -16,7 +16,7 @@
   hostname:
     name: "{{ bbb_set_hostname }}"
     use: systemd
-  when: bbb_set_hostname 
+  when: bbb_set_hostname
 
 - name: Install missing locales
   become: true

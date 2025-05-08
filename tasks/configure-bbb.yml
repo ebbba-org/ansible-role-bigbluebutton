@@ -105,7 +105,7 @@
   loop_control:
     label: "{{ item.path }} ({{ item.line }})"
   loop:
-  # https://github.com/bigbluebutton/bigbluebutton/issues/22980
-  - path: /usr/local/bigbluebutton/core/scripts/bigbluebutton.yml
-    regexp: "^playback_host: .*"
-    line: "playback_host: {{bbb_hostname}}"
+    # https://github.com/bigbluebutton/bigbluebutton/issues/22980
+    - path: /usr/local/bigbluebutton/core/scripts/bigbluebutton.yml
+      regexp: "^playback_host: .*"
+      line: "playback_host: {{ bbb_hostname }}"
