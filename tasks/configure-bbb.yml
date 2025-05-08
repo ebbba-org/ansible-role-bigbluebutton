@@ -78,6 +78,8 @@
     - src: bbb-apps-akka/logback.xml
     - src: bbb-web/logback.xml
       dest: /usr/share/bbb-web/WEB-INF/classes/logback.xml
+    - src: bigbluebutton/livekit.yaml
+      when: "{{ bbb_livekit_network_interfaces is defined }}"
   notify: Restart bigbluebutton
 
 - name: Remove unused config files

@@ -1,0 +1,28 @@
+---
+- name: Slurp content of current livekit.yaml
+  ansible.builtin.slurp:
+    src: /etc/bigbluebutton/livekit.yaml
+  register: bbb_livekit_config_slurped
+
+- name: Parse YAML content
+  ansible.builtin.set_fact:
+    bbb_livekit_config_current: "{{ bbb_livekit_config_slurped.content | b64decode | from_yaml }}"
+
+- name: Update bbb-web config for livekit
+  ansible.builtin.set_fact:
+    bbb_config_web_base: |
+      {{bbb_config_web_base | combine({
+        "audioBridge": "livekit",
+        "cameraBridge": "livekit",
+        "screenShareBridge": "livekit"
+      })}}
+
+- name: Update bbb livekit config
+  ansible.builtin.set_fact:
+    bbb_config_livekit: |
+      {{bbb_livekit_config_current | combine({
+      'rtc': {
+        'interfaces': {
+          'includes': bbb_livekit_network_interfaces
+        }}}, recursive=True)}}
+  when: bbb_livekit_network_interfaces is defined
