@@ -132,6 +132,12 @@ bbb_dialin_mask_caller: false
 bbb_dialin_mask_digits: 3
 bbb_dialin_mask_prefix: tel-
 
+### Experimental Livekit integration
+
+bbb_livekit_enable: false
+# Recommended: set the network interface(s) to use for Livekit
+# bbb_livekit_network_interfaces: []
+
 ### Other customizations
 
 bbb_default_welcome_message: Welcome to <b>%%CONFNAME%%</b>!
