@@ -291,6 +291,23 @@ rest, you are on your own. Good luck!
 * **`bbb_dialin_mask_prefix`** (default: `tel-`)\
   Prefix added to masked caller IDs.
 
+### Livekit integration (experimental)
+
+[Livekit integration](https://docs.bigbluebutton.org/new-features/#integration-with-livekit) to replace mediasouop as media streaming backend is experimental in BBB 3.0.
+This role offers to configure server-wide livekit usage, but be aware that some BBB functions might not work correctly with livekit at the current development state.
+Please read the official BBB docs to read up on the current integration state of livekit.
+
+* **`bbb_livekit_enable`** (default: `false`)\
+  Enable livekit integration. Will install livekit and configure the server to use it.
+
+* **`bbb_livekit_network_interfaces`** (no default)\
+  Optionally define network interfaces to be used be livekit to speed up negotiation times. Example `[eth0]`
+
+* **`bbb_livekit_api_key`** (default: auto-generated)\
+  Livekit API key for BigBlueButton.
+
+* **`bbb_livekit_api_secret`** (default: auto-generated)\
+  Livekit API secret for the key above.
 
 ### Common customizations
 

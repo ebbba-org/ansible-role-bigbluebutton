@@ -1,0 +1,9 @@
+---
+- name: Update bbb-web config for livekit
+  ansible.builtin.set_fact:
+    bbb_config_web_base: |
+      {{bbb_config_web_base | combine({
+        "audioBridge": "livekit",
+        "cameraBridge": "livekit",
+        "screenShareBridge": "livekit"
+      })}}
