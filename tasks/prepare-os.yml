@@ -11,11 +11,12 @@
     name: "{{ bbb_packages_system }}"
     state: present
 
-- name: Set local hostname to match bbb_hostname
+- name: Set system hostname
   become: true
   hostname:
-    name: "{{ bbb_hostname }}"
+    name: "{{ bbb_set_hostname }}"
     use: systemd
+  when: bbb_set_hostname 
 
 - name: Install missing locales
   become: true
