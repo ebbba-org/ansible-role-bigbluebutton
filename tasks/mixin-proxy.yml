@@ -20,10 +20,7 @@
           },
           'media': {
             'stunTurnServersFetchAddress': 'https://'+bbb_hostname+'/bigbluebutton/api/stuns',
-            'sip_ws_host': bbb_hostname,
-            'livekit': {
-              'url': 'wss://'+bbb_hostname+'/livekit'
-            }
+            'sip_ws_host': bbb_hostname
           },
           'kurento': {
             'wsUrl': 'wss://'+bbb_hostname+'/bbb-webrtc-sfu'
