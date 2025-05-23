@@ -1,5 +1,6 @@
 ---
 - name: "Update config for proxy mode"
+  when: "bbb_cluster_proxy is defined"
   ansible.builtin.set_fact:
     bbb_config_web_base: |
       {{bbb_config_web_base | combine({

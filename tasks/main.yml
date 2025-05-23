@@ -23,7 +23,6 @@
 
 - import_tasks: mixin-helper.yml
 - import_tasks: mixin-proxy.yml
-  when: "bbb_cluster_proxy is defined"
 - import_tasks: mixin-backgrounds.yml
 - import_tasks: mixin-assets.yml
 - import_tasks: mixin-styles.yml
