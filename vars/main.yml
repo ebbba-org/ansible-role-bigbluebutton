@@ -72,6 +72,8 @@ bbb_packages:
     when: "{{ bbb_recording_enable and 'screenshare' in bbb_recording_formats }}"
   - name: [haproxy, coturn]
     when: "{{ bbb_coturn_enable }}"
+  - name: [bbb-livekit]
+    when: "{{ bbb_livekit_enable }}"
 
 bbb_allowed_disabled_features:
   - breakoutRooms

@@ -146,3 +146,13 @@
     - bbb_dialin_provider_username is present
     - bbb_dialin_provider_password is present
     - bbb_dialin_provider_extension is present
+
+- name: Check livekit variables
+  when: bbb_livekit_enable
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_livekit_api_key is present
+    - bbb_livekit_api_key.startswith('API')
+    - bbb_livekit_api_secret is present

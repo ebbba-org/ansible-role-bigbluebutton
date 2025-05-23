@@ -1,5 +1,6 @@
 ---
 - name: "Update config for proxy mode"
+  when: "bbb_cluster_proxy is defined"
   ansible.builtin.set_fact:
     bbb_config_web_base: |
       {{bbb_config_web_base | combine({
@@ -20,10 +21,7 @@
           },
           'media': {
             'stunTurnServersFetchAddress': 'https://'+bbb_hostname+'/bigbluebutton/api/stuns',
-            'sip_ws_host': bbb_hostname,
-            'livekit': {
-              'url': 'wss://'+bbb_hostname+'/livekit'
-            }
+            'sip_ws_host': bbb_hostname
           },
           'kurento': {
             'wsUrl': 'wss://'+bbb_hostname+'/bbb-webrtc-sfu'

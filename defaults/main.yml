@@ -132,6 +132,11 @@ bbb_dialin_mask_caller: false
 bbb_dialin_mask_digits: 3
 bbb_dialin_mask_prefix: tel-
 
+### Experimental Livekit integration
+bbb_livekit_enable: false
+bbb_livekit_api_key: API{{ (ansible_fqdn | hash('sha256'))[:12] }}
+bbb_livekit_api_secret: "{{ ('livekit' + bbb_host_seed) | hash('sha256') }}"
+
 ### Other customizations
 
 bbb_default_welcome_message: Welcome to <b>%%CONFNAME%%</b>!

@@ -14,3 +14,9 @@ mediasoup:
     listenIp:
       ip: "{{ bbb_bind_ip4 }}"
       announcedIp: "{{ bbb_public_ip4 }}"
+{% if bbb_livekit_enable %}
+livekit:
+  key: {{ bbb_livekit_api_key }}
+  secret: {{ bbb_livekit_api_secret }}
+  enabled: true
+{% endif %}

@@ -15,6 +15,8 @@
     - bbb-webrtc-sfu
     - freeswitch
     - "{{ 'coturn' if bbb_coturn_enable else None }}"
+    - "{{ 'livekit-server' if bbb_livekit_enable else None }}"
+    - "{{ 'livekit-sip' if bbb_livekit_enable else None }}"
 
 - name: Deploy systemd override files
   become: true
@@ -73,13 +75,19 @@
     - src: bigbluebutton/recording/recording.yml
     - src: bigbluebutton/recording/presentation.yml
     - src: bigbluebutton/bbb-webrtc-sfu/production.yml
-    - src: bigbluebutton/bbb-webhooks/production.yml
-      when: "{{ bbb_webhooks_enable }}"
     - src: default/bigbluebutton-cron-config
     - src: bbb-fsesl-akka/logback.xml
     - src: bbb-apps-akka/logback.xml
     - src: bbb-web/logback.xml
       dest: /usr/share/bbb-web/WEB-INF/classes/logback.xml
+    # bbb_webhooks_enable
+    - src: bigbluebutton/bbb-webhooks/production.yml
+      when: "{{ bbb_webhooks_enable }}"
+    # bbb_livekit_enable
+    - src: bigbluebutton/livekit.yaml
+      when: "{{ bbb_livekit_enable }}"
+    - src: default/bbb-webrtc-recorder
+      when: "{{ bbb_livekit_enable }}"
   notify: Restart bigbluebutton
 
 - name: Remove unused config files
