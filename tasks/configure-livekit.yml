@@ -1,0 +1,8 @@
+---
+- name: Ensure livekit-sip service state
+  when: bbb_livekit_enable
+  become: true
+  ansible.builtin.service:
+    name: livekit-sip
+    enabled: "{{ bbb_dialin_enable }}"
+    state: "{{ bbb_dialin_enable | ternary('started', 'stopped') }}"

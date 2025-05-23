@@ -1,24 +1,25 @@
 ---
-- name: Update bbb-web for livekit
-  when: bbb_livekit_enable
-  ansible.builtin.set_fact:
-    bbb_config_web_base: |
-      {{bbb_config_web_base | combine({
-        "audioBridge": "livekit",
-        "cameraBridge": "livekit",
-        "screenShareBridge": "livekit"
-      })}}
+- when: bbb_livekit_enable
+  block:
+    - name: Update bbb-web for livekit
+      ansible.builtin.set_fact:
+        bbb_config_web_base: |
+          {{bbb_config_web_base | combine({
+            "audioBridge": "livekit",
+            "cameraBridge": "livekit",
+            "screenShareBridge": "livekit"
+          })}}
 
-- name: Update html5 for livekit
-  when: bbb_livekit_enable and bbb_cluster_proxy is defined
-  ansible.builtin.set_fact:
-    bbb_config_html5_base: |
-      {{bbb_config_html5_base | combine({
-        'public': {
-          'media': {
-            'livekit': {
-              'url': 'wss://'+bbb_hostname+'/livekit'
+    - name: Update html5 for livekit
+      when: bbb_cluster_proxy is defined
+      ansible.builtin.set_fact:
+        bbb_config_html5_base: |
+          {{bbb_config_html5_base | combine({
+            'public': {
+              'media': {
+                'livekit': {
+                  'url': 'wss://'+bbb_hostname+'/livekit'
+                }
+              }
             }
-          }
-        }
-      }, recursive=True)}}
+          }, recursive=True)}}

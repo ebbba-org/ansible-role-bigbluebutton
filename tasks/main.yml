@@ -29,14 +29,15 @@
 - import_tasks: mixin-fonts.yml
 - import_tasks: mixin-livekit.yml
 
-# Configuration phase: Write or patch configuration files and notify handlers
-# if necessary.
+# Configuration phase: Write or patch configuration files and notify handlers if
+# necessary. Order is significant here.
 
-- import_tasks: configure-bbb.yml
+- import_tasks: configure-bbb.yml # Should be the first one
 - import_tasks: configure-nginx.yml
 - import_tasks: configure-haproxy.yml # Depends on configure-nginx.yml
 - import_tasks: configure-freeswitch.yml
 - import_tasks: configure-coturn.yml
+- import_tasks: configure-livekit.yml
 
 # Finalizing phase: Tasks that require a fully configured and running BBB server.
 # Handlers are flushed before entering this phase.

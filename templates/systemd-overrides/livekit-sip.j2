@@ -1,8 +1,17 @@
-[Service]
+[Unit]
+{% if bbb_dialin_enable %}
+PartOf=bigbluebutton.target
+{% endif %}
 
+[Service]
 {% if bbb_container_compat %}
 IOSchedulingClass=
 IOSchedulingPriority=
 CPUSchedulingPolicy=
 CPUSchedulingPriority=
+{% endif %}
+
+[Install]
+{% if bbb_dialin_enable %}
+WantedBy=multi-user.target bigbluebutton.target
 {% endif %}
