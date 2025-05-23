@@ -4,13 +4,12 @@ keys:
   {{ bbb_livekit_api_key }}: {{ bbb_livekit_api_secret }}
 logging:
   level: debug
-{% if bbb_livekit_network_interfaces is defined %}
 rtc:
-  interfaces:
+  ips:
     includes:
-{% for interface in bbb_livekit_network_interfaces %}
-      - {{ interface }}
-{% endfor %}
+    - {{ bbb_public_ip4}}/32
+{% if bbb_bind_ip4 != bbb_public_ip4 %}
+    - {{ bbb_bind_ip4 }}/32
 {% endif %}
 webhook:
   api_key: {{ bbb_livekit_api_key }}

@@ -138,8 +138,6 @@ bbb_dialin_mask_prefix: tel-
 bbb_livekit_enable: false
 bbb_livekit_api_key: API{{ (ansible_fqdn | hash('sha256'))[:12] }}
 bbb_livekit_api_secret: "{{ ('livekit' + bbb_host_seed) | hash('sha256') }}"
-# Recommended: set the network interface(s) to use for Livekit
-# bbb_livekit_network_interfaces: []
 
 ### Other customizations
 
