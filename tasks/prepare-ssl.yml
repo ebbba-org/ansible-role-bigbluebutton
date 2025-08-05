@@ -20,19 +20,15 @@
   copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: "{{ item.owner }}"
-    group: "{{ item.group }}"
+    owner: "{{ bbb_ssl_owner }}"
+    group: "{{ bbb_ssl_group }}"
     mode: "{{ item.mode }}"
   loop:
     - src: "{{ bbb_ssl_cert_file }}"
       dest: "{{ bbb_ssl_cert }}"
-      owner: "{{ bbb_ssl_owner }}"
-      group: "{{ bbb_ssl_group }}"
       mode: "0644"
     - src: "{{ bbb_ssl_key_file }}"
       dest: "{{ bbb_ssl_key }}"
-      owner: "{{ bbb_ssl_owner }}"
-      group: "{{ bbb_ssl_group }}"
       mode: "0640"
   notify: Reload HTTPS
 
@@ -40,17 +36,13 @@
   become: true
   file:
     path: "{{ item.path }}"
-    owner: "{{ item.owner }}"
-    group: "{{ item.group }}"
+    owner: "{{ bbb_ssl_owner }}"
+    group: "{{ bbb_ssl_group }}"
     mode: "{{ item.mode }}"
   loop:
     - path: "{{ bbb_ssl_cert }}"
-      owner: "{{ bbb_ssl_owner }}"
-      group: "{{ bbb_ssl_group }}"
       mode: "0644"
     - path: "{{ bbb_ssl_key }}"
-      owner: "{{ bbb_ssl_owner }}"
-      group: "{{ bbb_ssl_group }}"
       mode: "0640"
 
 # TODO: wtf no!? Generate it on the server!
