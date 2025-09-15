@@ -136,6 +136,11 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
 * **`bbb_ssl_key`** (default: `/etc/bigbluebutton/ssl/private.key`)\
   Location of the ssl private key file. Must exist or be created by one of the means above. 
 
+* **`bbb_ssl_owner`** (default: `root`)\
+  Linux filesystem owner of the SSL files.
+
+* **`bbb_ssl_group`** (default: `root`)\
+  Linux filesystem group of the SSL files.
 
 ### Firewall
 

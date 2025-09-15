@@ -32,6 +32,8 @@ bbb_acmesh_update: false
 # bbb_ssl_key_file:
 bbb_ssl_cert: /etc/bigbluebutton/ssl/fullchain.cer
 bbb_ssl_key: /etc/bigbluebutton/ssl/private.key
+bbb_ssl_owner: root
+bbb_ssl_group: root
 
 ### Networking
 
