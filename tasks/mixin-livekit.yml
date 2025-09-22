@@ -36,9 +36,9 @@
   when: bbb_livekit_enable and bbb_dialin_enable
   ansible.builtin.set_fact:
     bbb_config_webrtc_sfu_base: |
-      {{bbb_config_webrtc_sfu_base | combine(_bbb_config_webrtc_sfu_patch, recursive=True)}}
+      {{ bbb_config_webrtc_sfu_base | combine(_bbb_config_webrtc_sfu_patch, recursive=True) }}
   vars:
-    _bbb_config_webrtc_sfu_patch: 
+    _bbb_config_webrtc_sfu_patch:
       livekit:
         rtcAgent:
           enabled: true
@@ -48,7 +48,7 @@
           trunk:
             # See https://docs.livekit.io/server-sdk-js/interfaces/CreateSipInboundTrunkOptions.html
             options:
-              allowedAddresses: 
+              allowedAddresses:
                 - "{{ bbb_dialin_provider }}"
               allowedNumbers:
                 - "{{ bbb_dialin_provider_extension }}"
@@ -57,7 +57,7 @@
           dispatch:
             # See https://docs.livekit.io/reference/server-sdk-js/interfaces/CreateSipDispatchRuleOptions.html
             options:
-              #attributes: {}
+              # attributes: {}
               hidePhoneNumber: "{{ bbb_dialin_mask_caller }}"
-              #roomConfig: {}
-              #roomPreset: 'default'
+              # roomConfig: {}
+              # roomPreset: 'default'

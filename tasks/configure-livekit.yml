@@ -16,4 +16,3 @@
     state: "{{ bbb_livekit_enable | ternary('stopped', 'started') }}"
   loop:
     - freeswitch
-
