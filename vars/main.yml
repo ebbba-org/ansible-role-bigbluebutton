@@ -72,6 +72,8 @@ bbb_packages:
     when: "{{ bbb_recording_enable and 'screenshare' in bbb_recording_formats }}"
   - name: [haproxy, coturn]
     when: "{{ bbb_coturn_enable }}"
+  - name: [bbb-livekit]
+    when: "{{ bbb_livekit_enable }}"
 
 bbb_allowed_disabled_features:
   - breakoutRooms
@@ -169,6 +171,22 @@ bbb_config_html5_base:
       wsUrl: "wss://{{ bbb_hostname }}/bbb-webrtc-sfu"
     pads:
       url: "https://{{ bbb_hostname }}/pad"
+
+bbb_config_webrtc_sfu_base:
+  freeswitch:
+    ip: "{{ bbb_public_ip4 }}"
+    sip_ip: "127.0.0.1"
+    esl_ip: "127.0.0.1"
+    esl_password: "{{ bbb_freeswitch_socket_password }}"
+  mediasoup:
+    webrtc:
+      listenIps:
+        - ip: "{{ bbb_bind_ip4 }}"
+          announcedIp: "{{ bbb_public_ip4 }}"
+    plainRtp:
+      listenIp:
+        ip: "{{ bbb_bind_ip4 }}"
+        announcedIp: "{{ bbb_public_ip4 }}"
 
 bbb_config_etherpad_base: {}
 bbb_nginx_root: /var/www/bigbluebutton-default/assets
