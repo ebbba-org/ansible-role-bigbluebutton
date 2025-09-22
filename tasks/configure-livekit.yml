@@ -1,4 +1,5 @@
 ---
+# https://github.com/bigbluebutton/bigbluebutton/issues/23247
 - name: Ensure livekit-sip service state
   when: bbb_livekit_enable
   become: true
@@ -6,3 +7,13 @@
     name: livekit-sip
     enabled: "{{ bbb_dialin_enable }}"
     state: "{{ bbb_dialin_enable | ternary('started', 'stopped') }}"
+
+- name: Stop freeswitch if livekit is used
+  become: true
+  ansible.builtin.service:
+    name: "{{ item }}"
+    enabled: "{{ not bbb_livekit_enable }}"
+    state: "{{ bbb_livekit_enable | ternary('stopped', 'started') }}"
+  loop:
+    - freeswitch
+

@@ -92,7 +92,7 @@
     owner: freeswitch
     group: daemon
     mode: "0600"
-  with_items:
+  loop:
     - /opt/freeswitch/etc/freeswitch/vars.xml
     - /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml
 
@@ -168,7 +168,7 @@
 
 - name: Deploy dial-in config files
   become: true
-  when: bbb_dialin_enable
+  when: bbb_dialin_enable and not bbb_livekit_enable
   ansible.builtin.template:
     src: "dial-in/{{ item.src }}.j2"
     dest: "/opt/freeswitch/conf/{{ item.dest }}"
@@ -184,7 +184,7 @@
 
 - name: Remove unused dial-in config files
   become: true
-  when: not bbb_dialin_enable
+  when: not bbb_dialin_enable or bbb_livekit_enable
   ansible.builtin.file:
     path: "/opt/freeswitch/conf/{{ item.dest }}"
     state: absent

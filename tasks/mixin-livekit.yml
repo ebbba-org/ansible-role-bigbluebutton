@@ -1,25 +1,63 @@
 ---
-- when: bbb_livekit_enable
-  block:
-    - name: Update bbb-web for livekit
-      ansible.builtin.set_fact:
-        bbb_config_web_base: |
-          {{bbb_config_web_base | combine({
-            "audioBridge": "livekit",
-            "cameraBridge": "livekit",
-            "screenShareBridge": "livekit"
-          })}}
+- name: Update base configuration for livekit
+  when: bbb_livekit_enable
+  ansible.builtin.set_fact:
+    bbb_config_web_base: |
+      {{bbb_config_web_base | combine({
+        "audioBridge": "livekit",
+        "cameraBridge": "livekit",
+        "screenShareBridge": "livekit"
+      })}}
+    bbb_config_webrtc_sfu_base: |
+      {{bbb_config_webrtc_sfu_base | combine({
+        "livekit": {
+          "enabled": True,
+          "key": bbb_livekit_api_key,
+          "secret": bbb_livekit_api_secret,
+        }
+      })}}
 
-    - name: Update html5 for livekit
-      when: bbb_cluster_proxy is defined
-      ansible.builtin.set_fact:
-        bbb_config_html5_base: |
-          {{bbb_config_html5_base | combine({
-            'public': {
-              'media': {
-                'livekit': {
-                  'url': 'wss://'+bbb_hostname+'/livekit'
-                }
-              }
+- name: Update html5 config for livekit with proxy mode
+  when: bbb_livekit_enable and bbb_cluster_proxy is defined
+  ansible.builtin.set_fact:
+    bbb_config_html5_base: |
+      {{bbb_config_html5_base | combine({
+        'public': {
+          'media': {
+            'livekit': {
+              'url': 'wss://'+bbb_hostname+'/livekit'
             }
-          }, recursive=True)}}
+          }
+        }
+      }, recursive=True)}}
+
+# TODO: Does not work yet!
+- name: Update webrtc-sfu for livekit with dialin
+  when: bbb_livekit_enable and bbb_dialin_enable
+  ansible.builtin.set_fact:
+    bbb_config_webrtc_sfu_base: |
+      {{bbb_config_webrtc_sfu_base | combine(_bbb_config_webrtc_sfu_patch, recursive=True)}}
+  vars:
+    _bbb_config_webrtc_sfu_patch: 
+      livekit:
+        rtcAgent:
+          enabled: true
+        sip:
+          enabled: true
+          requirePin: true
+          trunk:
+            # See https://docs.livekit.io/server-sdk-js/interfaces/CreateSipInboundTrunkOptions.html
+            options:
+              allowedAddresses: 
+                - "{{ bbb_dialin_provider }}"
+              allowedNumbers:
+                - "{{ bbb_dialin_provider_extension }}"
+              authUsername: "{{ bbb_dialin_provider_username }}"
+              authPassword: "{{ bbb_dialin_provider_password }}"
+          dispatch:
+            # See https://docs.livekit.io/reference/server-sdk-js/interfaces/CreateSipDispatchRuleOptions.html
+            options:
+              #attributes: {}
+              hidePhoneNumber: "{{ bbb_dialin_mask_caller }}"
+              #roomConfig: {}
+              #roomPreset: 'default'
