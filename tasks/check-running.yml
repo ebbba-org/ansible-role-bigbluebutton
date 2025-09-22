@@ -14,7 +14,7 @@
 - name: Check for running meetings
   when:
     - bbb_check_running
-    - bbb_old_secret
+    - bbb_old_secret | length > 0
   ansible.builtin.uri:
     url: https://{{ bbb_hostname }}/bigbluebutton/api/getMeetings?checksum={{ ('getMeetings' + bbb_old_secret) | hash('sha1') }}
     return_content: true
@@ -25,7 +25,7 @@
 - name: Fail if there are running meetings
   when:
     - bbb_check_running
-    - bbb_old_secret
+    - bbb_old_secret | length > 0
     - meetings_result.status | default(500) == 200
     - "'<messageKey>noMeetings</messageKey>' not in meetings_result.content"
   ansible.builtin.fail:

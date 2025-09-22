@@ -5,7 +5,7 @@
     path: "/etc/systemd/system/{{ item }}.service.d"
     state: directory
     mode: "0755"
-  when: item
+  when: item | length > 0
   loop: &systemd_overrides
     - bbb-html5-frontend@
     - bbb-html5-backend@
@@ -22,7 +22,7 @@
     src: "systemd-overrides/{{ item }}.j2"
     dest: "/etc/systemd/system/{{ item }}.service.d/override.conf"
     mode: "0644"
-  when: item
+  when: item | length > 0
   loop: *systemd_overrides
   notify:
     - Restart bigbluebutton
@@ -41,7 +41,7 @@
     path: "{{ item }}"
     state: directory
     mode: "0755"
-  when: item
+  when: item is string and item | length > 0
   loop:
     - /etc/bigbluebutton/
     - /etc/bigbluebutton/recording

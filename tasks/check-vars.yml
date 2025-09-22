@@ -44,7 +44,7 @@
 
 - name: Check IPv4 variables
   when:
-    - bbb_bind_ip4 or bbb_public_ip4
+    - bbb_bind_ip4 is defined or bbb_public_ip4 is defined
     - bbb_github_ci is undefined
   ansible.builtin.assert:
     quiet: true
@@ -56,7 +56,7 @@
 
 - name: Check IPv6 variables
   when:
-    - bbb_bind_ip6 or bbb_public_ip6
+    - bbb_bind_ip6 is defined or bbb_public_ip6 is defined
     - bbb_github_ci is undefined
   ansible.builtin.assert:
     quiet: true

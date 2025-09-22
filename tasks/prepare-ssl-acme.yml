@@ -83,6 +83,7 @@
           --key-file {{ bbb_ssl_key }}
           --fullchain-file {{ bbb_ssl_cert }}
           --keylength ec-256
+          --force
       register: result
       changed_when: "'new certificate deployed' in result.stdout"
       failed_when: result.rc not in [ 0, 2 ]

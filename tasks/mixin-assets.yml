@@ -5,13 +5,13 @@
     src: "{{ item.src }}"
     dest: "{{ bbb_nginx_root }}/{{ item.dest }}"
     mode: "0644"
-  when: item.src
+  when: item.src | default('') | length > 0
   loop_control:
     label: "{{ item.dest }}"
   loop:
     - dest: "default.pdf"
-      src: "{{ bbb_default_presentation_file | default(None) }}"
+      src: "{{ bbb_default_presentation_file | default('') }}"
     - dest: "images/logo.png"
-      src: "{{ bbb_default_logo_file | default(None) }}"
+      src: "{{ bbb_default_logo_file | default('') }}"
     - dest: "images/darklogo.png"
-      src: "{{ bbb_default_darklogo_file | default(None) }}"
+      src: "{{ bbb_default_darklogo_file | default('') }}"
