@@ -121,7 +121,7 @@
     quiet: true
     that: "{{ item }}"
   loop:
-    - bbb_nfs_mount is undefined
+    - bbb_nfs_share is undefined
     - bbb_symlink_var is abs
     - not bbb_symlink_var.startswith('/var/bigbluebutton')
     - bbb_symlink_log is abs
