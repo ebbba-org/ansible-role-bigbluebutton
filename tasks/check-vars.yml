@@ -142,7 +142,16 @@
     that: "{{ item }}"
   loop:
     - bbb_dialin_provider is ip or bbb_dialin_provider is fqdn
-    - bbb_dialin_provider_ip is ip or bbb_dialin_provider_ip is netmask
     - bbb_dialin_provider_username is present
     - bbb_dialin_provider_password is present
     - bbb_dialin_provider_extension is present
+
+- name: Check dial-in firewall relevant variables
+  when:
+     - bbb_dialin_enable
+     - bbb_firewall_enable
+  ansible.builtin.assert:
+    quiet: true
+    that: "{{ item }}"
+  loop:
+    - bbb_dialin_provider_ip is ip or bbb_dialin_provider_ip is netmask
