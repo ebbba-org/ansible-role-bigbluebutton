@@ -89,6 +89,7 @@ bbb_config_web: {} # bbb-web.properties
 bbb_config_html5: {} # bbb-html5.yml
 bbb_config_etherpad: {} # etherpad.json
 bbb_config_presentation: {} # recording/presentation.yml
+bbb_config_video: {} # recording/video.yml
 
 ### STUN/TURN Servers
 

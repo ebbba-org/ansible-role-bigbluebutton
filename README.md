@@ -405,6 +405,8 @@ This role generates configuration with sensible defaults out of the box and cove
 * **`bbb_config_presentation`** (default: `{}`)\
   Custom overrides for `/etc/bigbluebutton/recording/presentation.yml`. This will be deep-merged into the role-managed configuration. List values will not be merged, but replaced.
 
+* **`bbb_config_video`** (default: `{}`)\
+  Custom overrides for `/etc/bigbluebutton/recording/video.yml`. This will be deep-merged into the role-managed configuration. List values will not be merged, but replaced.
 
 ### Other stuff not full migrated to BBB 3.0 yet.
 

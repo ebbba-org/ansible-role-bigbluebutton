@@ -72,6 +72,7 @@
       group: etherpad
     - src: bigbluebutton/recording/recording.yml
     - src: bigbluebutton/recording/presentation.yml
+    - src: bigbluebutton/recording/video.yml
     - src: bigbluebutton/bbb-webrtc-sfu/production.yml
     - src: bigbluebutton/bbb-webhooks/production.yml
       when: "{{ bbb_webhooks_enable }}"
