@@ -126,6 +126,7 @@ bbb_dialin_enable: false
 # bbb_dialin_default_number: "613-555-1234"
 bbb_dialin_pin_minlen: 5
 bbb_dialin_pin_maxlen: 5
+bbb_dialin_pin_stdlen: "{{ bbb_dialin_pin_minlen }}"
 bbb_dialin_pin_timeout: 10000
 bbb_dialin_pin_maxwait: 5000
 bbb_dialin_pin_retries: 3

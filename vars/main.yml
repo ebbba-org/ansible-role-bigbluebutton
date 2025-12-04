@@ -129,6 +129,7 @@ bbb_config_web_base:
   muteOnStart: "{{ bbb_mute_on_start }}"
   appLogLevel: "{{ bbb_app_log_level }}"
   defaultDialAccessNumber: "{{ bbb_dialin_default_number | default('') }}"
+  defaultNumDigitsForTelVoice: "{{ bbb_dialin_pin_stdlen }}"
   defaultWelcomeMessageFooter: "{{ bbb_default_welcome_message_footer }}"
   bigbluebutton.web.logoutURL: "{{ bbb_web_logouturl }}"
   allowRequestsWithoutSession: "{{ bbb_allow_request_without_session }}"
