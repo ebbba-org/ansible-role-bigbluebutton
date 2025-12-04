@@ -148,8 +148,8 @@
 
 - name: Check dial-in firewall relevant variables
   when:
-     - bbb_dialin_enable
-     - bbb_firewall_enable
+    - bbb_dialin_enable
+    - bbb_ufw_enable
   ansible.builtin.assert:
     quiet: true
     that: "{{ item }}"

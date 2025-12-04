@@ -246,7 +246,7 @@ rest, you are on your own. Good luck!
 * **`bbb_dialin_provider`** (required if `bbb_dialin_enable` is true)\
   Domain or IP of your SIP provider, also known as registrar. Example: `sip.example.com`
 
-* **`bbb_dialin_provider_ip`** (required if `bbb_dialin_enable` and `bbb_firewall_enable` are true)\
+* **`bbb_dialin_provider_ip`** (required if `bbb_dialin_enable` and `bbb_ufw_enable` are true)\
   IP or network of your SIP provider. Example: `1.2.3.4` or ``
 
 * **`bbb_dialin_provider_username`** (required if `bbb_dialin_enable` is true)\
