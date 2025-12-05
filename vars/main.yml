@@ -16,13 +16,13 @@ bbb_package_repos:
     repo: >-
       deb [signed-by=/etc/apt/keyrings/bigbluebutton.asc]
       {{ bbb_apt_mirror }}/{{ bbb_version }}
-      bigbluebutton-{{ ansible_distribution_release | lower }} main
+      bigbluebutton-{{ ansible_facts.distribution_release | lower }} main
   - name: docker
     key: "https://download.docker.com/linux/ubuntu/gpg"
     repo: >-
       deb [signed-by=/etc/apt/keyrings/docker.asc]
       https://download.docker.com/linux/ubuntu
-      {{ ansible_distribution_release | lower }} stable
+      {{ ansible_facts.distribution_release | lower }} stable
   - name: bbb-support
     repo: ppa:bigbluebutton/support
   - name: yq

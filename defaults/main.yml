@@ -37,11 +37,11 @@ bbb_ssl_key: /etc/bigbluebutton/ssl/private.key
 
 bbb_set_hostname: "{{ bbb_hostname }}"
 bbb_local_ip: "127.0.0.1"
-bbb_bind_ip4: "{{ ansible_default_ipv4.address }}"
-bbb_bind_ip6: "{{ ansible_default_ipv6.address | default(None) }}"
-bbb_public_ip4: "{{ ansible_default_ipv4.address }}"
-bbb_public_ip6: "{{ ansible_default_ipv6.address | default(None) }}"
-bbb_net_mtu: "{{ ansible_default_ipv4.mtu | default(1500) }}"
+bbb_bind_ip4: "{{ ansible_facts.default_ipv4.address }}"
+bbb_bind_ip6: "{{ ansible_facts.default_ipv6.address | default(None) }}"
+bbb_public_ip4: "{{ ansible_facts.default_ipv4.address }}"
+bbb_public_ip6: "{{ ansible_facts.default_ipv6.address | default(None) }}"
+bbb_net_mtu: "{{ ansible_facts.default_ipv4.mtu | default(1500) }}"
 
 # Firewall
 

@@ -5,7 +5,7 @@
     path: "/etc/systemd/system/{{ item }}.service.d"
     state: directory
     mode: "0755"
-  when: item
+  when: item is present
   loop: &systemd_overrides
     - bbb-html5-frontend@
     - bbb-html5-backend@
@@ -22,7 +22,7 @@
     src: "systemd-overrides/{{ item }}.j2"
     dest: "/etc/systemd/system/{{ item }}.service.d/override.conf"
     mode: "0644"
-  when: item
+  when: item is present
   loop: *systemd_overrides
   notify:
     - Restart bigbluebutton
@@ -41,12 +41,12 @@
     path: "{{ item }}"
     state: directory
     mode: "0755"
-  when: item
+  when: item is present
   loop:
     - /etc/bigbluebutton/
     - /etc/bigbluebutton/recording
     - /etc/bigbluebutton/bbb-webrtc-sfu
-    - "{{ '/etc/bigbluebutton/bbb-webhooks' if bbb_webhooks_enable else False }}"
+    - "{{ '/etc/bigbluebutton/bbb-webhooks' if bbb_webhooks_enable else None }}"
 
 - name: Deploy bbb config files
   become: true
@@ -56,7 +56,7 @@
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('bigbluebutton') }}"
     mode: "{{ item.mode | default('0640') }}"
-  when: item.when | default(true)
+  when: item.when | default(True) is true
   loop_control:
     label: "{{ item.dest | default('/etc/' + item.src) }}"
   loop: &configfiles
@@ -66,7 +66,7 @@
     - src: bigbluebutton/bbb-html5.yml
     - src: bigbluebutton/bbb-graphql-server.env
     - src: bigbluebutton/bbb-graphql-middleware.yml
-      when: "{{ bbb_cluster_proxy is defined }}"
+      when: "{{ bbb_cluster_proxy is present }}"
     - src: bigbluebutton/turn-stun-servers.xml
     - src: bigbluebutton/etherpad.json
       group: etherpad

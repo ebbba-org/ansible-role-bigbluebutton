@@ -34,7 +34,7 @@
         to: "{{ item.value.to | default('any') }}"
         port: "{{ item.value.port | default(None) }}"
         proto: "{{ item.value.proto | default('tcp') }}"
-      when: item.value and (item.value.when | default(True))
+      when: item.value is not false and (item.value.when | default(True) is true)
       loop: "{{ bbb_ufw_rules_default | combine(bbb_ufw_rules) | dict2items }}"
 
     - name: Allow outgoing traffic to bbb_ufw_allow_networks(_default)
