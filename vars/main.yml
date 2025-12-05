@@ -16,13 +16,13 @@ bbb_package_repos:
     repo: >-
       deb [signed-by=/etc/apt/keyrings/bigbluebutton.asc]
       {{ bbb_apt_mirror }}/{{ bbb_version }}
-      bigbluebutton-{{ ansible_distribution_release | lower }} main
+      bigbluebutton-{{ ansible_facts.distribution_release | lower }} main
   - name: docker
     key: "https://download.docker.com/linux/ubuntu/gpg"
     repo: >-
       deb [signed-by=/etc/apt/keyrings/docker.asc]
       https://download.docker.com/linux/ubuntu
-      {{ ansible_distribution_release | lower }} stable
+      {{ ansible_facts.distribution_release | lower }} stable
   - name: bbb-support
     repo: ppa:bigbluebutton/support
   - name: yq
@@ -129,6 +129,7 @@ bbb_config_web_base:
   muteOnStart: "{{ bbb_mute_on_start }}"
   appLogLevel: "{{ bbb_app_log_level }}"
   defaultDialAccessNumber: "{{ bbb_dialin_default_number | default('') }}"
+  defaultNumDigitsForTelVoice: "{{ bbb_dialin_pin_stdlen }}"
   defaultWelcomeMessageFooter: "{{ bbb_default_welcome_message_footer }}"
   bigbluebutton.web.logoutURL: "{{ bbb_web_logouturl }}"
   allowRequestsWithoutSession: "{{ bbb_allow_request_without_session }}"

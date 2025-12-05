@@ -5,7 +5,7 @@
     path: "/etc/systemd/system/{{ item }}.service.d"
     state: directory
     mode: "0755"
-  when: item
+  when: item is present
   loop: &systemd_overrides
     - bbb-html5-frontend@
     - bbb-html5-backend@
@@ -22,7 +22,7 @@
     src: "systemd-overrides/{{ item }}.j2"
     dest: "/etc/systemd/system/{{ item }}.service.d/override.conf"
     mode: "0644"
-  when: item
+  when: item is present
   loop: *systemd_overrides
   notify:
     - Restart bigbluebutton
@@ -41,12 +41,12 @@
     path: "{{ item }}"
     state: directory
     mode: "0755"
-  when: item
+  when: item is present
   loop:
     - /etc/bigbluebutton/
     - /etc/bigbluebutton/recording
     - /etc/bigbluebutton/bbb-webrtc-sfu
-    - "{{ '/etc/bigbluebutton/bbb-webhooks' if bbb_webhooks_enable else False }}"
+    - "{{ '/etc/bigbluebutton/bbb-webhooks' if bbb_webhooks_enable else None }}"
 
 - name: Deploy bbb config files
   become: true
@@ -56,7 +56,7 @@
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('bigbluebutton') }}"
     mode: "{{ item.mode | default('0640') }}"
-  when: item.when | default(true)
+  when: item.when | default(True) is true
   loop_control:
     label: "{{ item.dest | default('/etc/' + item.src) }}"
   loop: &configfiles
@@ -66,12 +66,13 @@
     - src: bigbluebutton/bbb-html5.yml
     - src: bigbluebutton/bbb-graphql-server.env
     - src: bigbluebutton/bbb-graphql-middleware.yml
-      when: "{{ bbb_cluster_proxy is defined }}"
+      when: "{{ bbb_cluster_proxy is present }}"
     - src: bigbluebutton/turn-stun-servers.xml
     - src: bigbluebutton/etherpad.json
       group: etherpad
     - src: bigbluebutton/recording/recording.yml
     - src: bigbluebutton/recording/presentation.yml
+    - src: bigbluebutton/recording/video.yml
     - src: bigbluebutton/bbb-webrtc-sfu/production.yml
     - src: bigbluebutton/bbb-webhooks/production.yml
       when: "{{ bbb_webhooks_enable }}"
@@ -96,7 +97,7 @@
 # changes and restarts. They are also incomplete and buggy...
 # TODO: /usr/local/bigbluebutton/bbb-transcription-controller/config/default.yml
 
-- name: Patch more config files
+- name: Patch more config files in-place
   become: true
   ansible.builtin.lineinfile:
     path: "{{ item.path }}"
@@ -104,8 +105,23 @@
     line: "{{ item.line }}"
   loop_control:
     label: "{{ item.path }} ({{ item.line }})"
+  when: "item.get('when', True) | bool"
   loop:
     # https://github.com/bigbluebutton/bigbluebutton/issues/22980
     - path: /usr/local/bigbluebutton/core/scripts/bigbluebutton.yml
       regexp: "^playback_host: .*"
       line: "playback_host: {{ bbb_hostname }}"
+    - path: /usr/share/bbb-web/WEB-INF/classes/application.properties
+      regexp: "^server.servlet.session.cookie.secure=.*"
+      line: "server.servlet.session.cookie.secure=true"
+    - path: /usr/share/bbb-web/WEB-INF/classes/application.properties
+      regexp: "^server.servlet.session.cookie.SameSite=.*"
+      line: "server.servlet.session.cookie.SameSite={{ bbb_cluster_crossorigin | ternary('None', 'Lax') }}"
+  notify: Restart bigbluebutton
+
+- name: Copy hardened ImageMagick profile
+  become: true
+  copy:
+    src: ImageMagick-policy.xml
+    dest: /etc/ImageMagick-6/policy.xml
+    mode: "0644"

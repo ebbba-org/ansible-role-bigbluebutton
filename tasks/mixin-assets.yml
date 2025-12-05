@@ -5,7 +5,7 @@
     src: "{{ item.src }}"
     dest: "{{ bbb_nginx_root }}/{{ item.dest }}"
     mode: "0644"
-  when: item.src
+  when: item.src is present
   loop_control:
     label: "{{ item.dest }}"
   loop:

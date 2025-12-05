@@ -19,7 +19,7 @@
     quiet: true
     that: "{{ item }}"
   loop:
-    - ansible_distribution_release | lower == bbb_ubuntu_name
+    - ansible_facts.distribution_release | lower == bbb_ubuntu_name
     - bbb_version.startswith(bbb_ubuntu_name)
 
 - name: Check core variables
@@ -44,7 +44,7 @@
 
 - name: Check IPv4 variables
   when:
-    - bbb_bind_ip4 or bbb_public_ip4
+    - bbb_bind_ip4 is present or bbb_public_ip4 is present
     - bbb_github_ci is undefined
   ansible.builtin.assert:
     quiet: true
@@ -56,7 +56,7 @@
 
 - name: Check IPv6 variables
   when:
-    - bbb_bind_ip6 or bbb_public_ip6
+    - bbb_bind_ip6 is present or bbb_public_ip6 is present
     - bbb_github_ci is undefined
   ansible.builtin.assert:
     quiet: true
@@ -148,8 +148,8 @@
 
 - name: Check dial-in firewall relevant variables
   when:
-     - bbb_dialin_enable
-     - bbb_firewall_enable
+    - bbb_dialin_enable
+    - bbb_ufw_enable
   ansible.builtin.assert:
     quiet: true
     that: "{{ item }}"

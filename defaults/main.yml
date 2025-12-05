@@ -37,11 +37,11 @@ bbb_ssl_key: /etc/bigbluebutton/ssl/private.key
 
 bbb_set_hostname: "{{ bbb_hostname }}"
 bbb_local_ip: "127.0.0.1"
-bbb_bind_ip4: "{{ ansible_default_ipv4.address }}"
-bbb_bind_ip6: "{{ ansible_default_ipv6.address | default(None) }}"
-bbb_public_ip4: "{{ ansible_default_ipv4.address }}"
-bbb_public_ip6: "{{ ansible_default_ipv6.address | default(None) }}"
-bbb_net_mtu: "{{ ansible_default_ipv4.mtu | default(1500) }}"
+bbb_bind_ip4: "{{ ansible_facts.default_ipv4.address }}"
+bbb_bind_ip6: "{{ ansible_facts.default_ipv6.address | default(None) }}"
+bbb_public_ip4: "{{ ansible_facts.default_ipv4.address }}"
+bbb_public_ip6: "{{ ansible_facts.default_ipv6.address | default(None) }}"
+bbb_net_mtu: "{{ ansible_facts.default_ipv4.mtu | default(1500) }}"
 
 # Firewall
 
@@ -89,6 +89,7 @@ bbb_config_web: {} # bbb-web.properties
 bbb_config_html5: {} # bbb-html5.yml
 bbb_config_etherpad: {} # etherpad.json
 bbb_config_presentation: {} # recording/presentation.yml
+bbb_config_video: {} # recording/video.yml
 
 ### STUN/TURN Servers
 
@@ -102,6 +103,7 @@ bbb_turn_servers: [] # e.g. [{url: "turns:turn.example.com:443?transport=tcp", s
 
 # bbb_cluster_proxy: frontend.example.com
 bbb_cluster_node: "{{ bbb_hostname | split('.') | first }}"
+bbb_cluster_crossorigin: "{{ bbb_cluster_proxy is defined and not bbb_hostname.endswith('.' + bbb_cluster_proxy) }}"
 
 ### Freeswitch config
 bbb_freeswitch_socket_password: "{{ ('fsp' + bbb_host_seed) | hash('sha256') }}"
@@ -124,6 +126,7 @@ bbb_dialin_enable: false
 # bbb_dialin_default_number: "613-555-1234"
 bbb_dialin_pin_minlen: 5
 bbb_dialin_pin_maxlen: 5
+bbb_dialin_pin_stdlen: "{{ bbb_dialin_pin_minlen }}"
 bbb_dialin_pin_timeout: 10000
 bbb_dialin_pin_maxwait: 5000
 bbb_dialin_pin_retries: 3

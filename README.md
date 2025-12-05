@@ -81,26 +81,26 @@ A secret seed used to generate other host-local secrets and passwords. Override 
 * **`bbb_local_ip`** (default: `127.0.0.1`)\
   IP of your loopback device.
 
-* **`bbb_bind_ip4`** (default: `{{ ansible_default_ipv4.address }}`)\
+* **`bbb_bind_ip4`** (default: `{{ ansible_facts.default_ipv4.address }}`)\
   IP (v4) address public services should bind to. This may be a LAN IP if your
   server is behind a NAT router and does not know its own public IP. Do not
   forget to set `bbb_public_ip4` in this case!
 
-* **`bbb_public_ip4`** (default: `{{ ansible_default_ipv4.address }}`)\
+* **`bbb_public_ip4`** (default: `{{ ansible_facts.default_ipv4.address }}`)\
   Public IPv4 address of your server. Required if ansible cannot detect your
   public IP automatically. This may happen if your server is behind a NAT router
   and your public IP is not assigned to the primary interface, or if your primary
   interface has multiple IPs assigned and the first one is not your public IP.
 
-* **`bbb_bind_ip6`** (default: `{{ ansible_default_ipv6.address | default(None) }}`)\
+* **`bbb_bind_ip6`** (default: `{{ ansible_facts.default_ipv6.address | default(None) }}`)\
   Same as `bbb_bind_ip4` but for IPv6. Set this to `None` to disable IPv6 even
   if your server technically supports it.
 
-* **`bbb_public_ip6`** (default: `{{ ansible_default_ipv6.address | default(None) }}`)\
+* **`bbb_public_ip6`** (default: `{{ ansible_facts.default_ipv6.address | default(None) }}`)\
   Same as `bbb_public_ip4` but for IPv6. Set this to `None` to disable IPv6 even
   if your server technically supports it.
 
-* **`bbb_net_mtu`** (default: `{{ ansible_default_ipv4.mtu | default(1500) }}`)\
+* **`bbb_net_mtu`** (default: `{{ ansible_facts.default_ipv4.mtu | default(1500) }}`)\
   MTU (maximum transfer unit) for outgoing packets. Some cloud environments
   use a smaller MTU and docker needs extra configuration in that case.
 
@@ -150,7 +150,7 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
 
 * **`bbb_ufw_rules`** (default: `{}`)\
   A hash of named rules. Each rule can define `rule` (default: allow), `direction` (default: in), `from` (default: any), `to` (default: any) and `port` (required) properties. There are a bunch of default rules for BBB that can be overridden by using the same rule-name. Take special care to the `ssh` rule, which allows traffic from any IP to port 22 by default.
-  To remove a named rule, set it to `false`. Just removing the named rule from config will not actually remove the rule in ufw.
+  To remove a named rule, set it to `False`. Just removing the named rule from config will not actually remove the rule in ufw.
 
 * **`bbb_ufw_reject_networks`** (default: `[]`)\
   Block outgoing traffic to these networks in addition to `bbb_ufw_reject_networks_default`, which contains all non-routeable (LAN) networks by default. This prevets a certain group of security issues where the BBB server is tricked into accessing non-public services on the private LAN.
@@ -246,7 +246,7 @@ rest, you are on your own. Good luck!
 * **`bbb_dialin_provider`** (required if `bbb_dialin_enable` is true)\
   Domain or IP of your SIP provider, also known as registrar. Example: `sip.example.com`
 
-* **`bbb_dialin_provider_ip`** (required if `bbb_dialin_enable` and `bbb_firewall_enable` are true)\
+* **`bbb_dialin_provider_ip`** (required if `bbb_dialin_enable` and `bbb_ufw_enable` are true)\
   IP or network of your SIP provider. Example: `1.2.3.4` or ``
 
 * **`bbb_dialin_provider_username`** (required if `bbb_dialin_enable` is true)\
@@ -405,6 +405,8 @@ This role generates configuration with sensible defaults out of the box and cove
 * **`bbb_config_presentation`** (default: `{}`)\
   Custom overrides for `/etc/bigbluebutton/recording/presentation.yml`. This will be deep-merged into the role-managed configuration. List values will not be merged, but replaced.
 
+* **`bbb_config_video`** (default: `{}`)\
+  Custom overrides for `/etc/bigbluebutton/recording/video.yml`. This will be deep-merged into the role-managed configuration. List values will not be merged, but replaced.
 
 ### Other stuff not full migrated to BBB 3.0 yet.
 

@@ -2,13 +2,21 @@ from jinja2 import Undefined
 import ipaddress
 import re
 
+from ansible.template import accept_args_markers
+
+@accept_args_markers
 def is_present(value):
-    """ Return true if the value is defined and not empty or blank. """
+    """ Return true if the value is defined and not empty or blank or None.
+     
+        Note that a value of False is 'present'. It is a value.      
+        """
     if isinstance(value, Undefined): return False
+    if value is None: return False
     if isinstance(value, (str)): return bool(value.strip())
     if isinstance(value, (str, list, dict, set)): return bool(value)
     return True
 
+@accept_args_markers
 def is_missing(value):
     """ Return true if the value is undefined, None or an empty or blank string. """
     if isinstance(value, Undefined): return True
