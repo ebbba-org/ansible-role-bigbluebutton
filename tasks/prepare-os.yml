@@ -103,5 +103,5 @@
     shell: /bin/false
     home: /home/bigbluebutton
     uid: "{{ bbb_user_uid }}"
-    groups: [ bigbluebutton ]
+    groups: [bigbluebutton]
     append: true

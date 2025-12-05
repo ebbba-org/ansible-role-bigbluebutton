@@ -2,7 +2,7 @@
 - name: Install docker packages
   become: true
   ansible.builtin.package:
-    name: [ "docker-ce", "docker-ce-cli", "containerd.io", "docker-buildx-plugin", "docker-compose-plugin" ]
+    name: ["docker-ce", "docker-ce-cli", "containerd.io", "docker-buildx-plugin", "docker-compose-plugin"]
     state: present
 
 # Templated variables are always strings in ansible :/
