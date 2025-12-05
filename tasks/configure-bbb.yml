@@ -118,3 +118,10 @@
       regexp: "^server.servlet.session.cookie.SameSite=.*"
       line: "server.servlet.session.cookie.SameSite={{ bbb_cluster_crossorigin | ternary('None', 'Lax') }}"
   notify: Restart bigbluebutton
+
+- name: Copy hardened ImageMagick profile
+  become: true
+  copy:
+    src: ImageMagick-policy.xml
+    dest: /etc/ImageMagick-6/policy.xml
+    mode: "0644"
