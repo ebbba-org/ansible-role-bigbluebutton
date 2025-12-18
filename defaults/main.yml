@@ -167,6 +167,8 @@ bbb_bbbctl_enable: true
 
 bbb_fonts: "{{ bbb_fonts_base + bbb_fonts_extra }}"
 bbb_fonts_extra: []
+bbb_antivir_enable: false
+
 ## TODO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 bbb_mute_on_start: false
 # ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR

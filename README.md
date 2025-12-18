@@ -343,6 +343,10 @@ rest, you are on your own. Good luck!
 * **`bbb_shared_notes_editor`** (default: `etherpad`)\
   Which shared notes editor to use. Can be either `etherpad` (the default) or `blockNote`.
 
+* **`bbb_antivir_enable`** (default: `false`)\
+  Enable virus scan for uploaded presentations.
+
+
 ### Recordings
 
 * **`bbb_recording_enable`** (default: `true`)\

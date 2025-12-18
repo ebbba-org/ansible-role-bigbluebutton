@@ -129,6 +129,8 @@ bbb_config_web_base:
   defaultLogoURL: "{{ bbb_default_logo }}"
   defaultDarkLogoURL: "{{ bbb_default_darklogo }}"
   beans.presentationService.defaultUploadedPresentation: "{{ bbb_default_presentation }}"
+  scanUploadedPresentationFiles: "{{ bbb_antivir_enable }}"
+
 
   muteOnStart: "{{ bbb_mute_on_start }}"
   appLogLevel: "{{ bbb_app_log_level }}"
