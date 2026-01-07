@@ -30,7 +30,6 @@
     that: "{{ item }}"
   loop:
     - bbb_secret is defined
-    - bbb_hostname is fqdn
     - bbb_apt_mirror is url
     - bbb_apt_key is url
     - bbb_disabled_features is subset(bbb_allowed_disabled_features)
