@@ -7,4 +7,6 @@
   loop: "{{ bbb_packages }}"
   loop_control:
     label: "{{ 'install' if item.when | default(True) else 'remove ' }} {{ item.name | join(',') }}"
+  retries: 10
+  delay: 5
   notify: Restart bigbluebutton
