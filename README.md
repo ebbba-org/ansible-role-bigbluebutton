@@ -340,6 +340,8 @@ rest, you are on your own. Good luck!
   Additional font packages (without `fonts-` prefix) to install. Add your own
   fonts here. See `bbb_fonts`.
 
+* **`bbb_shared_notes_editor`** (default: `etherpad`)\
+  Which shared notes editor to use. Can be either `etherpad` (the default) or `blockNote`.
 
 ### Recordings
 
