@@ -70,6 +70,8 @@ bbb_packages:
     when: "{{ bbb_recording_enable and 'podcast' in bbb_recording_formats }}"
   - name: [bbb-playback-screenshare]
     when: "{{ bbb_recording_enable and 'screenshare' in bbb_recording_formats }}"
+  - name: [bbb-playback-notes]
+    when: "{{ bbb_recording_enable and 'notes' in bbb_recording_formats }}"
   - name: [haproxy, coturn]
     when: "{{ bbb_coturn_enable }}"
 
@@ -180,3 +182,4 @@ bbb_recording_builtin_formats:
   - video
   - screenshare
   - podcast
+  - notes
