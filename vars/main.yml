@@ -73,7 +73,7 @@ bbb_packages:
   - name: [haproxy, coturn]
     when: "{{ bbb_coturn_enable }}"
   - name: [bbb-shared-notes-server]
-    when: "{{ bbb_shared_notes_editor == 'blockNote' }}"
+    when: "{{ bbb_shared_notes_editor | lower == 'blocknote' }}"
 
 bbb_allowed_disabled_features:
   - breakoutRooms
