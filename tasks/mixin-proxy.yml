@@ -41,3 +41,15 @@
       {{bbb_config_etherpad_base | combine({
         "cluster_proxies": ["https://"+bbb_cluster_proxy]
       })}}
+
+- name: Update html5 config for blocknote with proxy mode
+  when: bbb_cluster_proxy is defined and bbb_shared_notes_editor | lower == 'blocknote'
+  ansible.builtin.set_fact:
+    bbb_config_html5_base: |
+      {{bbb_config_html5_base | combine({
+        'public': {
+          'sharedNotes': {
+            'serverHostname': bbb_hostname
+          }
+        }
+      }, recursive=True)}}
