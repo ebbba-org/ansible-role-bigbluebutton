@@ -74,6 +74,8 @@ bbb_packages:
     when: "{{ bbb_recording_enable and 'notes' in bbb_recording_formats }}"
   - name: [haproxy, coturn]
     when: "{{ bbb_coturn_enable }}"
+  - name: [bbb-shared-notes-server]
+    when: "{{ bbb_shared_notes_editor | lower == 'blocknote' }}"
 
 bbb_allowed_disabled_features:
   - breakoutRooms
@@ -163,6 +165,7 @@ bbb_config_web_base:
   notifyRecordingIsOn: "{{ bbb_notify_recording_is_on }}"
   allowRevealOfBBBVersion: "{{ bbb_allow_reveal_of_bbb_version }}"
   disabledFeatures: "{{ bbb_disabled_features }}"
+  sharedNotesEditor: "{{ bbb_shared_notes_editor }}"
 
 bbb_config_html5_base:
   public:

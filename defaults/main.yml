@@ -219,3 +219,7 @@ bbb_system_locale: en_US.UTF-8
 
 # Skip all tasks that are incompatible with (unprivileged) containers
 bbb_container_compat: false
+
+### Select shared notes editor
+# Can be either 'etherpad' or 'blockNote'
+bbb_shared_notes_editor: etherpad
