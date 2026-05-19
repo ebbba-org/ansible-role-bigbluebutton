@@ -17,7 +17,7 @@
     src: "docker/daemon.json.j2"
     dest: "/etc/docker/daemon.json"
     mode: "0600"
-  when: "bbb_docker_config | default(False)"
+  when: "bbb_docker_config is not false"
   register: result
 
 # Ansible lacks the ability to flush specific handlers, so reload docker manually

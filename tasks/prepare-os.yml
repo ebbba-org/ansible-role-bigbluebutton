@@ -16,7 +16,7 @@
   hostname:
     name: "{{ bbb_set_hostname }}"
     use: systemd
-  when: bbb_set_hostname
+  when: bbb_set_hostname is not false
 
 - name: Install missing locales
   become: true
@@ -59,7 +59,7 @@
   loop: "{{ bbb_package_repos }}"
   loop_control:
     label: "{{ item.key | default(item.repo) }}"
-  when: "item.key | default(False)"
+  when: "item.get('key') is present"
 
 - name: Configure extra repositories
   become: true

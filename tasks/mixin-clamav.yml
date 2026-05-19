@@ -1,0 +1,20 @@
+---
+
+- name: Start or remove ClamAV docker container
+  become: true
+  community.docker.docker_container:
+    name: clamav
+    image: clamav/clamav
+    state: >-
+      {{
+        (bbb_config_web_base | combine(bbb_config_web)).scanUploadedPresentationFiles
+        | default(False) | bool | ternary("started", "absent")
+      }}
+    restart_policy: "unless-stopped"
+    cpu_shares: 256 # of 1024
+    memory: "4G" # As recommended by clamd documentation
+    volumes:
+      - "/var/bigbluebutton:/var/bigbluebutton:ro"
+    ports:
+      - "127.0.0.1:3310:3310"
+      - "127.0.0.1:7357:7357"

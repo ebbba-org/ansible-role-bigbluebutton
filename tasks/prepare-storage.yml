@@ -50,12 +50,12 @@
     path: "{{ item.link_target }}"
   register: result
   failed_when: "not (result.stat.exists and result.stat.isdir)"
-  when: "item.link_target"
+  when: "item.link_target is present"
   loop: &symlinks
     - path: "/var/bigbluebutton"
-      link_target: "{{ bbb_symlink_var | default(False) }}"
+      link_target: "{{ bbb_symlink_var | default(None) }}"
     - path: "/var/log/bigbluebutton"
-      link_target: "{{ bbb_symlink_log | default(False) }}"
+      link_target: "{{ bbb_symlink_log | default(None) }}"
   loop_control:
     label: "{{ item.link_target or item.path }}"
 
@@ -69,7 +69,7 @@
     owner: "{{ bbb_user_uid }}"
     group: "{{ bbb_group_gid }}"
     mode: "u=Xrw,g=Xr,o=Xr"
-  when: "item.link_target"
+  when: "item.link_target is present"
   loop: *symlinks
   loop_control:
     label: "{{ item.path }} -> {{ item.link_target or '(skipped)' }}"
@@ -81,7 +81,7 @@
     follow: true
   register: result
   failed_when: not result.stat.exists
-  when: "item.link_target"
+  when: "item.link_target is present"
   loop: *symlinks
   loop_control:
     label: "{{ item.path }}"

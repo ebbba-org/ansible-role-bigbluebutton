@@ -44,25 +44,15 @@ server {
   # Used by BBB includes instead of $scheme
   set $real_scheme "https";
 
+{% if bbb_cluster_proxy is defined %}
+  rewrite ^/{{bbb_cluster_node}}/(.*)$ /$1 last;
+
+  location = /html5client/locale {
+    return 301 /{{bbb_cluster_node}}$request_uri;
+  }
+{% endif %}
+
   # Include specific rules for record and playback
   include /etc/bigbluebutton/nginx/*.nginx;
 
-  {% if bbb_cluster_proxy is defined %}
-    location /{{bbb_cluster_node}}/html5client {
-        gzip_static on;
-        alias /usr/share/bigbluebutton/html5-client/;
-        index index.html;
-        try_files $uri $uri/ =404;
-    }
-
-    location /{{bbb_cluster_node}}/html5client/locales {
-      alias /usr/share/bigbluebutton/html5-client/locales;
-      autoindex on;
-      autoindex_format json;
-    }
-
-    location = /html5client/locale {
-        return 301 /{{bbb_cluster_node}}$request_uri;
-    }
-  {% endif %}
 }

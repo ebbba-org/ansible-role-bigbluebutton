@@ -8,9 +8,9 @@
   remote_user: root
   vars:
     bbb_github_ci: true
-    bbb_hostname: "{{ ansible_default_ipv4.address }}.nip.io"
+    bbb_hostname: "{{ ansible_facts.default_ipv4.address }}.nip.io"
     # bbb_hostname: githubci.bigbluebutton.dev
-    bbb_public_ip4: "{{ ansible_default_ipv4.address }}"
+    bbb_public_ip4: "{{ ansible_facts.default_ipv4.address }}"
     bbb_public_ip6: None
     bbb_acme_enable: false
     bbb_acme_email: dev@bigbluebutton.dev
