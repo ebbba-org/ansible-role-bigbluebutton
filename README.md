@@ -347,7 +347,7 @@ rest, you are on your own. Good luck!
   Enable recordings. This will allow users to start recordings in meetings started with `record=true`.
 
 * **`bbb_recording_formats`** (default: `[presentation]`)
-  List of recording formats to render. This configures `process` and `publish` steps for each format and installs additional packages for the built-in formats: `presentation`, `video`, `screenshare` and `podcast`.
+  List of recording formats to render. This configures `process` and `publish` steps for each format and installs additional packages for the built-in formats: `presentation`, `video`, `notes`, `screenshare` and `podcast`.
 
 * **`bbb_recording_mp4`** (default: `False`)\
   Generate additional mp4-encoded videos for supported recording formats as a fallback for older iOS devices.
