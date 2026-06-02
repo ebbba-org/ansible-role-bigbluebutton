@@ -84,6 +84,8 @@
   <!-- don't read sensitive paths. -->
   <policy domain="path" rights="none" pattern="/*"/>
   <!-- allow access to required paths. -->
+  <policy domain="path" rights="read" pattern="/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/*"/>
+  <policy domain="path" rights="write" pattern="/usr/share/bigbluebutton/html5-client/resources/images/virtual-backgrounds/thumbnails/*"/>
   <policy domain="path" rights="read|write" pattern="/var/bigbluebutton/*"/>
   <policy domain="path" rights="read|write" pattern="/tmp/*"/>
   <!-- Indirect reads are not permitted. -->
