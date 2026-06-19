@@ -45,6 +45,9 @@ server {
   set $real_scheme "https";
 
 {% if bbb_cluster_proxy is defined %}
+  # Used by BBB includes for CORS headers
+  set $bbb_cors_origin 'https://{{ bbb_cluster_proxy }}';
+
   rewrite ^/{{bbb_cluster_node}}/(.*)$ /$1 last;
 
   location = /html5client/locale {
