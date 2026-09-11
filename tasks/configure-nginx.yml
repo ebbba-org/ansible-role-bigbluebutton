@@ -22,10 +22,10 @@
     - bigbluebutton
   notify: Reload nginx
 
-- name: Update sip.nginx for sipjsHackViaWs
+# https://github.com/bigbluebutton/bigbluebutton/commit/8da1a2c43b7aa077ab921f6321b633726c6e7f65
+- name: Remove legacy sip.js if present
   become: true
-  ansible.builtin.replace:
+  ansible.builtin.file:
     path: /usr/share/bigbluebutton/nginx/sip.nginx
-    regexp: "proxy_pass .*;"
-    replace: "proxy_pass http://{{ bbb_local_ip }}:5066;"
+    state: absent
   notify: Reload nginx
