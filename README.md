@@ -33,7 +33,7 @@ BigBlueButton does not follow [SemVer](https://semver.org/) and sometimes intodu
 
 ### Getting Started
 
-Check out the [examples](https://github.com/ebbba-org/ansible-role-bigbluebutton/tree/master/examples) and start from there, or install this role into your existing environment directly from git via `ansible-galaxy role install git+https://github.com/ebbba-org/ansible-role-bigbluebutton.git,bbb/3.0`. Older releases are also published to [ansible galaxy](https://galaxy.ansible.com/ui/standalone/roles/ebbba/bigbluebutton/).
+Check out the [examples](https://github.com/ebbba-org/ansible-role-bigbluebutton/tree/main/examples) and start from there, or install this role into your existing environment directly from git via `ansible-galaxy role install git+https://github.com/ebbba-org/ansible-role-bigbluebutton.git,bbb/3.0`. Older releases are also published to [ansible galaxy](https://galaxy.ansible.com/ui/standalone/roles/ebbba/bigbluebutton/).
 
 
 ## Configuration
