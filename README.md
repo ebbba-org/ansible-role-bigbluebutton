@@ -6,7 +6,7 @@
 
 This ansible role installs and configures [BigBlueButton](https://github.com/bigbluebutton/bigbluebutton) with support for advanced [customizations](https://docs.bigbluebutton.org/administration/customize/) and configurations.
 
-Installation requires a fresh and unmodified Ubuntu 22.04 Server that meets [minimum requirements](https://docs.bigbluebutton.org/administration/install/#minimum-server-requirements) an has no conflicting services (e.g. webservers) running. The role can be re-applied again on the same server to deploy config changes or install patch-level upgrades.
+Installation requires a fresh and unmodified Ubuntu Server that meets [minimum requirements](https://docs.bigbluebutton.org/administration/install/#minimum-server-requirements) an has no conflicting services (e.g. webservers) running. The role can be re-applied again on the same server to deploy config changes or install patch-level upgrades.
 
 > [!note]
 Ansible deployments are best suited for large cluster deployments with may BBB nodes or complex configurations. If you just want to install vanilla BBB on a single server, we recommend to follow the [official install instructions](https://docs.bigbluebutton.org/administration/install/) instead.
@@ -16,9 +16,9 @@ Ansible deployments are best suited for large cluster deployments with may BBB n
 
 For this role we try our best to support the most recent patch-level of each BigBlueButton release currently supported by upstream. Here is a quick overview:
 
-* The `main` branch usually targets the *next* BigBlueButton release. Use this for testing new release candidates or working on future versions of this role.
+* The `main` branch usually targets the *next* BigBlueButton release. Use this for testing new release candidates or working on future versions of this role. It is usually experimental, sometimes broken and NOT intended for production.
 * The `bbb/X.Y` branches target a specific BigBlueButton release (e.g. `3.0`) and will install the latest patch release by default. Use these to keep up with new patches, features and workarounds. 
-* Tags like `vX.Y.Z`  mark a version of this role that was tested against a specific BigBlueButton patch-release and published to ansible galaxy. We only do this if we had enough time to test and the role actually changed since the last published release, so releases may be skipped and delayed. We currently recommend watching the branches instead.
+* Tags like `vX.Y.Z`  mark a version of this role that was tested against a specific BigBlueButton patch-release <del>and published to ansible galaxy</del>. We only do this if we had enough time to test and the role actually changed since the last published release, so releases may be skipped and delayed. *We currently recommend watching the branches instead.*
 
 > [!warning]
 BigBlueButton does not follow [SemVer](https://semver.org/) and sometimes intoduces breaking changes in minor releases or even patch releases. The only way to be sure everything still works is to actually test it, especially if you run configurations that are not properly tested by upstream. Be prepared, run your own test environment and test each release (including patch releases) before upgrading your production environment. Downgrading to a previous release is usually not possible without extra steps.
@@ -56,14 +56,14 @@ The shared secret for API access. Should not contain any funny characters.
 * **`bbb_secret_seed`** (default: `bbb_secret`)\
 A secret seed used to generate other host-local secrets and passwords. Override this if you feel paranoid.
 
-* **`bbb_version`** (default: `jammy-300`) \
-  Install a specified BigBlueButton version (e.g. `jammy-300-3.0.1`). The version should of cause match whatever this role supports, or stuff may break.
+* **`bbb_version`** (default: `noble-40`) \
+  Install a specified BigBlueButton version (e.g. `noble-40-4.0.1`). The version should of cause match whatever this role supports, or stuff may break.
 
 * **`bbb_upgrade`** (default: `true`)\
   Upgrade all installed packages (including BBB packages) every time this role is applied.
 
 * **`bbb_apt_mirror`** (default: `https://ubuntu.bigbluebutton.org`)\
-  BBB repository server. Usefull if you want to switch to a local mirror (e.g. [this one](https://ftp.gwdg.de/pub/linux/misc/bigbluebutton/ubuntu/)). The *actual* repository is assumed to be located at `{{bbb_apt_mirror}}/{{bbb_version}}/`, so the mirror should follow upstream naming conventions.
+  BBB repository server. Usefull if you want to switch to a local mirror (e.g. [this one](https://ftp.gwdg.de/pub/linux/misc/bigbluebutton/ubuntu)). The *actual* repository is assumed to be located at `{{bbb_apt_mirror}}/{{bbb_version}}/`, so the mirror should follow upstream naming conventions.
 
 * **`bbb_apt_key`** (default: `{{ bbb_apt_mirror }}/repo/bigbluebutton.asc`)\
   Download URL for the BBB repository signing key.
@@ -218,18 +218,6 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
 * **`bbb_freeswitch_default_password`** (default: auto-generated)\
   Freeswitch default password.
 
-* **`bbb_freeswitch_muted_sound`** (default: `true`)\
-  Play `you are now muted` and `you are now unmuted` sounds.
-
-* **`bbb_dialplan_quality`** (default: `cdquality`)\
-  Set the default dialplan for all conferences.
-
-* **`bbb_dialplan_energy_level`** (default: `100`)\
-  Set target energy level for the default dialplan.
-
-* **`bbb_dialplan_comfort_noise`** (default: `1400`)\
-  Set comfort noise for the default dialplan. Allowed values: (0-10000); 0 disables comfort-noise.
-
 
 ### Dial-in via SIP
 
@@ -339,9 +327,6 @@ rest, you are on your own. Good luck!
 * **`bbb_fonts_extra`** (default: `[]`)\
   Additional font packages (without `fonts-` prefix) to install. Add your own
   fonts here. See `bbb_fonts`.
-
-* **`bbb_shared_notes_editor`** (default: `etherpad`)\
-  Which shared notes editor to use. Can be either `etherpad` (the default) or `blockNote`.
 
 * **`bbb_antivir_enable`** (default: `false`)\
   Enable virus scan for uploaded presentations.

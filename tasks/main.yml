@@ -17,11 +17,13 @@
 
 - import_tasks: install-bbb.yml
 
-# Mixin phase: Tasks that require BBB to be installed. This is also the best
-# phase to manipulate `bbb_config_*` or other settings before they are written
-# to config files in the next phase.
+# Mixin phase: Tasks that require BBB to be installed, but should run
+# before it is configured or started. This is the right place to manipulate
+# `bbb_config_*` or other settings before they are written to config files
+# in the next phase.
 
 - import_tasks: mixin-helper.yml
+- import_tasks: mixin-dialin.yml
 - import_tasks: mixin-proxy.yml
 - import_tasks: mixin-backgrounds.yml
 - import_tasks: mixin-assets.yml

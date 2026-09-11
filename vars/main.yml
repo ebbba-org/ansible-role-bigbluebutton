@@ -1,8 +1,8 @@
 ---
 
-bbb_ubuntu_name: "jammy"
+bbb_ubuntu_name: "{{ bbb_version | split('-') | first }}"
 bbb_node_version: "22"
-bbb_java_version: "17"
+bbb_java_version: "21"
 
 bbb_package_repos:
   - name: nodesource
@@ -23,12 +23,14 @@ bbb_package_repos:
       deb [signed-by=/etc/apt/keyrings/docker.asc]
       https://download.docker.com/linux/ubuntu
       {{ ansible_facts.distribution_release | lower }} stable
-  - name: bbb-support
-    repo: ppa:bigbluebutton/support
-  - name: yq
-    repo: ppa:rmescandon/yq
-  - name: coturn
-    repo: ppa:martin-uni-mainz/coturn
+#  - name: bbb-support
+#    repo: ppa:bigbluebutton/support
+#  - name: yq
+#    repo: ppa:rmescandon/yq
+#  - name: coturn
+#    repo: ppa:martin-uni-mainz/coturn
+#   - name: yq
+#     repo: ppa:martin-uni-mainz/yq-go
 
 # System packages that can/must be installed before other repositories are added
 bbb_packages_system:
@@ -54,16 +56,17 @@ bbb_packages_system:
   - ruby
 
 bbb_packages:
-  # Core dependencies from external repositories
-  - name: [yq]
+  # Utility packages
+  - name: [bbb-yq-go]
   # Core BBB packages
-  - name: [bigbluebutton, bbb-html5]
+  - name: [bigbluebutton]
+  - name: [bbb-html5]
   # Optional dependencies and packages
   - name: [bbb-webhooks]
     when: "{{ bbb_webhooks_enable }}"
   - name: [bbb-demo]
     when: "{{ bbb_api_demos_enable }}"
-  # BUG: bbb-playback-presentation is always installed because "bigbluebutton" depends on it
+  # Note: bbb-playback-presentation is always installed because "bigbluebutton" depends on it
   - name: [bbb-playback-video]
     when: "{{ bbb_recording_enable and 'video' in bbb_recording_formats }}"
   - name: [bbb-playback-podcast]
@@ -74,8 +77,6 @@ bbb_packages:
     when: "{{ bbb_recording_enable and 'notes' in bbb_recording_formats }}"
   - name: [haproxy, coturn]
     when: "{{ bbb_coturn_enable }}"
-  - name: [bbb-shared-notes-server]
-    when: "{{ bbb_shared_notes_editor | lower == 'blocknote' }}"
 
 bbb_allowed_disabled_features:
   - breakoutRooms
@@ -134,8 +135,6 @@ bbb_config_web_base:
 
   muteOnStart: "{{ bbb_mute_on_start }}"
   appLogLevel: "{{ bbb_app_log_level }}"
-  defaultDialAccessNumber: "{{ bbb_dialin_default_number | default('') }}"
-  defaultNumDigitsForTelVoice: "{{ bbb_dialin_pin_stdlen }}"
   defaultWelcomeMessageFooter: "{{ bbb_default_welcome_message_footer }}"
   bigbluebutton.web.logoutURL: "{{ bbb_web_logouturl }}"
   allowRequestsWithoutSession: "{{ bbb_allow_request_without_session }}"
@@ -167,16 +166,29 @@ bbb_config_web_base:
   notifyRecordingIsOn: "{{ bbb_notify_recording_is_on }}"
   allowRevealOfBBBVersion: "{{ bbb_allow_reveal_of_bbb_version }}"
   disabledFeatures: "{{ bbb_disabled_features }}"
-  sharedNotesEditor: "{{ bbb_shared_notes_editor }}"
 
 bbb_config_html5_base:
   public:
-    media:
-      sipjsHackViaWs: true
     kurento:
       wsUrl: "wss://{{ bbb_hostname }}/bbb-webrtc-sfu"
     pads:
       url: "https://{{ bbb_hostname }}/pad"
+
+bbb_config_sfu_base:
+  freeswitch:
+    ip: "{{ bbb_public_ip4 }}"
+    sip_ip: "127.0.0.1"
+    esl_ip: "127.0.0.1"
+    esl_password: "{{ bbb_freeswitch_socket_password }}"
+  mediasoup:
+    webrtc:
+      listenIps:
+        - ip: "{{ bbb_bind_ip4 }}"
+          announcedIp: "{{ bbb_public_ip4 }}"
+    plainRtp:
+      listenIp:
+        ip: "{{ bbb_bind_ip4 }}"
+        announcedIp: "{{ bbb_public_ip4 }}"
 
 bbb_config_etherpad_base: {}
 bbb_nginx_root: /var/www/bigbluebutton-default/assets

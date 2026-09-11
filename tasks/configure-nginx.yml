@@ -22,10 +22,3 @@
     - bigbluebutton
   notify: Reload nginx
 
-- name: Update sip.nginx for sipjsHackViaWs
-  become: true
-  ansible.builtin.replace:
-    path: /usr/share/bigbluebutton/nginx/sip.nginx
-    regexp: "proxy_pass .*;"
-    replace: "proxy_pass http://{{ bbb_local_ip }}:5066;"
-  notify: Reload nginx

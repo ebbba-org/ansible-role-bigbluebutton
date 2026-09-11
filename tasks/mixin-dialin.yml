@@ -1,0 +1,26 @@
+---
+- name: "Enable dial-in for livekit"
+  when: "bbb_dialin_enable"
+  ansible.builtin.set_fact:
+    bbb_config_sfu_base: |
+      {{bbb_config_sfu_base | combine({
+        "livekit": {
+          "rtcAgent": {
+            "enabled": true,
+          },
+          "sip": {
+            "enabled": true,
+            "requirePin": false,
+            "dispatch": {
+              "options": {
+                "hidePhoneNumber": true,
+              }
+            }
+          }
+        }
+      }, recursive=True)}}
+    bbb_config_web_base: |
+      {{bbb_config_web_base | combine({
+        "defaultDialAccessNumber": bbb_dialin_default_number | default(''),
+        "defaultNumDigitsForTelVoice": bbb_dialin_pin_stdlen,
+      })}}

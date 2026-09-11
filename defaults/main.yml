@@ -2,10 +2,11 @@
 
 ansible_python_interpreter: /usr/bin/python3
 
+bbb_version: noble-40
+
 bbb_hostname: "{{ ansible_fqdn }}"
 # bbb_secret
 bbb_secret_seed: "{{ bbb_secret }}"
-bbb_version: jammy-300
 bbb_upgrade: true
 bbb_apt_mirror: https://ubuntu.bigbluebutton.org
 bbb_apt_key: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
@@ -90,6 +91,7 @@ bbb_config_html5: {} # bbb-html5.yml
 bbb_config_etherpad: {} # etherpad.json
 bbb_config_presentation: {} # recording/presentation.yml
 bbb_config_video: {} # recording/video.yml
+bbb_config_sfu: {} # bbb-webrtc-sfu/production.yml
 
 ### STUN/TURN Servers
 
@@ -222,6 +224,3 @@ bbb_system_locale: en_US.UTF-8
 # Skip all tasks that are incompatible with (unprivileged) containers
 bbb_container_compat: false
 
-### Select shared notes editor
-# Can be either 'etherpad' or 'blockNote'
-bbb_shared_notes_editor: etherpad
