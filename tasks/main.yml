@@ -43,5 +43,6 @@
 # Finalizing phase: Tasks that require a fully configured and running BBB server.
 # Handlers are flushed before entering this phase.
 
-- meta: flush_handlers
+- name: Flush Handlers
+  meta: flush_handlers
 # - import_tasks: finalize-checks.yml

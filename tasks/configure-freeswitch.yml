@@ -134,34 +134,15 @@
     line: /opt/freeswitch/bin/fs_cli -p $(xmlstarlet sel -t -m 'configuration/settings/param[@name="password"]' -v @value
       /opt/freeswitch/etc/freeswitch/autoload_configs/event_socket.conf.xml) "$@"
 
-- name: Configure different mute sound
+- name: Configure different mute/unmute sounds
   become: true
   copy:
-    src: sounds/{{ item }}/conf-muted.wav
-    dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
+    src: sounds/{{ item[0] }}/{{ item[1] }}.wav
+    dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item[0] }}/
     mode: "0644"
     owner: freeswitch
     group: daemon
-  with_items:
-    - 48000
-    - 32000
-    - 16000
-    - 8000
-  when: bbb_freeswitch_muted_sound | bool
-
-- name: Configure different unmute sound
-  become: true
-  copy:
-    src: sounds/{{ item }}/conf-unmuted.wav
-    dest: /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference/{{ item }}/
-    mode: "0644"
-    owner: freeswitch
-    group: daemon
-  with_items:
-    - 48000
-    - 32000
-    - 16000
-    - 8000
+  loop: "{{ [8000, 16000, 32000, 48000] | product(['conf-muted', 'conf-unmuted']) | list }}"
   when: bbb_freeswitch_muted_sound | bool
 
 # Dial-in
