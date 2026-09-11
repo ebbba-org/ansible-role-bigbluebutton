@@ -2,7 +2,7 @@
 
 bbb_ubuntu_name: "jammy"
 bbb_node_version: "22"
-bbb_java_version: "17"
+bbb_java_version: "21"
 
 bbb_package_repos:
   - name: nodesource
