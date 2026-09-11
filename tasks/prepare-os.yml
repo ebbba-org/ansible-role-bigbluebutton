@@ -48,6 +48,24 @@
     dest: /etc/alternatives/java
     state: link
 
+- name: Install or remove local-apt-repository
+  become: true
+  ansible.builtin.package:
+    name: local-apt-repository
+    state: "{{ bbb_package_local is defined | ternary('present', 'absent') }}"
+
+- name: Upload custom packages
+  become: true
+  when: bbb_package_local is defined
+  ansible.builtin.synchronize:
+    src: "{{ bbb_package_local }}"
+    dest: "/srv/local-apt-repository/bbb"
+    delete: true
+    recursive: true
+    rsync_opts:
+      - "--include=*.deb"
+      - "--exclude=*"
+
 - name: Download PGP Keys for extra repositories
   become: true
   ansible.builtin.get_url:

@@ -399,6 +399,13 @@ This role generates configuration with sensible defaults out of the box and cove
 * **`bbb_config_video`** (default: `{}`)\
   Custom overrides for `/etc/bigbluebutton/recording/video.yml`. This will be deep-merged into the role-managed configuration. List values will not be merged, but replaced.
 
+
+### Development or debugging
+
+* **`bbb_package_local`** (no default)\
+  A local directory with `*.deb` files that will be uploaded and configured as a local `apt` package source. This is useful if you want to install patched versions of bbb packages or dependencies for testing.
+
+
 ### Other stuff not full migrated to BBB 3.0 yet.
 
 > [!warning]
