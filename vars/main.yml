@@ -190,7 +190,6 @@ bbb_config_sfu_base:
         ip: "{{ bbb_bind_ip4 }}"
         announcedIp: "{{ bbb_public_ip4 }}"
 
-bbb_config_etherpad_base: {}
 bbb_nginx_root: /var/www/bigbluebutton-default/assets
 bbb_host_seed: "{{ (bbb_hostname + bbb_secret_seed) | hash('sha256') }}"
 
