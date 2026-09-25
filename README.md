@@ -390,9 +390,6 @@ This role generates configuration with sensible defaults out of the box and cove
 * **`bbb_config_html5`** (default: `{}`)\
   Custom overrides for `/etc/bigbluebutton/bbb-html5.yml`. This will be deep-merged into the role-managed configuration. List values will not be merged, but replaced.
 
-* **`bbb_config_etherpad`** (default: `{}`)\
-  Custom overrides for `/etc/bigbluebutton/etherpad.json`. This will be deep-merged into the role-managed configuration. List values will not be merged, but replaced.
-
 * **`bbb_config_presentation`** (default: `{}`)\
   Custom overrides for `/etc/bigbluebutton/recording/presentation.yml`. This will be deep-merged into the role-managed configuration. List values will not be merged, but replaced.
 
@@ -431,9 +428,6 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
 
 * **`bbb_freeswitch_log_level`** (default: `warning`)\
   set freeswitch log level   
-
-* **`bbb_etherpad_log_level`** (default: `INFO`)\
-  set etherpad log level   
 
 * **`bbb_fsels_akka_log_level`** (default: `ERROR`)\
   set the loglevel between freeswitch and bbb-apps   

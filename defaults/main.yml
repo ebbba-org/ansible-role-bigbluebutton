@@ -88,7 +88,6 @@ bbb_ufw_rules_default:
 
 bbb_config_web: {} # bbb-web.properties
 bbb_config_html5: {} # bbb-html5.yml
-bbb_config_etherpad: {} # etherpad.json
 bbb_config_presentation: {} # recording/presentation.yml
 bbb_config_video: {} # recording/video.yml
 bbb_config_sfu: {} # bbb-webrtc-sfu/production.yml
@@ -217,7 +216,6 @@ bbb_app_log_level: DEBUG
 bbb_fsels_akka_log_level: ERROR
 bbb_apps_akka_log_level: ERROR
 bbb_freeswitch_log_level: warning
-bbb_etherpad_log_level: INFO
 
 bbb_system_locale: en_US.UTF-8
 

@@ -68,8 +68,6 @@
     - src: bigbluebutton/bbb-graphql-middleware.yml
       when: "{{ bbb_cluster_proxy is present }}"
     - src: bigbluebutton/turn-stun-servers.xml
-    - src: bigbluebutton/etherpad.json
-      group: etherpad
     - src: bigbluebutton/recording/recording.yml
     - src: bigbluebutton/recording/presentation.yml
     - src: bigbluebutton/recording/video.yml
