@@ -100,6 +100,11 @@ A secret seed used to generate other host-local secrets and passwords. Override 
   Same as `bbb_public_ip4` but for IPv6. Set this to `None` to disable IPv6 even
   if your server technically supports it.
 
+* **`bbb_public_lan`** (default: false)\
+  Allow local (non-routeable) IPs for `bbb_public_ip4` and `bbb_public_ip6`. This simply
+  changes some sanity checks and may be useful for non-public BBB servers that are not
+  reachable from the internet. BBB officially does not support this mode of operation.
+
 * **`bbb_net_mtu`** (default: `{{ ansible_facts.default_ipv4.mtu | default(1500) }}`)\
   MTU (maximum transfer unit) for outgoing packets. Some cloud environments
   use a smaller MTU and docker needs extra configuration in that case.
@@ -477,9 +482,6 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
 
 * **`bbb_max_num_pages`** (default: `200`)\
   Maximum number of pages allowed for an uploaded presentation   
-
-* **`bbb_max_conversion_time`** (default: `5`)\
-  Number of minutes the conversion should take  If it takes more than this time, cancel the conversion process 
 
 * **`bbb_num_conversion_threads`** (default: `5`)\
   Number of threads in the pool to do the presentation conversion   
