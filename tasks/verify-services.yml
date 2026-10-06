@@ -1,0 +1,29 @@
+---
+
+- name: Populate service facts
+  become: true
+  ansible.builtin.service_facts:
+
+- name: Check all expected services are running
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - > 
+        ansible_facts.services
+        | dict2items
+        | selectattr('key', 'match', '^' + item + '\\.service$' )
+        | selectattr('value.state', 'equalto', 'running')
+        | list
+        | length > 0
+    fail_msg: >-
+      Required BigBlueButton service {{ item }}.service is missing or not running.
+  loop: "{{ bbb_expected_services | select('string') | list }}"
+  loop_control:
+    label: "{{ item }}.service"
+
+- name: Run bbb-conf --status
+  become: true
+  ansible.builtin.command: bbb-conf --status
+  register: result
+  changed_when: false
+  failed_when: result.rc != 0 or 'inactive' in result.stdout

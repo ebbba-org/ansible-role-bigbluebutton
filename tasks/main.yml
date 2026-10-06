@@ -45,4 +45,6 @@
 
 - name: Flush Handlers
   meta: flush_handlers
-# - import_tasks: finalize-checks.yml
+
+- import_tasks: verify-services.yml
+- import_tasks: verify-runtest.yml

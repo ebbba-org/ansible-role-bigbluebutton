@@ -1,0 +1,15 @@
+---
+
+- name: Run bbb-conf --check
+  become: true
+  ansible.builtin.command: bbb-conf --check
+  register: result
+  changed_when: false
+  failed_when: result.rc != 0
+
+- name: Check BBB API 
+  become: true
+  ansible.builtin.command: /usr/local/bin/bbbctl meeting list
+  register: result
+  changed_when: false
+  failed_when: result.rc != 0

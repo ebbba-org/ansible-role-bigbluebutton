@@ -78,6 +78,32 @@ bbb_packages:
   - name: [haproxy, coturn]
     when: "{{ bbb_coturn_enable }}"
 
+bbb_expected_services:
+  - bbb-apps-akka
+  - bbb-export-annotations
+  - bbb-fsesl-akka
+  - bbb-graphql-actions
+  - bbb-graphql-middleware
+  - bbb-graphql-server@.+
+  - bbb-rap-caption-inbox
+  - bbb-rap-resque-worker
+  - bbb-rap-starter
+  - bbb-shared-notes-server
+  - bbb-webrtc-recorder
+  - bbb-webrtc-sfu
+  - bbb-web
+
+  - docker
+  - livekit-server
+  - livekit-sip
+  - postgresql@.+
+  - nginx
+  - redis-server
+
+  - "{{ 'freeswitch' if bbb_dialin_enable else None }}"
+  - "{{ 'coturn' if bbb_coturn_enable else None }}"
+  - "{{ 'haproxy' if bbb_coturn_enable else None }}"
+
 bbb_allowed_disabled_features:
   - breakoutRooms
   - captions
@@ -146,7 +172,6 @@ bbb_config_web_base:
   defaultMaxUsers: "{{ bbb_default_max_users }}"
   defaultMeetingDuration: "{{ bbb_default_meeting_duration }}"
   defaultMeetingLayout: "{{ bbb_default_meeting_layout }}"
-  maxConversionTime: "{{ bbb_max_conversion_time }}"
   numConversionThreads: "{{ bbb_num_conversion_threads }}"
   numFileProcessorThreads: "{{ bbb_num_file_processor_threads }}"
   officeToPdfConversionTimeout: "{{ bbb_office_to_pdf_conversion_timeout }}"
