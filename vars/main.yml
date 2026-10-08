@@ -147,7 +147,6 @@ bbb_config_web_base:
   defaultMaxUsers: "{{ bbb_default_max_users }}"
   defaultMeetingDuration: "{{ bbb_default_meeting_duration }}"
   defaultMeetingLayout: "{{ bbb_default_meeting_layout }}"
-  maxConversionTime: "{{ bbb_max_conversion_time }}"
   numConversionThreads: "{{ bbb_num_conversion_threads }}"
   numFileProcessorThreads: "{{ bbb_num_file_processor_threads }}"
   officeToPdfConversionTimeout: "{{ bbb_office_to_pdf_conversion_timeout }}"
