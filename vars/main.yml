@@ -1,7 +1,7 @@
 ---
 
 bbb_ubuntu_name: "{{ bbb_version | split('-') | first }}"
-bbb_node_version: "22"
+bbb_node_version: "24"
 bbb_java_version: "21"
 
 bbb_package_repos:
