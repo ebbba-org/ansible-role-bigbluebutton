@@ -214,6 +214,9 @@ For large deployments, it is common to run multiple BBB servers behind a scaler 
 * **`bbb_cluster_node`** (default: `{{ bbb_hostname | split('.') | first }}`)\
   Name of this cluster node. The front-end proxy must listen to requests for `https://{{bbb_cluster_proxy}}/{{bbb_cluster_node}}/*` and forward those to the matching back-end node via `https://{{bbb_hostname}}/`.
 
+* **`bbb_allow_request_without_session`** (default: `false`)\
+  Allow backend requests without a valid JSESSIONID Cookie. This weakens security, but may be required for a cross-origin proxy setup.
+
 
 ### Freeswitch
 
@@ -418,9 +421,6 @@ This is a junkyard of old BBB 2.7 configs that are not fully migrated yet. They 
 
 * **`bbb_web_logouturl`** (default: `default`)\
   set logout URL  Instead of using `bigbluebutton.web.serverURL` as default logout page, set another URL or customize logout page e.g. ${bigbluebutton.web.serverURL}/logout.html. API create call with the `logoutURL` parameter overwrite this setting 
-
-* **`bbb_allow_request_without_session`** (default: `false`)\
-  Enable or disable allow request without session  Allow requests without JSESSIONID to be handled 
 
 * **`bbb_api_demos_enable`** (default: `no`)\
   enable installation of the api demos   

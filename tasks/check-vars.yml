@@ -135,6 +135,13 @@
   loop:
     - bbb_cluster_node | lower is hostname
 
+- name: Check cluster mode variables (cross origin)
+  when: bbb_cluster_crossorigin
+  ansible.builtin.assert:
+    quiet: true
+    that: "bbb_allow_request_without_session"
+    fail_msg: "'bbb_allow_request_without_session' is required in proxy mode when the proxy has a different different origin (CORS cookie restrictions)."
+
 - name: Check dial-in variables
   when: bbb_dialin_enable
   ansible.builtin.assert:
