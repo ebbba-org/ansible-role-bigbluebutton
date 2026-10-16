@@ -2,7 +2,7 @@
 
 ansible_python_interpreter: /usr/bin/python3
 
-bbb_version: noble-40
+bbb_version: noble-400
 
 bbb_hostname: "{{ ansible_fqdn }}"
 # bbb_secret
