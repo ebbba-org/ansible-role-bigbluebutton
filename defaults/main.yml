@@ -34,6 +34,7 @@ bbb_ssl_cert: /etc/bigbluebutton/ssl/fullchain.cer
 bbb_ssl_key: /etc/bigbluebutton/ssl/private.key
 bbb_ssl_owner: root
 bbb_ssl_group: root
+bbb_haproxy_ssl_ciphers: "ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS"
 
 ### Networking
 

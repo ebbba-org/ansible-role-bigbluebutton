@@ -147,6 +147,9 @@ You can either use ACME (e.g. letsencrypt) to auto-generate certificates, or cop
 * **`bbb_ssl_group`** (default: `root`)\
   Linux filesystem group of the SSL files.
 
+* **`bbb_haproxy_ssl_ciphers`** (default: `ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS`)\
+  OpenSSL cipher list for TLS 1.2 and below on haproxy's listening sockets (`ssl-default-bind-ciphers`). TLS 1.3 suites are not affected.
+
 ### Firewall
 
 * **`bbb_ufw_enable`** (default: `false`)\
