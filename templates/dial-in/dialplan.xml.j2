@@ -17,7 +17,7 @@
 <extension name="bbb_try_bridge">
   <condition field="destination_number" expression="^BBB_LIVEKIT_SIP$">
     <action application="stop_dtmf"/>
-    <action application="bridge" data="{sip_dtmf_type=rfc2833}sofia/external/sip:${pin}@${local_ip_v4}:5062;transport=udp"/>
+    <action application="bridge" data="{dtmf_type=rfc2833}sofia/external/sip:${pin}@${local_ip_v4}:5062;transport=udp"/>
     <action application="transfer" data="BBB_BAD_PIN XML public"/>
   </condition>
 </extension>
